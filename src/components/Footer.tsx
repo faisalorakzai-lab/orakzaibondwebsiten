@@ -46,7 +46,7 @@ const links = [
   { label: "Token",           href: "#token"     },
   { label: "Lottery",         href: "#lottery"   },
   { label: "Tokenomics",      href: "#tokenomics"},
-  { label: "Roadmap",         href: "#roadmap"   },
+  { label: "Roadmap",         href: "/roadmap"   },
 ];
 
 const legalLinks = [
