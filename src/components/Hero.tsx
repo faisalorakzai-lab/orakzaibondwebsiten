@@ -71,7 +71,7 @@ export default function Hero({ onConnect, address }: HeroProps) {
   }, [coinSpunIn, floatControls]);
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-20">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_60%,rgba(234,179,8,0.13),transparent_70%)] pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_100%_at_50%_50%,transparent_40%,rgba(0,0,0,0.55)_100%)] pointer-events-none" />
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.12] pointer-events-none mix-blend-overlay" />
@@ -81,27 +81,27 @@ export default function Hero({ onConnect, address }: HeroProps) {
         
         {/* Premium Countdown Timer */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="mb-12 p-1 rounded-2xl bg-gradient-to-r from-primary/40 via-yellow-500/50 to-primary/40 shadow-[0_0_30px_rgba(234,179,8,0.3)]"
+          className="mb-16 p-1 rounded-3xl bg-gradient-to-r from-primary/50 via-yellow-500/60 to-primary/50 shadow-[0_0_40px_rgba(234,179,8,0.4)]"
         >
-          <div className="bg-background/90 backdrop-blur-xl rounded-[14px] px-8 py-6 flex flex-col items-center">
-            <div className="flex items-center gap-2 mb-4">
-              <Clock className="w-5 h-5 text-primary animate-pulse" />
-              <span className="text-primary font-mono text-sm font-bold uppercase tracking-[0.2em]">ICO Phase 1 Ending In</span>
+          <div className="bg-background/95 backdrop-blur-2xl rounded-[22px] px-10 py-8 flex flex-col items-center border border-white/5">
+            <div className="flex items-center gap-3 mb-6">
+              <Clock className="w-6 h-6 text-primary animate-pulse" />
+              <span className="text-primary font-mono text-sm font-black uppercase tracking-[0.3em]">ICO PHASE 1 STARTING IN</span>
             </div>
-            <div className="flex gap-6 md:gap-10">
+            <div className="flex gap-8 md:gap-14">
               {[
                 { label: "Hours", value: timeLeft.hours },
                 { label: "Minutes", value: timeLeft.minutes },
                 { label: "Seconds", value: timeLeft.seconds },
               ].map((unit) => (
                 <div key={unit.label} className="flex flex-col items-center">
-                  <span className="text-4xl md:text-6xl font-black font-mono text-foreground tabular-nums tracking-tighter">
+                  <span className="text-5xl md:text-7xl font-black font-mono text-foreground tabular-nums tracking-tighter leading-none">
                     {String(unit.value || 0).padStart(2, '0')}
                   </span>
-                  <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground/60 mt-1">{unit.label}</span>
+                  <span className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground/70 mt-2">{unit.label}</span>
                 </div>
               ))}
             </div>
@@ -109,36 +109,36 @@ export default function Hero({ onConnect, address }: HeroProps) {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-4xl"
+          transition={{ duration: 0.8, delay: 0.1 }}
+          className="max-w-5xl"
         >
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-foreground mb-6 leading-[0.9]">
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter text-foreground mb-8 leading-[0.85]">
             Orakzai Bond<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-yellow-300 to-yellow-200 drop-shadow-[0_0_40px_rgba(234,179,8,0.6)]">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-yellow-300 to-yellow-200 drop-shadow-[0_0_50px_rgba(234,179,8,0.7)]">
               OKBOND
             </span>
           </h1>
 
-          <div className="h-10 mb-8">
+          <div className="h-12 mb-10">
             <motion.p
               key={sloganIdx}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="text-xl md:text-2xl font-bold text-primary/80 italic"
+              exit={{ opacity: 0, y: -15 }}
+              className="text-2xl md:text-3xl font-bold text-primary/85 italic"
             >
               "{SLOGANS[sloganIdx]}"
             </motion.p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-14">
             {!address && (
               <Button
                 onClick={onConnect}
                 size="lg"
-                className="w-full sm:w-auto text-lg h-14 px-10 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-black shadow-[0_0_30px_rgba(234,179,8,0.4)] transition-all"
+                className="w-full sm:w-auto text-lg h-16 px-12 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-black shadow-[0_0_40px_rgba(234,179,8,0.5)] hover:shadow-[0_0_60px_rgba(234,179,8,0.8)] transition-all duration-300"
               >
                 Connect Wallet
               </Button>
@@ -147,28 +147,34 @@ export default function Hero({ onConnect, address }: HeroProps) {
               href={QUICKSWAP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 text-lg h-14 px-10 rounded-full font-bold bg-white/5 border border-white/10 text-foreground hover:bg-white/10 transition-all"
+              whileHover={{ scale: 1.05 }}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 text-lg h-16 px-12 rounded-full font-black bg-white/8 border-2 border-white/20 text-foreground hover:bg-white/15 hover:border-white/30 transition-all duration-300"
             >
-              <ArrowLeftRight className="w-5 h-5" />
+              <ArrowLeftRight className="w-6 h-6" />
               Trade on QuickSwap
             </motion.a>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-3">
-            {["Polygon PoS", "Smart Contract Verified", "250+ Projects", "Capital Protected"].map((p) => (
-              <span key={p} className="px-4 py-1.5 rounded-full border border-white/5 bg-white/5 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+          <div className="flex flex-wrap justify-center gap-4">
+            {["Polygon PoS", "Smart Contract Verified", "250+ Projects", "100% Capital Protected"].map((p) => (
+              <motion.span 
+                key={p} 
+                whileHover={{ scale: 1.05 }}
+                className="px-5 py-2 rounded-full border border-white/10 bg-white/5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground hover:border-primary/40 hover:bg-primary/8 transition-all cursor-default"
+              >
                 {p}
-              </span>
+              </motion.span>
             ))}
           </div>
         </motion.div>
       </div>
 
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-        <motion.div className="w-px h-12 bg-gradient-to-b from-primary to-transparent"
-          animate={{ scaleY: [1, 0.5, 1], opacity: [1, 0.3, 1] }}
-          transition={{ duration: 2, repeat: Infinity }} />
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5 }}
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
+        <span className="text-xs text-muted-foreground/50 uppercase tracking-widest font-mono">Explore</span>
+        <motion.div className="w-px h-14 bg-gradient-to-b from-primary/60 to-transparent"
+          animate={{ scaleY: [1, 0.4, 1], opacity: [1, 0.3, 1] }}
+          transition={{ duration: 2.2, repeat: Infinity }} />
       </motion.div>
     </section>
   );

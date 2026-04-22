@@ -20,31 +20,15 @@ import DocumentsPage from "@/pages/DocumentsPage";
 import Navbar from "@/components/Navbar";
 import SiteSidebar from "@/components/SiteSidebar";
 import Hero from "@/components/Hero";
-import About from "@/components/About";
-import TokenDetails from "@/components/TokenDetails";
-import Lottery from "@/components/Lottery";
-import Tokenomics from "@/components/Tokenomics";
-import Roadmap from "@/components/Roadmap";
 import Footer from "@/components/Footer";
 import StatsStrip from "@/components/StatsStrip";
 import { useWallet } from "@/hooks/useWallet";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlertTriangle, X, Megaphone } from "lucide-react";
-import WinnersHallOfFame from "@/components/WinnersHallOfFame";
-import Community from "@/components/Community";
-import FounderSection from "@/components/FounderSection";
-import ResourcesSection from "@/components/ResourcesSection";
-import SecuritySection from "@/components/SecuritySection";
-import ContactSection from "@/components/ContactSection";
-import ICOModule from "@/components/ICOModule";
-import SafetyVault from "@/components/SafetyVault";
-import LatestUpdates from "@/components/LatestUpdates";
-import LoyaltyTier from "@/components/LoyaltyTier";
 import WhatsAppBot from "@/components/WhatsAppBot";
 
 const queryClient = new QueryClient();
 
-// ── Global Announcement — edit this to push a new site-wide message ──────────
 const GLOBAL_ANNOUNCEMENT = {
   active: true,
   message: "🚀 OKBOND ICO is LIVE!  |  $10 Entry  |  100% Capital Protection Guaranteed  |  Powered by Polygon Network  |  🔥 Orakzai Bond Lottery is LIVE — Connect your wallet and enter now!  |  250+ Projects · One Ecosystem · Infinite Power",
@@ -66,7 +50,6 @@ function Home() {
     if (walletError) setErrorDismissed(false);
   }, [walletError]);
 
-  // Parse ?ref=ADDRESS from URL — store in localStorage so it persists across tabs & sessions
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const ref = params.get("ref");
@@ -86,7 +69,6 @@ function Home() {
       <Navbar address={address} onConnect={connect} />
       <SiteSidebar />
 
-      {/* ── Global Announcement Banner ─────────────────────────────────────── */}
       <AnimatePresence>
         {GLOBAL_ANNOUNCEMENT.active && !announcementDismissed && (
           <motion.div
@@ -106,10 +88,8 @@ function Home() {
               <span className="flex-shrink-0 px-2 py-0.5 rounded-md bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-widest font-mono">
                 LIVE
               </span>
-              {/* Scrolling ticker */}
               <div className="flex-1 overflow-hidden min-w-0">
                 <div className="ticker-track">
-                  {/* Text duplicated for seamless loop */}
                   <span className="text-sm text-primary/90 font-semibold whitespace-nowrap pr-24">
                     {GLOBAL_ANNOUNCEMENT.message}
                   </span>
@@ -130,7 +110,6 @@ function Home() {
         )}
       </AnimatePresence>
 
-      {/* Wallet error banner */}
       <AnimatePresence>
         {showBanner && (
           <motion.div
@@ -154,7 +133,6 @@ function Home() {
         )}
       </AnimatePresence>
 
-      {/* Referral banner */}
       <AnimatePresence>
         {referrer && referrer.toLowerCase() !== address?.toLowerCase() && (
           <motion.div
@@ -181,27 +159,12 @@ function Home() {
         )}
       </AnimatePresence>
 
-      {/* Live stats ticker */}
       <StatsStrip provider={provider} />
 
       <main className="flex-1 lg:pl-[60px]">
         <Hero onConnect={connect} address={address} />
-        <LoyaltyTier provider={provider} address={address} onConnect={connect} />
-        <SafetyVault />
-        <LatestUpdates />
-        <About />
-        <TokenDetails provider={provider} />
-        <Lottery provider={provider} address={address} onConnect={connect} referrer={referrer} isPolygon={isPolygon} switchToPolygon={switchToPolygon} />
-        <WinnersHallOfFame provider={provider} />
-        <ICOModule provider={provider} address={address} onConnect={connect} referrer={referrer} isPolygon={isPolygon} switchToPolygon={switchToPolygon} />
-        <Tokenomics />
-        <Roadmap />
-        <FounderSection />
-        <Community />
-        <ResourcesSection />
-        <SecuritySection />
-        <ContactSection />
       </main>
+
       <div className="lg:pl-[60px]">
         <Footer />
       </div>
@@ -230,7 +193,6 @@ function Router() {
         <Route path="/contact" component={ContactPage} />
         <Route path="/Contact" component={ContactPage} />
         <Route path="/documents" component={DocumentsPage} />
-        <Route path="/Documents" component={DocumentsPage} />
         <Route component={NotFound} />
       </Switch>
       {!hideWA && <WhatsAppBot />}
