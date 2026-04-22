@@ -1,8 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowLeft, ShieldCheck, Trophy, Sparkles } from "lucide-react";
 import { Link } from "wouter";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Lottery from "@/components/Lottery";
 import { useWallet } from "@/hooks/useWallet";
 
@@ -10,9 +8,7 @@ export default function LotteryPage() {
   const { address, connect, provider, isPolygon, switchToPolygon } = useWallet();
 
   return (
-    <div className="min-h-screen w-full bg-background text-foreground flex flex-col overflow-x-hidden">
-      <Navbar address={address} onConnect={connect} />
-
+    <div className="w-full bg-background text-foreground flex flex-col overflow-x-hidden">
       <main className="flex-1 container mx-auto px-4 py-24 max-w-6xl">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
@@ -20,7 +16,7 @@ export default function LotteryPage() {
             <Link href="/">
               <motion.button
                 whileHover={{ x: -4 }}
-                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6 group"
+                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6 group cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4 group-hover:animate-pulse" />
                 Back to Home
@@ -104,8 +100,6 @@ export default function LotteryPage() {
           />
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

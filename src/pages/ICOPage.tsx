@@ -8,8 +8,6 @@ import {
 import { Link } from "wouter";
 import { useWallet } from "@/hooks/useWallet";
 import { useICO } from "@/hooks/useICO";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import ReferralDashboard from "@/components/ReferralDashboard";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
@@ -252,12 +250,12 @@ function BuyForm({
   const { stats, txStatus, txHash, txError, buyTokens, resetTx, loading } = useICO(provider, address);
 
   const estimatedTokens = parseFloat(polAmount || "0") * 0.6;
-  const estimatedUSD    = estimatedTokens * 0.15;
+  const estimatedUSD    = parseFloat(polAmount || "0") * 0.45; // Approx
 
   const handleBuy = async () => {
-    const amount = parseFloat(polAmount);
-    if (isNaN(amount) || amount < 10 || amount > 10000) return;
-    await buyTokens(polAmount, null);
+    const val = parseFloat(polAmount);
+    if (isNaN(val) || val < 10) return;
+    await buyTokens(polAmount);
   };
 
   const copyRef = useCallback(() => {
@@ -440,9 +438,7 @@ export default function ICOPage() {
   const cd = useCountdown(PHASE1_END);
 
   return (
-    <div className="min-h-screen w-full bg-background text-foreground flex flex-col overflow-x-hidden">
-      <Navbar address={address} onConnect={connect} />
-
+    <div className="w-full bg-background text-foreground flex flex-col overflow-x-hidden">
       {/* ── Background Effects ────────────────────────────────────────── */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(234,179,8,0.12),transparent_70%)]" />
@@ -630,8 +626,6 @@ export default function ICOPage() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
