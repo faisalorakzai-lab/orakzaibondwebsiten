@@ -41,7 +41,7 @@ const DOC_LINKS = [
 ];
 
 const SOCIALS = [
-  { label: "Twitter",  icon: <Twitter className="w-3.5 h-3.5" />, href: "https://x.com/OrakzaiBond" },
+  { label: "Twitter",  icon: <Twitter className="w-3.5 h-3.5" />, href: "https://x.com/orakzaibond1" },
   { label: "Telegram", icon: <Send    className="w-3.5 h-3.5" />, href: "https://t.me/orakzaibond"  },
   { label: "Email",    icon: <Mail    className="w-3.5 h-3.5" />, href: "mailto:orakzaibond@gmail.com" },
 ];
@@ -51,7 +51,6 @@ export default function SiteSidebar() {
   const [activeSection, setActiveSection] = useState("hero");
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // IntersectionObserver — track which section is in view
   useEffect(() => {
     const sections = NAV_ITEMS.map(n => n.id);
     const observers: IntersectionObserver[] = [];
@@ -63,7 +62,8 @@ export default function SiteSidebar() {
         ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
         { threshold: 0.25, rootMargin: "-60px 0px -30% 0px" }
       );
-      obs.observe(id === "hero" ? document.querySelector("section, [data-section='hero']") as Element || el : el);
+      const target = id === "hero" ? document.querySelector("section, [data-section='hero']") || el : el;
+      obs.observe(target);
       observers.push(obs);
     });
 
@@ -73,6 +73,10 @@ export default function SiteSidebar() {
   const scrollTo = useCallback((href: string) => {
     setMobileOpen(false);
     if (href === "#") { window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+    if (href.startsWith("/")) {
+      window.location.href = href;
+      return;
+    }
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
@@ -80,10 +84,8 @@ export default function SiteSidebar() {
   const W_COLLAPSED = 60;
   const W_EXPANDED  = 220;
 
-  // ── Sidebar content (shared for desktop & mobile) ──────────────────────────
   const SidebarContent = ({ mobile = false }: { mobile?: boolean }) => (
     <div className="flex flex-col h-full">
-      {/* Logo + Toggle */}
       <div className={`flex items-center ${expanded || mobile ? "justify-between px-4" : "justify-center px-2"} py-4 border-b border-border/40`}>
         {(expanded || mobile) && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2.5">
@@ -104,7 +106,6 @@ export default function SiteSidebar() {
         )}
       </div>
 
-      {/* Section links */}
       <div className="flex-1 overflow-y-auto py-3 space-y-0.5 px-2">
         {(expanded || mobile) && (
           <p className="text-[9px] text-muted-foreground/50 uppercase tracking-widest font-bold px-2 mb-2">Sections</p>
@@ -140,19 +141,17 @@ export default function SiteSidebar() {
           );
         })}
 
-        {/* Divider */}
         <div className={`my-3 border-t border-border/30 ${!expanded && !mobile ? "mx-2" : "mx-1"}`} />
 
-        {/* Page links */}
         {(expanded || mobile) && (
           <p className="text-[9px] text-muted-foreground/50 uppercase tracking-widest font-bold px-2 mb-2">Pages</p>
         )}
         {PAGE_LINKS.map((link) => (
-          <a
+          <button
             key={link.label}
-            href={link.href}
+            onClick={() => scrollTo(link.href)}
             title={!expanded && !mobile ? link.label : undefined}
-            className={`w-full flex items-center gap-3 rounded-xl transition-all
+            className={`w-full flex items-center gap-3 rounded-xl transition-all text-left
               ${expanded || mobile ? "px-3 py-2.5" : "px-0 py-2.5 justify-center"}
               text-muted-foreground hover:text-foreground hover:bg-muted/25 border border-transparent`}
           >
@@ -167,13 +166,11 @@ export default function SiteSidebar() {
               </motion.span>
             )}
             {(expanded || mobile) && <ExternalLink className="w-3 h-3 opacity-30 flex-shrink-0" />}
-          </a>
+          </button>
         ))}
 
-        {/* Divider */}
         <div className={`my-3 border-t border-border/30 ${!expanded && !mobile ? "mx-2" : "mx-1"}`} />
 
-        {/* Document downloads */}
         {(expanded || mobile) && (
           <p className="text-[9px] text-muted-foreground/50 uppercase tracking-widest font-bold px-2 mb-2">Documents</p>
         )}
@@ -203,7 +200,6 @@ export default function SiteSidebar() {
         ))}
       </div>
 
-      {/* Socials bottom */}
       <div className={`border-t border-border/30 py-3 px-2 space-y-1`}>
         {(expanded || mobile) && (
           <p className="text-[9px] text-muted-foreground/50 uppercase tracking-widest font-bold px-2 mb-2">Connect</p>
@@ -230,7 +226,6 @@ export default function SiteSidebar() {
 
   return (
     <>
-      {/* ── Desktop Sidebar ─────────────────────────────────────────────────── */}
       <motion.aside
         animate={{ width: expanded ? W_EXPANDED : W_COLLAPSED }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -240,7 +235,6 @@ export default function SiteSidebar() {
         <SidebarContent />
       </motion.aside>
 
-      {/* ── Mobile toggle button ─────────────────────────────────────────────── */}
       <button
         onClick={() => setMobileOpen(p => !p)}
         className="lg:hidden fixed left-0 top-1/2 -translate-y-1/2 z-50 w-7 h-14 bg-primary/20 border border-primary/40 border-l-0 rounded-r-xl flex items-center justify-center text-primary shadow-[2px_0_12px_rgba(234,179,8,0.2)]"
@@ -248,7 +242,6 @@ export default function SiteSidebar() {
         <ChevronRight className={`w-4 h-4 transition-transform ${mobileOpen ? "rotate-180" : ""}`} />
       </button>
 
-      {/* ── Mobile Drawer ───────────────────────────────────────────────────── */}
       <AnimatePresence>
         {mobileOpen && (
           <>
