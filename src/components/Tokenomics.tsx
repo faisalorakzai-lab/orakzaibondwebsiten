@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from "recharts";
 import { CheckCircle2, TrendingUp } from "lucide-react";
+import { useState } from "react";
 
 const TOKENOMICS_DATA = [
   {
@@ -66,16 +67,33 @@ const TRANSPARENCY_POINTS = [
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-background/95 backdrop-blur-xl border border-primary/30 rounded-lg p-3 shadow-lg">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-background/95 backdrop-blur-xl border border-primary/30 rounded-lg p-4 shadow-lg"
+      >
         <p className="font-bold text-foreground">{payload[0].name}</p>
         <p className="text-sm text-primary font-mono">{payload[0].value}%</p>
-      </div>
+        <p className="text-xs text-muted-foreground mt-1">
+          {TOKENOMICS_DATA[payload[0].payload.index]?.amount}
+        </p>
+      </motion.div>
     );
   }
   return null;
 };
 
 export default function Tokenomics() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const handleMouseEnter = (index: number) => {
+    setActiveIndex(index);
+  };
+
+  const handleMouseLeave = () => {
+    setActiveIndex(null);
+  };
+
   return (
     <section className="relative min-h-screen py-20 overflow-hidden">
       {/* Background gradients */}
@@ -107,46 +125,81 @@ export default function Tokenomics() {
 
         {/* Chart and Breakdown */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
-          {/* Chart */}
+          {/* Premium Donut Chart */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative p-8 rounded-3xl backdrop-blur-xl border border-primary/30 bg-gradient-to-br from-white/8 to-white/3 flex items-center justify-center"
+            className="relative p-8 rounded-3xl backdrop-blur-xl border border-primary/30 bg-gradient-to-br from-white/8 to-white/3 flex items-center justify-center overflow-hidden group"
             style={{
               boxShadow: "0 0 40px rgba(234,179,8,0.2), inset 0 1px 0 rgba(255,255,255,0.1)",
             }}
           >
-            <ResponsiveContainer width="100%" height={400}>
-              <PieChart>
-                <Pie
-                  data={TOKENOMICS_DATA}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={80}
-                  outerRadius={140}
-                  paddingAngle={2}
-                  dataKey="value"
-                  animationBegin={0}
-                  animationDuration={800}
-                  animationEasing="ease-out"
-                >
-                  {TOKENOMICS_DATA.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip content={<CustomTooltip />} />
-                <Legend
-                  verticalAlign="bottom"
-                  height={36}
-                  formatter={(value, entry) => (
-                    <span className="text-xs text-muted-foreground">
-                      {entry.payload.name}
-                    </span>
-                  )}
-                />
-              </PieChart>
-            </ResponsiveContainer>
+            {/* Animated background glow */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,rgba(234,179,8,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+            {/* Chart container */}
+            <div className="relative z-10 w-full h-full flex items-center justify-center">
+              <ResponsiveContainer width="100%" height={450}>
+                <PieChart>
+                  <Pie
+                    data={TOKENOMICS_DATA.map((item, index) => ({
+                      ...item,
+                      index,
+                    }))}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={90}
+                    outerRadius={150}
+                    paddingAngle={3}
+                    dataKey="value"
+                    animationBegin={0}
+                    animationDuration={1000}
+                    animationEasing="ease-out"
+                    onMouseEnter={(_, index) => handleMouseEnter(index)}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    {TOKENOMICS_DATA.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={entry.color}
+                        opacity={activeIndex === null || activeIndex === index ? 1 : 0.4}
+                        style={{
+                          filter:
+                            activeIndex === index
+                              ? `drop-shadow(0 0 20px ${entry.color})`
+                              : "none",
+                          transition: "all 0.3s ease",
+                          cursor: "pointer",
+                        }}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<CustomTooltip />} />
+                  <Legend
+                    verticalAlign="bottom"
+                    height={36}
+                    wrapperStyle={{
+                      paddingTop: "20px",
+                    }}
+                    formatter={(value, entry) => (
+                      <span className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                        {entry.payload.name}
+                      </span>
+                    )}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Center text for donut */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground font-mono">Total Supply</p>
+                <p className="text-3xl font-black text-primary">10M</p>
+                <p className="text-xs text-muted-foreground mt-1">OKBOND</p>
+              </div>
+            </div>
           </motion.div>
 
           {/* Breakdown List */}
@@ -159,14 +212,22 @@ export default function Tokenomics() {
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
                 className="group"
+                onMouseEnter={() => handleMouseEnter(idx)}
+                onMouseLeave={() => handleMouseLeave()}
               >
                 <motion.div
                   whileHover={{ x: 8 }}
-                  className="relative p-6 rounded-2xl backdrop-blur-xl border transition-all duration-300 overflow-hidden"
+                  className="relative p-6 rounded-2xl backdrop-blur-xl border transition-all duration-300 overflow-hidden cursor-pointer"
                   style={{
-                    borderColor: item.color + "50",
-                    background: `linear-gradient(135deg, ${item.color}08 0%, ${item.color}04 100%)`,
-                    boxShadow: `0 0 20px ${item.color}15, inset 0 1px 0 rgba(255,255,255,0.1)`,
+                    borderColor: activeIndex === null || activeIndex === idx ? item.color + "50" : item.color + "20",
+                    background:
+                      activeIndex === null || activeIndex === idx
+                        ? `linear-gradient(135deg, ${item.color}08 0%, ${item.color}04 100%)`
+                        : `linear-gradient(135deg, ${item.color}04 0%, ${item.color}02 100%)`,
+                    boxShadow:
+                      activeIndex === null || activeIndex === idx
+                        ? `0 0 20px ${item.color}15, inset 0 1px 0 rgba(255,255,255,0.1)`
+                        : `0 0 10px ${item.color}08, inset 0 1px 0 rgba(255,255,255,0.05)`,
                   }}
                 >
                   {/* Animated neon border glow */}
@@ -178,7 +239,10 @@ export default function Tokenomics() {
                   <div className="relative z-10">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div
+                        <motion.div
+                          animate={{
+                            scale: activeIndex === idx ? 1.2 : 1,
+                          }}
                           className="w-4 h-4 rounded-full"
                           style={{ backgroundColor: item.color }}
                         />
@@ -186,9 +250,15 @@ export default function Tokenomics() {
                           {item.name}
                         </h4>
                       </div>
-                      <span className="text-lg font-black" style={{ color: item.color }}>
+                      <motion.span
+                        animate={{
+                          scale: activeIndex === idx ? 1.1 : 1,
+                        }}
+                        className="text-lg font-black"
+                        style={{ color: item.color }}
+                      >
                         {item.value}%
-                      </span>
+                      </motion.span>
                     </div>
                     <p className="text-sm text-muted-foreground mb-2">
                       {item.amount} OKBOND
