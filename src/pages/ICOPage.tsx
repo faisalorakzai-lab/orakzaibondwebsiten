@@ -3,13 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Rocket, Wallet, Shield, TrendingUp, Lock, Zap, Clock,
   Copy, Check, ExternalLink, Loader2, AlertTriangle,
-  CheckCircle2, XCircle, RefreshCw, ArrowRight, Star, Target, ArrowLeft,
+  CheckCircle2, XCircle, RefreshCw, ArrowRight, Star, Target, ArrowLeft, Users, Gift, ShieldCheck
 } from "lucide-react";
 import { Link } from "wouter";
 import { useWallet } from "@/hooks/useWallet";
 import { useICO } from "@/hooks/useICO";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ReferralDashboard from "@/components/ReferralDashboard";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 const POLYGON_SCAN = "https://polygonscan.com/tx/";
@@ -164,6 +165,78 @@ function ROITable() {
   );
 }
 
+// ── Referral Profit Calculator ────────────────────────────────────────────────
+function ReferralCalculator() {
+  const [investors, setInvestors] = useState("10");
+  const [result, setResult]       = useState<{ l1: number; l2: number; l3: number; total: number } | null>({
+    l1: 5, l2: 3, l3: 2, total: 10
+  });
+
+  const INVESTMENT = 10; // base investment per person in POL (approximate for calculation)
+
+  const calculate = () => {
+    const n = parseFloat(investors);
+    if (!n || n <= 0) return;
+    const l1 = n * INVESTMENT * 0.05;
+    const l2 = n * INVESTMENT * 0.03;
+    const l3 = n * INVESTMENT * 0.02;
+    setResult({ l1, l2, l3, total: l1 + l2 + l3 });
+  };
+
+  useEffect(() => {
+    calculate();
+  }, [investors]);
+
+  return (
+    <div className="glass-card rounded-2xl border border-primary/20 p-6 bg-gradient-to-br from-primary/5 to-transparent">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center">
+          <TrendingUp className="w-5 h-5 text-primary" />
+        </div>
+        <div>
+          <h4 className="font-bold text-foreground">Profit Calculator</h4>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-widest">3-Level MLM Earnings</p>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <div>
+          <label className="text-[10px] text-muted-foreground uppercase font-bold block mb-2">Number of Referrals (L1)</label>
+          <input
+            type="number"
+            value={investors}
+            onChange={(e) => setInvestors(e.target.value)}
+            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-sm font-mono text-foreground focus:outline-none focus:border-primary/50"
+            placeholder="e.g. 10"
+          />
+          <p className="text-[9px] text-muted-foreground mt-1.5">* Assumes each referral contributes 10 POL</p>
+        </div>
+
+        {result && (
+          <div className="grid grid-cols-2 gap-2 pt-2">
+            <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+              <p className="text-[9px] text-muted-foreground uppercase font-bold">L1 (5%)</p>
+              <p className="text-sm font-bold text-foreground">{result.l1.toFixed(1)} POL</p>
+            </div>
+            <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+              <p className="text-[9px] text-muted-foreground uppercase font-bold">L2 (3%)</p>
+              <p className="text-sm font-bold text-foreground">{result.l2.toFixed(1)} POL</p>
+            </div>
+            <div className="p-3 rounded-xl bg-white/5 border border-white/5">
+              <p className="text-[9px] text-muted-foreground uppercase font-bold">L3 (2%)</p>
+              <p className="text-sm font-bold text-foreground">{result.l3.toFixed(1)} POL</p>
+            </div>
+            <div className="p-3 rounded-xl bg-primary/10 border border-primary/20">
+              <p className="text-[9px] text-primary uppercase font-bold">Total</p>
+              <p className="text-sm font-bold text-primary">{result.total.toFixed(1)} POL</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── Buy Form ───────────────────────────────────────────────────────────────────
 function BuyForm({
   address, provider, isPolygon, onConnect, switchToPolygon,
@@ -182,7 +255,8 @@ function BuyForm({
   const estimatedUSD    = estimatedTokens * 0.15;
 
   const handleBuy = async () => {
-    if (!polAmount || parseFloat(polAmount) <= 0) return;
+    const amount = parseFloat(polAmount);
+    if (isNaN(amount) || amount < 10 || amount > 10000) return;
     await buyTokens(polAmount, null);
   };
 
@@ -277,7 +351,7 @@ function BuyForm({
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
-              disabled={txStatus === "pending" || txStatus === "confirming"}
+              disabled={txStatus === "pending" || txStatus === "confirming" || parseFloat(polAmount) < 10 || parseFloat(polAmount) > 10000}
               onClick={handleBuy}
               className="w-full py-4 rounded-xl bg-primary text-primary-foreground font-bold text-base flex items-center justify-center gap-2 shadow-lg shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -442,6 +516,50 @@ export default function ICOPage() {
                 </div>
               </div>
 
+              {/* Phase Cards */}
+              <div className="space-y-6">
+                <h3 className="text-sm font-bold text-primary uppercase tracking-widest flex items-center gap-2">
+                  <Zap className="w-4 h-4" />
+                  ICO Phases
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  {PHASES.map((p, i) => (
+                    <motion.div
+                      key={p.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 * i }}
+                      className={`relative glass-card rounded-2xl border ${p.borderColor} p-6 space-y-4 shadow-xl ${p.glowColor} ${p.status === "live" ? "ring-1 ring-emerald-500/30" : ""}`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{p.label}</span>
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold uppercase ${p.badgeColor} ${p.status === "live" ? "text-black" : "text-foreground/80"}`}>
+                          {p.badge}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-4xl font-extrabold text-foreground font-mono">{p.price}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">per OKBOND</p>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Rocket className="w-4 h-4 text-primary/60" />
+                        <span className="text-muted-foreground">{p.supply}</span>
+                      </div>
+                      {p.status === "upcoming" && (
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground/60">
+                          <Lock className="w-3.5 h-3.5" />
+                          Unlocks after Phase {p.id - 1}
+                        </div>
+                      )}
+                      <p className="text-xs text-muted-foreground border-t border-white/5 pt-3">{p.desc}</p>
+                      {p.status === "live" && (
+                        <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
               {/* ROI Table */}
               <div className="space-y-6">
                 <h3 className="text-sm font-bold text-primary uppercase tracking-widest flex items-center gap-2">
@@ -450,15 +568,26 @@ export default function ICOPage() {
                 </h3>
                 <ROITable />
               </div>
+
+              {/* Referral Dashboard (Only if connected) */}
+              {address && (
+                <div className="space-y-6">
+                  <h3 className="text-sm font-bold text-primary uppercase tracking-widest flex items-center gap-2">
+                    <Users className="w-4 h-4" />
+                    Team Performance
+                  </h3>
+                  <ReferralDashboard address={address} />
+                </div>
+              )}
             </div>
 
             {/* ── Right Column: Buy Widget ──────────────────────────────── */}
-            <div className="lg:col-span-5">
+            <div className="lg:col-span-5 space-y-8">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2 }}
-                className="sticky top-28"
+                className="sticky top-28 space-y-8"
               >
                 <BuyForm 
                   address={address} 
@@ -467,6 +596,35 @@ export default function ICOPage() {
                   onConnect={connect} 
                   switchToPolygon={switchToPolygon} 
                 />
+
+                <ReferralCalculator />
+
+                {/* Why Buy Now Info */}
+                <div className="space-y-4">
+                  <h2 className="text-xl font-extrabold text-foreground">Why Participate?</h2>
+                  {[
+                    { icon: <ShieldCheck className="w-5 h-5" />, title: "Capital Protection", desc: "Your principal is protected via smart contract logic." },
+                    { icon: <TrendingUp className="w-5 h-5" />, title: "High ROI Potential", desc: "Phase 1 price $0.15 vs target listing price $1.00." },
+                    { icon: <Gift className="w-5 h-5" />, title: "MLM Rewards", desc: "Earn up to 3 levels of deep referral commissions." },
+                    { icon: <Zap className="w-5 h-5" />, title: "Polygon Network", desc: "Fast, secure, and near-zero gas fees." },
+                  ].map((item, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.15 * i }}
+                      className="glass-card rounded-xl border border-primary/20 p-4 flex gap-4 items-start"
+                    >
+                      <div className="flex-shrink-0 w-9 h-9 rounded-lg bg-primary/15 border border-primary/20 flex items-center justify-center text-primary">
+                        {item.icon}
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-foreground">{item.title}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
               </motion.div>
             </div>
           </div>
