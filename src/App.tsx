@@ -55,7 +55,9 @@ function App() {
           </Route>
           <Route path="/about" component={AboutPage} />
           <Route path="/founder" component={FounderPage} />
-          <Route path="/ico" component={ICOPage} />
+          <Route path="/ico">
+            <ICOPage />
+          </Route>
           <Route path="/lottery" component={LotteryPage} />
           <Route path="/community" component={CommunityPage} />
           <Route path="/contact" component={ContactPage} />

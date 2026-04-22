@@ -99,6 +99,55 @@ export default function LotteryPage() {
             switchToPolygon={switchToPolygon} 
           />
         </div>
+
+        {/* Claim Action Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto"
+        >
+          {/* Button 1: Claim Reward (Winners Only) - Gold Theme */}
+          <motion.button
+            whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(234,179,8,0.6)" }}
+            whileTap={{ scale: 0.98 }}
+            className="relative h-16 rounded-2xl font-extrabold text-base bg-gradient-to-r from-primary via-yellow-400 to-primary text-primary-foreground transition-all duration-300 flex items-center justify-center gap-3 group overflow-hidden"
+            style={{
+              boxShadow: "0 0 30px rgba(234,179,8,0.4), inset 0 1px 0 rgba(255,255,255,0.2)",
+            }}
+          >
+            {/* Animated background glow */}
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            
+            {/* Icon and Text */}
+            <motion.div
+              animate={{ y: [0, -2, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="relative z-10 flex items-center gap-2"
+            >
+              <Trophy className="w-5 h-5" />
+              <span>Claim Reward (Winners Only)</span>
+            </motion.div>
+          </motion.button>
+
+          {/* Button 2: Claim Capital (Non-Winners) - Silver/Outlined Gold Theme */}
+          <motion.button
+            whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(234,179,8,0.4)" }}
+            whileTap={{ scale: 0.98 }}
+            className="relative h-16 rounded-2xl font-extrabold text-base bg-transparent border-2 border-primary/60 text-primary hover:border-primary hover:bg-primary/5 transition-all duration-300 flex items-center justify-center gap-3 group"
+          >
+            {/* Icon and Text */}
+            <motion.div
+              animate={{ y: [0, -2, 0] }}
+              transition={{ duration: 2, repeat: Infinity, delay: 0.1 }}
+              className="flex items-center gap-2"
+            >
+              <ShieldCheck className="w-5 h-5" />
+              <span>Claim Capital (Non-Winners)</span>
+            </motion.div>
+          </motion.button>
+        </motion.div>
       </main>
     </div>
   );
