@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Globe, ChevronDown, Check, ArrowLeftRight } from "lucide-react";
+import { Globe, ChevronDown, Check, ArrowLeftRight, Menu } from "lucide-react";
 
 const QUICKSWAP_URL = "https://dapp.quickswap.exchange/swap?type=v3&from=0x6F539e4232c045cCAc08e2009d97BdC72815472a&to=ETH";
 
 interface NavbarProps {
   address: string | null;
   onConnect: () => void;
+  onMenuToggle?: () => void;
 }
 
 const LANGUAGES = [
@@ -17,7 +18,7 @@ const LANGUAGES = [
   { code: "zh", label: "Chinese",  native: "中文"       },
 ];
 
-export default function Navbar({ address, onConnect }: NavbarProps) {
+export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps) {
   const truncatedAddress = address
     ? `${address.slice(0, 6)}...${address.slice(-4)}`
     : null;
@@ -34,38 +35,53 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
     >
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
 
-        {/* ── Logo ─────────────────────────────────────────────────────────── */}
-        <div className="flex items-center gap-3">
-          <motion.div
-            className="relative w-10 h-10 rounded-full overflow-hidden border border-primary/50 flex-shrink-0"
-            animate={{
-              boxShadow: [
-                "0 0 8px rgba(234,179,8,0.35), 0 0 20px rgba(234,179,8,0.15)",
-                "0 0 16px rgba(234,179,8,0.65), 0 0 40px rgba(234,179,8,0.30)",
-                "0 0 8px rgba(234,179,8,0.35), 0 0 20px rgba(234,179,8,0.15)",
-              ],
-            }}
-            transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+        {/* ── Left: Hamburger + Logo ─────────────────────────────────────────── */}
+        <div className="flex items-center gap-4">
+          
+          {/* Hamburger Menu Toggle */}
+          <motion.button
+            onClick={onMenuToggle}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.95 }}
+            className="lg:hidden p-2 rounded-lg border border-border hover:border-primary/40 bg-background/60 hover:bg-primary/5 transition-all"
+            aria-label="Toggle menu"
           >
-            <img src="/okbond-logo.png" alt="OKBOND" className="w-full h-full object-cover" />
-          </motion.div>
+            <Menu className="w-5 h-5 text-muted-foreground hover:text-primary transition-colors" />
+          </motion.button>
 
-          <div>
-            <motion.h1
-              className="font-bold text-xl tracking-tight"
-              style={{ color: "hsl(var(--foreground))" }}
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <motion.div
+              className="relative w-10 h-10 rounded-full overflow-hidden border border-primary/50 flex-shrink-0"
               animate={{
-                textShadow: [
-                  "0 0 6px rgba(234,179,8,0.0)",
-                  "0 0 12px rgba(234,179,8,0.55), 0 0 25px rgba(234,179,8,0.25)",
-                  "0 0 6px rgba(234,179,8,0.0)",
+                boxShadow: [
+                  "0 0 8px rgba(234,179,8,0.35), 0 0 20px rgba(234,179,8,0.15)",
+                  "0 0 16px rgba(234,179,8,0.65), 0 0 40px rgba(234,179,8,0.30)",
+                  "0 0 8px rgba(234,179,8,0.35), 0 0 20px rgba(234,179,8,0.15)",
                 ],
               }}
-              transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+              transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
             >
-              Orakzai Bond
-            </motion.h1>
-            <span className="text-xs text-primary font-mono font-medium tracking-widest uppercase">OKBOND</span>
+              <img src="/okbond-logo.png" alt="OKBOND" className="w-full h-full object-cover" />
+            </motion.div>
+
+            <div>
+              <motion.h1
+                className="font-bold text-xl tracking-tight"
+                style={{ color: "hsl(var(--foreground))" }}
+                animate={{
+                  textShadow: [
+                    "0 0 6px rgba(234,179,8,0.0)",
+                    "0 0 12px rgba(234,179,8,0.55), 0 0 25px rgba(234,179,8,0.25)",
+                    "0 0 6px rgba(234,179,8,0.0)",
+                  ],
+                }}
+                transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+              >
+                Orakzai Bond
+              </motion.h1>
+              <span className="text-xs text-primary font-mono font-medium tracking-widest uppercase">OKBOND</span>
+            </div>
           </div>
         </div>
 
@@ -125,19 +141,6 @@ export default function Navbar({ address, onConnect }: NavbarProps) {
 
         {/* ── Right side: Language + Wallet ─────────────────────────────────── */}
         <div className="flex items-center gap-3">
-
-          {/* QuickSwap Buy button */}
-          <motion.a
-            href={QUICKSWAP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.97 }}
-            className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-sm bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500/25 hover:border-emerald-400/60 hover:text-emerald-300 transition-all shadow-[0_0_12px_rgba(16,185,129,0.15)] hover:shadow-[0_0_20px_rgba(16,185,129,0.3)]"
-          >
-            <ArrowLeftRight className="w-3.5 h-3.5" />
-            Buy / Sell
-          </motion.a>
 
           {/* Language dropdown */}
           <div className="relative hidden sm:block">

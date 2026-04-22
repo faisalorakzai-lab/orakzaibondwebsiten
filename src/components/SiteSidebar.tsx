@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronRight, ChevronLeft, Home, Info, Coins, Ticket,
@@ -46,10 +46,18 @@ const SOCIALS = [
   { label: "Email",    icon: <Mail    className="w-3.5 h-3.5" />, href: "mailto:orakzaibond@gmail.com" },
 ];
 
-export default function SiteSidebar() {
+export interface SidebarHandle {
+  toggleMobile: () => void;
+}
+
+const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
   const [expanded, setExpanded] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  useImperativeHandle(ref, () => ({
+    toggleMobile: () => setMobileOpen(p => !p),
+  }));
 
   useEffect(() => {
     const sections = NAV_ITEMS.map(n => n.id);
@@ -235,13 +243,6 @@ export default function SiteSidebar() {
         <SidebarContent />
       </motion.aside>
 
-      <button
-        onClick={() => setMobileOpen(p => !p)}
-        className="lg:hidden fixed left-0 top-1/2 -translate-y-1/2 z-50 w-7 h-14 bg-primary/20 border border-primary/40 border-l-0 rounded-r-xl flex items-center justify-center text-primary shadow-[2px_0_12px_rgba(234,179,8,0.2)]"
-      >
-        <ChevronRight className={`w-4 h-4 transition-transform ${mobileOpen ? "rotate-180" : ""}`} />
-      </button>
-
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -262,4 +263,7 @@ export default function SiteSidebar() {
       </AnimatePresence>
     </>
   );
-}
+});
+
+SiteSidebar.displayName = "SiteSidebar";
+export default SiteSidebar;

@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { useEffect } from "react";
-import { BadgeCheck, Building2, Globe, Linkedin, Twitter, Send, ExternalLink } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { BadgeCheck, Building2, Globe, Linkedin, Twitter, Send, ExternalLink, ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import SiteSidebar from "@/components/SiteSidebar";
+import SiteSidebar, { SidebarHandle } from "@/components/SiteSidebar";
 import Footer from "@/components/Footer";
 import { useWallet } from "@/hooks/useWallet";
 
@@ -14,6 +14,7 @@ const STATS = [
 
 export default function FounderPage() {
   const { address, connect } = useWallet();
+  const sidebarRef = useRef<SidebarHandle>(null);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
@@ -34,13 +35,31 @@ export default function FounderPage() {
     };
   }, []);
 
+  const handleMenuToggle = () => {
+    if (sidebarRef.current) {
+      sidebarRef.current.toggleMobile();
+    }
+  };
+
   return (
     <div className="min-h-screen w-full bg-background text-foreground flex flex-col overflow-x-hidden">
-      <Navbar address={address} onConnect={connect} />
-      <SiteSidebar />
+      <Navbar address={address} onConnect={connect} onMenuToggle={handleMenuToggle} />
+      <SiteSidebar ref={sidebarRef} />
 
-      <main className="flex-1 lg:pl-[60px] pt-24">
-        <section className="py-24 relative overflow-hidden">
+      <main className="flex-1 lg:pl-[60px]">
+        {/* ── Exit Button ───────────────────────────────────────────────────── */}
+        <div className="px-4 sm:px-6 lg:px-12 pt-6">
+          <motion.a
+            href="/"
+            whileHover={{ x: -4 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:border-primary/40 bg-background/60 hover:bg-primary/5 text-muted-foreground hover:text-primary transition-all text-sm font-medium"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </motion.a>
+        </div>
+
+        <section className="py-12 relative overflow-hidden">
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, #04060f 0%, #060a1a 40%, #08091e 70%, #04060f 100%)" }} />
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_30%_50%,rgba(234,179,8,0.05),transparent)]" />

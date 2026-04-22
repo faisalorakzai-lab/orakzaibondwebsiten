@@ -2,16 +2,17 @@
  * ICOPage — Dedicated ICO dashboard at /ico
  * Full 3-phase structure, 60-day countdown, buy form, progress bar, ROI table
  */
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Rocket, Wallet, Shield, TrendingUp, Lock, Zap, Clock,
   ChevronRight, Copy, Check, ExternalLink, Loader2, AlertTriangle,
-  CheckCircle2, XCircle, RefreshCw, ArrowRight, Star, Target,
+  CheckCircle2, XCircle, RefreshCw, ArrowRight, Star, Target, ArrowLeft,
 } from "lucide-react";
 import { useWallet } from "@/hooks/useWallet";
 import { useICO } from "@/hooks/useICO";
 import Navbar from "@/components/Navbar";
+import SiteSidebar, { SidebarHandle } from "@/components/SiteSidebar";
 import Footer from "@/components/Footer";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
@@ -393,19 +394,39 @@ function BuyForm({
 export default function ICOPage() {
   const { address, provider, isPolygon, connect, switchToPolygon } = useWallet();
   const countdown = useCountdown(PHASE1_END);
+  const sidebarRef = useRef<SidebarHandle>(null);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
     window.scrollTo(0, 0);
   }, []);
 
+  const handleMenuToggle = () => {
+    if (sidebarRef.current) {
+      sidebarRef.current.toggleMobile();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col overflow-x-hidden">
-      <Navbar address={address} onConnect={connect} />
+      <Navbar address={address} onConnect={connect} onMenuToggle={handleMenuToggle} />
+      <SiteSidebar ref={sidebarRef} />
 
       <main className="flex-1 lg:pl-[60px]">
+        {/* ── Exit Button ───────────────────────────────────────────────────── */}
+        <div className="px-4 sm:px-6 lg:px-12 pt-6">
+          <motion.a
+            href="/"
+            whileHover={{ x: -4 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:border-primary/40 bg-background/60 hover:bg-primary/5 text-muted-foreground hover:text-primary transition-all text-sm font-medium"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </motion.a>
+        </div>
+
         {/* ── Hero ──────────────────────────────────────────────────────────── */}
-        <section className="relative pt-20 pb-12 px-4 sm:px-6 lg:px-12 overflow-hidden">
+        <section className="relative pt-12 pb-12 px-4 sm:px-6 lg:px-12 overflow-hidden">
           {/* bg glow */}
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/8 rounded-full blur-[120px]" />

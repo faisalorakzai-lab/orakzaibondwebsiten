@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
   Shield, Zap, Globe, MapPin, ArrowRight, Users, Target,
-  TrendingUp, Lock, Layers, CheckCircle, ExternalLink,
+  TrendingUp, Lock, Layers, CheckCircle, ExternalLink, ArrowLeft,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import SiteSidebar, { SidebarHandle } from "@/components/SiteSidebar";
 import Footer from "@/components/Footer";
 import { useWallet } from "@/hooks/useWallet";
 
@@ -74,18 +75,39 @@ const values = [
 
 export default function AboutPage() {
   const { address, connect } = useWallet();
+  const sidebarRef = useRef<SidebarHandle>(null);
 
   useEffect(() => {
     document.documentElement.classList.add("dark");
     window.scrollTo(0, 0);
   }, []);
 
+  const handleMenuToggle = () => {
+    if (sidebarRef.current) {
+      sidebarRef.current.toggleMobile();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col overflow-x-hidden">
-      <Navbar address={address} onConnect={connect} />
+      <Navbar address={address} onConnect={connect} onMenuToggle={handleMenuToggle} />
+      <SiteSidebar ref={sidebarRef} />
 
-      {/* ── HERO ─────────────────────────────────────────────────── */}
-      <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+      <main className="flex-1 lg:pl-[60px]">
+        {/* ── Exit Button ───────────────────────────────────────────────────── */}
+        <div className="px-4 sm:px-6 lg:px-12 pt-6">
+          <motion.a
+            href="/"
+            whileHover={{ x: -4 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:border-primary/40 bg-background/60 hover:bg-primary/5 text-muted-foreground hover:text-primary transition-all text-sm font-medium"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </motion.a>
+        </div>
+
+        {/* ── HERO ─────────────────────────────────────────────────── */}
+        <section className="relative pt-12 pb-20 px-4 overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_center,rgba(234,179,8,0.09),transparent_60%)] pointer-events-none" />
         <div className="absolute inset-0 pointer-events-none">
           {[...Array(30)].map((_, i) => (
@@ -362,7 +384,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <Footer />
+      </main>
+      <div className="lg:pl-[60px]">
+        <Footer />
+      </div>
     </div>
   );
 }

@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowLeftRight, Clock } from "lucide-react";
+import { Clock, CheckCircle2, ShieldCheck, Gift } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 
 const coinImage = "/okbond-logo.png";
-const QUICKSWAP_URL = "https://dapp.quickswap.exchange/swap?type=v3&from=0x6F539e4232c045cCAc08e2009d97BdC72815472a&to=ETH";
+const ICO_URL = "/ico";
 
 interface HeroProps {
   onConnect: () => void;
@@ -16,6 +16,37 @@ const SLOGANS = [
   "Beyond Borders. Beyond Limits.",
   "The Sovereign Currency of Power.",
   "One Ecosystem. Infinite Potential.",
+];
+
+const PILLARS = [
+  {
+    icon: Gift,
+    title: "Lottery Non-Winner Cashback",
+    color: "text-blue-400",
+    bgColor: "bg-blue-500/10",
+    borderColor: "border-blue-500/30",
+  },
+  {
+    icon: ShieldCheck,
+    title: "100% Capital Protection",
+    color: "text-blue-400",
+    bgColor: "bg-blue-500/10",
+    borderColor: "border-blue-500/30",
+  },
+  {
+    icon: CheckCircle2,
+    title: "Verified Smart Contract",
+    color: "text-green-400",
+    bgColor: "bg-green-500/10",
+    borderColor: "border-green-500/30",
+  },
+  {
+    icon: Clock,
+    title: "60-Day Secure Vesting",
+    color: "text-blue-400",
+    bgColor: "bg-blue-500/10",
+    borderColor: "border-blue-500/30",
+  },
 ];
 
 export default function Hero({ onConnect, address }: HeroProps) {
@@ -144,27 +175,35 @@ export default function Hero({ onConnect, address }: HeroProps) {
               </Button>
             )}
             <motion.a
-              href={QUICKSWAP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={ICO_URL}
               whileHover={{ scale: 1.05 }}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 text-lg h-16 px-12 rounded-full font-black bg-white/8 border-2 border-white/20 text-foreground hover:bg-white/15 hover:border-white/30 transition-all duration-300"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 text-lg h-16 px-12 rounded-full font-black bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700 transition-all duration-300 shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:shadow-[0_0_50px_rgba(16,185,129,0.6)]"
             >
-              <ArrowLeftRight className="w-6 h-6" />
-              Trade on QuickSwap
+              <CheckCircle2 className="w-6 h-6" />
+              BUY ICO NOW
             </motion.a>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-4">
-            {["Polygon PoS", "Smart Contract Verified", "250+ Projects", "100% Capital Protected"].map((p) => (
-              <motion.span 
-                key={p} 
-                whileHover={{ scale: 1.05 }}
-                className="px-5 py-2 rounded-full border border-white/10 bg-white/5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground hover:border-primary/40 hover:bg-primary/8 transition-all cursor-default"
-              >
-                {p}
-              </motion.span>
-            ))}
+          {/* 4 Pillars Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
+            {PILLARS.map((pillar, idx) => {
+              const Icon = pillar.icon;
+              return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 + idx * 0.1 }}
+                  whileHover={{ y: -4 }}
+                  className={`p-5 rounded-2xl border ${pillar.borderColor} ${pillar.bgColor} backdrop-blur-sm transition-all hover:shadow-[0_0_20px_${pillar.color.replace('text-', 'rgba').replace('-400', ',0.2)')}]`}
+                >
+                  <div className={`w-10 h-10 rounded-lg ${pillar.bgColor} border ${pillar.borderColor} flex items-center justify-center mb-3`}>
+                    <Icon className={`w-5 h-5 ${pillar.color}`} />
+                  </div>
+                  <p className="text-sm font-bold text-foreground leading-snug">{pillar.title}</p>
+                </motion.div>
+              );
+            })}
           </div>
         </motion.div>
       </div>
