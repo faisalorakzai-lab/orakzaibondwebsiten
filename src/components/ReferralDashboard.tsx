@@ -64,7 +64,7 @@ export default function ReferralDashboard({ address, provider }: Props) {
           <p className="text-[10px] text-primary uppercase font-bold tracking-widest mb-1">Total Earnings</p>
           <div className="flex items-baseline gap-1">
             <p className="text-2xl font-black text-primary">{parseFloat(userStats?.referralEarnings || "0").toFixed(2)}</p>
-            <span className="text-xs font-bold text-primary/70">POL</span>
+            <span className="text-xs font-bold text-primary/70">OKBOND</span>
           </div>
         </div>
       </div>
@@ -107,7 +107,7 @@ export default function ReferralDashboard({ address, provider }: Props) {
                     <div className="px-4 pb-4 pt-2 border-t border-white/5">
                       <div className="flex items-center justify-between p-3 rounded-xl bg-black/20">
                         <span className="text-[10px] font-bold text-muted-foreground uppercase">Earnings</span>
-                        <p className={`text-sm font-bold font-mono ${cfg.color}`}>{parseFloat(earnings).toFixed(4)} POL</p>
+                        <p className={`text-sm font-bold font-mono ${cfg.color}`}>{parseFloat(earnings).toFixed(4)} OKBOND</p>
                       </div>
                     </div>
                   </motion.div>

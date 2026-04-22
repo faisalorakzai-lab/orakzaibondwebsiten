@@ -2,13 +2,22 @@ import { useState, useEffect, useCallback } from "react";
 import { BrowserProvider, Contract, EventLog, parseEther, formatEther, JsonRpcProvider } from "ethers";
 import ICO_ABI from "@/abi/ICOContract.json";
 
+// Live Contract Addresses
 const ICO_CONTRACT_ADDRESS = "0x0134F0ADE4b5e48aCBFF97155691bBC54eBadD16";
+const REFERRAL_CONTRACT_ADDRESS = "0x66471251A19D7A862e931340998cADFa9a411E9B";
+
 const FALLBACK_RPCS = [
   "https://rpc.ankr.com/polygon",
   "https://polygon.llamarpc.com",
   "https://polygon-bor-rpc.publicnode.com",
 ];
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+
+// Simplified ABI for the Referral Contract View Functions
+const REFERRAL_ABI = [
+  "function getUserStats(address _user) external view returns (uint256[5] counts, uint256[5] earnings, uint256 totalEarnings, address referrer)",
+  "function distributeRewards(address _buyer, uint256 _tokenAmount, address _referrer) external"
+];
 
 export interface ICOStats {
   icoActive: boolean;
@@ -29,14 +38,15 @@ export interface UserICOStats {
   referralCount: string;
   levelCounts: string[];
   levelEarnings: string[];
+  referrer: string;
 }
 
 export type TxStatus = "idle" | "pending" | "confirming" | "success" | "error";
 
-function getReadContract(provider?: BrowserProvider | null) {
-  if (provider) return new Contract(ICO_CONTRACT_ADDRESS, ICO_ABI, provider);
+function getReadContract(address: string, abi: any, provider?: BrowserProvider | null) {
+  if (provider) return new Contract(address, abi, provider);
   const rpc = new JsonRpcProvider(FALLBACK_RPCS[0]);
-  return new Contract(ICO_CONTRACT_ADDRESS, ICO_ABI, rpc);
+  return new Contract(address, abi, rpc);
 }
 
 async function safeCall<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
@@ -54,7 +64,7 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
   const fetchStats = useCallback(async () => {
     setLoading(true);
     try {
-      const c = getReadContract(provider);
+      const c = getReadContract(ICO_CONTRACT_ADDRESS, ICO_ABI, provider);
       const [
         icoActiveRaw, totalRaisedRaw, hardCapRaw, softCapRaw,
         tokensPerPOLRaw, minContribRaw, maxContribRaw, totalSoldRaw, refBonusRaw
@@ -77,7 +87,7 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
         softCap: formatEther(softCapRaw as bigint),
         tokensPerPOL: (tokensPerPOLRaw as bigint).toString(),
         minContribution: formatEther(minContribRaw as bigint),
-        maxContribution: formatEther(maxContributionRaw as bigint),
+        maxContribution: formatEther(maxContribRaw as bigint),
         totalTokensSold: formatEther(totalSoldRaw as bigint),
         referralBonusPercent: (refBonusRaw as bigint).toString(),
       });
@@ -90,15 +100,16 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
 
   const fetchUserStats = useCallback(async (addr: string) => {
     try {
-      const c = getReadContract(provider);
-      // Simulating 5-level fetching from contract or related event logs
-      // In a real scenario, these would be direct contract calls to the new Referral contract
-      const [contrib, refEarnings, refCount, events] = await Promise.all([
-        safeCall(() => c.getUserContribution(addr), BigInt(0)),
-        safeCall(() => c.getReferralEarnings(addr), BigInt(0)),
-        safeCall(() => c.referralCount(addr), BigInt(0)),
-        safeCall(() => c.queryFilter(c.filters.TokensPurchased(addr), -150_000), []),
+      const icoContract = getReadContract(ICO_CONTRACT_ADDRESS, ICO_ABI, provider);
+      const refContract = getReadContract(REFERRAL_CONTRACT_ADDRESS, REFERRAL_ABI, provider);
+      
+      const [contrib, refStatsRaw, events] = await Promise.all([
+        safeCall(() => icoContract.getUserContribution(addr), BigInt(0)),
+        safeCall(() => refContract.getUserStats(addr), [Array(5).fill(BigInt(0)), Array(5).fill(BigInt(0)), BigInt(0), ZERO_ADDRESS]),
+        safeCall(() => icoContract.queryFilter(icoContract.filters.TokensPurchased(addr), -150_000), []),
       ]);
+
+      const [counts, earnings, totalEarnings, referrer] = refStatsRaw;
 
       let earnedRaw = BigInt(0);
       if (Array.isArray(events)) {
@@ -112,10 +123,11 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
       setUserStats({
         contribution: formatEther(contrib as bigint),
         earnedTokens: formatEther(earnedRaw),
-        referralEarnings: formatEther(refEarnings as bigint),
-        referralCount: (refCount as bigint).toString(),
-        levelCounts: ["0", "0", "0", "0", "0"], // Placeholder for 5 levels
-        levelEarnings: ["0", "0", "0", "0", "0"], // Placeholder for 5 levels
+        referralEarnings: formatEther(totalEarnings as bigint),
+        referralCount: (counts as bigint[]).reduce((a, b) => a + b, BigInt(0)).toString(),
+        levelCounts: (counts as bigint[]).map(c => c.toString()),
+        levelEarnings: (earnings as bigint[]).map(e => formatEther(e)),
+        referrer: referrer as string,
       });
     } catch (e) {
       console.error("useICO fetchUserStats error:", e);
@@ -138,7 +150,12 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
       setTxError("Wallet not connected.");
       return;
     }
-    const referrerAddr = referrer && referrer.startsWith("0x") && referrer.length === 42 && referrer.toLowerCase() !== address.toLowerCase() ? referrer : ZERO_ADDRESS;
+    
+    // Fallback to existing referrer if not in URL
+    const finalReferrer = (referrer && referrer.startsWith("0x") && referrer.length === 42 && referrer.toLowerCase() !== address.toLowerCase()) 
+      ? referrer 
+      : (userStats?.referrer && userStats.referrer !== ZERO_ADDRESS ? userStats.referrer : ZERO_ADDRESS);
+
     setTxStatus("pending");
     setTxError(null);
     setTxHash(null);
@@ -146,10 +163,17 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
       const signer = await provider.getSigner();
       const contract = new Contract(ICO_CONTRACT_ADDRESS, ICO_ABI, signer);
       const value = parseEther(polAmount);
-      const tx = await contract.buyTokens(referrerAddr, { value });
+      
+      // Step 1: Buy tokens on ICO contract
+      const tx = await contract.buyTokens(finalReferrer, { value });
       setTxStatus("confirming");
       setTxHash(tx.hash);
-      await tx.wait(1);
+      const receipt = await tx.wait(1);
+      
+      // Note: The referral reward distribution is handled separately or within the contract.
+      // If the ICO contract doesn't call the Referral contract, we would call it here,
+      // but typically the ICO contract should be the one calling the Referral contract for security.
+      
       setTxStatus("success");
       await fetchStats();
       if (address) await fetchUserStats(address);
@@ -157,7 +181,7 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
       setTxStatus("error");
       setTxError(err.message || "Transaction failed.");
     }
-  }, [provider, address, fetchStats, fetchUserStats]);
+  }, [provider, address, userStats, fetchStats, fetchUserStats]);
 
   return { stats, userStats, loading, txStatus, txHash, txError, buyTokens, resetTx: () => setTxStatus("idle"), refresh: fetchStats };
 }
