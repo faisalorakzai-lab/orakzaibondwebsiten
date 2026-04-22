@@ -1,14 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
-  Shield, Zap, Globe, MapPin, ArrowRight, Users, Target,
+  Shield, Zap, Globe, ArrowRight, Users, Target,
   TrendingUp, Lock, Layers, CheckCircle, ExternalLink, ArrowLeft,
 } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import SiteSidebar, { SidebarHandle } from "@/components/SiteSidebar";
-import Footer from "@/components/Footer";
-import { useWallet } from "@/hooks/useWallet";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 32 },
@@ -31,14 +27,6 @@ const features = [
     description: "250+ real-world projects across energy, media, tech and finance — all powered by a single token." },
   { icon: TrendingUp, title: "567% ROI Potential",
     description: "Buy at $0.15 ICO Phase 1, list at $1.00 — that's a 567% return for early believers." },
-];
-
-const milestones = [
-  { year: "2019", title: "Orakzai Group Founded", desc: "Faisal Orakzai establishes the Orakzai conglomerate in Karachi, Pakistan." },
-  { year: "2022", title: "Blockchain Expansion", desc: "Decision to bridge real-world assets to DeFi via Polygon PoS network." },
-  { year: "2024", title: "OKBOND Token Deployed", desc: "Smart contracts deployed and audited on Polygon. Token mint complete." },
-  { year: "2025", title: "ICO Phase 1 Launch", desc: "$0.15/token with 100% capital protection — 75,000 OKBOND available." },
-  { year: "2026", title: "Listing & Staking", desc: "Target listing at $1.00 on QuickSwap; staking vaults and DAO governance go live." },
 ];
 
 const LOCATIONS: [number, number, string, boolean][] = [
@@ -74,36 +62,25 @@ const values = [
 ];
 
 export default function AboutPage() {
-  const { address, connect } = useWallet();
-  const sidebarRef = useRef<SidebarHandle>(null);
-
   useEffect(() => {
     document.documentElement.classList.add("dark");
     window.scrollTo(0, 0);
   }, []);
 
-  const handleMenuToggle = () => {
-    if (sidebarRef.current) {
-      sidebarRef.current.toggleMobile();
-    }
-  };
-
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col overflow-x-hidden">
-      <Navbar address={address} onConnect={connect} onMenuToggle={handleMenuToggle} />
-      <SiteSidebar ref={sidebarRef} />
-
-      <main className="flex-1 lg:pl-[60px]">
+      <main className="flex-1">
         {/* ── Exit Button ───────────────────────────────────────────────────── */}
         <div className="px-4 sm:px-6 lg:px-12 pt-6">
-          <motion.a
-            href="/"
-            whileHover={{ x: -4 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:border-primary/40 bg-background/60 hover:bg-primary/5 text-muted-foreground hover:text-primary transition-all text-sm font-medium"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </motion.a>
+          <Link href="/">
+            <motion.span
+              whileHover={{ x: -4 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:border-primary/40 bg-background/60 hover:bg-primary/5 text-muted-foreground hover:text-primary transition-all text-sm font-medium cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Home
+            </motion.span>
+          </Link>
         </div>
 
         {/* ── HERO ─────────────────────────────────────────────────── */}
@@ -137,13 +114,15 @@ export default function AboutPage() {
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
             className="flex flex-wrap gap-3 justify-center">
-            <Link href="/ico"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:bg-primary/90 transition-colors">
-              Join ICO Now <ArrowRight className="w-4 h-4" />
+            <Link href="/ico">
+              <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:bg-primary/90 transition-colors cursor-pointer">
+                Join ICO Now <ArrowRight className="w-4 h-4" />
+              </span>
             </Link>
-            <Link href="/founder"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-primary/40 text-primary font-semibold text-sm hover:bg-primary/10 transition-colors">
-              Meet the Founder <ExternalLink className="w-4 h-4" />
+            <Link href="/founder">
+              <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-primary/40 text-primary font-semibold text-sm hover:bg-primary/10 transition-colors cursor-pointer">
+                Meet the Founder <ExternalLink className="w-4 h-4" />
+              </span>
             </Link>
           </motion.div>
         </div>
@@ -220,9 +199,10 @@ export default function AboutPage() {
             <p className="text-muted-foreground leading-relaxed text-base">
               A Global Visionary and Architect of the Orakzai Group — Faisal Orakzai has built a multi-industry conglomerate from the ground up in Karachi, Pakistan, expanding its reach to international blockchain innovation. His journey reflects the leap from local leadership to building a decentralized global ecosystem designed for the next generation.
             </p>
-            <Link href="/founder"
-              className="inline-flex items-center gap-2 mt-5 text-sm text-primary font-semibold hover:underline">
-              Read Full Story →
+            <Link href="/founder">
+              <span className="inline-flex items-center gap-2 mt-5 text-sm text-primary font-semibold hover:underline cursor-pointer">
+                Read Full Story →
+              </span>
             </Link>
           </motion.div>
 
@@ -255,10 +235,6 @@ export default function AboutPage() {
         </div>
       </section>
       </main>
-
-      <div className="lg:pl-[60px]">
-        <Footer />
-      </div>
     </div>
   );
 }
