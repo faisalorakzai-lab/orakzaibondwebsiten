@@ -13,7 +13,7 @@ import ReferralDashboard from "@/components/ReferralDashboard";
 // ── Constants ──────────────────────────────────────────────────────────────────
 const POLYGON_SCAN = "https://polygonscan.com/tx/";
 
-// Phase 1 ends 60 days from April 10, 2026
+// Phase 1 ends 60 days from April 10, 2026 - Deployment Fix
 const PHASE1_END = new Date("2026-06-09T00:00:00Z").getTime();
 
 const PHASE1_SUPPLY = 75_000;   // tokens in Phase 1
