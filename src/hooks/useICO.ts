@@ -13,10 +13,15 @@ const FALLBACK_RPCS = [
 ];
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
-// Simplified ABI for the Referral Contract View Functions
+/**
+ * @dev Precise ABI for the Chairman Edition ICOReferral Contract
+ * Matches the deployed contract at 0x66471251A19D7A862e931340998cADFa9a411E9B
+ */
 const REFERRAL_ABI = [
   "function getUserStats(address _user) external view returns (uint256[5] counts, uint256[5] earnings, uint256 totalEarnings, address referrer)",
-  "function distributeRewards(address _buyer, uint256 _tokenAmount, address _referrer) external"
+  "function distributeRewards(address _buyer, uint256 _tokenAmount, address _referrer) external",
+  "function levelRates(uint256) external view returns (uint256)",
+  "function paused() external view returns (bool)"
 ];
 
 export interface ICOStats {
@@ -50,7 +55,10 @@ function getReadContract(address: string, abi: any, provider?: BrowserProvider |
 }
 
 async function safeCall<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
-  try { return await fn(); } catch { return fallback; }
+  try { return await fn(); } catch (err) { 
+    console.warn("Contract call failed:", err);
+    return fallback; 
+  }
 }
 
 export function useICO(provider: BrowserProvider | null, address: string | null) {
@@ -109,7 +117,10 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
         safeCall(() => icoContract.queryFilter(icoContract.filters.TokensPurchased(addr), -150_000), []),
       ]);
 
-      const [counts, earnings, totalEarnings, referrer] = refStatsRaw;
+      const counts = refStatsRaw[0];
+      const earnings = refStatsRaw[1];
+      const totalEarnings = refStatsRaw[2];
+      const referrer = refStatsRaw[3];
 
       let earnedRaw = BigInt(0);
       if (Array.isArray(events)) {
@@ -124,9 +135,9 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
         contribution: formatEther(contrib as bigint),
         earnedTokens: formatEther(earnedRaw),
         referralEarnings: formatEther(totalEarnings as bigint),
-        referralCount: (counts as bigint[]).reduce((a, b) => a + b, BigInt(0)).toString(),
-        levelCounts: (counts as bigint[]).map(c => c.toString()),
-        levelEarnings: (earnings as bigint[]).map(e => formatEther(e)),
+        referralCount: (counts as bigint[]).reduce((a: bigint, b: bigint) => a + b, BigInt(0)).toString(),
+        levelCounts: (counts as bigint[]).map((c: bigint) => c.toString()),
+        levelEarnings: (earnings as bigint[]).map((e: bigint) => formatEther(e)),
         referrer: referrer as string,
       });
     } catch (e) {
@@ -151,7 +162,6 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
       return;
     }
     
-    // Fallback to existing referrer if not in URL
     const finalReferrer = (referrer && referrer.startsWith("0x") && referrer.length === 42 && referrer.toLowerCase() !== address.toLowerCase()) 
       ? referrer 
       : (userStats?.referrer && userStats.referrer !== ZERO_ADDRESS ? userStats.referrer : ZERO_ADDRESS);
@@ -164,24 +174,30 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
       const contract = new Contract(ICO_CONTRACT_ADDRESS, ICO_ABI, signer);
       const value = parseEther(polAmount);
       
-      // Step 1: Buy tokens on ICO contract
       const tx = await contract.buyTokens(finalReferrer, { value });
       setTxStatus("confirming");
       setTxHash(tx.hash);
-      const receipt = await tx.wait(1);
-      
-      // Note: The referral reward distribution is handled separately or within the contract.
-      // If the ICO contract doesn't call the Referral contract, we would call it here,
-      // but typically the ICO contract should be the one calling the Referral contract for security.
+      await tx.wait(1);
       
       setTxStatus("success");
       await fetchStats();
       if (address) await fetchUserStats(address);
     } catch (err: any) {
+      console.error("Purchase error:", err);
       setTxStatus("error");
       setTxError(err.message || "Transaction failed.");
     }
   }, [provider, address, userStats, fetchStats, fetchUserStats]);
 
-  return { stats, userStats, loading, txStatus, txHash, txError, buyTokens, resetTx: () => setTxStatus("idle"), refresh: fetchStats };
+  return { 
+    stats, 
+    userStats, 
+    loading, 
+    txStatus, 
+    txHash, 
+    txError, 
+    buyTokens, 
+    resetTx: () => setTxStatus("idle"), 
+    refresh: () => { fetchStats(); if(address) fetchUserStats(address); } 
+  };
 }
