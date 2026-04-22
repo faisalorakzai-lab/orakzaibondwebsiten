@@ -6,39 +6,53 @@ import { Link } from "wouter";
 
 const TOKENOMICS_DATA = [
   {
-    name: "Public Sale (ICO)",
-    value: 40,
-    amount: "4,000,000",
+    name: "Staking Rewards",
+    value: 28,
+    amount: "2,800,000",
     color: "#eab308",
-    description: "Available for public purchase during ICO phases",
+    description: "Distributed to active stakers and long-term holders",
   },
   {
-    name: "Staking Rewards",
+    name: "Community & Ecosystem",
     value: 20,
     amount: "2,000,000",
     color: "#f59e0b",
-    description: "Distributed to active stakers and liquidity providers",
+    description: "Allocated for ecosystem growth and community initiatives",
   },
   {
-    name: "Ecosystem & 250+ Projects",
+    name: "Liquidity Pool",
     value: 20,
     amount: "2,000,000",
     color: "#3b82f6",
-    description: "Allocated for ecosystem development and partner projects",
+    description: "Locked liquidity to ensure stable trading and market depth",
   },
   {
-    name: "Marketing & Community",
-    value: 10,
-    amount: "1,000,000",
+    name: "Development",
+    value: 12,
+    amount: "1,200,000",
     color: "#10b981",
-    description: "Used for marketing initiatives and community engagement",
+    description: "Reserved for platform upgrades and technical infrastructure",
   },
   {
-    name: "Team & Development",
-    value: 10,
-    amount: "1,000,000",
+    name: "Team & Advisors",
+    value: 8,
+    amount: "800,000",
     color: "#8b5cf6",
-    description: "Reserved for core team with 60-day security lock-up",
+    description: "Incentives for core team and strategic advisors",
+  },
+  {
+    name: "Team Lock-up",
+    value: 6,
+    amount: "600,000",
+    color: "#ec4899",
+    description: "Strictly locked for 12 months to ensure long-term commitment",
+  },
+  {
+    name: "Public Sale",
+    value: 6,
+    amount: "600,000",
+    color: "#f97316",
+    description: "Exclusive scarcity phase for early public participants",
   },
 ];
 
@@ -69,22 +83,22 @@ const TRANSPARENCY_POINTS = [
   {
     icon: "📉",
     title: "Scarcity Drives Value",
-    description: "With only 10M total supply and 40% in public sale, OKBOND maintains extreme scarcity. This proven mechanism ensures sustained demand and price appreciation.",
+    description: "With only 10M total supply and exclusive public allocation, OKBOND maintains extreme scarcity for sustained demand.",
   },
   {
     icon: "🔒",
-    title: "Security Lock-up",
-    description: "Team and development tokens are locked for 60 days via smart contract, preventing sudden market flooding and ensuring long-term commitment.",
+    title: "12-Month Team Lock-up",
+    description: "A significant portion of team tokens is locked for 12 months via smart contract, ensuring zero market flooding.",
   },
   {
     icon: "💰",
-    title: "Investor Protection",
-    description: "60% of tokens are allocated to public sale, staking, and ecosystem growth, ensuring fair distribution and reducing concentration risk.",
+    title: "Liquidity Assurance",
+    description: "20% of tokens are dedicated to the Liquidity Pool, providing a stable foundation for all traders and investors.",
   },
   {
     icon: "🌱",
     title: "Sustainable Growth",
-    description: "20% dedicated to ecosystem and 250+ projects ensures continuous development and real-world utility for token holders.",
+    description: "20% dedicated to community and ecosystem ensures continuous development and real-world utility.",
   },
 ];
 
@@ -147,7 +161,7 @@ export default function Tokenomics() {
         >
           <span className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-mono font-semibold uppercase tracking-widest">
             <TrendingUp className="w-3.5 h-3.5" />
-            Token Distribution
+            Official Token Distribution
           </span>
           <h2 className="text-6xl md:text-7xl font-black tracking-tighter text-foreground mb-6 leading-[0.85]">
             OKBOND<br />
@@ -156,7 +170,7 @@ export default function Tokenomics() {
             </span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            10 Million fixed supply. Fair distribution. Engineered for scarcity and sustainable value growth.
+            10 Million fixed supply. Strategic allocation for long-term stability and ecosystem dominance.
           </p>
         </motion.div>
 
@@ -172,10 +186,8 @@ export default function Tokenomics() {
               boxShadow: "0 0 40px rgba(234,179,8,0.2), inset 0 1px 0 rgba(255,255,255,0.1)",
             }}
           >
-            {/* Animated background glow */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,rgba(234,179,8,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-            {/* Chart container */}
             <div className="relative z-10 w-full h-full flex items-center justify-center">
               <ResponsiveContainer width="100%" height={450}>
                 <PieChart>
@@ -229,7 +241,6 @@ export default function Tokenomics() {
               </ResponsiveContainer>
             </div>
 
-            {/* Center text for donut */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="text-center">
                 <p className="text-sm text-muted-foreground font-mono">Total Supply</p>
@@ -240,7 +251,7 @@ export default function Tokenomics() {
           </motion.div>
 
           {/* Breakdown List */}
-          <div className="space-y-4">
+          <div className="space-y-3">
             {TOKENOMICS_DATA.map((item, idx) => (
               <motion.div
                 key={idx}
@@ -254,7 +265,7 @@ export default function Tokenomics() {
               >
                 <motion.div
                   whileHover={{ x: 8 }}
-                  className="relative p-6 rounded-2xl backdrop-blur-xl border transition-all duration-300 overflow-hidden cursor-pointer"
+                  className="relative p-5 rounded-2xl backdrop-blur-xl border transition-all duration-300 overflow-hidden cursor-pointer"
                   style={{
                     borderColor: activeIndex === null || activeIndex === idx ? item.color + "50" : item.color + "20",
                     background:
@@ -267,23 +278,22 @@ export default function Tokenomics() {
                         : `0 0 10px ${item.color}08, inset 0 1px 0 rgba(255,255,255,0.05)`,
                   }}
                 >
-                  {/* Animated neon border glow */}
                   <div
                     className="absolute inset-0 rounded-2xl border opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm"
                     style={{ borderColor: item.color }}
                   />
 
                   <div className="relative z-10">
-                    <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center gap-3">
                         <motion.div
                           animate={{
                             scale: activeIndex === idx ? 1.2 : 1,
                           }}
-                          className="w-4 h-4 rounded-full"
+                          className="w-3 h-3 rounded-full"
                           style={{ backgroundColor: item.color }}
                         />
-                        <h4 className="font-black text-foreground">
+                        <h4 className="font-black text-foreground text-sm">
                           {item.name}
                         </h4>
                       </div>
@@ -291,22 +301,23 @@ export default function Tokenomics() {
                         animate={{
                           scale: activeIndex === idx ? 1.1 : 1,
                         }}
-                        className="text-lg font-black"
+                        className="text-base font-black"
                         style={{ color: item.color }}
                       >
                         {item.value}%
                       </motion.span>
                     </div>
-                    <p className="text-sm text-muted-foreground mb-2">
-                      {item.amount} OKBOND
-                    </p>
-                    <p className="text-xs text-muted-foreground/70">
-                      {item.description}
-                    </p>
+                    <div className="flex justify-between items-center">
+                      <p className="text-xs text-muted-foreground">
+                        {item.amount} OKBOND
+                      </p>
+                      <p className="text-[10px] text-muted-foreground/60 italic">
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
 
-                  {/* Progress bar */}
-                  <div className="relative z-10 mt-4 h-2 rounded-full bg-muted/30 overflow-hidden">
+                  <div className="relative z-10 mt-3 h-1.5 rounded-full bg-muted/30 overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       whileInView={{ width: `${item.value}%` }}
@@ -385,7 +396,6 @@ export default function Tokenomics() {
             boxShadow: "0 0 40px rgba(234,179,8,0.2), inset 0 1px 0 rgba(255,255,255,0.1)",
           }}
         >
-          {/* Animated neon border glow */}
           <div className="absolute inset-0 rounded-3xl border border-primary/50 opacity-20 blur-sm" />
 
           <div className="relative z-10">
@@ -398,12 +408,12 @@ export default function Tokenomics() {
                   Transparency Note: Scarcity as a Value Driver
                 </h3>
                 <p className="text-muted-foreground text-lg leading-relaxed mb-4">
-                  With only 40% of OKBOND available in the public sale and a fixed total supply of 10 million tokens, scarcity becomes the primary mechanism for price appreciation. This proven economic principle ensures that early investors benefit from sustained demand and limited supply. The remaining 60% is strategically allocated to staking rewards, ecosystem development, and team incentives — all designed to create long-term value for token holders.
+                  With a fixed total supply of 10 million tokens and strategic lock-ups, scarcity is the primary mechanism for value preservation. This proven economic principle ensures that early believers benefit from limited supply. The majority of tokens are strategically allocated to staking, ecosystem growth, and liquidity — all designed for sustainable long-term value.
                 </p>
                 <p className="text-primary font-semibold">
-                  ✓ Fixed supply ensures no inflation
-                  <br />✓ 60-day security lock-up prevents market flooding
-                  <br />✓ 60% allocation to growth and rewards
+                  ✓ Fixed supply ensures zero inflation
+                  <br />✓ 12-month Team Lock-up prevents market flooding
+                  <br />✓ 20% Liquidity Pool for market stability
                 </p>
               </div>
             </div>
@@ -438,15 +448,12 @@ export default function Tokenomics() {
                     boxShadow: "0 0 20px rgba(59,130,246,0.2), inset 0 1px 0 rgba(255,255,255,0.1)",
                   }}
                 >
-                  {/* Animated neon border glow */}
                   <div className="absolute inset-0 rounded-3xl border border-primary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
 
-                  {/* Icon */}
                   <div className="relative z-10 text-5xl mb-4">
                     {point.icon}
                   </div>
 
-                  {/* Content */}
                   <h4 className="relative z-10 text-xl font-black text-foreground mb-3">
                     {point.title}
                   </h4>
