@@ -13,10 +13,6 @@ const FALLBACK_RPCS = [
 ];
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
-/**
- * @dev Precise ABI for the Chairman Edition ICOReferral Contract
- * Matches the deployed contract at 0x66471251A19D7A862e931340998cADFa9a411E9B
- */
 const REFERRAL_ABI = [
   "function getUserStats(address _user) external view returns (uint256[5] counts, uint256[5] earnings, uint256 totalEarnings, address referrer)",
   "function distributeRewards(address _buyer, uint256 _tokenAmount, address _referrer) external",
@@ -49,9 +45,14 @@ export interface UserICOStats {
 export type TxStatus = "idle" | "pending" | "confirming" | "success" | "error";
 
 function getReadContract(address: string, abi: any, provider?: BrowserProvider | null) {
-  if (provider) return new Contract(address, abi, provider);
-  const rpc = new JsonRpcProvider(FALLBACK_RPCS[0]);
-  return new Contract(address, abi, rpc);
+  try {
+    if (provider) return new Contract(address, abi, provider);
+    const rpc = new JsonRpcProvider(FALLBACK_RPCS[0]);
+    return new Contract(address, abi, rpc);
+  } catch (err) {
+    console.error("Failed to initialize contract:", err);
+    return null;
+  }
 }
 
 async function safeCall<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
@@ -73,6 +74,8 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
     setLoading(true);
     try {
       const c = getReadContract(ICO_CONTRACT_ADDRESS, ICO_ABI, provider);
+      if (!c) throw new Error("ICO contract not initialized");
+
       const [
         icoActiveRaw, totalRaisedRaw, hardCapRaw, softCapRaw,
         tokensPerPOLRaw, minContribRaw, maxContribRaw, totalSoldRaw, refBonusRaw
@@ -90,14 +93,14 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
 
       setStats({
         icoActive: Boolean(icoActiveRaw),
-        totalRaisedPOL: formatEther(totalRaisedRaw as bigint),
-        hardCap: formatEther(hardCapRaw as bigint),
-        softCap: formatEther(softCapRaw as bigint),
-        tokensPerPOL: (tokensPerPOLRaw as bigint).toString(),
-        minContribution: formatEther(minContribRaw as bigint),
-        maxContribution: formatEther(maxContribRaw as bigint),
-        totalTokensSold: formatEther(totalSoldRaw as bigint),
-        referralBonusPercent: (refBonusRaw as bigint).toString(),
+        totalRaisedPOL: formatEther(totalRaisedRaw || BigInt(0)),
+        hardCap: formatEther(hardCapRaw || BigInt(0)),
+        softCap: formatEther(softCapRaw || BigInt(0)),
+        tokensPerPOL: (tokensPerPOLRaw || BigInt(0)).toString(),
+        minContribution: formatEther(minContribRaw || BigInt(0)),
+        maxContribution: formatEther(maxContribRaw || BigInt(0)),
+        totalTokensSold: formatEther(totalSoldRaw || BigInt(0)),
+        referralBonusPercent: (refBonusRaw || BigInt(0)).toString(),
       });
     } catch (e) {
       console.error("useICO fetchStats error:", e);
@@ -107,20 +110,25 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
   }, [provider]);
 
   const fetchUserStats = useCallback(async (addr: string) => {
+    console.log("Fetching user stats for:", addr);
     try {
       const icoContract = getReadContract(ICO_CONTRACT_ADDRESS, ICO_ABI, provider);
       const refContract = getReadContract(REFERRAL_CONTRACT_ADDRESS, REFERRAL_ABI, provider);
       
+      if (!icoContract || !refContract) throw new Error("Contracts not initialized");
+
       const [contrib, refStatsRaw, events] = await Promise.all([
         safeCall(() => icoContract.getUserContribution(addr), BigInt(0)),
         safeCall(() => refContract.getUserStats(addr), [Array(5).fill(BigInt(0)), Array(5).fill(BigInt(0)), BigInt(0), ZERO_ADDRESS]),
         safeCall(() => icoContract.queryFilter(icoContract.filters.TokensPurchased(addr), -150_000), []),
       ]);
 
-      const counts = refStatsRaw[0];
-      const earnings = refStatsRaw[1];
-      const totalEarnings = refStatsRaw[2];
-      const referrer = refStatsRaw[3];
+      console.log("Raw refStatsRaw:", refStatsRaw);
+
+      const counts = Array.isArray(refStatsRaw?.[0]) ? refStatsRaw[0] : Array(5).fill(BigInt(0));
+      const earnings = Array.isArray(refStatsRaw?.[1]) ? refStatsRaw[1] : Array(5).fill(BigInt(0));
+      const totalEarnings = refStatsRaw?.[2] || BigInt(0);
+      const referrer = refStatsRaw?.[3] || ZERO_ADDRESS;
 
       let earnedRaw = BigInt(0);
       if (Array.isArray(events)) {
@@ -131,15 +139,18 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
         }
       }
 
-      setUserStats({
-        contribution: formatEther(contrib as bigint),
+      const newUserStats = {
+        contribution: formatEther(contrib || BigInt(0)),
         earnedTokens: formatEther(earnedRaw),
-        referralEarnings: formatEther(totalEarnings as bigint),
-        referralCount: (counts as bigint[]).reduce((a: bigint, b: bigint) => a + b, BigInt(0)).toString(),
-        levelCounts: (counts as bigint[]).map((c: bigint) => c.toString()),
-        levelEarnings: (earnings as bigint[]).map((e: bigint) => formatEther(e)),
-        referrer: referrer as string,
-      });
+        referralEarnings: formatEther(totalEarnings),
+        referralCount: counts.reduce((a: bigint, b: bigint) => a + (b || BigInt(0)), BigInt(0)).toString(),
+        levelCounts: counts.map((c: bigint) => (c || BigInt(0)).toString()),
+        levelEarnings: earnings.map((e: bigint) => formatEther(e || BigInt(0))),
+        referrer: String(referrer),
+      };
+      
+      console.log("Setting user stats:", newUserStats);
+      setUserStats(newUserStats);
     } catch (e) {
       console.error("useICO fetchUserStats error:", e);
     }

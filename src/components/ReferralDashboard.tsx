@@ -25,12 +25,14 @@ export default function ReferralDashboard({ address, provider }: Props) {
   const [copied, setCopied] = useState(false);
   const [expandedLevel, setExpandedLevel] = useState<number | null>(1);
 
-  const referralLink = `${window.location.origin}/ico?ref=${address}`;
+  const referralLink = typeof window !== 'undefined' ? `${window.location.origin}/ico?ref=${address}` : "";
 
   const copyReferral = () => {
-    navigator.clipboard.writeText(referralLink);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (typeof navigator !== 'undefined' && referralLink) {
+      navigator.clipboard.writeText(referralLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
@@ -107,7 +109,7 @@ export default function ReferralDashboard({ address, provider }: Props) {
                     <div className="px-4 pb-4 pt-2 border-t border-white/5">
                       <div className="flex items-center justify-between p-3 rounded-xl bg-black/20">
                         <span className="text-[10px] font-bold text-muted-foreground uppercase">Earnings</span>
-                        <p className={`text-sm font-bold font-mono ${cfg.color}`}>{parseFloat(earnings).toFixed(4)} OKBOND</p>
+                        <p className={`text-sm font-bold font-mono ${cfg.color}`}>{parseFloat(earnings || "0").toFixed(4)} OKBOND</p>
                       </div>
                     </div>
                   </motion.div>
