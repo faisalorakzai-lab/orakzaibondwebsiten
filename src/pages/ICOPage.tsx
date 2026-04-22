@@ -8,7 +8,7 @@ import {
 import { Link } from "wouter";
 import { useWallet } from "@/hooks/useWallet";
 import { useICO } from "@/hooks/useICO";
-import ReferralDashboard from "@/components/ReferralDashboard";
+// import ReferralDashboard from "@/components/ReferralDashboard";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 const POLYGON_SCAN = "https://polygonscan.com/tx/";
@@ -524,8 +524,8 @@ export default function ICOPage() {
                 <ROITable />
               </div>
 
-              {/* Referral Dashboard (Only if connected) */}
-              {address && (
+              {/* Referral Dashboard (Temporarily disabled) */}
+              {/* {address && (
                 <div className="space-y-6">
                   <h3 className="text-sm font-bold text-primary uppercase tracking-widest flex items-center gap-2">
                     <Users className="w-4 h-4" />
@@ -533,7 +533,7 @@ export default function ICOPage() {
                   </h3>
                   <ReferralDashboard address={address} />
                 </div>
-              )}
+              )} */}
             </div>
 
             {/* ── Right Column: Buy Widget ──────────────────────────────── */}
