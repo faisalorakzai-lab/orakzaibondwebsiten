@@ -9,8 +9,6 @@ import {
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { useWallet } from "@/hooks/useWallet";
 
 /* ── Constants ────────────────────────────────────────────────────────── */
@@ -137,7 +135,7 @@ function StatCard({
 
 /* ── Main Dashboard ───────────────────────────────────────────────────── */
 export default function SystemPage() {
-  const { address, connect } = useWallet();
+  const { address } = useWallet();
   const [copied, setCopied]       = useState(false);
   const [refCopied, setRefCopied] = useState(false);
   const [chartData]               = useState(() => generateChartData());
@@ -148,9 +146,6 @@ export default function SystemPage() {
   const refLink        = `https://orakzaibond.com/?ref=${displayAddress.slice(0, 10)}`;
 
   const chartFiltered = selectedRange === "7D" ? chartData.slice(-7) : selectedRange === "14D" ? chartData.slice(-14) : chartData;
-  const priceChange   = chartFiltered.length > 1
-    ? ((chartFiltered[chartFiltered.length - 1].price - chartFiltered[0].price) / chartFiltered[0].price * 100)
-    : 0;
 
   function copyAddress() {
     navigator.clipboard.writeText(displayAddress).catch(() => {});
@@ -161,10 +156,6 @@ export default function SystemPage() {
     setRefCopied(true); setTimeout(() => setRefCopied(false), 2000);
   }
 
-  function handleDisconnect() {
-    window.location.reload();
-  }
-
   useEffect(() => {
     document.title = "Dashboard | Orakzai Bond";
     return () => { document.title = "Orakzai Bond"; };
@@ -172,10 +163,8 @@ export default function SystemPage() {
 
   return (
     <div className="min-h-screen w-full bg-background text-foreground flex flex-col overflow-x-hidden" style={{ background: "#04060f" }}>
-      <Navbar address={address} onConnect={connect} />
-
       {/* ── News Ticker ─────────────────────────────────────────────── */}
-      <div className="fixed top-[64px] left-0 right-0 z-30 border-b overflow-hidden"
+      <div className="sticky top-0 left-0 right-0 z-30 border-b overflow-hidden"
         style={{ background: "rgba(4,6,15,0.97)", borderColor: "rgba(0,212,255,0.15)", backdropFilter: "blur(12px)" }}>
         <div className="flex items-center">
           {/* LIVE badge */}
@@ -207,398 +196,213 @@ export default function SystemPage() {
         </div>
       </div>
 
-      <main className="flex-1 pt-[112px] pb-20">
+      <main className="flex-1 pt-12 pb-20">
         <div className="container mx-auto px-4 max-w-7xl">
-
-          {/* ── Dashboard Header ──────────────────────────────────────── */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pt-6">
+          {/* Header section */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <motion.div className="w-2 h-2 rounded-full bg-emerald-400"
-                  animate={{ boxShadow: ["0 0 4px #34d399", "0 0 12px #34d399", "0 0 4px #34d399"] }}
-                  transition={{ duration: 2, repeat: Infinity }} />
-                <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-400">Live Dashboard</span>
-              </div>
-              <h1 className="text-3xl font-extrabold text-foreground">
-                Orakzai{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-primary to-cyan-400">
-                  User Portal
-                </span>
-              </h1>
-              <p className="text-xs text-muted-foreground/60 mt-0.5 font-mono">Polygon PoS · Chain ID 137 · Real-time</p>
+              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-3 mb-2">
+                <div className="w-2 h-8 bg-cyan-500 rounded-full" />
+                <h1 className="text-4xl font-black tracking-tight">User <span className="text-cyan-400">Dashboard</span></h1>
+              </motion.div>
+              <p className="text-muted-foreground font-medium">Welcome back, <span className="text-foreground font-bold">{shortAddress}</span></p>
             </div>
 
-            {/* Connected wallet indicator */}
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-3 px-4 py-3 rounded-2xl border"
-              style={{ background: "rgba(6,8,32,0.9)", borderColor: "rgba(0,212,255,0.2)", backdropFilter: "blur(12px)" }}>
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center"
-                style={{ background: "rgba(0,212,255,0.12)", border: "1px solid rgba(0,212,255,0.25)" }}>
-                <Wallet className="w-4 h-4 text-cyan-400" />
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Polygon Mainnet</span>
               </div>
-              <div className="hidden sm:block">
-                <p className="text-[10px] text-muted-foreground/60 font-mono uppercase tracking-widest">Connected</p>
-                <p className="text-xs font-bold font-mono text-cyan-300">{shortAddress}</p>
-              </div>
-              <button onClick={copyAddress}
-                className="w-7 h-7 rounded-lg border border-border bg-muted/20 flex items-center justify-center text-muted-foreground hover:text-cyan-400 hover:border-cyan-500/30 transition-all">
-                {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+              <button onClick={copyAddress} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 transition-all">
+                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                <span className="text-xs font-bold uppercase tracking-wider">{copied ? "Copied" : "Copy Address"}</span>
               </button>
-              <div className="w-px h-6 bg-border" />
-              <button onClick={handleDisconnect}
-                className="flex items-center gap-1.5 text-xs font-bold text-red-400/70 hover:text-red-400 transition-colors px-2 py-1 rounded-lg hover:bg-red-500/10">
-                <LogOut className="w-3 h-3" />
-                <span className="hidden sm:inline">Disconnect</span>
-              </button>
-            </motion.div>
-          </div>
-
-          {/* ── Stat Cards ────────────────────────────────────────────── */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <StatCard
-              delay={0}
-              icon={<Coins className="w-5 h-5" />}
-              label="Token Balance"
-              value="750 OKBOND"
-              sub={`≈ $${(750 * ICO_PRICE_USD).toFixed(2)} USD at current ICO price`}
-              color="#eab308"
-              glow="rgba(234,179,8,0.2)"
-            />
-            <StatCard
-              delay={0.08}
-              icon={<TrendingUp className="w-5 h-5" />}
-              label="Potential Profit"
-              value={`$${(750 * TARGET_PRICE).toFixed(2)}`}
-              sub={`Entry $0.15 → Target $1.00 · +${ROI_PCT.toFixed(0)}% ROI`}
-              trend="up"
-              color="#22d3ee"
-              glow="rgba(34,211,238,0.2)"
-            />
-            <StatCard
-              delay={0.16}
-              icon={<Gift className="w-5 h-5" />}
-              label="Referral Rewards"
-              value="26.7 POL"
-              sub={`≈ $${(26.7 * POL_USD).toFixed(2)} USD · 42 total referrals`}
-              trend="neutral"
-              color="#a78bfa"
-              glow="rgba(167,139,250,0.2)"
-            />
-          </div>
-
-          {/* ── Middle Row: Chart + Referral ──────────────────────────── */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-
-            {/* Live Price Chart */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="lg:col-span-2 rounded-2xl border p-6"
-              style={{
-                background: "rgba(6,8,32,0.85)",
-                backdropFilter: "blur(14px)",
-                borderColor: "rgba(0,212,255,0.15)",
-              }}>
-
-              {/* Chart header */}
-              <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <BarChart3 className="w-4 h-4 text-cyan-400" />
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-cyan-400">Live Chart</span>
-                  </div>
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-2xl font-extrabold font-mono text-foreground">
-                      {OKBOND_POL.toFixed(4)} <span className="text-sm text-muted-foreground font-normal">POL</span>
-                    </span>
-                    <span className={`text-xs font-bold px-2 py-0.5 rounded-lg ${priceChange >= 0 ? "bg-emerald-500/15 text-emerald-400" : "bg-red-500/15 text-red-400"}`}>
-                      {priceChange >= 0 ? "+" : ""}{priceChange.toFixed(2)}%
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground/60 font-mono mt-0.5">OKBOND / POL · ≈ ${ICO_PRICE_USD} USD</p>
-                </div>
-
-                {/* Range selector */}
-                <div className="flex rounded-xl border border-border overflow-hidden text-xs font-bold">
-                  {(["7D", "14D", "30D"] as const).map((r) => (
-                    <button key={r} onClick={() => setSelectedRange(r)}
-                      className={`px-3 py-2 transition-all ${selectedRange === r ? "bg-cyan-500/15 text-cyan-400" : "text-muted-foreground/60 hover:text-foreground"}`}>
-                      {r}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Recharts area chart */}
-              <div className="h-[220px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={chartFiltered} margin={{ top: 5, right: 5, bottom: 0, left: 0 }}>
-                    <defs>
-                      <linearGradient id="priceGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%"  stopColor="#22d3ee" stopOpacity={0.25} />
-                        <stop offset="95%" stopColor="#22d3ee" stopOpacity={0.01} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-                    <XAxis dataKey="date" tick={{ fill: "rgba(148,163,184,0.5)", fontSize: 9, fontFamily: "monospace" }}
-                      axisLine={false} tickLine={false} interval={selectedRange === "7D" ? 0 : selectedRange === "14D" ? 1 : 4} />
-                    <YAxis tick={{ fill: "rgba(148,163,184,0.5)", fontSize: 9, fontFamily: "monospace" }}
-                      axisLine={false} tickLine={false} width={48}
-                      tickFormatter={(v) => v.toFixed(3)}
-                      domain={["auto", "auto"]} />
-                    <Tooltip content={(props) => <ChartTooltip {...(props as { active?: boolean; payload?: { value: number }[]; label?: string })} />} />
-                    <Area type="monotone" dataKey="price" stroke="#22d3ee" strokeWidth={2}
-                      fill="url(#priceGrad)" dot={false} activeDot={{ r: 4, fill: "#22d3ee", stroke: "#04060f", strokeWidth: 2 }} />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-
-              {/* Bottom info row */}
-              <div className="flex flex-wrap items-center gap-4 mt-4 pt-4 border-t" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
-                {[
-                  { label: "Phase 1 Price", value: "$0.15",  color: "text-primary" },
-                  { label: "Target Price",  value: "$1.00",  color: "text-emerald-400" },
-                  { label: "Network",       value: "Polygon PoS", color: "text-purple-400" },
-                  { label: "Contract",      value: TOKEN_ADDRESS.slice(0,10)+"…", color: "text-cyan-400", href: EXPLORER },
-                ].map((s) => (
-                  <div key={s.label}>
-                    <p className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-widest mb-0.5">{s.label}</p>
-                    {s.href
-                      ? <a href={s.href} target="_blank" rel="noreferrer"
-                          className={`text-xs font-bold font-mono ${s.color} hover:underline flex items-center gap-0.5`}>
-                          {s.value} <ExternalLink className="w-2.5 h-2.5" />
-                        </a>
-                      : <p className={`text-xs font-bold font-mono ${s.color}`}>{s.value}</p>}
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Referral Empire */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.28 }}
-              className="rounded-2xl border p-6 flex flex-col"
-              style={{
-                background: "rgba(6,8,32,0.85)",
-                backdropFilter: "blur(14px)",
-                borderColor: "rgba(234,179,8,0.18)",
-              }}>
-
-              <div className="flex items-center gap-2 mb-1">
-                <Users className="w-4 h-4 text-primary" />
-                <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-primary/70">Referral Empire</span>
-              </div>
-              <h3 className="text-lg font-extrabold text-foreground mb-4">Your Network</h3>
-
-              {/* Referral link */}
-              <div className="mb-5">
-                <p className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-widest mb-1.5">Your Referral Link</p>
-                <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl border"
-                  style={{ borderColor: "rgba(234,179,8,0.25)", background: "rgba(234,179,8,0.05)" }}>
-                  <span className="flex-1 text-xs font-mono text-primary/80 truncate">{refLink}</span>
-                  <motion.button onClick={copyRef} whileTap={{ scale: 0.9 }}
-                    className="flex-shrink-0 w-7 h-7 rounded-lg border flex items-center justify-center transition-all"
-                    style={{ borderColor: refCopied ? "rgba(52,211,153,0.4)" : "rgba(234,179,8,0.3)", background: refCopied ? "rgba(52,211,153,0.1)" : "rgba(234,179,8,0.1)" }}>
-                    {refCopied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3 text-primary" />}
-                  </motion.button>
-                </div>
-              </div>
-
-              {/* Tier breakdown */}
-              <div className="space-y-3 flex-1">
-                {REF_TIERS.map((tier, i) => (
-                  <motion.div key={tier.level} initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.4 + i * 0.1 }}
-                    className="p-3.5 rounded-xl border transition-all"
-                    style={{ borderColor: tier.color + "28", background: tier.color + "08" }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = `0 0 16px ${tier.glow}`; }}
-                    onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-extrabold font-mono px-2 py-0.5 rounded-md"
-                          style={{ background: tier.color + "20", color: tier.color, border: `1px solid ${tier.color}40` }}>
-                          {tier.level}
-                        </span>
-                        <span className="text-xs text-muted-foreground/70">{tier.label}</span>
-                      </div>
-                      <span className="text-xs font-extrabold font-mono" style={{ color: tier.color }}>{tier.pct}%</span>
-                    </div>
-                    <div className="flex items-center justify-between text-[11px]">
-                      <span className="text-muted-foreground/60 font-mono">{tier.partners} partners</span>
-                      <span className="font-bold font-mono" style={{ color: tier.color }}>{tier.earned}</span>
-                    </div>
-                    {/* Progress bar */}
-                    <div className="mt-2 h-1 rounded-full bg-white/5 overflow-hidden">
-                      <motion.div className="h-full rounded-full"
-                        style={{ background: `linear-gradient(90deg, ${tier.color}99, ${tier.color})` }}
-                        initial={{ width: 0 }}
-                        animate={{ width: `${Math.min((tier.partners / 30) * 100, 100)}%` }}
-                        transition={{ duration: 1.2, delay: 0.6 + i * 0.15 }} />
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* CTA */}
-              <a href="/community" className="mt-4 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-xs transition-all"
-                style={{ background: "linear-gradient(135deg,rgba(234,179,8,0.15),rgba(234,179,8,0.08))", border: "1px solid rgba(234,179,8,0.3)", color: "#eab308" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "0 0 20px rgba(234,179,8,0.25)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}>
-                <Star className="w-3.5 h-3.5" />
-                Grow Your Network
-                <ArrowUpRight className="w-3.5 h-3.5" />
-              </a>
-            </motion.div>
-          </div>
-
-          {/* ── Transaction History ────────────────────────────────────── */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.35 }}
-            className="rounded-2xl border overflow-hidden"
-            style={{
-              background: "rgba(6,8,32,0.85)",
-              backdropFilter: "blur(14px)",
-              borderColor: "rgba(255,255,255,0.06)",
-            }}>
-
-            {/* Table header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b"
-              style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-              <div>
-                <div className="flex items-center gap-2 mb-0.5">
-                  <Clock className="w-4 h-4 text-cyan-400" />
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-cyan-400">Transaction History</span>
-                </div>
-                <h3 className="text-lg font-extrabold text-foreground">Activity Log</h3>
-              </div>
-              <a href={EXPLORER} target="_blank" rel="noreferrer"
-                className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground/60 hover:text-cyan-400 transition-colors">
-                View All on Polygonscan <ExternalLink className="w-3 h-3" />
-              </a>
             </div>
+          </div>
 
-            {/* Table */}
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr style={{ background: "rgba(255,255,255,0.02)" }}>
-                    {["Date", "Type", "Amount", "USD Value", "Status", "Tx Hash"].map((h) => (
-                      <th key={h} className="text-left text-[10px] font-extrabold uppercase tracking-widest text-muted-foreground/50 font-mono px-6 py-3">
-                        {h}
-                      </th>
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+            <StatCard icon={<Coins className="w-5 h-5" />} label="OKBOND Balance" value="1,250.00" sub="≈ $187.50 USD" trend="up" color="#eab308" glow="rgba(234,179,8,0.25)" />
+            <StatCard icon={<Gift className="w-5 h-5" />} label="Lottery Entries" value="25 Tickets" sub="Next Draw: June 9" trend="neutral" color="#22d3ee" glow="rgba(34,211,238,0.25)" />
+            <StatCard icon={<Users className="w-5 h-5" />} label="Referral Earnings" value="26.7 POL" sub="≈ $13.35 USD" trend="up" color="#a78bfa" glow="rgba(167,139,250,0.25)" />
+            <StatCard icon={<Shield className="w-5 h-5" />} label="Protected Capital" value="$125.00" sub="100% Refundable" trend="neutral" color="#10b981" glow="rgba(16,185,129,0.25)" />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left: Chart & Transactions */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Chart Card */}
+              <div className="rounded-3xl border border-white/5 bg-[#060818]/60 backdrop-blur-xl p-6">
+                <div className="flex items-center justify-between mb-8">
+                  <div>
+                    <h3 className="text-lg font-bold flex items-center gap-2">
+                      <BarChart3 className="w-5 h-5 text-cyan-400" />
+                      OKBOND / POL
+                    </h3>
+                    <p className="text-xs text-muted-foreground">Live price action on Polygon</p>
+                  </div>
+                  <div className="flex bg-white/5 p-1 rounded-xl border border-white/10">
+                    {(["7D", "14D", "30D"] as const).map((r) => (
+                      <button key={r} onClick={() => setSelectedRange(r)} className={`px-4 py-1.5 rounded-lg text-[10px] font-black transition-all ${selectedRange === r ? "bg-cyan-500 text-black" : "text-muted-foreground hover:text-foreground"}`}>
+                        {r}
+                      </button>
                     ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {MOCK_TXS.map((tx, i) => (
-                    <motion.tr key={tx.id}
-                      initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.4 + i * 0.06 }}
-                      className="border-t transition-colors group cursor-pointer"
-                      style={{ borderColor: "rgba(255,255,255,0.04)" }}
-                      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.025)"; }}
-                      onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}>
+                  </div>
+                </div>
 
-                      <td className="px-6 py-4 text-xs font-mono text-muted-foreground/70">{tx.date}</td>
+                <div className="h-[320px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={chartFiltered}>
+                      <defs>
+                        <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#22d3ee" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="#22d3ee" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" vertical={false} />
+                      <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fill: "rgba(255,255,255,0.3)", fontSize: 10, fontWeight: 600 }} dy={10} />
+                      <YAxis hide domain={["dataMin - 0.02", "dataMax + 0.02"]} />
+                      <Tooltip content={<ChartTooltip />} />
+                      <Area type="monotone" dataKey="price" stroke="#22d3ee" strokeWidth={3} fillOpacity={1} fill="url(#colorPrice)" animationDuration={1500} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
 
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${
-                            tx.type === "Buy" ? "bg-primary/15 text-primary" :
-                            tx.type === "Lottery Entry" ? "bg-violet-500/15 text-violet-400" :
-                            "bg-emerald-500/15 text-emerald-400"
-                          }`}>
-                            {tx.type === "Buy" ? <Coins className="w-3.5 h-3.5" /> :
-                             tx.type === "Lottery Entry" ? <Zap className="w-3.5 h-3.5" /> :
-                             <Gift className="w-3.5 h-3.5" />}
-                          </div>
-                          <span className="text-xs font-bold text-foreground">{tx.type}</span>
+              {/* Transactions */}
+              <div className="rounded-3xl border border-white/5 bg-[#060818]/60 backdrop-blur-xl overflow-hidden">
+                <div className="p-6 border-b border-white/5 flex items-center justify-between">
+                  <h3 className="text-lg font-bold flex items-center gap-2">
+                    <Activity className="w-5 h-5 text-primary" />
+                    Recent Activity
+                  </h3>
+                  <button className="text-[10px] font-black text-primary uppercase tracking-widest hover:underline">View All</button>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr className="bg-white/[0.02] text-[10px] font-black text-muted-foreground uppercase tracking-widest">
+                        <th className="px-6 py-4">Type</th>
+                        <th className="px-6 py-4">Amount</th>
+                        <th className="px-6 py-4">Value</th>
+                        <th className="px-6 py-4">Status</th>
+                        <th className="px-6 py-4 text-right">TX</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {MOCK_TXS.map((tx) => (
+                        <tr key={tx.id} className="hover:bg-white/[0.02] transition-colors group">
+                          <td className="px-6 py-4">
+                            <p className="text-sm font-bold text-foreground">{tx.type}</p>
+                            <p className="text-[10px] text-muted-foreground font-mono">{tx.date}</p>
+                          </td>
+                          <td className="px-6 py-4 font-mono text-sm font-bold text-foreground">{tx.amount}</td>
+                          <td className="px-6 py-4 font-mono text-sm text-muted-foreground">{tx.value}</td>
+                          <td className="px-6 py-4">
+                            <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10px] font-black uppercase ${
+                              tx.status === "completed" ? "bg-emerald-500/10 text-emerald-400" : "bg-amber-500/10 text-amber-400"
+                            }`}>
+                              {tx.status === "completed" ? <CheckCircle2 className="w-3 h-3" /> : <RefreshCw className="w-3 h-3" />}
+                              {tx.status}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                              <ExternalLink className="w-4 h-4 ml-auto" />
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Referral & Quick Actions */}
+            <div className="space-y-8">
+              {/* Referral Card */}
+              <div className="rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/10 to-transparent p-8 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+                <h3 className="text-xl font-black mb-2">Refer & Earn</h3>
+                <p className="text-sm text-muted-foreground mb-6">Invite friends and earn up to <span className="text-primary font-bold">10% commission</span> on their purchases.</p>
+
+                <div className="space-y-4 mb-8">
+                  {REF_TIERS.map((t) => (
+                    <div key={t.level} className="flex items-center justify-between p-3 rounded-2xl bg-black/40 border border-white/5">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-black" style={{ background: t.color + "20", color: t.color, border: `1px solid ${t.color}40` }}>{t.level}</div>
+                        <div>
+                          <p className="text-xs font-bold">{t.label}</p>
+                          <p className="text-[10px] text-muted-foreground">{t.partners} Partners</p>
                         </div>
-                      </td>
-
-                      <td className="px-6 py-4 text-xs font-bold font-mono text-foreground">{tx.amount}</td>
-                      <td className="px-6 py-4 text-xs font-mono text-muted-foreground/70">{tx.value}</td>
-
-                      <td className="px-6 py-4">
-                        <div className={`inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-lg ${
-                          tx.status === "completed" ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/25" : "bg-sky-500/15 text-sky-400 border border-sky-500/25"
-                        }`}>
-                          {tx.status === "completed"
-                            ? <CheckCircle2 className="w-2.5 h-2.5" />
-                            : <RefreshCw className="w-2.5 h-2.5" />}
-                          {tx.status === "completed" ? "Completed" : "Refunded"}
-                        </div>
-                      </td>
-
-                      <td className="px-6 py-4">
-                        <a href={`https://polygonscan.com/tx/${tx.hash}`} target="_blank" rel="noreferrer"
-                          className="flex items-center gap-1 text-xs font-mono text-muted-foreground/50 hover:text-cyan-400 transition-colors">
-                          {tx.hash} <ExternalLink className="w-2.5 h-2.5" />
-                        </a>
-                      </td>
-                    </motion.tr>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs font-black" style={{ color: t.color }}>{t.earned}</p>
+                        <p className="text-[9px] text-muted-foreground uppercase font-bold">{t.pct}% Rate</p>
+                      </div>
+                    </div>
                   ))}
-                </tbody>
-              </table>
-            </div>
+                </div>
 
-            {/* Table footer */}
-            <div className="flex items-center justify-between px-6 py-4 border-t"
-              style={{ borderColor: "rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.01)" }}>
-              <p className="text-[11px] text-muted-foreground/50 font-mono">
-                Showing 6 of 6 transactions · Polygon PoS
-              </p>
-              <a href={QUICKSWAP} target="_blank" rel="noreferrer"
-                className="flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary/80 transition-colors">
-                Buy More OKBOND <ArrowUpRight className="w-3 h-3" />
-              </a>
-            </div>
-          </motion.div>
+                <div className="space-y-2">
+                  <p className="text-[10px] font-black text-primary uppercase tracking-widest">Your Referral Link</p>
+                  <div className="flex gap-2">
+                    <div className="flex-1 bg-black/60 border border-white/10 rounded-xl px-4 py-3 text-xs font-mono text-muted-foreground truncate">
+                      {refLink}
+                    </div>
+                    <button onClick={copyRef} className="p-3 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
+                      {refCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    </button>
+                  </div>
+                </div>
+              </div>
 
-          {/* ── Quick Action Row ───────────────────────────────────────── */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
-            {[
-              { label: "Enter Lottery",   icon: <Zap className="w-4 h-4" />,        href: "/#lottery",  color: "#eab308", glow: "rgba(234,179,8,0.2)"   },
-              { label: "Buy OKBOND",      icon: <Coins className="w-4 h-4" />,       href: "/ico",       color: "#22d3ee", glow: "rgba(34,211,238,0.2)"  },
-              { label: "Community Hub",   icon: <Users className="w-4 h-4" />,       href: "/community", color: "#a78bfa", glow: "rgba(167,139,250,0.2)" },
-              { label: "View on Chain",   icon: <Shield className="w-4 h-4" />,      href: EXPLORER,     color: "#34d399", glow: "rgba(52,211,153,0.2)"  },
-            ].map((a, i) => (
-              <motion.a key={a.label} href={a.href}
-                target={a.href.startsWith("http") ? "_blank" : undefined}
-                rel={a.href.startsWith("http") ? "noreferrer" : undefined}
-                initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 + i * 0.07 }}
-                className="flex items-center gap-3 px-4 py-4 rounded-2xl border font-bold text-sm transition-all"
-                style={{ background: "rgba(6,8,32,0.85)", backdropFilter: "blur(10px)", borderColor: a.color + "22", color: a.color }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = `0 0 20px ${a.glow}`; (e.currentTarget as HTMLElement).style.borderColor = a.color + "55"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; (e.currentTarget as HTMLElement).style.borderColor = a.color + "22"; }}>
-                {a.icon}
-                {a.label}
-                <ChevronRight className="w-3.5 h-3.5 ml-auto opacity-50" />
-              </motion.a>
-            ))}
+              {/* Quick Actions */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-black text-muted-foreground uppercase tracking-widest px-2">Quick Actions</h4>
+                <a href={QUICKSWAP} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-400 group-hover:scale-110 transition-transform">
+                      <Zap className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold">Swap on QuickSwap</p>
+                      <p className="text-[10px] text-muted-foreground">Trade OKBOND instantly</p>
+                    </div>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-cyan-400 transition-colors" />
+                </a>
+
+                <a href={EXPLORER} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                      <Globe className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold">View on Explorer</p>
+                      <p className="text-[10px] text-muted-foreground">Verify on PolygonScan</p>
+                    </div>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                </a>
+
+                <button className="w-full flex items-center justify-between p-5 rounded-2xl bg-red-500/5 border border-red-500/20 hover:bg-red-500/10 transition-all group">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center text-red-400 group-hover:scale-110 transition-transform">
+                      <LogOut className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold">Disconnect Wallet</p>
+                      <p className="text-[10px] text-muted-foreground">End current session</p>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
           </div>
-
-          {/* ── Security Note ──────────────────────────────────────────── */}
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}
-            className="mt-6 flex items-center gap-3 px-5 py-4 rounded-2xl border"
-            style={{ borderColor: "rgba(52,211,153,0.15)", background: "rgba(52,211,153,0.04)" }}>
-            <Lock className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-            <p className="text-xs text-muted-foreground/60">
-              <span className="font-bold text-emerald-400">Non-custodial & Secure</span> —
-              Your OKBOND tokens are held by the smart contract only. Orakzai Bond never holds,
-              manages, or has access to your wallet funds. Your keys, your wealth.
-            </p>
-            <a href="https://polygonscan.com/address/0x5bc55d4b347e39b986864e28604ddca5de6357b7"
-              target="_blank" rel="noreferrer"
-              className="flex-shrink-0 flex items-center gap-1 text-[10px] font-bold text-emerald-400 hover:underline">
-              Verify <ExternalLink className="w-2.5 h-2.5" />
-            </a>
-          </motion.div>
-
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
