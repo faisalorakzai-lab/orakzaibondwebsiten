@@ -25,11 +25,14 @@ import AdminPage from "./pages/AdminPage";
 import SecretAdminPage from "./pages/SecretAdminPage";
 import NotFound from "./pages/not-found";
 
+console.log("App.tsx module loaded");
+
 function App() {
   const { address, connect } = useWallet();
   const sidebarRef = useRef<SidebarHandle>(null);
 
   useEffect(() => {
+    console.log("App component mounted");
     document.documentElement.classList.add("dark");
   }, []);
 
@@ -55,7 +58,12 @@ function App() {
           </Route>
           <Route path="/about" component={AboutPage} />
           <Route path="/founder" component={FounderPage} />
-          <Route path="/ico" component={ICOPage} />
+          <Route path="/ico">
+            {() => {
+              console.log("Rendering /ico route");
+              return <ICOPage />;
+            }}
+          </Route>
           <Route path="/lottery" component={LotteryPage} />
           <Route path="/community" component={CommunityPage} />
           <Route path="/contact" component={ContactPage} />

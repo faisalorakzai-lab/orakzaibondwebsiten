@@ -11,6 +11,8 @@ import { useICO } from "@/hooks/useICO";
 import ReferralDashboard from "@/components/ReferralDashboard";
 import { Button } from "@/components/ui/button";
 
+console.log("ICOPage.tsx module loaded");
+
 // ── Constants ──────────────────────────────────────────────────────────────────
 const POLYGON_SCAN = "https://polygonscan.com/tx/";
 
@@ -411,8 +413,13 @@ function BuyForm({
 
 // ── Main Page Component ────────────────────────────────────────────────────────
 export default function ICOPage() {
+  console.log("ICOPage component rendering");
   const { address, connect, provider, isPolygon, switchToPolygon } = useWallet();
   const cd = useCountdown(PHASE1_END);
+
+  useEffect(() => {
+    console.log("ICOPage component mounted");
+  }, []);
 
   return (
     <div className="w-full bg-background text-foreground flex flex-col overflow-x-hidden">
