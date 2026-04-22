@@ -28,6 +28,16 @@ export interface UserICOStats {
   earnedTokens: string;      // OKBOND tokens received (from TokensPurchased events)
   referralEarnings: string;  // POL earned as referral commission (Pending Rewards)
   referralCount: string;
+  level1Count: string;
+  level2Count: string;
+  level3Count: string;
+  level4Count: string;
+  level5Count: string;
+  level1Earnings: string;
+  level2Earnings: string;
+  level3Earnings: string;
+  level4Earnings: string;
+  level5Earnings: string;
 }
 
 export type TxStatus = "idle" | "pending" | "confirming" | "success" | "error";
@@ -105,15 +115,33 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
       const c = getReadContract(provider);
 
       // Parallel: on-chain view calls + event log query
-      const [contrib, refEarnings, refCount, events] = await Promise.all([
+      const [
+        contrib, 
+        refEarnings, 
+        refCount, 
+        l1C, l2C, l3C, l4C, l5C,
+        l1E, l2E, l3E, l4E, l5E,
+        events
+      ] = await Promise.all([
         safeCall(() => c.getUserContribution(addr),  BigInt(0)),
         safeCall(() => c.getReferralEarnings(addr),  BigInt(0)),
         safeCall(() => c.referralCount(addr),        BigInt(0)),
+        // 5-level counts
+        safeCall(() => c.level1Count(addr), BigInt(0)),
+        safeCall(() => c.level2Count(addr), BigInt(0)),
+        safeCall(() => c.level3Count(addr), BigInt(0)),
+        safeCall(() => c.level4Count(addr), BigInt(0)),
+        safeCall(() => c.level5Count(addr), BigInt(0)),
+        // 5-level earnings
+        safeCall(() => c.level1Earnings(addr), BigInt(0)),
+        safeCall(() => c.level2Earnings(addr), BigInt(0)),
+        safeCall(() => c.level3Earnings(addr), BigInt(0)),
+        safeCall(() => c.level4Earnings(addr), BigInt(0)),
+        safeCall(() => c.level5Earnings(addr), BigInt(0)),
         // Query TokensPurchased events where buyer == addr (indexed param 0)
-        // "latest" - 150000 ≈ last 5 months on Polygon (2s blocks)
         safeCall(
           () => c.queryFilter(c.filters.TokensPurchased(addr), -150_000),
-          [] as ReturnType<typeof c.queryFilter> extends Promise<infer T> ? T : never[]
+          [] as any[]
         ),
       ]);
 
@@ -132,6 +160,16 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
         earnedTokens:     formatEther(earnedRaw),
         referralEarnings: formatEther(refEarnings as bigint),
         referralCount:    (refCount as bigint).toString(),
+        level1Count:      (l1C as bigint).toString(),
+        level2Count:      (l2C as bigint).toString(),
+        level3Count:      (l3C as bigint).toString(),
+        level4Count:      (l4C as bigint).toString(),
+        level5Count:      (l5C as bigint).toString(),
+        level1Earnings:   formatEther(l1E as bigint),
+        level2Earnings:   formatEther(l2E as bigint),
+        level3Earnings:   formatEther(l3E as bigint),
+        level4Earnings:   formatEther(l4E as bigint),
+        level5Earnings:   formatEther(l5E as bigint),
       });
     } catch (e) {
       console.error("useICO fetchUserStats error:", e);

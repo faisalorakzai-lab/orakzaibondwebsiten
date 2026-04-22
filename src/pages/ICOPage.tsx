@@ -5,10 +5,11 @@ import {
   Copy, Check, ExternalLink, Loader2, AlertTriangle,
   CheckCircle2, XCircle, RefreshCw, ArrowRight, Star, Target, ArrowLeft, Users, Gift, ShieldCheck
 } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useWallet } from "@/hooks/useWallet";
 import { useICO } from "@/hooks/useICO";
-// import ReferralDashboard from "@/components/ReferralDashboard";
+import ReferralDashboard from "@/components/ReferralDashboard";
+import { Button } from "@/components/ui/button";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 const POLYGON_SCAN = "https://polygonscan.com/tx/";
@@ -193,7 +194,7 @@ function ReferralCalculator() {
         </div>
         <div>
           <h4 className="font-bold text-foreground">Profit Calculator</h4>
-          <p className="text-[10px] text-muted-foreground uppercase tracking-widest">3-Level MLM Earnings</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-widest">5-Level MLM Earnings</p>
         </div>
       </div>
 
@@ -225,7 +226,7 @@ function ReferralCalculator() {
               <p className="text-sm font-bold text-foreground">{result.l3.toFixed(1)} POL</p>
             </div>
             <div className="p-3 rounded-xl bg-primary/10 border border-primary/20">
-              <p className="text-[9px] text-primary uppercase font-bold">Total</p>
+              <p className="text-[9px] text-primary uppercase font-bold">Total (L1-L3)</p>
               <p className="text-sm font-bold text-primary">{result.total.toFixed(1)} POL</p>
             </div>
           </div>
@@ -246,11 +247,20 @@ function BuyForm({
   switchToPolygon: () => void;
 }) {
   const [polAmount, setPolAmount]   = useState("10");
-  const [copied, setCopied]         = useState(false);
   const { stats, txStatus, txHash, txError, buyTokens, resetTx, loading } = useICO(provider, address);
 
   const estimatedTokens = parseFloat(polAmount || "0") * 0.6;
   const estimatedUSD    = parseFloat(polAmount || "0") * 0.45; // Approx
+
+  // Get referrer from URL
+  const [referrer, setReferrer] = useState<string | null>(null);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get("ref");
+    if (ref && ref.startsWith("0x") && ref.length === 42) {
+      setReferrer(ref);
+    }
+  }, []);
 
   const handleBuy = async () => {
     if (!isPolygon) {
@@ -261,7 +271,7 @@ function BuyForm({
       onConnect();
       return;
     }
-    await buyTokens(polAmount);
+    await buyTokens(polAmount, referrer);
   };
 
   return (
@@ -277,11 +287,18 @@ function BuyForm({
           </div>
         </div>
 
+        {referrer && (
+          <div className="p-3 rounded-xl bg-primary/10 border border-primary/20 flex items-center gap-2">
+            <Users className="w-4 h-4 text-primary" />
+            <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Referrer: {referrer.slice(0,6)}...{referrer.slice(-4)}</p>
+          </div>
+        )}
+
         <div className="space-y-4">
           <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-1">
             <div className="flex justify-between text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
               <span>You Pay</span>
-              <span>Balance: {stats?.balance || "0"} POL</span>
+              <span>Balance: {(stats as any)?.balance || "0"} POL</span>
             </div>
             <div className="flex items-center gap-3">
               <input
@@ -349,13 +366,13 @@ function BuyForm({
             }`}
           >
             <div className="flex items-start gap-3">
-              {txStatus === "loading" && <Loader2 className="w-5 h-5 animate-spin mt-0.5" />}
+              {txStatus === "pending" && <Loader2 className="w-5 h-5 animate-spin mt-0.5" />}
               {txStatus === "success" && <CheckCircle2 className="w-5 h-5 mt-0.5" />}
               {txStatus === "error" && <AlertTriangle className="w-5 h-5 mt-0.5" />}
               
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold">
-                  {txStatus === "loading" ? "Transaction Pending..." :
+                  {txStatus === "pending" ? "Transaction Pending..." :
                    txStatus === "success" ? "Purchase Successful!" : "Transaction Failed"}
                 </p>
                 {txError && <p className="text-xs opacity-80 mt-1 line-clamp-2">{txError}</p>}
@@ -524,16 +541,16 @@ export default function ICOPage() {
                 <ROITable />
               </div>
 
-              {/* Referral Dashboard (Temporarily disabled) */}
-              {/* {address && (
+              {/* Referral Dashboard */}
+              {address && (
                 <div className="space-y-6">
                   <h3 className="text-sm font-bold text-primary uppercase tracking-widest flex items-center gap-2">
                     <Users className="w-4 h-4" />
-                    Team Performance
+                    5-Level Team Performance
                   </h3>
-                  <ReferralDashboard address={address} />
+                  <ReferralDashboard address={address} provider={provider} />
                 </div>
-              )} */}
+              )}
             </div>
 
             {/* ── Right Column: Buy Widget ──────────────────────────────── */}
@@ -560,7 +577,7 @@ export default function ICOPage() {
                   {[
                     { icon: <ShieldCheck className="w-5 h-5" />, title: "Capital Protection", desc: "Your principal is protected via smart contract logic." },
                     { icon: <TrendingUp className="w-5 h-5" />, title: "High ROI Potential", desc: "Phase 1 price $0.15 vs target listing price $1.00." },
-                    { icon: <Gift className="w-5 h-5" />, title: "MLM Rewards", desc: "Earn up to 3 levels of deep referral commissions." },
+                    { icon: <Gift className="w-5 h-5" />, title: "MLM Rewards", desc: "Earn up to 5 levels of deep referral commissions." },
                     { icon: <Zap className="w-5 h-5" />, title: "Polygon Network", desc: "Fast, secure, and near-zero gas fees." },
                   ].map((item, i) => (
                     <motion.div
