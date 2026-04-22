@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BrowserProvider, Contract, formatUnits } from "ethers";
+import { BrowserProvider, Contract, formatUnits, parseEther } from "ethers";
 import { useLocation } from "wouter";
 import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
@@ -10,7 +10,7 @@ import {
   ShieldCheck, Loader2, CheckCircle2, ExternalLink,
   Play, Crown, Users, Coins, Clock, AlertTriangle,
   RefreshCw, Lock, Wallet, ArrowLeft, LayoutDashboard,
-  TrendingUp, Database, CreditCard, Layers, Trophy,
+  TrendingUp, Database, CreditCard, Layers, Trophy, Check,
   ChevronRight, Activity, ArrowRightLeft, Bell, BellRing,
   BarChart2, Info, CheckCheck, AlertCircle, Zap, X,
   TrendingDown, PieChart as PieIcon, Square, PowerOff,
@@ -23,12 +23,15 @@ import ParticleBackground from "@/components/ParticleBackground";
 const ADMIN_WALLET    = "0x9b02e2Edd6F58D626aAa91889708dbF39dfa8Cd7";
 const LOTTERY_ADDRESS = "0x5bc55d4b347e39b986864e28604ddca5de6357b7";
 const TOKEN_ADDRESS   = "0x6f539e4232c045ccac08e2009d97bdc72815472a";
+const REFERRAL_CONTRACT = "0x66471251A19D7A862e931340998cADFa9a411E9B";
 const EXPLORER        = "https://polygonscan.com";
 
 const ERC20_ABI = [
   "function balanceOf(address) view returns (uint256)",
   "function totalSupply() view returns (uint256)",
   "function decimals() view returns (uint8)",
+  "function approve(address spender, uint256 amount) public returns (bool)",
+  "function allowance(address owner, address spender) public view returns (uint256)"
 ];
 
 type TxPhase = "idle" | "pending" | "success" | "failed";
@@ -166,6 +169,11 @@ export default function AdminPage() {
   const [selectErr,   setSelectErr]   = useState<string | null>(null);
   const [closeErr,    setCloseErr]    = useState<string | null>(null);
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
+
+  // -- Referral Allowance State --
+  const [allowancePhase, setAllowancePhase] = useState<TxPhase>("idle");
+  const [allowanceTx, setAllowanceTx] = useState<string | null>(null);
+  const [allowanceErr, setAllowanceErr] = useState<string | null>(null);
 
   // ── Notifications ──────────────────────────────────────────────────────────
   const [notifs, setNotifs] = useState<Notification[]>([]);
@@ -838,10 +846,78 @@ export default function AdminPage() {
                     ))}
                   </div>
 
-                  {/* Charts row 1 */}
-                  <div className="grid md:grid-cols-2 gap-5">
-                    {/* Players per round */}
-                    <div className="glass-card rounded-2xl border border-border p-5">
+                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Referral System Controls */}
+                    <div className="glass-card rounded-3xl border border-primary/30 overflow-hidden bg-primary/5">
+                      <div className="px-6 py-4 border-b border-primary/20 bg-primary/10 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Users className="w-5 h-5 text-primary" />
+                          <h3 className="font-bold text-foreground">Referral System</h3>
+                        </div>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-primary text-primary-foreground uppercase tracking-widest">Active</span>
+                      </div>
+                      <div className="p-6 space-y-4">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          The 5-level referral system requires OKBOND allowance to distribute rewards from your wallet.
+                        </p>
+                        
+                        <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-muted-foreground uppercase">Target Contract</span>
+                            <span className="text-[10px] font-mono text-primary/70">{REFERRAL_CONTRACT.slice(0,12)}...{REFERRAL_CONTRACT.slice(-6)}</span>
+                          </div>
+                          
+                          <button
+                            onClick={async () => {
+                              if (!provider) return;
+                              setAllowancePhase("pending");
+                              setAllowanceErr(null);
+                              try {
+                                const signer = await provider.getSigner();
+                                const token = new Contract(TOKEN_ADDRESS, ERC20_ABI, signer);
+                                // Approve a very large amount (100 Billion OKBOND)
+                                const amount = parseEther("100000000000"); 
+                                const tx = await token.approve(REFERRAL_CONTRACT, amount);
+                                setAllowanceTx(tx.hash);
+                                await tx.wait();
+                                setAllowancePhase("success");
+                                addNotif("success", "Allowance Granted", "Referral contract is now authorized to distribute rewards.");
+                              } catch (err) {
+                                console.error(err);
+                                setAllowancePhase("failed");
+                                setAllowanceErr(parseErr(err));
+                              }
+                            }}
+                            disabled={allowancePhase === "pending"}
+                            className="w-full h-14 rounded-xl bg-primary text-primary-foreground font-black text-sm flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 shadow-[0_0_20px_rgba(234,179,8,0.3)]"
+                          >
+                            {allowancePhase === "pending" ? (
+                              <><Loader2 className="w-5 h-5 animate-spin" /> Confirming...</>
+                            ) : allowancePhase === "success" ? (
+                              <><Check className="w-5 h-5" /> Allowance Granted</>
+                            ) : (
+                              <><ShieldCheck className="w-5 h-5" /> Grant Reward Allowance</>
+                            )}
+                          </button>
+                        </div>
+
+                        {allowanceErr && (
+                          <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs flex gap-2">
+                            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                            <span>{allowanceErr}</span>
+                          </div>
+                        )}
+                        
+                        {allowanceTx && (
+                          <a href={`${EXPLORER}/tx/${allowanceTx}`} target="_blank" className="block text-center text-[10px] font-bold text-primary/50 uppercase hover:text-primary transition-colors">
+                            View Approval Transaction <ExternalLink className="w-2.5 h-2.5 inline" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Active Round Controls */}
+                    <div className="glass-card rounded-3xl border border-border overflow-hidden">
                       <div className="flex items-center gap-2 mb-4">
                         <BarChart2 className="w-4 h-4 text-primary/60" />
                         <p className="font-bold text-sm text-foreground">Players per Round</p>
