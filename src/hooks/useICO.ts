@@ -110,7 +110,6 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
   }, [provider]);
 
   const fetchUserStats = useCallback(async (addr: string) => {
-    console.log("Fetching user stats for:", addr);
     try {
       const icoContract = getReadContract(ICO_CONTRACT_ADDRESS, ICO_ABI, provider);
       const refContract = getReadContract(REFERRAL_CONTRACT_ADDRESS, REFERRAL_ABI, provider);
@@ -122,8 +121,6 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
         safeCall(() => refContract.getUserStats(addr), [Array(5).fill(BigInt(0)), Array(5).fill(BigInt(0)), BigInt(0), ZERO_ADDRESS]),
         safeCall(() => icoContract.queryFilter(icoContract.filters.TokensPurchased(addr), -150_000), []),
       ]);
-
-      console.log("Raw refStatsRaw:", refStatsRaw);
 
       const counts = Array.isArray(refStatsRaw?.[0]) ? refStatsRaw[0] : Array(5).fill(BigInt(0));
       const earnings = Array.isArray(refStatsRaw?.[1]) ? refStatsRaw[1] : Array(5).fill(BigInt(0));
@@ -139,7 +136,7 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
         }
       }
 
-      const newUserStats = {
+      setUserStats({
         contribution: formatEther(contrib || BigInt(0)),
         earnedTokens: formatEther(earnedRaw),
         referralEarnings: formatEther(totalEarnings),
@@ -147,10 +144,7 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
         levelCounts: counts.map((c: bigint) => (c || BigInt(0)).toString()),
         levelEarnings: earnings.map((e: bigint) => formatEther(e || BigInt(0))),
         referrer: String(referrer),
-      };
-      
-      console.log("Setting user stats:", newUserStats);
-      setUserStats(newUserStats);
+      });
     } catch (e) {
       console.error("useICO fetchUserStats error:", e);
     }
@@ -182,13 +176,43 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
     setTxHash(null);
     try {
       const signer = await provider.getSigner();
-      const contract = new Contract(ICO_CONTRACT_ADDRESS, ICO_ABI, signer);
+      const icoContract = new Contract(ICO_CONTRACT_ADDRESS, ICO_ABI, signer);
+      const refContract = new Contract(REFERRAL_CONTRACT_ADDRESS, REFERRAL_ABI, signer);
+      
       const value = parseEther(polAmount);
       
-      const tx = await contract.buyTokens(finalReferrer, { value });
+      // Step 1: Purchase Tokens
+      const tx = await icoContract.buyTokens(finalReferrer, { value });
       setTxStatus("confirming");
       setTxHash(tx.hash);
-      await tx.wait(1);
+      const receipt = await tx.wait(1);
+      
+      // Step 2: Trigger Referral Distribution
+      // Find the TokensPurchased event to get the exact token amount
+      let tokenAmount = BigInt(0);
+      const event = receipt.logs.find(log => {
+        try {
+          const parsed = icoContract.interface.parseLog(log);
+          return parsed?.name === "TokensPurchased";
+        } catch { return false; }
+      });
+
+      if (event) {
+        const parsed = icoContract.interface.parseLog(event);
+        tokenAmount = parsed?.args?.tokens || BigInt(0);
+      }
+
+      if (tokenAmount > BigInt(0)) {
+        try {
+          // This call triggers the 5-level commission distribution
+          const refTx = await refContract.distributeRewards(address, tokenAmount, finalReferrer);
+          await refTx.wait(1);
+        } catch (refErr) {
+          console.error("Referral distribution failed:", refErr);
+          // We don't fail the whole buy process if referral fails, 
+          // but we log it for the user.
+        }
+      }
       
       setTxStatus("success");
       await fetchStats();
