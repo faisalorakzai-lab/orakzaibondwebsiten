@@ -420,6 +420,165 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
           </motion.div>
         </motion.div>
 
+        {/* ── NON-WINNER CASHBACK SECTION ────────────────────────────────── */}
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.65 }}
+          className="max-w-4xl mx-auto mb-10 mt-16">
+          <div className="rounded-3xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/8 via-emerald-500/3 to-transparent overflow-hidden">
+            {/* Header */}
+            <div className="px-8 py-8 border-b border-emerald-500/20">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center">
+                  <ShieldCheck className="w-6 h-6 text-emerald-400" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-extrabold text-foreground">Non-Winner Cashback</h3>
+                  <p className="text-xs text-emerald-400/80 font-semibold uppercase tracking-widest mt-0.5">100% Capital Protection Guarantee</p>
+                </div>
+              </div>
+              <p className="text-muted-foreground text-base leading-relaxed max-w-2xl">
+                Didn't win this round? No problem. Your entire entry deposit is automatically refundable through the smart contract. This is not a promise — it's hardcoded into the blockchain.
+              </p>
+            </div>
+
+            {/* Content Grid */}
+            <div className="px-8 py-8 space-y-6">
+              {/* How Cashback Works */}
+              <div className="space-y-4">
+                <h4 className="font-extrabold text-foreground flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xs font-bold text-emerald-400">1</span>
+                  How Cashback Works
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {[
+                    {
+                      title: "You Participate",
+                      desc: "Enter the lottery by depositing OKBOND tokens. Your funds are secured in the smart contract immediately.",
+                      icon: "🎫"
+                    },
+                    {
+                      title: "Winners Are Selected",
+                      desc: "5 winners are randomly chosen via on-chain RNG. If you're not selected, you become eligible for cashback.",
+                      icon: "🎲"
+                    },
+                    {
+                      title: "Claim Your Refund",
+                      desc: "Visit this page and click 'Claim Refund' to instantly recover 100% of your entry deposit to your wallet.",
+                      icon: "💰"
+                    }
+                  ].map((item, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.1 }}
+                      className="p-4 rounded-xl border border-emerald-500/15 bg-emerald-500/5 hover:border-emerald-500/30 transition-all"
+                    >
+                      <div className="text-2xl mb-2">{item.icon}</div>
+                      <h5 className="font-bold text-foreground text-sm mb-1">{item.title}</h5>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Key Guarantees */}
+              <div className="space-y-4">
+                <h4 className="font-extrabold text-foreground flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xs font-bold text-emerald-400">2</span>
+                  Key Guarantees
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {[
+                    { title: "100% Automatic", desc: "No manual approval needed. The smart contract enforces refunds automatically." },
+                    { title: "No Delays", desc: "Claim your refund instantly. Funds arrive in your wallet within seconds." },
+                    { title: "No Conditions", desc: "If you didn't win, you're eligible. No questions asked, no exceptions." },
+                    { title: "On-Chain Verified", desc: "Every refund is recorded on the Polygon blockchain — fully transparent and immutable." }
+                  ].map((item, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -12 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.08 }}
+                      className="flex gap-3 p-3 rounded-lg border border-emerald-500/10 bg-emerald-500/3 hover:border-emerald-500/20 transition-all"
+                    >
+                      <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-semibold text-foreground text-sm">{item.title}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{item.desc}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* FAQ Section */}
+              <div className="space-y-4">
+                <h4 className="font-extrabold text-foreground flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xs font-bold text-emerald-400">3</span>
+                  Frequently Asked Questions
+                </h4>
+                <div className="space-y-3">
+                  {[
+                    {
+                      q: "What if I win? Do I still get my deposit back?",
+                      a: "No. Winners receive their reward instead of a refund. The reward is typically higher than the entry amount."
+                    },
+                    {
+                      q: "When can I claim my refund?",
+                      a: "After winners are selected and announced. You can claim immediately using the 'Claim Refund' button on this page."
+                    },
+                    {
+                      q: "Are there any fees or deductions?",
+                      a: "No. You receive 100% of your original entry deposit. Only standard Polygon network gas fees apply (typically $0.01–$0.10)."
+                    },
+                    {
+                      q: "What if I forget to claim my refund?",
+                      a: "Your funds remain in the smart contract indefinitely. You can claim them at any time in the future — there's no deadline."
+                    },
+                    {
+                      q: "Is this guaranteed by law or just the smart contract?",
+                      a: "It's guaranteed by the smart contract code itself. The refund mechanism is hardcoded and immutable — no admin can override it."
+                    }
+                  ].map((item, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 8 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.05 }}
+                      className="p-4 rounded-lg border border-border bg-card/50 hover:border-emerald-500/20 transition-all"
+                    >
+                      <p className="font-semibold text-foreground text-sm mb-2">{item.q}</p>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{item.a}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Trust Badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="p-4 rounded-xl border border-emerald-500/25 bg-emerald-500/8 flex items-start gap-3"
+              >
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center flex-shrink-0">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                </div>
+                <div>
+                  <p className="font-bold text-emerald-300 text-sm">Why This Matters</p>
+                  <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                    Most lotteries keep your money if you lose. OKBOND is different. We believe in fair play and capital protection. Whether you win or not, your money is always yours.
+                  </p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+
         {/* ── JACKPOT DISPLAY ────────────────────────────────────────── */}
         <motion.div initial={{ opacity: 0, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }} transition={{ duration: 0.6 }}
