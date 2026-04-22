@@ -1,9 +1,25 @@
 import { useState, useRef, useEffect } from "react";
+import { Route, Switch } from "wouter";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import SiteSidebar, { SidebarHandle } from "./components/SiteSidebar";
 import Footer from "./components/Footer";
 import { useWallet } from "./hooks/useWallet";
+
+// Pages
+import AboutPage from "./pages/AboutPage";
+import FounderPage from "./pages/FounderPage";
+import ICOPage from "./pages/ICOPage";
+import CommunityPage from "./pages/CommunityPage";
+import ContactPage from "./pages/ContactPage";
+import DocumentsPage from "./pages/DocumentsPage";
+import GuidePage from "./pages/GuidePage";
+import RulesPage from "./pages/RulesPage";
+import SystemPage from "./pages/SystemPage";
+import WinnersPage from "./pages/WinnersPage";
+import AdminPage from "./pages/AdminPage";
+import SecretAdminPage from "./pages/SecretAdminPage";
+import NotFound from "./pages/not-found";
 
 function App() {
   const { address, connect } = useWallet();
@@ -29,8 +45,24 @@ function App() {
       <SiteSidebar ref={sidebarRef} />
 
       <main className="flex-1 lg:pl-[60px]">
-        {/* The Home screen only shows the Hero (Launchpad) section */}
-        <Hero onConnect={connect} address={address} />
+        <Switch>
+          <Route path="/">
+            <Hero onConnect={connect} address={address} />
+          </Route>
+          <Route path="/about" component={AboutPage} />
+          <Route path="/founder" component={FounderPage} />
+          <Route path="/ico" component={ICOPage} />
+          <Route path="/community" component={CommunityPage} />
+          <Route path="/contact" component={ContactPage} />
+          <Route path="/documents" component={DocumentsPage} />
+          <Route path="/guide" component={GuidePage} />
+          <Route path="/rules" component={RulesPage} />
+          <Route path="/system" component={SystemPage} />
+          <Route path="/winners" component={WinnersPage} />
+          <Route path="/admin" component={AdminPage} />
+          <Route path="/secret-admin" component={SecretAdminPage} />
+          <Route component={NotFound} />
+        </Switch>
       </main>
 
       <div className="lg:pl-[60px]">

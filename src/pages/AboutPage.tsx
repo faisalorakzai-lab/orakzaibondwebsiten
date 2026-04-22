@@ -149,12 +149,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── STATS ROW ────────────────────────────────────────────── */}
+      {/* ── STATS ROW (4 Pillars Update) ────────────────────────────────────────────── */}
       <section className="px-4 pb-16">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { value: "250+",   label: "Global Projects" },
-            { value: "75K",    label: "OKBOND Supply" },
+            { value: "250+",   label: "Future Projects" },
+            { value: "10M",    label: "Total Supply" },
             { value: "$0.15",  label: "ICO Phase 1 Price" },
             { value: "567%",   label: "Target ROI" },
           ].map((stat, i) => (
@@ -198,193 +198,64 @@ export default function AboutPage() {
                     initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }} transition={{ delay: 0.2 + i * 0.08 }}
                     style={{ filter: isHQ ? "drop-shadow(0 0 2px rgba(234,179,8,0.9))" : "drop-shadow(0 0 1px rgba(234,179,8,0.5))" }} />
-                  <motion.text x={cx} y={cy - (isHQ ? 2.2 : 1.8)} textAnchor="middle"
-                    fontSize={isHQ ? "2.2" : "1.6"} fill={isHQ ? "hsl(43,96%,56%)" : "rgba(234,179,8,0.7)"}
-                    fontFamily="monospace" fontWeight={isHQ ? "bold" : "normal"}
-                    initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-                    transition={{ delay: 0.4 + i * 0.08 }}>
-                    {isHQ ? "★ " : ""}{label}
-                  </motion.text>
                 </g>
               ))}
             </svg>
-            <div className="absolute bottom-4 right-4 flex flex-col gap-1.5 text-xs">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-primary shadow-[0_0_6px_rgba(234,179,8,0.8)]" />
-                <span className="text-primary font-mono font-bold">Global HQ — Karachi, PK</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-primary/60" />
-                <span className="text-muted-foreground font-mono">Project Presence</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-3 h-3 text-primary/50" />
-                <span className="text-muted-foreground font-mono">250+ Worldwide Projects</span>
-              </div>
-            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* ── WHAT WE DO ────────────────────────────────────────────── */}
+      {/* ── FOUNDER & MISSION (Restored Content) ────────────────────────────── */}
       <section className="px-4 pb-20">
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-4">
-              What We{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-200">Build</span>
-            </h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">
-              Six pillars that make OKBOND more than just a token — a complete financial ecosystem.
-            </p>
-          </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((f, i) => (
-              <motion.div key={f.title} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-                className="group relative p-6 rounded-2xl border border-border bg-card hover:border-primary/40 transition-all duration-300 hover:shadow-[0_0_30px_rgba(234,179,8,0.08)]">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                  <f.icon className="w-6 h-6 text-primary" />
-                </div>
-                <h3 className="text-lg font-bold text-foreground mb-2">{f.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">{f.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FOUNDER + VISION ──────────────────────────────────────── */}
-      <section className="px-4 pb-20">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
           <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="p-8 rounded-2xl border border-primary/25 bg-gradient-to-br from-primary/5 to-transparent">
+            transition={{ duration: 0.7 }} className="p-8 rounded-2xl border border-primary/20 bg-card">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-1 h-8 bg-primary rounded-full" />
-              <h3 className="text-2xl font-bold">The Founder</h3>
+              <h3 className="text-2xl font-bold text-foreground">The Founder</h3>
             </div>
-            <p className="text-primary font-semibold mb-3 text-sm uppercase tracking-wide">Faisal Orakzai</p>
-            <p className="text-muted-foreground leading-relaxed mb-5">
-              A Global Visionary and Architect of the Orakzai Group — Faisal Orakzai has built a multi-industry
-              conglomerate from the ground up in Karachi, Pakistan, expanding its reach to international blockchain
-              innovation. His journey reflects the leap from local leadership to building a decentralized global
-              ecosystem designed for the next generation.
+            <p className="text-primary font-semibold mb-3 text-sm uppercase tracking-wide">
+              Faisal Orakzai
+            </p>
+            <p className="text-muted-foreground leading-relaxed text-base">
+              A Global Visionary and Architect of the Orakzai Group — Faisal Orakzai has built a multi-industry conglomerate from the ground up in Karachi, Pakistan, expanding its reach to international blockchain innovation. His journey reflects the leap from local leadership to building a decentralized global ecosystem designed for the next generation.
             </p>
             <Link href="/founder"
-              className="inline-flex items-center gap-2 text-sm text-primary font-semibold hover:underline">
-              Read Full Story <ArrowRight className="w-4 h-4" />
+              className="inline-flex items-center gap-2 mt-5 text-sm text-primary font-semibold hover:underline">
+              Read Full Story →
             </Link>
           </motion.div>
 
           <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="p-8 rounded-2xl border border-border bg-card">
+            transition={{ duration: 0.7 }} className="p-8 rounded-2xl border border-border bg-card">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-1 h-8 bg-primary rounded-full" />
-              <h3 className="text-2xl font-bold">Our Vision</h3>
+              <h3 className="text-2xl font-bold text-foreground">Our Vision</h3>
             </div>
-            <p className="text-muted-foreground leading-relaxed text-base mb-6">
-              To become a leading Web3 financial ecosystem — where OKBOND is the currency of power, and every
-              holder is a sovereign participant in a future built on trust, transparency, and unstoppable code.
-            </p>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-1 h-8 bg-primary/60 rounded-full" />
-              <h3 className="text-xl font-bold">Our Mission</h3>
-            </div>
-            <p className="text-muted-foreground leading-relaxed text-base">
-              To democratize access to investment opportunities through decentralized technology — breaking
-              geographic and financial barriers so that anyone, anywhere, can participate in the new economy.
+            <p className="text-muted-foreground leading-relaxed text-lg">
+              To become a leading Web3 financial ecosystem — where OKBOND is the currency of power, and every holder is a sovereign participant in a future built on trust, transparency, and unstoppable code.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* ── CORE VALUES ───────────────────────────────────────────── */}
+      {/* ── VALUES ────────────────────────────────────────────────── */}
       <section className="px-4 pb-20">
         <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="text-center mb-10">
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-3">
-              Our Core{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-200">Values</span>
-            </h2>
-          </motion.div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((v, i) => (
               <motion.div key={v.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-                className="p-5 rounded-2xl border border-primary/15 bg-card text-center">
-                <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-3">
-                  <v.icon className="w-5 h-5 text-primary" />
-                </div>
-                <h4 className="font-bold text-foreground mb-2">{v.label}</h4>
-                <p className="text-xs text-muted-foreground leading-relaxed">{v.desc}</p>
+                className="p-6 rounded-2xl border border-border bg-card/50 hover:border-primary/30 transition-all">
+                <v.icon className="w-8 h-8 text-primary mb-4" />
+                <h4 className="text-lg font-bold mb-2">{v.label}</h4>
+                <p className="text-sm text-muted-foreground leading-relaxed">{v.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
-
-      {/* ── TIMELINE ──────────────────────────────────────────────── */}
-      <section className="px-4 pb-20">
-        <div className="max-w-3xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-3">
-              Our{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-200">Journey</span>
-            </h2>
-            <p className="text-muted-foreground">From a Karachi vision to a global blockchain ecosystem.</p>
-          </motion.div>
-          <div className="relative">
-            <div className="absolute left-8 top-0 bottom-0 w-px bg-primary/20" />
-            <div className="space-y-8">
-              {milestones.map((m, i) => (
-                <motion.div key={m.year} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-                  className="relative pl-20">
-                  <div className="absolute left-0 w-16 text-right">
-                    <span className="text-primary font-mono font-bold text-sm">{m.year}</span>
-                  </div>
-                  <div className="absolute left-[30px] top-1.5 w-4 h-4 rounded-full border-2 border-primary bg-background shadow-[0_0_8px_rgba(234,179,8,0.5)]" />
-                  <div className="p-5 rounded-xl border border-border bg-card">
-                    <h4 className="font-bold text-foreground mb-1">{m.title}</h4>
-                    <p className="text-sm text-muted-foreground">{m.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ───────────────────────────────────────────────────── */}
-      <section className="px-4 pb-24">
-        <div className="max-w-3xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-            className="relative rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-10 text-center overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(234,179,8,0.1),transparent_70%)] pointer-events-none" />
-            <h2 className="text-3xl md:text-4xl font-extrabold mb-4 relative z-10">
-              Ready to Join the{" "}
-              <span className="text-primary">Orakzai Bond</span> Ecosystem?
-            </h2>
-            <p className="text-muted-foreground mb-8 text-lg relative z-10">
-              ICO Phase 1 is live at $0.15. Capital is protected. ROI potential is 567%.
-            </p>
-            <div className="flex flex-wrap gap-3 justify-center relative z-10">
-              <Link href="/ico"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/90 transition-colors">
-                Buy OKBOND Now <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link href="/guide"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl border border-primary/40 text-primary font-semibold hover:bg-primary/10 transition-colors">
-                How to Buy Guide
-              </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       </main>
+
       <div className="lg:pl-[60px]">
         <Footer />
       </div>
