@@ -1,0 +1,82 @@
+[
+  {
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "position": 1,
+    "filepath": "src/pages/slides/Slide01Cover.tsx",
+    "title": "Cover – Orakzai Bond",
+    "description": "Title slide with dark gold blockchain aesthetic",
+    "speakerNotes": ""
+  },
+  {
+    "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+    "position": 2,
+    "filepath": "src/pages/slides/Slide02Introduction.tsx",
+    "title": "Introduction – What is Orakzai Bond?",
+    "description": "Overview of the decentralized lottery system",
+    "speakerNotes": ""
+  },
+  {
+    "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+    "position": 3,
+    "filepath": "src/pages/slides/Slide03HowItWorks.tsx",
+    "title": "How It Works – System Flow",
+    "description": "5-step process from wallet connect to reward claim",
+    "speakerNotes": ""
+  },
+  {
+    "id": "d4e5f6a7-b8c9-0123-defa-234567890123",
+    "position": 4,
+    "filepath": "src/pages/slides/Slide04Features.tsx",
+    "title": "Key Features",
+    "description": "Core features and comparison with traditional lotteries",
+    "speakerNotes": ""
+  },
+  {
+    "id": "e5f6a7b8-c9d0-1234-efab-345678901234",
+    "position": 5,
+    "filepath": "src/pages/slides/Slide05TrustSecurity.tsx",
+    "title": "Trust & Security",
+    "description": "Transparency system and security architecture",
+    "speakerNotes": ""
+  },
+  {
+    "id": "f6a7b8c9-d0e1-2345-fabc-456789012345",
+    "position": 6,
+    "filepath": "src/pages/slides/Slide06Founder.tsx",
+    "title": "Founder – Malak Faisal Orakzai",
+    "description": "Founder profile and leadership vision",
+    "speakerNotes": ""
+  },
+  {
+    "id": "a7b8c9d0-e1f2-3456-abcd-567890123456",
+    "position": 7,
+    "filepath": "src/pages/slides/Slide07Vision.tsx",
+    "title": "Scale & Vision",
+    "description": "12 industries, 250+ projects, global ecosystem vision",
+    "speakerNotes": ""
+  },
+  {
+    "id": "b8c9d0e1-f2a3-4567-bcde-678901234567",
+    "position": 8,
+    "filepath": "src/pages/slides/Slide08WhyJoin.tsx",
+    "title": "Why Join?",
+    "description": "Benefits and user advantages",
+    "speakerNotes": ""
+  },
+  {
+    "id": "c9d0e1f2-a3b4-5678-cdef-789012345678",
+    "position": 9,
+    "filepath": "src/pages/slides/Slide09CallToAction.tsx",
+    "title": "Call to Action – Join Now",
+    "description": "3-step onboarding and website link",
+    "speakerNotes": ""
+  },
+  {
+    "id": "d0e1f2a3-b4c5-6789-defa-890123456789",
+    "position": 10,
+    "filepath": "src/pages/slides/Slide10Contact.tsx",
+    "title": "Social & Contact",
+    "description": "Website, Telegram, WhatsApp contact details",
+    "speakerNotes": ""
+  }
+]
