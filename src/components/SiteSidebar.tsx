@@ -10,9 +10,9 @@ import {
 const NAV_ITEMS = [
   { id: "hero",       label: "Home",        icon: <Home       className="w-4 h-4" />, href: "/"           },
   { id: "about",      label: "About",       icon: <Info       className="w-4 h-4" />, href: "/about"      },
-  { id: "token",      label: "Token",       icon: <Coins      className="w-4 h-4" />, href: "/#token"      },
+  { id: "token",      label: "Token",       icon: <Coins      className="w-4 h-4" />, href: "/token"      },
   { id: "lottery",    label: "Lottery",     icon: <Ticket     className="w-4 h-4" />, href: "/#lottery"    },
-  { id: "tokenomics", label: "Tokenomics",  icon: <PieChart   className="w-4 h-4" />, href: "/#tokenomics" },
+  { id: "tokenomics", label: "Tokenomics",  icon: <PieChart   className="w-4 h-4" />, href: "/tokenomics" },
   { id: "roadmap",    label: "Roadmap",     icon: <Map        className="w-4 h-4" />, href: "/roadmap"    },
   { id: "ico",        label: "ICO / Buy",   icon: <Rocket     className="w-4 h-4" />, href: "/ico"        },
   { id: "community",  label: "Community",   icon: <Users      className="w-4 h-4" />, href: "/community"  },

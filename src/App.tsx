@@ -16,6 +16,8 @@ import DocumentsPage from "./pages/DocumentsPage";
 import GuidePage from "./pages/GuidePage";
 import RulesPage from "./pages/RulesPage";
 import RoadmapPage from "./pages/RoadmapPage";
+import TokenPage from "./pages/TokenPage";
+import TokenomicsPage from "./pages/TokenomicsPage";
 import SystemPage from "./pages/SystemPage";
 import WinnersPage from "./pages/WinnersPage";
 import AdminPage from "./pages/AdminPage";
@@ -59,6 +61,8 @@ function App() {
           <Route path="/guide" component={GuidePage} />
           <Route path="/rules" component={RulesPage} />
           <Route path="/roadmap" component={RoadmapPage} />
+          <Route path="/token" component={TokenPage} />
+          <Route path="/tokenomics" component={TokenomicsPage} />
           <Route path="/system" component={SystemPage} />
           <Route path="/winners" component={WinnersPage} />
           <Route path="/admin" component={AdminPage} />

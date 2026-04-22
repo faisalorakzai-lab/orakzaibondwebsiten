@@ -1,0 +1,16 @@
+import { useEffect } from "react";
+import Tokenomics from "@/components/Tokenomics";
+
+export default function TokenomicsPage() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.title = "Tokenomics | Orakzai Bond";
+    return () => { document.title = "Orakzai Bond"; };
+  }, []);
+
+  return (
+    <main className="flex-1">
+      <Tokenomics />
+    </main>
+  );
+}
