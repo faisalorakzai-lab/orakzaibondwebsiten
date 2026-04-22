@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
 import { PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer } from "recharts";
-import { CheckCircle2, TrendingUp } from "lucide-react";
+import { CheckCircle2, TrendingUp, ArrowLeft, Zap, Shield, Repeat, Lock } from "lucide-react";
 import { useState } from "react";
+import { Link } from "wouter";
 
 const TOKENOMICS_DATA = [
   {
-    name: "Public Sale / ICO",
+    name: "Public Sale (ICO)",
     value: 40,
     amount: "4,000,000",
     color: "#eab308",
@@ -33,11 +34,34 @@ const TOKENOMICS_DATA = [
     description: "Used for marketing initiatives and community engagement",
   },
   {
-    name: "Team & Development (Locked)",
+    name: "Team & Development",
     value: 10,
     amount: "1,000,000",
     color: "#8b5cf6",
     description: "Reserved for core team with 60-day security lock-up",
+  },
+];
+
+const UTILITY_DRIVERS = [
+  {
+    icon: <Zap className="w-6 h-6" />,
+    title: "Limited Supply, Massive Ecosystem",
+    description: "With only 10 Million tokens and 250+ upcoming projects using OKBOND, the scarcity will drive long-term value.",
+  },
+  {
+    icon: <Repeat className="w-6 h-6" />,
+    title: "Buy-Back & Burn Mechanism",
+    description: "A portion of profits from the Orakzai Group’s integrated projects will be used to buy back and stabilize the token value.",
+  },
+  {
+    icon: <Shield className="w-6 h-6" />,
+    title: "High-Utility Staking",
+    description: "Holding OKBOND gives exclusive access to the Mega Lottery, Staking Rewards, and priority investment in Orakzai Properties.",
+  },
+  {
+    icon: <Lock className="w-6 h-6" />,
+    title: "Capital Protection",
+    description: "Unlike other volatile coins, OKBOND is backed by a Capital-Retention Model, making it a safer haven for long-term holders.",
   },
 ];
 
@@ -75,7 +99,7 @@ const CustomTooltip = ({ active, payload }: any) => {
         <p className="font-bold text-foreground">{payload[0].name}</p>
         <p className="text-sm text-primary font-mono">{payload[0].value}%</p>
         <p className="text-xs text-muted-foreground mt-1">
-          {TOKENOMICS_DATA[payload[0].payload.index]?.amount}
+          {TOKENOMICS_DATA[payload[0].payload.index]?.amount} OKBOND
         </p>
       </motion.div>
     );
@@ -101,6 +125,19 @@ export default function Tokenomics() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_100%_at_50%_50%,transparent_40%,rgba(0,0,0,0.55)_100%)] pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
+        {/* Exit Button */}
+        <div className="mb-12">
+          <Link href="/">
+            <motion.span
+              whileHover={{ x: -4 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:border-primary/40 bg-background/60 hover:bg-primary/5 text-muted-foreground hover:text-primary transition-all text-sm font-medium cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Home
+            </motion.span>
+          </Link>
+        </div>
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -281,6 +318,57 @@ export default function Tokenomics() {
                       }}
                     />
                   </div>
+                </motion.div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Token Utility & Demand Drivers Section */}
+        <div className="mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h3 className="text-4xl md:text-5xl font-black text-foreground mb-4">
+              Token Utility & Demand Drivers
+            </h3>
+            <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
+              OKBOND is engineered to be more than just a token; it's the fuel for a massive, multi-industry ecosystem.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {UTILITY_DRIVERS.map((driver, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="group"
+              >
+                <motion.div
+                  whileHover={{ y: -8, boxShadow: "0 0 40px rgba(234,179,8,0.3)" }}
+                  className="relative p-8 rounded-3xl backdrop-blur-xl border border-primary/30 bg-gradient-to-br from-white/8 to-white/3 transition-all duration-300 overflow-hidden h-full"
+                  style={{
+                    boxShadow: "0 0 20px rgba(59,130,246,0.2), inset 0 1px 0 rgba(255,255,255,0.1)",
+                  }}
+                >
+                  <div className="absolute inset-0 rounded-3xl border border-primary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
+                  
+                  <div className="relative z-10 mb-4 w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center text-primary">
+                    {driver.icon}
+                  </div>
+
+                  <h4 className="relative z-10 text-xl font-black text-foreground mb-3">
+                    {driver.title}
+                  </h4>
+                  <p className="relative z-10 text-sm text-muted-foreground leading-relaxed">
+                    {driver.description}
+                  </p>
                 </motion.div>
               </motion.div>
             ))}

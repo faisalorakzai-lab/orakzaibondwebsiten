@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { CheckCircle2, Shield, Lock, Zap, FileText, ExternalLink } from "lucide-react";
+import { CheckCircle2, Shield, Lock, Zap, FileText, ExternalLink, ArrowLeft } from "lucide-react";
+import { Link } from "wouter";
 
 const TOKEN_SPECS = [
   {
@@ -59,6 +60,19 @@ export default function Token() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_100%_at_50%_50%,transparent_40%,rgba(0,0,0,0.55)_100%)] pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
+        {/* Exit Button */}
+        <div className="mb-12">
+          <Link href="/">
+            <motion.span
+              whileHover={{ x: -4 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:border-primary/40 bg-background/60 hover:bg-primary/5 text-muted-foreground hover:text-primary transition-all text-sm font-medium cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Home
+            </motion.span>
+          </Link>
+        </div>
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -197,7 +211,7 @@ export default function Token() {
                   All OKBOND smart contracts have been professionally audited and verified for security, transparency, and compliance. Our audit report is publicly available for full transparency.
                 </p>
                 <motion.a
-                  href="https://drive.google.com/uc?export=download&id=1ciuxocfbRbwENLaclrpey50EJMxF_pdr"
+                  href="https://drive.google.com/file/d/1uvONnEDac-Z06mrth6TT94N9bRGecyhN/view?usp=drivesdk"
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(234,179,8,0.5)" }}
