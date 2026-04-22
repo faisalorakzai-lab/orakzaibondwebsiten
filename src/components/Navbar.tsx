@@ -102,9 +102,9 @@ export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps
           </a>
 
           {/* 3. Token */}
-          <a href="/#token" className="hover:text-primary transition-colors">
-            Token
-          </a>
+          <Link href="/token">
+            <span className="hover:text-primary transition-colors cursor-pointer">Token</span>
+          </Link>
 
           {/* 3b. ICO */}
           <Link href="/ico">
@@ -125,9 +125,9 @@ export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps
           </span>
 
           {/* 5. Tokenomics */}
-          <a href="/#tokenomics" className="hover:text-primary transition-colors">
-            Tokenomics
-          </a>
+          <Link href="/tokenomics">
+            <span className="hover:text-primary transition-colors cursor-pointer">Tokenomics</span>
+          </Link>
 
           {/* 6. About Us */}
           <Link href="/about">
