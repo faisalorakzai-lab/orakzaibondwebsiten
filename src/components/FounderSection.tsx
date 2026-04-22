@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import {
-  Quote, BadgeCheck, ExternalLink, Building2, Globe, Linkedin, Twitter, ExternalLink as LinkIcon
+  Quote, BadgeCheck, Building2, Globe, Linkedin, Twitter, ExternalLink as LinkIcon, Send
 } from "lucide-react";
 
 const SOCIALS = [
@@ -40,6 +41,22 @@ const STATS = [
 ];
 
 export default function FounderSection() {
+  useEffect(() => {
+    // Load LinkedIn badge script asynchronously
+    const script = document.createElement("script");
+    script.src = "https://platform.linkedin.com/badges/js/profile.js";
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    return () => {
+      // Clean up script on unmount
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
+
   return (
     <section id="founder" className="py-24 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -59,7 +76,7 @@ export default function FounderSection() {
           
           {/* LEFT: Identity & Badge */}
           <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} className="flex flex-col items-center lg:items-start">
-            <div className="mb-8 w-full flex justify-center lg:justify-start">
+            <div className="mb-8 w-full flex justify-center lg:justify-start min-h-[250px]">
               {/* LinkedIn Premium Badge Rendering */}
               <div className="badge-base LI-profile-badge" 
                    data-locale="en_US" 

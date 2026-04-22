@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowLeftRight, Clock } from "lucide-react";
@@ -31,13 +31,13 @@ export default function Hero({ onConnect, address }: HeroProps) {
     target.setDate(target.getDate() + 1);
     target.setHours(12, 0, 0, 0);
 
-    const timer = setInterval(() => {
+    const updateTimer = () => {
       const now = new Date().getTime();
       const distance = target.getTime() - now;
 
       if (distance < 0) {
-        clearInterval(timer);
-        return;
+        setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
+        return false;
       }
 
       setTimeLeft({
@@ -45,12 +45,18 @@ export default function Hero({ onConnect, address }: HeroProps) {
         minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
         seconds: Math.floor((distance % (1000 * 60)) / 1000),
       });
+      return true;
+    };
+
+    updateTimer();
+    const timer = setInterval(() => {
+      if (!updateTimer()) clearInterval(timer);
     }, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
-  async function onCoinAnimationComplete() {
+  const onCoinAnimationComplete = useCallback(async () => {
     if (coinSpunIn) return;
     setCoinSpunIn(true);
     floatControls.start({
@@ -62,7 +68,7 @@ export default function Hero({ onConnect, address }: HeroProps) {
       setSloganIdx((i) => (i + 1) % SLOGANS.length);
     }, 3200);
     return () => clearInterval(cycle);
-  }
+  }, [coinSpunIn, floatControls]);
 
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-20">
@@ -93,7 +99,7 @@ export default function Hero({ onConnect, address }: HeroProps) {
               ].map((unit) => (
                 <div key={unit.label} className="flex flex-col items-center">
                   <span className="text-4xl md:text-6xl font-black font-mono text-foreground tabular-nums tracking-tighter">
-                    {String(unit.value).padStart(2, '0')}
+                    {String(unit.value || 0).padStart(2, '0')}
                   </span>
                   <span className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground/60 mt-1">{unit.label}</span>
                 </div>
