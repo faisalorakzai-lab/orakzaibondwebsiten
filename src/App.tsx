@@ -15,6 +15,7 @@ import ContactPage from "./pages/ContactPage";
 import DocumentsPage from "./pages/DocumentsPage";
 import GuidePage from "./pages/GuidePage";
 import RulesPage from "./pages/RulesPage";
+import RoadmapPage from "./pages/RoadmapPage";
 import SystemPage from "./pages/SystemPage";
 import WinnersPage from "./pages/WinnersPage";
 import AdminPage from "./pages/AdminPage";
@@ -57,6 +58,7 @@ function App() {
           <Route path="/documents" component={DocumentsPage} />
           <Route path="/guide" component={GuidePage} />
           <Route path="/rules" component={RulesPage} />
+          <Route path="/roadmap" component={RoadmapPage} />
           <Route path="/system" component={SystemPage} />
           <Route path="/winners" component={WinnersPage} />
           <Route path="/admin" component={AdminPage} />
