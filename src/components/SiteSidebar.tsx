@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocation } from "wouter";
 import {
   ChevronRight, ChevronLeft, Home, Info, Coins, Ticket,
   PieChart, Map, Cpu, Trophy, Users, Shield, FileText,
@@ -7,13 +8,13 @@ import {
 } from "lucide-react";
 
 const NAV_ITEMS = [
-  { id: "hero",       label: "Home",        icon: <Home       className="w-4 h-4" />, href: "#"           },
+  { id: "hero",       label: "Home",        icon: <Home       className="w-4 h-4" />, href: "/"           },
   { id: "about",      label: "About",       icon: <Info       className="w-4 h-4" />, href: "/about"      },
-  { id: "token",      label: "Token",       icon: <Coins      className="w-4 h-4" />, href: "#token"      },
-  { id: "lottery",    label: "Lottery",     icon: <Ticket     className="w-4 h-4" />, href: "#lottery"    },
-  { id: "tokenomics", label: "Tokenomics",  icon: <PieChart   className="w-4 h-4" />, href: "#tokenomics" },
-  { id: "roadmap",    label: "Roadmap",     icon: <Map        className="w-4 h-4" />, href: "#roadmap"    },
-  { id: "ico",        label: "ICO / Buy",   icon: <Rocket     className="w-4 h-4" />, href: "#ico"        },
+  { id: "token",      label: "Token",       icon: <Coins      className="w-4 h-4" />, href: "/#token"      },
+  { id: "lottery",    label: "Lottery",     icon: <Ticket     className="w-4 h-4" />, href: "/#lottery"    },
+  { id: "tokenomics", label: "Tokenomics",  icon: <PieChart   className="w-4 h-4" />, href: "/#tokenomics" },
+  { id: "roadmap",    label: "Roadmap",     icon: <Map        className="w-4 h-4" />, href: "/#roadmap"    },
+  { id: "ico",        label: "ICO / Buy",   icon: <Rocket     className="w-4 h-4" />, href: "/ico"        },
   { id: "community",  label: "Community",   icon: <Users      className="w-4 h-4" />, href: "/community"  },
 ];
 
@@ -54,13 +55,16 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
   const [expanded, setExpanded] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [location, setLocation] = useLocation();
 
   useImperativeHandle(ref, () => ({
     toggleMobile: () => setMobileOpen(p => !p),
   }));
 
   useEffect(() => {
-    const sections = NAV_ITEMS.map(n => n.id);
+    if (location !== "/") return;
+    
+    const sections = NAV_ITEMS.filter(n => n.href.startsWith("/#") || n.href === "/").map(n => n.id);
     const observers: IntersectionObserver[] = [];
 
     sections.forEach(id => {
@@ -76,18 +80,33 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
     });
 
     return () => observers.forEach(o => o.disconnect());
-  }, []);
+  }, [location]);
 
-  const scrollTo = useCallback((href: string) => {
+  const navigateTo = useCallback((href: string) => {
     setMobileOpen(false);
-    if (href === "#") { window.scrollTo({ top: 0, behavior: "smooth" }); return; }
-    if (href.startsWith("/")) {
-      window.location.href = href;
+    if (href.startsWith("http") || href.startsWith("mailto")) {
+      window.open(href, "_blank");
       return;
     }
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
+    
+    if (href.startsWith("/#")) {
+      const hash = href.substring(1);
+      if (location === "/") {
+        const el = document.querySelector(hash);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        setLocation("/");
+        setTimeout(() => {
+          const el = document.querySelector(hash);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+      }
+      return;
+    }
+
+    setLocation(href);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location, setLocation]);
 
   const W_COLLAPSED = 60;
   const W_EXPANDED  = 220;
@@ -119,11 +138,11 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
           <p className="text-[9px] text-muted-foreground/50 uppercase tracking-widest font-bold px-2 mb-2">Sections</p>
         )}
         {NAV_ITEMS.map((item) => {
-          const active = activeSection === item.id;
+          const active = location === item.href || (location === "/" && activeSection === item.id);
           return (
             <button
               key={item.id}
-              onClick={() => scrollTo(item.href)}
+              onClick={() => navigateTo(item.href)}
               title={!expanded && !mobile ? item.label : undefined}
               className={`w-full flex items-center gap-3 rounded-xl transition-all text-left
                 ${expanded || mobile ? "px-3 py-2.5" : "px-0 py-2.5 justify-center"}
@@ -157,11 +176,14 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
         {PAGE_LINKS.map((link) => (
           <button
             key={link.label}
-            onClick={() => scrollTo(link.href)}
+            onClick={() => navigateTo(link.href)}
             title={!expanded && !mobile ? link.label : undefined}
             className={`w-full flex items-center gap-3 rounded-xl transition-all text-left
               ${expanded || mobile ? "px-3 py-2.5" : "px-0 py-2.5 justify-center"}
-              text-muted-foreground hover:text-foreground hover:bg-muted/25 border border-transparent`}
+              ${location === link.href 
+                ? "bg-primary/15 text-primary border border-primary/25 shadow-[0_0_8px_rgba(234,179,8,0.12)]"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/25 border border-transparent"
+              }`}
           >
             <span className="flex-shrink-0">{link.icon}</span>
             {(expanded || mobile) && (

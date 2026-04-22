@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Globe, ChevronDown, Check, ArrowLeftRight, Menu } from "lucide-react";
-
-const QUICKSWAP_URL = "https://dapp.quickswap.exchange/swap?type=v3&from=0x6F539e4232c045cCAc08e2009d97BdC72815472a&to=ETH";
+import { Globe, ChevronDown, Check, Menu } from "lucide-react";
 
 interface NavbarProps {
   address: string | null;
@@ -50,75 +49,72 @@ export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps
           </motion.button>
 
           {/* Logo */}
-          <div className="flex items-center gap-3">
-            <motion.div
-              className="relative w-10 h-10 rounded-full overflow-hidden border border-primary/50 flex-shrink-0"
-              animate={{
-                boxShadow: [
-                  "0 0 8px rgba(234,179,8,0.35), 0 0 20px rgba(234,179,8,0.15)",
-                  "0 0 16px rgba(234,179,8,0.65), 0 0 40px rgba(234,179,8,0.30)",
-                  "0 0 8px rgba(234,179,8,0.35), 0 0 20px rgba(234,179,8,0.15)",
-                ],
-              }}
-              transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <img src="/okbond-logo.png" alt="OKBOND" className="w-full h-full object-cover" />
-            </motion.div>
-
-            <div>
-              <motion.h1
-                className="font-bold text-xl tracking-tight"
-                style={{ color: "hsl(var(--foreground))" }}
+          <Link href="/">
+            <div className="flex items-center gap-3 cursor-pointer">
+              <motion.div
+                className="relative w-10 h-10 rounded-full overflow-hidden border border-primary/50 flex-shrink-0"
                 animate={{
-                  textShadow: [
-                    "0 0 6px rgba(234,179,8,0.0)",
-                    "0 0 12px rgba(234,179,8,0.55), 0 0 25px rgba(234,179,8,0.25)",
-                    "0 0 6px rgba(234,179,8,0.0)",
+                  boxShadow: [
+                    "0 0 8px rgba(234,179,8,0.35), 0 0 20px rgba(234,179,8,0.15)",
+                    "0 0 16px rgba(234,179,8,0.65), 0 0 40px rgba(234,179,8,0.30)",
+                    "0 0 8px rgba(234,179,8,0.35), 0 0 20px rgba(234,179,8,0.15)",
                   ],
                 }}
-                transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+                transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
               >
-                Orakzai Bond
-              </motion.h1>
-              <span className="text-xs text-primary font-mono font-medium tracking-widest uppercase">OKBOND</span>
+                <img src="/okbond-logo.png" alt="OKBOND" className="w-full h-full object-cover" />
+              </motion.div>
+
+              <div>
+                <motion.h1
+                  className="font-bold text-xl tracking-tight"
+                  style={{ color: "hsl(var(--foreground))" }}
+                  animate={{
+                    textShadow: [
+                      "0 0 6px rgba(234,179,8,0.0)",
+                      "0 0 12px rgba(234,179,8,0.55), 0 0 25px rgba(234,179,8,0.25)",
+                      "0 0 6px rgba(234,179,8,0.0)",
+                    ],
+                  }}
+                  transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
+                >
+                  Orakzai Bond
+                </motion.h1>
+                <span className="text-xs text-primary font-mono font-medium tracking-widest uppercase">OKBOND</span>
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
 
         {/* ── Nav links ──────────────────────────────────────────────────────── */}
         <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
           {/* 1. Home */}
-          <a
-            href="#"
-            onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-            className="hover:text-primary transition-colors"
-          >
-            Home
-          </a>
+          <Link href="/">
+            <span className="hover:text-primary transition-colors cursor-pointer">Home</span>
+          </Link>
 
           {/* 2. Lottery */}
           <a
-            href="#lottery"
+            href="/#lottery"
             className="font-semibold text-primary/80 hover:text-primary transition-colors"
           >
             Lottery
           </a>
 
           {/* 3. Token */}
-          <a href="#token" className="hover:text-primary transition-colors">
+          <a href="/#token" className="hover:text-primary transition-colors">
             Token
           </a>
 
           {/* 3b. ICO */}
-          <a
-            href="/ico"
-            className="relative flex items-center gap-1.5 hover:text-primary transition-colors font-semibold text-primary"
-          >
-            ICO
-            <span className="px-1.5 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[8px] font-bold uppercase tracking-widest leading-none animate-pulse">
-              Live
+          <Link href="/ico">
+            <span className="relative flex items-center gap-1.5 hover:text-primary transition-colors font-semibold text-primary cursor-pointer">
+              ICO
+              <span className="px-1.5 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[8px] font-bold uppercase tracking-widest leading-none animate-pulse">
+                Live
+              </span>
             </span>
-          </a>
+          </Link>
 
           {/* 4. Stake — coming soon */}
           <span className="relative flex items-center gap-1.5 cursor-default select-none opacity-60">
@@ -129,14 +125,14 @@ export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps
           </span>
 
           {/* 5. Tokenomics */}
-          <a href="#tokenomics" className="hover:text-primary transition-colors">
+          <a href="/#tokenomics" className="hover:text-primary transition-colors">
             Tokenomics
           </a>
 
           {/* 6. About Us */}
-          <a href="/about" className="hover:text-primary transition-colors">
-            About Us
-          </a>
+          <Link href="/about">
+            <span className="hover:text-primary transition-colors cursor-pointer">About Us</span>
+          </Link>
         </div>
 
         {/* ── Right side: Language + Wallet ─────────────────────────────────── */}
