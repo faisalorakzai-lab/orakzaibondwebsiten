@@ -18,7 +18,7 @@ const SLOGANS = [
   "One Ecosystem. Infinite Potential.",
 ];
 
-// Premium 3D Metallic Style Icons as SVG components
+// Premium 3D Metallic Style Icons as SVG components with enhanced effects
 const PillarIcon = ({ type }: { type: "cashback" | "protection" | "verified" | "vesting" }) => {
   const iconMap = {
     cashback: (
@@ -26,17 +26,37 @@ const PillarIcon = ({ type }: { type: "cashback" | "protection" | "verified" | "
         <defs>
           <linearGradient id="cashback-grad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#60a5fa" />
-            <stop offset="100%" stopColor="#3b82f6" />
+            <stop offset="50%" stopColor="#3b82f6" />
+            <stop offset="100%" stopColor="#1e40af" />
+          </linearGradient>
+          <linearGradient id="cashback-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fbbf24" />
+            <stop offset="100%" stopColor="#d97706" />
           </linearGradient>
           <filter id="cashback-shadow">
-            <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.4" floodColor="#3b82f6" />
+            <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.6" floodColor="#3b82f6" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" />
+          </filter>
+          <filter id="cashback-glow">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
         </defs>
-        <circle cx="32" cy="32" r="28" fill="url(#cashback-grad)" opacity="0.15" />
-        <rect x="16" y="20" width="32" height="24" rx="4" fill="url(#cashback-grad)" stroke="url(#cashback-grad)" strokeWidth="1.5" filter="url(#cashback-shadow)" />
-        <circle cx="24" cy="32" r="3" fill="#60a5fa" />
-        <circle cx="40" cy="32" r="3" fill="#60a5fa" />
-        <path d="M 20 28 Q 32 35 44 28" stroke="#60a5fa" strokeWidth="1.5" fill="none" />
+        {/* 3D Metallic background sphere */}
+        <circle cx="32" cy="32" r="28" fill="url(#cashback-grad)" opacity="0.2" filter="url(#cashback-glow)" />
+        <circle cx="32" cy="28" r="26" fill="url(#cashback-grad)" opacity="0.1" />
+        {/* Main wallet shape with metallic effect */}
+        <rect x="16" y="20" width="32" height="24" rx="4" fill="url(#cashback-grad)" stroke="url(#cashback-gold)" strokeWidth="2" filter="url(#cashback-shadow)" />
+        {/* Metallic highlight */}
+        <rect x="16" y="20" width="32" height="6" rx="4" fill="url(#cashback-gold)" opacity="0.3" />
+        {/* Coin slots */}
+        <circle cx="24" cy="32" r="3" fill="#fbbf24" filter="url(#cashback-shadow)" />
+        <circle cx="40" cy="32" r="3" fill="#fbbf24" filter="url(#cashback-shadow)" />
+        {/* Smile curve */}
+        <path d="M 20 28 Q 32 35 44 28" stroke="url(#cashback-gold)" strokeWidth="2" fill="none" strokeLinecap="round" filter="url(#cashback-glow)" />
       </svg>
     ),
     protection: (
@@ -44,14 +64,31 @@ const PillarIcon = ({ type }: { type: "cashback" | "protection" | "verified" | "
         <defs>
           <linearGradient id="protection-grad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#60a5fa" />
-            <stop offset="100%" stopColor="#3b82f6" />
+            <stop offset="50%" stopColor="#3b82f6" />
+            <stop offset="100%" stopColor="#1e40af" />
+          </linearGradient>
+          <linearGradient id="protection-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fbbf24" />
+            <stop offset="100%" stopColor="#d97706" />
           </linearGradient>
           <filter id="protection-shadow">
-            <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.4" floodColor="#3b82f6" />
+            <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.6" floodColor="#3b82f6" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" />
+          </filter>
+          <filter id="protection-glow">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
         </defs>
-        <path d="M 32 14 L 20 20 L 20 32 Q 20 45 32 50 Q 44 45 44 32 L 44 20 Z" fill="url(#protection-grad)" opacity="0.15" stroke="url(#protection-grad)" strokeWidth="1.5" filter="url(#protection-shadow)" />
-        <path d="M 28 32 L 32 36 L 40 26" stroke="#60a5fa" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        {/* 3D Shield with metallic effect */}
+        <path d="M 32 14 L 20 20 L 20 32 Q 20 45 32 50 Q 44 45 44 32 L 44 20 Z" fill="url(#protection-grad)" opacity="0.2" stroke="url(#protection-gold)" strokeWidth="2" filter="url(#protection-glow)" />
+        {/* Metallic highlight on shield */}
+        <path d="M 32 14 L 20 20 L 20 28 Q 20 35 32 38 Q 40 35 40 28 L 40 20 Z" fill="url(#protection-gold)" opacity="0.25" />
+        {/* Checkmark */}
+        <path d="M 28 32 L 32 36 L 40 26" stroke="url(#protection-gold)" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" filter="url(#protection-glow)" />
       </svg>
     ),
     verified: (
@@ -59,14 +96,31 @@ const PillarIcon = ({ type }: { type: "cashback" | "protection" | "verified" | "
         <defs>
           <linearGradient id="verified-grad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#10b981" />
-            <stop offset="100%" stopColor="#059669" />
+            <stop offset="50%" stopColor="#059669" />
+            <stop offset="100%" stopColor="#047857" />
+          </linearGradient>
+          <linearGradient id="verified-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fbbf24" />
+            <stop offset="100%" stopColor="#d97706" />
           </linearGradient>
           <filter id="verified-shadow">
-            <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.4" floodColor="#10b981" />
+            <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.6" floodColor="#10b981" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" />
+          </filter>
+          <filter id="verified-glow">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
         </defs>
-        <circle cx="32" cy="32" r="18" fill="url(#verified-grad)" opacity="0.15" stroke="url(#verified-grad)" strokeWidth="1.5" filter="url(#verified-shadow)" />
-        <path d="M 26 32 L 30 36 L 38 28" stroke="#10b981" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        {/* 3D Circle with metallic effect */}
+        <circle cx="32" cy="32" r="18" fill="url(#verified-grad)" opacity="0.2" stroke="url(#verified-gold)" strokeWidth="2" filter="url(#verified-glow)" />
+        {/* Metallic highlight */}
+        <circle cx="32" cy="26" r="16" fill="url(#verified-gold)" opacity="0.2" />
+        {/* Checkmark */}
+        <path d="M 26 32 L 30 36 L 38 28" stroke="url(#verified-gold)" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" filter="url(#verified-glow)" />
       </svg>
     ),
     vesting: (
@@ -74,15 +128,33 @@ const PillarIcon = ({ type }: { type: "cashback" | "protection" | "verified" | "
         <defs>
           <linearGradient id="vesting-grad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#60a5fa" />
-            <stop offset="100%" stopColor="#3b82f6" />
+            <stop offset="50%" stopColor="#3b82f6" />
+            <stop offset="100%" stopColor="#1e40af" />
+          </linearGradient>
+          <linearGradient id="vesting-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#fbbf24" />
+            <stop offset="100%" stopColor="#d97706" />
           </linearGradient>
           <filter id="vesting-shadow">
-            <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.4" floodColor="#3b82f6" />
+            <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.6" floodColor="#3b82f6" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" />
+          </filter>
+          <filter id="vesting-glow">
+            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
           </filter>
         </defs>
-        <circle cx="32" cy="32" r="16" fill="none" stroke="url(#vesting-grad)" strokeWidth="1.5" opacity="0.3" />
-        <circle cx="32" cy="32" r="12" fill="url(#vesting-grad)" opacity="0.15" stroke="url(#vesting-grad)" strokeWidth="1.5" filter="url(#vesting-shadow)" />
-        <path d="M 32 24 L 32 32 L 38 38" stroke="#60a5fa" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        {/* Outer ring with metallic effect */}
+        <circle cx="32" cy="32" r="16" fill="none" stroke="url(#vesting-grad)" strokeWidth="2" opacity="0.4" filter="url(#vesting-glow)" />
+        {/* Inner circle */}
+        <circle cx="32" cy="32" r="12" fill="url(#vesting-grad)" opacity="0.15" stroke="url(#vesting-gold)" strokeWidth="1.5" filter="url(#vesting-shadow)" />
+        {/* Metallic highlight */}
+        <circle cx="32" cy="26" r="10" fill="url(#vesting-gold)" opacity="0.2" />
+        {/* Clock hand */}
+        <path d="M 32 24 L 32 32 L 38 38" stroke="url(#vesting-gold)" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" filter="url(#vesting-glow)" />
       </svg>
     ),
   };
@@ -95,28 +167,32 @@ const PILLARS = [
     title: "Lottery Non-Winner Cashback",
     color: "from-blue-500 to-blue-600",
     glowColor: "shadow-blue-500/40",
-    borderColor: "border-blue-500/50",
+    borderColor: "border-blue-400/60",
+    accentGold: "from-yellow-400/20 to-yellow-500/10",
   },
   {
     type: "protection" as const,
     title: "100% Capital Protection",
     color: "from-blue-500 to-blue-600",
     glowColor: "shadow-blue-500/40",
-    borderColor: "border-blue-500/50",
+    borderColor: "border-blue-400/60",
+    accentGold: "from-yellow-400/20 to-yellow-500/10",
   },
   {
     type: "verified" as const,
     title: "Verified Smart Contract",
     color: "from-emerald-500 to-emerald-600",
     glowColor: "shadow-emerald-500/40",
-    borderColor: "border-emerald-500/50",
+    borderColor: "border-emerald-400/60",
+    accentGold: "from-yellow-400/20 to-yellow-500/10",
   },
   {
     type: "vesting" as const,
     title: "60-Day Secure Vesting",
     color: "from-blue-500 to-blue-600",
     glowColor: "shadow-blue-500/40",
-    borderColor: "border-blue-500/50",
+    borderColor: "border-blue-400/60",
+    accentGold: "from-yellow-400/20 to-yellow-500/10",
   },
 ];
 
@@ -246,18 +322,24 @@ export default function Hero({ onConnect, address }: HeroProps) {
               </Button>
             )}
             
-            {/* Premium "BUY ICO NOW" Button with Neon Glow */}
+            {/* Premium "BUY ICO NOW" Button with Enhanced Neon Glow */}
             <motion.a
               href={ICO_URL}
-              whileHover={{ scale: 1.05, boxShadow: "0 0 60px rgba(16,185,129,0.8), 0 0 100px rgba(16,185,129,0.4)" }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ 
+                scale: 1.08, 
+                boxShadow: "0 0 80px rgba(16,185,129,1), 0 0 120px rgba(16,185,129,0.6), inset 0 0 40px rgba(255,255,255,0.15)" 
+              }}
+              whileTap={{ scale: 0.96 }}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-3 text-lg h-16 px-12 rounded-full font-black bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-600 text-white transition-all duration-300 relative overflow-hidden group"
               style={{
-                boxShadow: "0 0 30px rgba(16,185,129,0.5), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 60px rgba(16,185,129,0.3)",
+                boxShadow: "0 0 40px rgba(16,185,129,0.7), inset 0 1px 0 rgba(255,255,255,0.3), 0 0 80px rgba(16,185,129,0.4), 0 0 120px rgba(16,185,129,0.2)",
               }}
             >
-              {/* Animated background glow */}
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/0 via-white/10 to-emerald-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Animated background glow layer */}
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/0 via-white/15 to-emerald-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
+              
+              {/* Neon border effect */}
+              <div className="absolute inset-0 rounded-full border border-emerald-300/40 group-hover:border-emerald-200/80 transition-colors duration-300" />
               
               {/* Checkmark SVG */}
               <svg className="w-6 h-6 relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -268,37 +350,45 @@ export default function Hero({ onConnect, address }: HeroProps) {
             </motion.a>
           </div>
 
-          {/* 4 Pillars Section with Glass-Morphism & Neon Borders */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
+          {/* 4 Pillars Section with Premium Glassmorphism & Neon Borders */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-20">
             {PILLARS.map((pillar, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + idx * 0.1 }}
-                whileHover={{ y: -6, boxShadow: `0 0 40px rgba(${pillar.type === 'verified' ? '16,185,129' : '59,130,246'}, 0.6)` }}
-                className={`relative p-6 rounded-2xl backdrop-blur-xl border ${pillar.borderColor} bg-gradient-to-br from-white/8 to-white/3 transition-all duration-300 overflow-hidden group`}
+                transition={{ delay: 0.3 + idx * 0.12, type: "spring", stiffness: 100 }}
+                whileHover={{ 
+                  y: -10, 
+                  boxShadow: pillar.type === 'verified' 
+                    ? "0 0 60px rgba(16,185,129,0.8), 0 0 100px rgba(16,185,129,0.4), inset 0 0 30px rgba(16,185,129,0.1)" 
+                    : "0 0 60px rgba(59,130,246,0.8), 0 0 100px rgba(59,130,246,0.4), inset 0 0 30px rgba(59,130,246,0.1)"
+                }}
+                className={`relative p-7 rounded-3xl backdrop-blur-2xl border-2 ${pillar.borderColor} bg-gradient-to-br from-white/12 to-white/4 transition-all duration-300 overflow-hidden group hover:border-opacity-100`}
                 style={{
-                  boxShadow: `0 0 20px rgba(${pillar.type === 'verified' ? '16,185,129' : '59,130,246'}, 0.3), inset 0 1px 0 rgba(255,255,255,0.1)`,
+                  boxShadow: `0 0 30px rgba(${pillar.type === 'verified' ? '16,185,129' : '59,130,246'}, 0.4), inset 0 1px 0 rgba(255,255,255,0.15), 0 0 60px rgba(${pillar.type === 'verified' ? '16,185,129' : '59,130,246'}, 0.15)`,
                 }}
               >
-                {/* Animated neon border glow */}
-                <div className={`absolute inset-0 rounded-2xl border ${pillar.borderColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm`} />
+                {/* Animated neon border glow - enhanced */}
+                <div className={`absolute inset-0 rounded-3xl border-2 ${pillar.borderColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-lg`} />
                 
-                {/* Animated gradient overlay on hover */}
-                <div className={`absolute inset-0 bg-gradient-to-br from-${pillar.type === 'verified' ? 'emerald' : 'blue'}-500/0 to-${pillar.type === 'verified' ? 'emerald' : 'blue'}-500/0 group-hover:from-${pillar.type === 'verified' ? 'emerald' : 'blue'}-500/5 group-hover:to-${pillar.type === 'verified' ? 'emerald' : 'blue'}-500/5 transition-all duration-500 rounded-2xl`} />
+                {/* Premium gradient overlay with gold accent */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${pillar.accentGold} group-hover:from-yellow-400/30 group-hover:to-yellow-500/15 transition-all duration-500 rounded-3xl`} />
 
-                {/* Icon Container with 3D effect */}
-                <div className={`relative w-14 h-14 rounded-xl bg-gradient-to-br ${pillar.color} mb-4 p-3 group-hover:scale-110 transition-transform duration-300`}
+                {/* Icon Container with 3D metallic effect */}
+                <div className={`relative w-16 h-16 rounded-2xl bg-gradient-to-br ${pillar.color} mb-5 p-3 group-hover:scale-125 transition-transform duration-300 flex items-center justify-center`}
                   style={{
-                    boxShadow: `0 8px 16px rgba(${pillar.type === 'verified' ? '16,185,129' : '59,130,246'}, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)`,
+                    boxShadow: `0 12px 24px rgba(${pillar.type === 'verified' ? '16,185,129' : '59,130,246'}, 0.5), inset 0 2px 4px rgba(255,255,255,0.3), 0 0 30px rgba(${pillar.type === 'verified' ? '16,185,129' : '59,130,246'}, 0.3)`,
                   }}
                 >
                   <PillarIcon type={pillar.type} />
                 </div>
 
-                {/* Text with modern typography */}
-                <p className="text-base font-black text-foreground leading-snug relative z-10 tracking-tight">{pillar.title}</p>
+                {/* Text with modern typography (Inter/Sora style) */}
+                <p className="text-base font-black text-foreground leading-snug relative z-10 tracking-tight group-hover:text-white transition-colors duration-300">{pillar.title}</p>
+                
+                {/* Subtle animated accent line */}
+                <div className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-transparent via-yellow-400 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 w-full rounded-full" />
               </motion.div>
             ))}
           </div>
