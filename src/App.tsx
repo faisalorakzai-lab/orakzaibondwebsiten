@@ -20,6 +20,7 @@ import TokenPage from "./pages/TokenPage";
 import TokenomicsPage from "./pages/TokenomicsPage";
 import SystemPage from "./pages/SystemPage";
 import WinnersPage from "./pages/WinnersPage";
+import LotteryPage from "./pages/LotteryPage";
 import AdminPage from "./pages/AdminPage";
 import SecretAdminPage from "./pages/SecretAdminPage";
 import NotFound from "./pages/not-found";
@@ -55,6 +56,7 @@ function App() {
           <Route path="/about" component={AboutPage} />
           <Route path="/founder" component={FounderPage} />
           <Route path="/ico" component={ICOPage} />
+          <Route path="/lottery" component={LotteryPage} />
           <Route path="/community" component={CommunityPage} />
           <Route path="/contact" component={ContactPage} />
           <Route path="/documents" component={DocumentsPage} />

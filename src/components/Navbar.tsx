@@ -94,12 +94,9 @@ export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps
           </Link>
 
           {/* 2. Lottery */}
-          <a
-            href="/#lottery"
-            className="font-semibold text-primary/80 hover:text-primary transition-colors"
-          >
-            Lottery
-          </a>
+          <Link href="/lottery">
+            <span className="hover:text-primary transition-colors cursor-pointer font-semibold text-primary/80">Lottery</span>
+          </Link>
 
           {/* 3. Token */}
           <Link href="/token">
