@@ -195,25 +195,35 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
       // Step 2: Trigger Referral Distribution on Referral Contract
       // We MUST extract the token amount from the receipt to pass it to the referral contract
       let tokenAmount = BigInt(0);
+      
+      // Attempt to parse the TokensPurchased event from the receipt logs
       for (const log of receipt.logs) {
         try {
-          const parsed = icoContract.interface.parseLog(log);
+          const parsed = icoContract.interface.parseLog({
+            topics: [...log.topics],
+            data: log.data
+          });
           if (parsed?.name === "TokensPurchased") {
-            tokenAmount = parsed.args.tokens;
+            tokenAmount = parsed.args.tokens || parsed.args[2];
+            console.log("Found TokensPurchased event, tokens:", tokenAmount.toString());
             break;
           }
         } catch (e) { /* skip logs from other contracts */ }
       }
 
       // If TokensPurchased event wasn't found in receipt logs, calculate manually as fallback
-      if (tokenAmount === BigInt(0) && stats?.tokensPerPOL) {
-        tokenAmount = (value * BigInt(stats.tokensPerPOL));
+      if (tokenAmount === BigInt(0)) {
+        const rate = stats?.tokensPerPOL ? BigInt(stats.tokensPerPOL) : BigInt(600000); // fallback to 0.6 if stats not loaded
+        tokenAmount = (value * rate) / BigInt(1000000); 
+        console.log("Manual token calculation:", tokenAmount.toString());
       }
 
       if (tokenAmount > BigInt(0)) {
         try {
-          // IMPORTANT: This call links the buyer to the referrer and distributes rewards
+          console.log("Triggering distributeRewards for:", address, "tokens:", tokenAmount.toString(), "referrer:", finalReferrer);
+          // IMPORTANT: This call links the buyer to the referrer and distributes rewards on-chain
           const refTx = await refContract.distributeRewards(address, tokenAmount, finalReferrer);
+          console.log("Referral distribution TX sent:", refTx.hash);
           await refTx.wait(1);
           console.log("Referral rewards distributed successfully");
         } catch (refErr) {

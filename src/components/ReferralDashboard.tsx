@@ -109,7 +109,7 @@ export default function ReferralDashboard({ address, provider }: Props) {
                     <div className="px-4 pb-4 pt-2 border-t border-white/5">
                       <div className="flex items-center justify-between p-3 rounded-xl bg-black/20">
                         <span className="text-[10px] font-bold text-muted-foreground uppercase">Earnings</span>
-                        <p className={`text-sm font-bold font-mono ${cfg.color}`}>{parseFloat(earnings || "0").toFixed(4)} OKBOND</p>
+                        <p className={`text-sm font-bold font-mono ${cfg.color}`}>{parseFloat(earnings || "0").toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })} OKBOND</p>
                       </div>
                     </div>
                   </motion.div>
