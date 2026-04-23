@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
-  Rocket, Wallet, Shield, TrendingUp, Lock, Zap, Clock,
-  ExternalLink, Loader2, AlertTriangle, CheckCircle2, ArrowRight, Star, ArrowLeft, Users, Gift, ShieldCheck
+  Rocket, Wallet, Shield, TrendingUp, Lock, Zap,
+  ExternalLink, Loader2, ArrowLeft, Users, Gift, ShieldCheck, RefreshCw
 } from "lucide-react";
 import { Link } from "wouter";
 import { useWallet } from "@/hooks/useWallet";

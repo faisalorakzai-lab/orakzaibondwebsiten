@@ -180,9 +180,7 @@ const PILLARS = [
 ];
 
 export default function Hero({ onConnect, address }: HeroProps) {
-  const [coinSpunIn, setCoinSpunIn] = useState(false);
   const [sloganIdx, setSloganIdx] = useState(0);
-  const floatControls = useAnimation();
   
   const { provider } = useWallet();
   const { stats } = useICO(provider, address);
