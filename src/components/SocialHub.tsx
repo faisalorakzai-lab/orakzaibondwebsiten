@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   User, Edit2, Camera, Send, Image as ImageIcon, 
   BadgeCheck, Shield, Crown, MessageSquare, 
-  Loader2, X, Globe, Lock
+  Loader2, X, Globe, Lock, Heart, UserPlus, UserCheck, MessageCircle
 } from "lucide-react";
-import { supabase, Profile, Post } from "@/lib/supabase";
+import { supabase, Profile, Post, Comment } from "@/lib/supabase";
 import { useWallet } from "@/hooks/useWallet";
 
 const BADGE_CONFIG = {
@@ -23,22 +23,17 @@ export default function SocialHub() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [newPost, setNewPost] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [activePostId, setActivePostId] = useState<string | null>(null);
+  const [comments, setComments] = useState<Record<string, Comment[]>>({});
+  const [newComment, setNewComment] = useState("");
+  const [followingList, setFollowingList] = useState<string[]>([]);
 
   // Edit Profile Form State
   const [editUsername, setEditUsername] = useState("");
   const [editBio, setEditBio] = useState("");
   const [editAvatar, setEditAvatar] = useState("");
 
-  useEffect(() => {
-    fetchPosts();
-    if (address) {
-      fetchProfile(address);
-    } else {
-      setProfile(null);
-    }
-  }, [address]);
-
-  async function fetchProfile(walletAddr: string) {
+  const fetchProfile = useCallback(async (walletAddr: string) => {
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -47,7 +42,6 @@ export default function SocialHub() {
         .single();
 
       if (error && error.code === 'PGRST116') {
-        // Auto-create lazy profile
         const newProfile = {
           address: walletAddr.toLowerCase(),
           username: "Orakzai Investor",
@@ -74,9 +68,17 @@ export default function SocialHub() {
     } catch (err) {
       console.error("Profile fetch error:", err);
     }
-  }
+  }, []);
 
-  async function fetchPosts() {
+  const fetchFollowing = useCallback(async (walletAddr: string) => {
+    const { data } = await supabase
+      .from('follows')
+      .select('following_address')
+      .eq('follower_address', walletAddr.toLowerCase());
+    if (data) setFollowingList(data.map(f => f.following_address));
+  }, []);
+
+  const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -85,13 +87,41 @@ export default function SocialHub() {
         .order('created_at', { ascending: false })
         .limit(50);
 
-      if (data) setPosts(data);
+      if (data) {
+        // If logged in, check which posts user has liked
+        if (address) {
+          const { data: likedPosts } = await supabase
+            .from('likes')
+            .select('post_id')
+            .eq('address', address.toLowerCase());
+          
+          const likedSet = new Set(likedPosts?.map(l => l.post_id));
+          const enrichedPosts = data.map(p => ({
+            ...p,
+            user_has_liked: likedSet.has(p.id)
+          }));
+          setPosts(enrichedPosts);
+        } else {
+          setPosts(data);
+        }
+      }
     } catch (err) {
       console.error("Posts fetch error:", err);
     } finally {
       setLoading(false);
     }
-  }
+  }, [address]);
+
+  useEffect(() => {
+    fetchPosts();
+    if (address) {
+      fetchProfile(address);
+      fetchFollowing(address);
+    } else {
+      setProfile(null);
+      setFollowingList([]);
+    }
+  }, [address, fetchPosts, fetchProfile, fetchFollowing]);
 
   async function handleUpdateProfile() {
     if (!address || !profile) return;
@@ -133,13 +163,78 @@ export default function SocialHub() {
         .single();
 
       if (data) {
-        setPosts([data, ...posts]);
+        setPosts([{...data, user_has_liked: false}, ...posts]);
         setNewPost("");
       }
     } catch (err) {
       console.error("Create post error:", err);
     } finally {
       setIsSubmitting(false);
+    }
+  }
+
+  async function handleLike(postId: string, hasLiked: boolean) {
+    if (!address) return;
+    try {
+      if (hasLiked) {
+        await supabase.from('likes').delete().eq('post_id', postId).eq('address', address.toLowerCase());
+        setPosts(posts.map(p => p.id === postId ? { ...p, user_has_liked: false, likes_count: p.likes_count - 1 } : p));
+      } else {
+        await supabase.from('likes').insert({ post_id: postId, address: address.toLowerCase() });
+        setPosts(posts.map(p => p.id === postId ? { ...p, user_has_liked: true, likes_count: p.likes_count + 1 } : p));
+      }
+    } catch (err) {
+      console.error("Like error:", err);
+    }
+  }
+
+  async function fetchComments(postId: string) {
+    const { data } = await supabase
+      .from('comments')
+      .select('*, profiles(*)')
+      .eq('post_id', postId)
+      .order('created_at', { ascending: true });
+    if (data) setComments(prev => ({ ...prev, [postId]: data }));
+  }
+
+  async function handleAddComment(postId: string) {
+    if (!address || !newComment.trim()) return;
+    try {
+      const { data } = await supabase
+        .from('comments')
+        .insert({
+          post_id: postId,
+          address: address.toLowerCase(),
+          content: newComment
+        })
+        .select('*, profiles(*)')
+        .single();
+      
+      if (data) {
+        setComments(prev => ({ ...prev, [postId]: [...(prev[postId] || []), data] }));
+        setPosts(posts.map(p => p.id === postId ? { ...p, comments_count: p.comments_count + 1 } : p));
+        setNewComment("");
+      }
+    } catch (err) {
+      console.error("Comment error:", err);
+    }
+  }
+
+  async function handleFollow(targetAddress: string) {
+    if (!address || address.toLowerCase() === targetAddress.toLowerCase()) return;
+    const isFollowing = followingList.includes(targetAddress.toLowerCase());
+    try {
+      if (isFollowing) {
+        await supabase.from('follows').delete().eq('follower_address', address.toLowerCase()).eq('following_address', targetAddress.toLowerCase());
+        setFollowingList(followingList.filter(a => a !== targetAddress.toLowerCase()));
+      } else {
+        await supabase.from('follows').insert({ follower_address: address.toLowerCase(), following_address: targetAddress.toLowerCase() });
+        setFollowingList([...followingList, targetAddress.toLowerCase()]);
+      }
+      // Refresh current user profile to see updated follower counts if applicable
+      fetchProfile(address);
+    } catch (err) {
+      console.error("Follow error:", err);
     }
   }
 
@@ -185,9 +280,13 @@ export default function SocialHub() {
                 </div>
               )}
             </div>
-            <p className="text-xs text-muted-foreground font-mono">
-              {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Connect wallet to participate"}
-            </p>
+            <div className="flex items-center justify-center md:justify-start gap-4 text-xs font-mono text-muted-foreground">
+              <span>{address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Connect wallet"}</span>
+              <span className="w-1 h-1 rounded-full bg-white/20" />
+              <span>{profile?.followers_count || 0} Followers</span>
+              <span className="w-1 h-1 rounded-full bg-white/20" />
+              <span>{profile?.following_count || 0} Following</span>
+            </div>
             {profile?.bio && (
               <p className="text-sm text-muted-foreground/80 max-w-xl italic">
                 "{profile.bio}"
@@ -267,7 +366,7 @@ export default function SocialHub() {
                       </div>
                     )}
                   </div>
-                  <div className="flex-1 min-w-0 space-y-1">
+                  <div className="flex-1 min-w-0 space-y-3">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-bold text-sm text-foreground truncate max-w-[150px]">
                         {post.profiles?.username || "Investor"}
@@ -283,6 +382,15 @@ export default function SocialHub() {
                       <span className="text-[10px] text-muted-foreground/40 font-mono">
                         {post.address.slice(0, 6)}...{post.address.slice(-4)}
                       </span>
+                      {address && address.toLowerCase() !== post.address.toLowerCase() && (
+                        <button 
+                          onClick={() => handleFollow(post.address)}
+                          className={`ml-2 text-[10px] font-bold uppercase tracking-widest transition-colors ${followingList.includes(post.address.toLowerCase()) ? 'text-primary' : 'text-muted-foreground hover:text-primary'}`}
+                        >
+                          {followingList.includes(post.address.toLowerCase()) ? <UserCheck size={14} className="inline mr-1" /> : <UserPlus size={14} className="inline mr-1" />}
+                          {followingList.includes(post.address.toLowerCase()) ? 'Following' : 'Follow'}
+                        </button>
+                      )}
                       <span className="text-[10px] text-muted-foreground/40 ml-auto">
                         {new Date(post.created_at).toLocaleDateString()}
                       </span>
@@ -290,6 +398,78 @@ export default function SocialHub() {
                     <p className="text-sm text-muted-foreground/80 leading-relaxed whitespace-pre-wrap">
                       {post.content}
                     </p>
+                    
+                    {/* Actions: Like & Comment */}
+                    <div className="flex items-center gap-6 pt-2 border-t border-white/5">
+                      <button 
+                        onClick={() => handleLike(post.id, !!post.user_has_liked)}
+                        className={`flex items-center gap-2 text-xs font-bold transition-all hover:scale-110 ${post.user_has_liked ? 'text-rose-500' : 'text-muted-foreground hover:text-rose-500'}`}
+                      >
+                        <Heart size={16} className={post.user_has_liked ? 'fill-current' : ''} />
+                        {post.likes_count || 0}
+                      </button>
+                      <button 
+                        onClick={() => {
+                          if (activePostId === post.id) setActivePostId(null);
+                          else {
+                            setActivePostId(post.id);
+                            fetchComments(post.id);
+                          }
+                        }}
+                        className={`flex items-center gap-2 text-xs font-bold transition-all hover:scale-110 ${activePostId === post.id ? 'text-primary' : 'text-muted-foreground hover:text-primary'}`}
+                      >
+                        <MessageCircle size={16} />
+                        {post.comments_count || 0}
+                      </button>
+                    </div>
+
+                    {/* Comments Area */}
+                    <AnimatePresence>
+                      {activePostId === post.id && (
+                        <motion.div 
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden space-y-4 pt-4"
+                        >
+                          <div className="space-y-3">
+                            {(comments[post.id] || []).map(comment => (
+                              <div key={comment.id} className="flex gap-3 bg-white/5 p-3 rounded-xl">
+                                <div className="w-6 h-6 rounded-full bg-black/40 overflow-hidden flex-shrink-0">
+                                  {comment.profiles?.avatar_url ? (
+                                    <img src={comment.profiles.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
+                                  ) : <User size={12} className="m-auto mt-1 text-primary/20" />}
+                                </div>
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <span className="text-[10px] font-bold text-foreground">{comment.profiles?.username || 'Investor'}</span>
+                                    <span className="text-[9px] text-muted-foreground/40 font-mono">{comment.address.slice(0,6)}...</span>
+                                  </div>
+                                  <p className="text-xs text-muted-foreground/80">{comment.content}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          {address && (
+                            <div className="flex gap-2">
+                              <input 
+                                type="text" 
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
+                                placeholder="Write a comment..."
+                                className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-xs text-foreground focus:border-primary/50 outline-none"
+                              />
+                              <button 
+                                onClick={() => handleAddComment(post.id)}
+                                className="p-2 rounded-xl bg-primary text-black"
+                              >
+                                <Send size={14} />
+                              </button>
+                            </div>
+                          )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 </div>
               </motion.div>
