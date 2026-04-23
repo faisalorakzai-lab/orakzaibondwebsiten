@@ -204,8 +204,8 @@ const INCENTIVES = [
   {
     icon: BadgePercent,
     title: "Referral Rewards",
-    value: "17%",
-    desc: "Earn across 3 levels. L1: 10%, L2: 4%, L3: 3%.",
+    value: "11.5%",
+    desc: "Earn across 5 levels. L1: 5%, L2: 3%, L3: 2%, L4: 1%, L5: 0.5%.",
     color: "text-primary",
     bg: "bg-primary/10 border-primary/25",
     glow: "rgba(234,179,8,0.3)",
@@ -471,34 +471,25 @@ export default function Community() {
           className="text-center mb-16">
           <motion.span
             className="inline-flex items-center gap-2 mb-4 px-5 py-2 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-mono font-semibold uppercase tracking-widest"
-            animate={{ boxShadow: ["0 0 0px rgba(234,179,8,0)", "0 0 22px rgba(234,179,8,0.35)", "0 0 0px rgba(234,179,8,0)"] }}
-            transition={{ duration: 3.5, repeat: Infinity }}>
-            <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 2, repeat: Infinity }}>
-              <Sparkles className="w-3.5 h-3.5" />
-            </motion.div>
-            Global Community · 10,000+ Investors
+            animate={{ boxShadow: ["0 0 0px rgba(234,179,8,0)", "0 0 20px rgba(234,179,8,0.3)", "0 0 0px rgba(234,179,8,0)"] }}
+            transition={{ duration: 3, repeat: Infinity }}>
+            <Users className="w-3.5 h-3.5" />
+            Orakzai Global Network
           </motion.span>
-          <h2 className="text-4xl md:text-6xl font-extrabold text-foreground mb-5 leading-tight">
-            Join the{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-yellow-200 to-primary">
-              Orakzai Movement
+          <h2 className="text-5xl md:text-7xl font-black text-foreground tracking-tighter mb-6 leading-[0.9]">
+            The World's Most <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-yellow-200 to-primary drop-shadow-[0_0_30px_rgba(234,179,8,0.3)]">
+              Powerful Community
             </span>
           </h2>
-          <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-            Connect with <span className="text-primary font-bold">10,000+</span> investors and be part of the future of digital finance.
-            We're building this legacy together — across borders, across chains.
+          <p className="text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
+            Join 31,000+ verified members building the future of decentralized finance. 
+            Empowering investors through transparency, collective strength, and shared success.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-3 mt-8">
-            {[
-              { icon: Shield,     label: "Verified Community",cls: "border-emerald-500/25 text-emerald-400 bg-emerald-500/8" },
-              { icon: TrendingUp, label: "Growing Daily",      cls: "border-primary/25 text-primary bg-primary/8" },
-              { icon: Users,      label: "10,000+ Members",    cls: "border-sky-500/25 text-sky-400 bg-sky-500/8" },
-            ].map((b) => (
-              <span key={b.label} className={`flex items-center gap-1.5 px-4 py-2 rounded-full border text-xs font-bold ${b.cls}`}>
-                <b.icon className="w-3.5 h-3.5" />
-                {b.label}
-              </span>
-            ))}
+          <div className="flex items-center justify-center gap-4 mt-8">
+             <div className="px-4 py-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-bold font-mono">
+               Trust Score: 93.93 | Top Ranking Company in Pakistan
+             </div>
           </div>
         </motion.div>
 
@@ -688,16 +679,23 @@ export default function Community() {
                 <div>
                   <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-primary/60 mb-1">The Founder's Corner</p>
                   <h3 className="text-xl font-extrabold text-foreground">Faisal Orakzai</h3>
-                  <p className="text-xs text-muted-foreground/70 mt-0.5">Founder & CEO, Orakzai Group · Karachi, Pakistan 🇵🇰</p>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    <a href="https://www.crunchbase.com/organization/orakzai-bond" target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border border-primary/30 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider hover:bg-primary/20 transition-all">
+                      <ExternalLink className="w-3 h-3" />
+                      Official Crunchbase Profile
+                    </a>
+                  </div>
                 </div>
               </div>
 
-              <div className="relative pl-6 mb-6">
-                <Quote className="absolute left-0 top-0 w-4 h-4 text-primary/40" />
-                <blockquote className="text-foreground/90 text-base leading-relaxed font-medium italic">
-                  We are building more than a token; we are building a legacy of financial freedom and community welfare.
-                  Every holder is a partner in this mission — and every milestone belongs to all of us.
-                  <span className="block mt-2 text-primary/70 not-italic text-sm">— From the streets of Karachi to the global blockchain.</span>
+              <div className="relative mb-6">
+                <Quote className="absolute -top-4 -left-2 w-8 h-8 text-primary/10" />
+                <blockquote className="text-sm text-muted-foreground/90 leading-relaxed italic pl-6 border-l border-primary/20">
+                  "Orakzai Bond is more than just a token; it's a commitment to our community. 
+                  We are building a legacy of trust and shared prosperity, starting right here in Pakistan 
+                  and reaching out to the global stage. Our 5-level referral system ensures that every 
+                  member who helps us grow is rewarded fairly for their contribution."
                 </blockquote>
               </div>
 
@@ -762,7 +760,7 @@ export default function Community() {
               transition={{ delay: 0.5 }}
               className="mt-auto p-4 rounded-2xl border border-primary/20 bg-primary/5 text-center">
               <p className="text-[10px] text-primary/60 uppercase tracking-widest font-bold mb-1">Total Community</p>
-              <p className="text-3xl font-extrabold text-primary font-mono">26,708+</p>
+              <p className="text-3xl font-extrabold text-primary font-mono">31,000+</p>
               <p className="text-[10px] text-muted-foreground/50 font-mono">across all platforms</p>
             </motion.div>
           </motion.div>

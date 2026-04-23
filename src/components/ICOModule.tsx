@@ -200,7 +200,7 @@ function ICOPhaseCards() {
 // ── Referral Profit Calculator ────────────────────────────────────────────────
 function ReferralCalculator() {
   const [investors, setInvestors] = useState("");
-  const [result, setResult]       = useState<{ l1: number; l2: number; l3: number; total: number } | null>(null);
+  const [result, setResult]       = useState<{ l1: number; l2: number; l3: number; l4: number; l5: number; total: number } | null>(null);
 
   const INVESTMENT = 10; // base investment per person in USD
 
@@ -210,7 +210,9 @@ function ReferralCalculator() {
     const l1 = n * INVESTMENT * 0.05;
     const l2 = n * INVESTMENT * 0.03;
     const l3 = n * INVESTMENT * 0.02;
-    setResult({ l1, l2, l3, total: l1 + l2 + l3 });
+    const l4 = n * INVESTMENT * 0.01;
+    const l5 = n * INVESTMENT * 0.005;
+    setResult({ l1, l2, l3, l4, l5, total: l1 + l2 + l3 + l4 + l5 });
   };
 
   const handleKey = (e: React.KeyboardEvent) => {
@@ -232,7 +234,7 @@ function ReferralCalculator() {
         </div>
         <div>
           <h3 className="font-extrabold text-foreground">Referral Profit Calculator</h3>
-          <p className="text-xs text-muted-foreground">Estimate your 3-level MLM earnings</p>
+          <p className="text-xs text-muted-foreground">Estimate your 5-level MLM earnings</p>
         </div>
         <div className="ml-auto px-2.5 py-1 rounded-lg bg-primary/15 border border-primary/25 text-primary text-[10px] font-extrabold tracking-widest">
           📊 LIVE CALC
@@ -243,259 +245,232 @@ function ReferralCalculator() {
         {/* Input side */}
         <div className="space-y-4">
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">
-              Number of Direct Referrals
-            </label>
+            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">Total Network Size (Investors)</label>
             <div className="relative">
+              <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-primary/40" />
               <input
                 type="number"
                 value={investors}
                 onChange={(e) => setInvestors(e.target.value)}
                 onKeyDown={handleKey}
-                placeholder="e.g. 50"
-                className="w-full bg-black/40 border border-primary/20 rounded-2xl px-4 py-3 text-foreground font-mono focus:outline-none focus:border-primary/50 transition-colors"
+                placeholder="e.g. 100"
+                className="w-full h-14 pl-12 pr-4 rounded-2xl bg-black/40 border border-white/10 text-foreground font-mono focus:border-primary/50 focus:outline-none transition-all"
               />
-              <button
-                onClick={calculate}
-                className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:scale-105 transition-transform"
-              >
-                Calc
-              </button>
             </div>
-            <p className="text-[9px] text-muted-foreground/60 italic ml-1">
-              * Assumes average $10 investment per person
-            </p>
           </div>
-
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { l: "L1", p: "5%" },
-              { l: "L2", p: "3%" },
-              { l: "L3", p: "2%" },
-            ].map((i) => (
-              <div key={i.l} className="p-2 rounded-xl bg-white/5 border border-white/5 text-center">
-                <p className="text-[9px] text-muted-foreground uppercase font-bold">{i.l}</p>
-                <p className="text-xs font-bold text-primary">{i.p}</p>
-              </div>
-            ))}
-          </div>
+          <button
+            onClick={calculate}
+            className="w-full h-14 rounded-2xl bg-primary text-primary-foreground font-black text-sm uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+          >
+            Calculate Profit
+          </button>
+          <p className="text-[9px] text-muted-foreground/60 text-center italic">
+            * Assuming average investment of $10 per person.
+          </p>
         </div>
 
-        {/* Result side */}
-        <div className="glass-card rounded-2xl border border-primary/10 p-4 bg-black/20">
-          <AnimatePresence mode="wait">
-            {result ? (
-              <motion.div
-                key="result"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="space-y-3"
-              >
-                <div className="flex justify-between items-center text-xs">
-                  <span className="text-muted-foreground">Level 1 (Direct)</span>
-                  <span className="font-mono text-foreground">${result.l1.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between items-center text-xs">
-                  <span className="text-muted-foreground">Level 2</span>
-                  <span className="font-mono text-foreground">${result.l2.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between items-center text-xs">
-                  <span className="text-muted-foreground">Level 3</span>
-                  <span className="font-mono text-foreground">${result.l3.toFixed(2)}</span>
-                </div>
-                <div className="pt-2 border-t border-white/5 flex justify-between items-center">
-                  <span className="text-sm font-bold text-primary">Total Estimated</span>
-                  <span className="text-lg font-black text-primary font-mono">${result.total.toFixed(2)}</span>
-                </div>
-              </motion.div>
-            ) : (
-              <div key="empty" className="h-full flex flex-col items-center justify-center py-4 text-center">
-                <Target className="w-8 h-8 text-primary/20 mb-2" />
-                <p className="text-[10px] text-muted-foreground/50 uppercase tracking-widest">Enter count to see potential</p>
+        {/* Results side */}
+        <div className="rounded-2xl border border-white/5 bg-white/5 p-5 space-y-4">
+          {result ? (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">Level 1 (5%)</span>
+                <span className="font-mono text-primary">${result.l1.toFixed(2)}</span>
               </div>
-            )}
-          </AnimatePresence>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">Level 2 (3%)</span>
+                <span className="font-mono text-primary">${result.l2.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">Level 3 (2%)</span>
+                <span className="font-mono text-primary">${result.l3.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">Level 4 (1%)</span>
+                <span className="font-mono text-primary">${result.l4.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">Level 5 (0.5%)</span>
+                <span className="font-mono text-primary">${result.l5.toFixed(2)}</span>
+              </div>
+              <div className="pt-3 border-t border-white/10 flex items-center justify-between">
+                <span className="text-sm font-bold text-foreground">Total Potential</span>
+                <span className="text-lg font-black text-primary font-mono">${result.total.toFixed(2)}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="h-40 flex flex-col items-center justify-center text-center space-y-2 opacity-30">
+              <TrendingUp className="w-8 h-8" />
+              <p className="text-xs">Enter network size to see<br/>estimated earnings</p>
+            </div>
+          )}
         </div>
       </div>
     </motion.div>
   );
 }
 
-// ── Main Component ────────────────────────────────────────────────────────────
 export default function ICOModule({
   provider, address, onConnect, referrer, isPolygon, switchToPolygon,
 }: ICOModuleProps) {
-  const [polAmount, setPolAmount] = useState("10");
-  const [copied, setCopied]       = useState(false);
-
   const {
-    stats, txStatus, txHash, txError, buyTokens, resetTx, loading,
+    icoStats, userTokens, totalRaised, buyTokens,
+    txStatus, txHash, txError, resetTx,
   } = useICO(provider, address);
 
-  const handleBuy = async () => {
-    if (!polAmount || parseFloat(polAmount) <= 0) return;
-    await buyTokens(polAmount, referrer);
-  };
+  const [amount, setAmount] = useState("");
+  const [copied, setCopied] = useState(false);
 
-  const copyRef = useCallback(() => {
+  const estimatedTokens = parseFloat(amount) * TOKENS_PER_POL;
+
+  const handleBuy = useCallback(() => {
+    if (!amount || parseFloat(amount) <= 0) return;
+    buyTokens(amount, referrer || undefined);
+  }, [amount, buyTokens, referrer]);
+
+  const copyRef = () => {
     if (!address) return;
-    navigator.clipboard.writeText(`${SITE_URL}?ref=${address}`);
+    const link = `${SITE_URL}?ref=${address}`;
+    navigator.clipboard.writeText(link);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  }, [address]);
-
-  // Dynamic stats from hook
-  const tokensSold = stats ? parseFloat(stats.totalTokensSold) : 0;
-  const totalRaised = stats ? parseFloat(stats.totalRaisedPOL) : 0;
-  const userTokens = stats ? stats.userTokens : "0";
+  };
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-6">
+    <div className="w-full max-w-6xl mx-auto space-y-10">
       
-      {/* 1. Countdown & Progress */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <ICOCountdown />
-        <div className="glass-card rounded-2xl border border-primary/20 p-5 bg-gradient-to-br from-primary/10 to-transparent flex flex-col justify-center">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xs font-bold text-primary uppercase tracking-widest">Phase 1 Progress</h3>
-            {loading && <Loader2 className="w-3.5 h-3.5 text-primary animate-spin" />}
+      {/* 1. Header & Countdown */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div className="lg:col-span-7 space-y-6">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-primary font-mono text-xs font-bold uppercase tracking-[0.3em]">
+              <span className="w-8 h-px bg-primary/40" />
+              Token Launch
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-black text-foreground tracking-tighter leading-none">
+              OKBOND <span className="text-primary">ICO Phase 1</span>
+            </h2>
+            <p className="text-muted-foreground text-sm sm:text-base max-w-xl leading-relaxed">
+              Join the sovereign currency of power. Participate in Phase 1 at the lowest possible price before exchange listings.
+            </p>
           </div>
-          <div className="space-y-3">
-            <div className="flex justify-between text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
-              <span>{fmt(tokensSold.toString(), 0)} Sold</span>
-              <span>{fmt(PHASE1_SUPPLY.toString(), 0)} Target</span>
-            </div>
-            <div className="h-2.5 w-full rounded-full bg-black/40 border border-primary/20 overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${pct(tokensSold.toString(), PHASE1_SUPPLY.toString())}%` }}
-                className="h-full bg-gradient-to-r from-primary/80 to-primary relative"
-              >
-                <div className="absolute inset-0 bg-white/10 animate-pulse" />
-              </motion.div>
-            </div>
-            <div className="flex justify-between text-[10px] font-bold">
-              <span className="text-emerald-400">{pct(tokensSold.toString(), PHASE1_SUPPLY.toString()).toFixed(1)}% FILLED</span>
-              <span className="text-muted-foreground uppercase tracking-tighter">Polygon Network</span>
-            </div>
-          </div>
+          <ICOPhaseCards />
+        </div>
+        <div className="lg:col-span-5">
+          <ICOCountdown />
         </div>
       </div>
 
-      {/* 2. Phase Cards */}
-      <ICOPhaseCards />
-
-      {/* 3. Main Buy Card & Stats */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
+      {/* 2. Main Purchase Area */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Buy Form (7 cols) */}
         <div className="lg:col-span-7">
-          <div className="glass-card rounded-3xl border border-primary/30 p-6 sm:p-8 bg-gradient-to-br from-primary/10 via-background to-background relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
-              <Rocket className="w-32 h-32 text-primary" />
+          <div className="glass-card rounded-3xl border border-white/10 p-6 sm:p-8 bg-gradient-to-br from-white/5 to-transparent relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] pointer-events-none" />
+            
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center text-primary-foreground shadow-lg shadow-primary/20">
+                  <Wallet className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-black text-foreground uppercase tracking-tight">Buy Tokens</h3>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Polygon PoS Network</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mb-1">Price</p>
+                <p className="text-lg font-black text-primary font-mono">1 POL = {TOKENS_PER_POL} OKBOND</p>
+              </div>
             </div>
 
-            <div className="relative z-10 space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-black text-foreground">Participate in ICO</h2>
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-black uppercase tracking-widest">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Phase 1 Live
+            <div className="space-y-6">
+              {/* Input Group */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between px-1">
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Amount in POL</label>
+                  {address && (
+                    <span className="text-[10px] text-primary/60 font-mono">Connected: {address.slice(0,6)}...{address.slice(-4)}</span>
+                  )}
                 </div>
-              </div>
-
-              {/* Input Area */}
-              <div className="space-y-4">
-                <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-2">
-                  <div className="flex justify-between text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                    <span>You Pay (POL)</span>
-                    <span>Min: 10 POL</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="number"
-                      value={polAmount}
-                      onChange={(e) => setPolAmount(e.target.value)}
-                      className="flex-1 bg-transparent border-none text-3xl font-mono font-bold text-foreground focus:outline-none placeholder:text-muted-foreground/30"
-                      placeholder="0.0"
-                    />
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-primary/10 border border-primary/20">
-                      <Zap className="w-4 h-4 text-primary" />
-                      <span className="font-bold text-sm">POL</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-center py-2">
-                  <div className="h-px flex-1 bg-white/5" />
-                  <div className="px-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">You Receive</div>
-                  <div className="h-px flex-1 bg-white/5" />
-                </div>
-
-                <div className="p-5 rounded-2xl bg-primary/5 border border-primary/20 space-y-2">
-                  <div className="flex justify-between text-[10px] font-bold text-primary/60 uppercase tracking-widest">
-                    <span>OKBOND Estimate</span>
-                    <span>Rate: 0.6 / POL</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-3xl font-mono font-black text-primary">
-                      {fmt((parseFloat(polAmount || "0") * TOKENS_PER_POL).toString(), 2)}
-                    </span>
-                    <span className="text-sm font-bold text-primary/80">OKBOND</span>
+                <div className="relative group">
+                  <input
+                    type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    placeholder="0.0"
+                    className="w-full h-20 pl-6 pr-24 rounded-2xl bg-black/60 border border-white/10 text-3xl font-mono text-foreground focus:border-primary/50 focus:outline-none transition-all placeholder:text-white/5"
+                  />
+                  <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col items-end">
+                    <span className="text-sm font-black text-primary">POL</span>
+                    <span className="text-[10px] text-muted-foreground font-bold">MATIC</span>
                   </div>
                 </div>
               </div>
 
-              {/* Action Buttons */}
+              {/* Estimate */}
+              <div className="p-4 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                    <Zap className="w-5 h-5" />
+                  </div>
+                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">You Receive</span>
+                </div>
+                <div className="text-right">
+                  <p className="text-2xl font-black text-primary font-mono">{fmt(estimatedTokens.toString(), 2)}</p>
+                  <p className="text-[10px] text-muted-foreground font-bold">OKBOND TOKENS</p>
+                </div>
+              </div>
+
+              {/* Action Button */}
               {!address ? (
                 <button
                   onClick={onConnect}
-                  className="w-full py-5 rounded-2xl bg-primary text-primary-foreground font-black text-lg shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-3"
+                  className="w-full h-16 rounded-2xl bg-primary text-primary-foreground font-black text-lg uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                 >
-                  <Wallet className="w-6 h-6" />
-                  Connect Wallet to Participate
+                  Connect Wallet
                 </button>
               ) : !isPolygon ? (
                 <button
                   onClick={switchToPolygon}
-                  className="w-full py-5 rounded-2xl bg-amber-500 text-black font-black text-lg flex items-center justify-center gap-3"
+                  className="w-full h-16 rounded-2xl bg-amber-500 text-black font-black text-lg uppercase tracking-[0.2em] shadow-xl shadow-amber-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3"
                 >
                   <AlertTriangle className="w-6 h-6" />
-                  Switch to Polygon Network
+                  Switch to Polygon
                 </button>
               ) : (
                 <button
                   onClick={handleBuy}
-                  disabled={loading || !polAmount || parseFloat(polAmount) < 10}
-                  className="w-full py-5 rounded-2xl bg-primary text-primary-foreground font-black text-lg shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100 transition-all flex items-center justify-center gap-3"
+                  disabled={txStatus === "pending" || txStatus === "confirming" || !amount}
+                  className="w-full h-16 rounded-2xl bg-primary text-primary-foreground font-black text-lg uppercase tracking-[0.2em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:hover:scale-100"
                 >
-                  {loading ? (
-                    <Loader2 className="w-6 h-6 animate-spin" />
+                  {txStatus === "pending" || txStatus === "confirming" ? (
+                    <div className="flex items-center justify-center gap-3">
+                      <Loader2 className="w-6 h-6 animate-spin" />
+                      Processing...
+                    </div>
                   ) : (
-                    <>
-                      <Rocket className="w-6 h-6" />
-                      Buy OKBOND Tokens Now
-                    </>
+                    "Buy OKBOND Now"
                   )}
                 </button>
               )}
 
-              {/* Transaction Status */}
+              {/* Transaction Status Overlay */}
               <AnimatePresence>
                 {txStatus !== "idle" && (
                   <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="overflow-hidden"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="mt-4"
                   >
                     <div className={`p-4 rounded-2xl border ${
                       txStatus === "success" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
                       txStatus === "error" ? "bg-red-500/10 border-red-500/20 text-red-400" :
-                      "bg-primary/10 border-primary/20 text-primary"
+                      "bg-blue-500/10 border-blue-500/20 text-blue-400"
                     }`}>
                       <div className="flex items-start gap-3">
-                        <div className="mt-1">
+                        <div className="mt-0.5">
                           {txStatus === "pending" || txStatus === "confirming" ? <Loader2 className="w-5 h-5 animate-spin" /> :
                            txStatus === "success" ? <CheckCircle2 className="w-5 h-5" /> :
                            <XCircle className="w-5 h-5" />}
