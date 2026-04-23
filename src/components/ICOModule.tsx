@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BrowserProvider } from "ethers";
 import {
   Rocket, Wallet, Copy, Check, ExternalLink, AlertTriangle,
-  Loader2, TrendingUp, Users, Gift, ShieldCheck, ArrowRight,
+  Loader2, TrendingUp, Users, Gift, ShieldCheck,
   RefreshCw, CheckCircle2, XCircle,
   Zap, Clock, Lock, Target,
 } from "lucide-react";
@@ -242,128 +242,77 @@ function ReferralCalculator() {
       <div className="grid md:grid-cols-2 gap-6 items-start">
         {/* Input side */}
         <div className="space-y-4">
-          {/* Commission levels info */}
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { level: "L1", pct: "5%", color: "text-yellow-400", bg: "bg-yellow-400/10 border-yellow-400/20" },
-              { level: "L2", pct: "3%", color: "text-amber-400",  bg: "bg-amber-400/10 border-amber-400/20" },
-              { level: "L3", pct: "2%", color: "text-orange-400", bg: "bg-orange-400/10 border-orange-400/20" },
-            ].map((l) => (
-              <div key={l.level} className={`text-center p-2.5 rounded-xl border ${l.bg}`}>
-                <p className={`text-xs font-extrabold ${l.color}`}>{l.level}</p>
-                <p className={`text-lg font-extrabold ${l.color}`}>{l.pct}</p>
-                <p className="text-[9px] text-muted-foreground font-mono">commission</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Investor input */}
-          <div>
-            <label className="text-xs text-muted-foreground font-semibold mb-2 block">
-              How many investors can your team bring?
+          <div className="space-y-2">
+            <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest ml-1">
+              Number of Direct Referrals
             </label>
-            <div className="flex gap-2">
+            <div className="relative">
               <input
                 type="number"
-                min="1"
-                placeholder="e.g. 10"
                 value={investors}
                 onChange={(e) => setInvestors(e.target.value)}
                 onKeyDown={handleKey}
-                className="flex-1 px-4 py-3 rounded-2xl bg-muted/30 border border-border hover:border-primary/30 focus:border-primary/50 outline-none text-foreground font-mono text-sm transition-all"
+                placeholder="e.g. 50"
+                className="w-full bg-black/40 border border-primary/20 rounded-2xl px-4 py-3 text-foreground font-mono focus:outline-none focus:border-primary/50 transition-colors"
               />
-              <motion.button
-                whileTap={{ scale: 0.96 }}
+              <button
                 onClick={calculate}
-                disabled={!investors || parseFloat(investors) <= 0}
-                className="px-5 py-3 rounded-2xl bg-primary text-primary-foreground font-extrabold text-sm
-                  hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all
-                  shadow-[0_0_16px_rgba(234,179,8,0.3)] hover:shadow-[0_0_28px_rgba(234,179,8,0.5)]"
+                className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:scale-105 transition-transform"
               >
-                Calculate
-              </motion.button>
+                Calc
+              </button>
             </div>
-            {/* Quick picks */}
-            <div className="flex gap-2 mt-2 flex-wrap">
-              {["5", "10", "25", "50", "100"].map((v) => (
-                <button
-                  key={v}
-                  onClick={() => { setInvestors(v); setResult(null); }}
-                  className="px-3 py-1 rounded-lg bg-muted/30 border border-border hover:border-primary/30 hover:bg-primary/8 text-xs text-muted-foreground hover:text-primary transition-all font-mono"
-                >
-                  {v}
-                </button>
-              ))}
-            </div>
+            <p className="text-[9px] text-muted-foreground/60 italic ml-1">
+              * Assumes average $10 investment per person
+            </p>
           </div>
 
-          <p className="text-[10px] text-muted-foreground/60 font-mono">
-            * Based on $10 average investment per person · 3-level MLM structure
-          </p>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { l: "L1", p: "5%" },
+              { l: "L2", p: "3%" },
+              { l: "L3", p: "2%" },
+            ].map((i) => (
+              <div key={i.l} className="p-2 rounded-xl bg-white/5 border border-white/5 text-center">
+                <p className="text-[9px] text-muted-foreground uppercase font-bold">{i.l}</p>
+                <p className="text-xs font-bold text-primary">{i.p}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Result side */}
-        <div>
+        <div className="glass-card rounded-2xl border border-primary/10 p-4 bg-black/20">
           <AnimatePresence mode="wait">
-            {!result ? (
-              <motion.div
-                key="empty"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="h-full flex flex-col items-center justify-center py-8 text-center"
-              >
-                <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-3">
-                  <TrendingUp className="w-7 h-7 text-primary/40" />
-                </div>
-                <p className="text-sm text-muted-foreground">Enter number of investors and press Calculate</p>
-              </motion.div>
-            ) : (
+            {result ? (
               <motion.div
                 key="result"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
                 className="space-y-3"
               >
-                {/* Level results */}
-                {[
-                  { label: "Level 1 (5%)", value: result.l1,  color: "text-yellow-400", bg: "from-yellow-400/12 border-yellow-400/20" },
-                  { label: "Level 2 (3%)", value: result.l2,  color: "text-amber-400",  bg: "from-amber-400/12 border-amber-400/20" },
-                  { label: "Level 3 (2%)", value: result.l3,  color: "text-orange-400", bg: "from-orange-400/12 border-orange-400/20" },
-                ].map((row, i) => (
-                  <motion.div
-                    key={row.label}
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.08 }}
-                    className={`flex items-center justify-between px-4 py-3 rounded-2xl border bg-gradient-to-r to-transparent ${row.bg}`}
-                  >
-                    <span className="text-sm text-muted-foreground font-medium">{row.label}</span>
-                    <span className={`font-extrabold font-mono text-lg ${row.color}`}>
-                      ${row.value.toFixed(2)}
-                    </span>
-                  </motion.div>
-                ))}
-
-                {/* Divider */}
-                <div className="border-t border-primary/20 pt-3">
-                  <motion.div
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="flex items-center justify-between px-4 py-4 rounded-2xl bg-gradient-to-r from-primary/20 to-primary/8 border border-primary/40 shadow-[0_0_20px_rgba(234,179,8,0.2)]"
-                  >
-                    <div>
-                      <p className="text-[10px] text-primary/70 uppercase tracking-widest font-bold">Total Potential Profit</p>
-                      <p className="text-xs text-muted-foreground font-mono mt-0.5">from {investors} investors</p>
-                    </div>
-                    <span className="text-2xl font-extrabold text-primary font-mono">
-                      ${result.total.toFixed(2)}
-                    </span>
-                  </motion.div>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-muted-foreground">Level 1 (Direct)</span>
+                  <span className="font-mono text-foreground">${result.l1.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-muted-foreground">Level 2</span>
+                  <span className="font-mono text-foreground">${result.l2.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-muted-foreground">Level 3</span>
+                  <span className="font-mono text-foreground">${result.l3.toFixed(2)}</span>
+                </div>
+                <div className="pt-2 border-t border-white/5 flex justify-between items-center">
+                  <span className="text-sm font-bold text-primary">Total Estimated</span>
+                  <span className="text-lg font-black text-primary font-mono">${result.total.toFixed(2)}</span>
                 </div>
               </motion.div>
+            ) : (
+              <div key="empty" className="h-full flex flex-col items-center justify-center py-4 text-center">
+                <Target className="w-8 h-8 text-primary/20 mb-2" />
+                <p className="text-[10px] text-muted-foreground/50 uppercase tracking-widest">Enter count to see potential</p>
+              </div>
             )}
           </AnimatePresence>
         </div>
@@ -372,788 +321,296 @@ function ReferralCalculator() {
   );
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
+// ── Main Component ────────────────────────────────────────────────────────────
 export default function ICOModule({
   provider, address, onConnect, referrer, isPolygon, switchToPolygon,
 }: ICOModuleProps) {
-  const { stats, userStats, loading, txStatus, txHash, txError, buyTokens, resetTx, refresh } = useICO(provider, address);
+  const [polAmount, setPolAmount] = useState("10");
+  const [copied, setCopied]       = useState(false);
 
-  const [polInput, setPolInput]     = useState("");
-  const [refCopied, setRefCopied]   = useState(false);
-  const [addrCopied, setAddrCopied] = useState(false);
+  const {
+    stats, txStatus, txHash, txError, buyTokens, resetTx, loading,
+  } = useICO(provider, address);
 
-  // Computed token estimate — fixed rate: 1 POL = 0.6 OKBOND
-  const tokensEst = (() => {
-    const pol = parseFloat(polInput);
-    if (!pol || isNaN(pol) || pol <= 0) return null;
-    const tokens = pol * TOKENS_PER_POL;
-    const usdValue = tokens * TOKEN_PRICE_USD;
-    return { tokens: tokens.toFixed(4), usd: usdValue.toFixed(2) };
-  })();
+  const handleBuy = async () => {
+    if (!polAmount || parseFloat(polAmount) <= 0) return;
+    await buyTokens(polAmount, referrer);
+  };
 
-  // Referral link
-  const referralLink = address
-    ? `${SITE_URL}/?ref=${address}`
-    : null;
-
-  const copyReferral = useCallback(async () => {
-    if (!referralLink) return;
-    await navigator.clipboard.writeText(referralLink);
-    setRefCopied(true);
-    setTimeout(() => setRefCopied(false), 2500);
-  }, [referralLink]);
-
-  const copyAddress = useCallback(async () => {
+  const copyRef = useCallback(() => {
     if (!address) return;
-    await navigator.clipboard.writeText(address);
-    setAddrCopied(true);
-    setTimeout(() => setAddrCopied(false), 2000);
+    navigator.clipboard.writeText(`${SITE_URL}?ref=${address}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   }, [address]);
 
-  const handleBuy = useCallback(async () => {
-    const pol = parseFloat(polInput);
-    if (!pol || pol <= 0) return;
-    await buyTokens(polInput, referrer);
-  }, [polInput, referrer, buyTokens]);
-
-  // Progress bar values
-  const raisedPct = pct(stats?.totalRaisedPOL ?? "0", stats?.hardCap ?? "0");
-  const softPct   = pct(stats?.softCap ?? "0",        stats?.hardCap ?? "0");
+  // Dynamic stats from hook
+  const tokensSold = stats ? parseFloat(stats.totalTokensSold) : 0;
+  const totalRaised = stats ? parseFloat(stats.totalRaisedPOL) : 0;
+  const userTokens = stats ? stats.userTokens : "0";
 
   return (
-    <section id="ico" className="py-20 px-4 relative">
-      {/* Background glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,rgba(234,179,8,0.06),transparent_60%)] pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_50%,rgba(168,85,247,0.04),transparent_60%)] pointer-events-none" />
-
-      <div className="container mx-auto max-w-5xl relative z-10">
-
-        {/* ── Header ──────────────────────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 mb-5">
-            <Rocket className="w-3.5 h-3.5 text-primary" />
-            <span className="text-xs text-primary font-semibold uppercase tracking-widest">Initial Coin Offering</span>
+    <div className="w-full max-w-4xl mx-auto space-y-6">
+      
+      {/* 1. Countdown & Progress */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <ICOCountdown />
+        <div className="glass-card rounded-2xl border border-primary/20 p-5 bg-gradient-to-br from-primary/10 to-transparent flex flex-col justify-center">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xs font-bold text-primary uppercase tracking-widest">Phase 1 Progress</h3>
+            {loading && <Loader2 className="w-3.5 h-3.5 text-primary animate-spin" />}
           </div>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-3">
-            OKBOND{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-yellow-200 to-primary">
-              ICO
-            </span>
-          </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto text-sm leading-relaxed">
-            Purchase OKBOND tokens directly from the smart contract on Polygon PoS. Earn referral rewards by sharing your unique link.
-          </p>
-
-          {/* Price ticker — always visible */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4 }}
-            className="mt-5 inline-flex flex-wrap items-center justify-center gap-3"
-          >
-            {/* Main price pill */}
-            <div className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-gradient-to-r from-primary/20 to-primary/10 border border-primary/40 shadow-[0_0_20px_rgba(234,179,8,0.2)]">
-              <div className="text-center">
-                <p className="text-[9px] text-primary/70 uppercase tracking-widest font-bold">Token Price</p>
-                <p className="text-2xl font-extrabold text-primary leading-none">$0.15</p>
-                <p className="text-[9px] text-primary/60 font-mono">per OKBOND</p>
-              </div>
-              <div className="w-px h-10 bg-primary/20" />
-              <div className="text-center">
-                <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">Fixed Rate</p>
-                <p className="text-lg font-extrabold text-foreground leading-none">1 POL</p>
-                <p className="text-[9px] text-muted-foreground font-mono">=</p>
-              </div>
-              <div className="text-center">
-                <p className="text-[9px] text-primary/70 uppercase tracking-widest font-bold">You Get</p>
-                <p className="text-lg font-extrabold text-primary leading-none">0.6 OKBOND</p>
-                <p className="text-[9px] text-primary/60 font-mono">tokens</p>
-              </div>
+          <div className="space-y-3">
+            <div className="flex justify-between text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
+              <span>{fmt(tokensSold.toString(), 0)} Sold</span>
+              <span>{fmt(PHASE1_SUPPLY.toString(), 0)} Target</span>
             </div>
-
-            {/* Network badge */}
-            <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-purple-500/10 border border-purple-500/25">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs text-purple-300 font-semibold">Polygon PoS</span>
-            </div>
-          </motion.div>
-
-          {/* ICO status badge */}
-          {!loading && stats && (
-            <div className="mt-4 flex items-center justify-center gap-3">
-              <span className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-bold
-                ${stats.icoActive
-                  ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-400"
-                  : "bg-red-500/15 border-red-500/40 text-red-400"
-                }`}>
-                <span className={`w-2 h-2 rounded-full ${stats.icoActive ? "bg-emerald-400 animate-pulse" : "bg-red-400"}`} />
-                ICO {stats.icoActive ? "Active — Open for Investment" : "Paused"}
-              </span>
-              <button
-                onClick={refresh}
-                className="p-2 rounded-xl border border-border hover:border-primary/30 hover:bg-primary/5 text-muted-foreground hover:text-primary transition-all"
-                title="Refresh stats"
-              >
-                <RefreshCw className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          )}
-
-          {/* ── Target listing price pill ──────────────────────────────────── */}
-          <div className="mt-5 flex items-center justify-center">
-            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-2xl border border-primary/40 bg-primary/10">
-              <Target className="w-4 h-4 text-primary" />
-              <span className="text-xs text-muted-foreground">Target Listing Price</span>
-              <span className="text-xl font-extrabold text-primary font-mono">$1.00</span>
-              <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold border border-emerald-500/30">
-                +567% from Phase 1
-              </span>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* ── Countdown Timer Removed ──────────────────────────────────────── */}
-
-        {/* ── 3 Phase Cards ────────────────────────────────────────────────── */}
-        <ICOPhaseCards />
-
-        {/* ── View Full Dashboard CTA ──────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="flex justify-center mb-8"
-        >
-          <a
-            href="/ico"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-primary/20 to-amber-500/20 border border-primary/40 text-primary font-bold text-sm hover:border-primary/70 hover:from-primary/30 hover:to-amber-500/30 transition-all shadow-[0_0_16px_rgba(234,179,8,0.15)] hover:shadow-[0_0_28px_rgba(234,179,8,0.3)]"
-          >
-            <Rocket className="w-4 h-4" />
-            View Full ICO Dashboard
-            <ArrowRight className="w-4 h-4" />
-          </a>
-        </motion.div>
-
-        {/* ── Loading skeleton ─────────────────────────────────────────────── */}
-        {loading && (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="w-8 h-8 text-primary animate-spin" />
-            <span className="ml-3 text-muted-foreground text-sm">Loading ICO data from Polygon…</span>
-          </div>
-        )}
-
-        {!loading && stats && (
-          <>
-            {/* ── Progress Section ──────────────────────────────────────────── */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="glass-card rounded-3xl border border-border/60 p-6 mb-6"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <h3 className="font-extrabold text-foreground text-lg">Fundraising Progress</h3>
-                  <p className="text-xs text-muted-foreground mt-0.5 font-mono">
-                    {fmt(stats.totalRaisedPOL, 2)} POL raised of {fmt(stats.hardCap, 0)} POL hard cap
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-2xl font-extrabold text-primary">{raisedPct.toFixed(1)}%</p>
-                  <p className="text-[10px] text-muted-foreground font-mono">funded</p>
-                </div>
-              </div>
-
-              {/* Progress bar */}
-              <div className="relative h-4 bg-muted/40 rounded-full overflow-hidden border border-border/40">
-                {softPct > 0 && (
-                  <div
-                    className="absolute top-0 bottom-0 w-0.5 bg-yellow-400/60 z-10"
-                    style={{ left: `${softPct}%` }}
-                    title={`Soft cap: ${fmt(stats.softCap, 0)} POL`}
-                  />
-                )}
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${raisedPct}%` }}
-                  transition={{ duration: 1.2, ease: "easeOut" }}
-                  className="h-full rounded-full bg-gradient-to-r from-primary via-yellow-300 to-primary shadow-[0_0_12px_rgba(234,179,8,0.5)]"
-                />
-              </div>
-
-              <div className="flex items-center justify-between mt-2 text-[10px] text-muted-foreground font-mono">
-                <span>0 POL</span>
-                {parseFloat(stats.softCap) > 0 && (
-                  <span className="text-yellow-400">Soft Cap: {fmt(stats.softCap, 0)} POL</span>
-                )}
-                <span>Hard Cap: {fmt(stats.hardCap, 0)} POL</span>
-              </div>
-
-              {/* Phase 1 token progress */}
-              {(() => {
-                const sold   = Math.min(parseFloat(stats.totalTokensSold) || 0, PHASE1_SUPPLY);
-                const p1pct  = Math.min((sold / PHASE1_SUPPLY) * 100, 100);
-                return (
-                  <div className="mt-5 pt-4 border-t border-primary/15">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        <span className="text-xs font-bold text-foreground">Phase 1 Token Sale</span>
-                      </div>
-                      <span className="text-xs font-extrabold text-emerald-400 font-mono">{p1pct.toFixed(1)}% filled</span>
-                    </div>
-                    <div className="h-2.5 w-full rounded-full bg-black/40 border border-emerald-500/20 overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${p1pct}%` }}
-                        transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-                        className="h-full rounded-full bg-gradient-to-r from-emerald-500/80 via-emerald-400 to-amber-400"
-                      />
-                    </div>
-                    <div className="flex justify-between text-[10px] font-mono text-muted-foreground mt-1">
-                      <span>{sold.toLocaleString()} OKBOND sold</span>
-                      <span>{PHASE1_SUPPLY.toLocaleString()} total</span>
-                    </div>
-                  </div>
-                );
-              })()}
-
-              {/* Quick stat row */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-5">
-                <StatCard
-                  label="Total Raised"
-                  value={`${fmt(stats.totalRaisedPOL, 2)} POL`}
-                  icon={<TrendingUp className="w-4 h-4" />}
-                  color="primary"
-                />
-                <StatCard
-                  label="Tokens Sold"
-                  value={parseFloat(stats.totalTokensSold) > 0 ? `${fmt(stats.totalTokensSold, 0)} OKBOND` : "—"}
-                  icon={<Zap className="w-4 h-4" />}
-                  color="purple"
-                />
-                <StatCard
-                  label="Rate (Fixed)"
-                  value="0.6 / POL"
-                  sub="$0.15 per OKBOND"
-                  icon={<Gift className="w-4 h-4" />}
-                  color="emerald"
-                />
-                <StatCard
-                  label="Min Buy"
-                  value={parseFloat(stats.minContribution) > 0 ? `${fmt(stats.minContribution, 4)} POL` : "—"}
-                  icon={<ShieldCheck className="w-4 h-4" />}
-                  color="blue"
-                />
-              </div>
-            </motion.div>
-
-            {/* ── Buy + Referral Grid ───────────────────────────────────────── */}
-            <div className="grid lg:grid-cols-2 gap-6 mb-6">
-
-              {/* ── Buy Tokens Card ───────────────────────────────────────── */}
+            <div className="h-2.5 w-full rounded-full bg-black/40 border border-primary/20 overflow-hidden">
               <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="glass-card rounded-3xl border border-primary/20 p-6 bg-gradient-to-br from-primary/8 to-transparent"
+                initial={{ width: 0 }}
+                animate={{ width: `${pct(tokensSold.toString(), PHASE1_SUPPLY.toString())}%` }}
+                className="h-full bg-gradient-to-r from-primary/80 to-primary relative"
               >
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-10 h-10 rounded-2xl bg-primary/15 border border-primary/30 flex items-center justify-center">
-                    <Rocket className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-extrabold text-foreground">Buy OKBOND Tokens</h3>
-                    <p className="text-xs text-muted-foreground">Pay with POL on Polygon PoS</p>
-                  </div>
-                </div>
-
-                {/* Wallet not connected */}
-                {!address && (
-                  <div className="text-center py-6">
-                    <Wallet className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
-                    <p className="text-muted-foreground text-sm mb-4">Connect your wallet to buy OKBOND tokens</p>
-                    <button
-                      onClick={onConnect}
-                      className="px-6 py-3 rounded-2xl bg-primary text-primary-foreground font-bold text-sm hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(234,179,8,0.35)] hover:-translate-y-0.5"
-                    >
-                      Connect MetaMask
-                    </button>
-                  </div>
-                )}
-
-                {/* Wrong network */}
-                {address && !isPolygon && (
-                  <div className="text-center py-6">
-                    <AlertTriangle className="w-10 h-10 text-yellow-400 mx-auto mb-3" />
-                    <p className="text-muted-foreground text-sm mb-4">Switch to Polygon network to participate in the ICO</p>
-                    <button
-                      onClick={switchToPolygon}
-                      className="px-6 py-3 rounded-2xl bg-yellow-500/20 border border-yellow-500/40 text-yellow-400 font-bold text-sm hover:bg-yellow-500/30 transition-all"
-                    >
-                      Switch to Polygon
-                    </button>
-                  </div>
-                )}
-
-                {/* Buy form — always shown when wallet connected on Polygon */}
-                {address && isPolygon && txStatus === "idle" && (
-                  <div className="space-y-4">
-                    {/* Referrer indicator */}
-                    {referrer && referrer.toLowerCase() !== address.toLowerCase() && (
-                      <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-400">
-                        <Gift className="w-3.5 h-3.5 flex-shrink-0" />
-                        Referral active:{" "}
-                        <span className="font-mono">{referrer.slice(0, 8)}…{referrer.slice(-6)}</span>
-                      </div>
-                    )}
-
-                    {/* Fixed rate badge */}
-                    <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-emerald-500/8 border border-emerald-500/20 text-xs">
-                      <span className="text-muted-foreground">Fixed ICO Price</span>
-                      <span className="font-extrabold text-emerald-400 font-mono">1 POL = 0.6 OKBOND = $0.15/token</span>
-                    </div>
-
-                    {/* POL amount input */}
-                    <div>
-                      <label className="text-xs text-muted-foreground font-semibold mb-2 block">
-                        Amount to spend (POL)
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="number"
-                          min="0"
-                          step="0.01"
-                          placeholder={`Min: ${parseFloat(stats.minContribution) > 0 ? stats.minContribution : "0"} POL`}
-                          value={polInput}
-                          onChange={(e) => setPolInput(e.target.value)}
-                          className="w-full px-4 py-3 pr-16 rounded-2xl bg-muted/30 border border-border hover:border-primary/30 focus:border-primary/50 outline-none text-foreground font-mono text-sm transition-all"
-                        />
-                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-muted-foreground font-bold">
-                          POL
-                        </span>
-                      </div>
-
-                      {/* Quick amounts */}
-                      <div className="flex gap-2 mt-2 flex-wrap">
-                        {["1", "5", "10", "50", "100"].map((v) => (
-                          <button
-                            key={v}
-                            onClick={() => setPolInput(v)}
-                            className="px-3 py-1 rounded-lg bg-muted/30 border border-border hover:border-primary/30 hover:bg-primary/8 text-xs text-muted-foreground hover:text-primary transition-all font-mono"
-                          >
-                            {v} POL
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Estimated tokens */}
-                    {tokensEst && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="rounded-2xl bg-primary/8 border border-primary/20 overflow-hidden space-y-0"
-                      >
-                        <div className="flex items-center justify-between px-4 py-3">
-                          <span className="text-xs text-muted-foreground">You receive</span>
-                          <span className="text-primary font-extrabold font-mono text-lg">
-                            {parseFloat(tokensEst.tokens).toLocaleString()} OKBOND
-                          </span>
-                        </div>
-
-                        {/* ── Profit highlight ── */}
-                        <motion.div
-                          key={tokensEst.tokens}
-                          initial={{ scale: 0.97, opacity: 0.6 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          transition={{ duration: 0.2 }}
-                          className="flex items-center justify-between px-4 py-2.5 bg-emerald-500/10 border-t border-emerald-500/30"
-                          style={{ boxShadow: "inset 0 0 12px rgba(34,197,94,0.08)" }}
-                        >
-                          <div className="flex items-center gap-1.5">
-                            <TrendingUp className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-                            <span className="font-bold text-emerald-400" style={{ fontSize: "0.82rem" }}>
-                              Value at listing ($1.00)
-                            </span>
-                          </div>
-                          <span
-                            className="font-extrabold font-mono"
-                            style={{ fontSize: "1.05rem", color: "#22c55e" }}
-                          >
-                            ${(parseFloat(tokensEst.tokens) * 1).toFixed(2)}
-                          </span>
-                        </motion.div>
-
-                        <div className="flex items-center justify-between px-4 py-2 bg-primary/5 border-t border-primary/10">
-                          <span className="text-[10px] text-muted-foreground font-mono">You pay (USD approx.)</span>
-                          <span className="text-[11px] text-primary/70 font-mono font-semibold">≈ ${tokensEst.usd} USD</span>
-                        </div>
-                      </motion.div>
-                    )}
-
-                    {/* Buy button */}
-                    <button
-                      onClick={handleBuy}
-                      disabled={!polInput || parseFloat(polInput) <= 0}
-                      className="w-full py-4 rounded-2xl font-extrabold text-sm bg-primary text-primary-foreground
-                        hover:bg-primary/90 hover:-translate-y-0.5 active:translate-y-0
-                        disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0
-                        transition-all shadow-[0_0_20px_rgba(234,179,8,0.35)] hover:shadow-[0_0_35px_rgba(234,179,8,0.6)]
-                        flex items-center justify-center gap-2"
-                    >
-                      <Rocket className="w-4 h-4" />
-                      Buy OKBOND Tokens
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-
-                    <p className="text-center text-[10px] text-muted-foreground/60 font-mono">
-                      Transaction signed via MetaMask · Polygon PoS Network
-                    </p>
-                  </div>
-                )}
-
-                {/* TX: Pending */}
-                {txStatus === "pending" && (
-                  <div className="text-center py-6 space-y-3">
-                    <Loader2 className="w-10 h-10 text-primary animate-spin mx-auto" />
-                    <p className="text-foreground font-bold">Awaiting MetaMask…</p>
-                    <p className="text-xs text-muted-foreground">Please confirm the transaction in your wallet</p>
-                  </div>
-                )}
-
-                {/* TX: Confirming */}
-                {txStatus === "confirming" && (
-                  <div className="text-center py-6 space-y-3">
-                    <Loader2 className="w-10 h-10 text-blue-400 animate-spin mx-auto" />
-                    <p className="text-foreground font-bold">Confirming on Polygon…</p>
-                    {txHash && (
-                      <a
-                        href={`${POLYGON_SCAN}${txHash}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline font-mono"
-                      >
-                        {txHash.slice(0, 12)}…{txHash.slice(-8)}
-                        <ExternalLink className="w-3 h-3" />
-                      </a>
-                    )}
-                  </div>
-                )}
-
-                {/* TX: Success */}
-                {txStatus === "success" && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="text-center py-6 space-y-4"
-                  >
-                    <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
-                    <div>
-                      <p className="text-foreground font-extrabold text-lg">Purchase Successful!</p>
-                      <p className="text-xs text-muted-foreground mt-1">OKBOND tokens have been sent to your wallet</p>
-                    </div>
-                    {txHash && (
-                      <a
-                        href={`${POLYGON_SCAN}${txHash}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline font-mono"
-                      >
-                        View on PolygonScan <ExternalLink className="w-3 h-3" />
-                      </a>
-                    )}
-                    <button
-                      onClick={resetTx}
-                      className="w-full py-3 rounded-2xl bg-muted/30 border border-border text-sm font-bold hover:bg-muted/50 transition-all"
-                    >
-                      Buy More Tokens
-                    </button>
-                  </motion.div>
-                )}
-
-                {/* TX: Error */}
-                {txStatus === "error" && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="text-center py-6 space-y-4"
-                  >
-                    <XCircle className="w-10 h-10 text-red-400 mx-auto" />
-                    <p className="text-foreground font-bold">Transaction Failed</p>
-                    <p className="text-xs text-red-400/80 font-mono px-4 break-words">{txError}</p>
-                    <button
-                      onClick={resetTx}
-                      className="w-full py-3 rounded-2xl bg-muted/30 border border-border text-sm font-bold hover:bg-muted/50 transition-all"
-                    >
-                      Try Again
-                    </button>
-                  </motion.div>
-                )}
+                <div className="absolute inset-0 bg-white/10 animate-pulse" />
               </motion.div>
+            </div>
+            <div className="flex justify-between text-[10px] font-bold">
+              <span className="text-emerald-400">{pct(tokensSold.toString(), PHASE1_SUPPLY.toString()).toFixed(1)}% FILLED</span>
+              <span className="text-muted-foreground uppercase tracking-tighter">Polygon Network</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-              {/* ── Referral Card ─────────────────────────────────────────── */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="glass-card rounded-3xl border border-purple-500/20 p-6 bg-gradient-to-br from-purple-500/8 to-transparent"
-              >
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-10 h-10 rounded-2xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center">
-                    <Users className="w-5 h-5 text-purple-400" />
+      {/* 2. Phase Cards */}
+      <ICOPhaseCards />
+
+      {/* 3. Main Buy Card & Stats */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        {/* Buy Form (7 cols) */}
+        <div className="lg:col-span-7">
+          <div className="glass-card rounded-3xl border border-primary/30 p-6 sm:p-8 bg-gradient-to-br from-primary/10 via-background to-background relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-6 opacity-5 pointer-events-none">
+              <Rocket className="w-32 h-32 text-primary" />
+            </div>
+
+            <div className="relative z-10 space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-black text-foreground">Participate in ICO</h2>
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[10px] font-black uppercase tracking-widest">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Phase 1 Live
+                </div>
+              </div>
+
+              {/* Input Area */}
+              <div className="space-y-4">
+                <div className="p-5 rounded-2xl bg-black/40 border border-white/5 space-y-2">
+                  <div className="flex justify-between text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                    <span>You Pay (POL)</span>
+                    <span>Min: 10 POL</span>
                   </div>
-                  <div>
-                    <h3 className="font-extrabold text-foreground">Referral Program</h3>
-                    <p className="text-xs text-muted-foreground">Earn rewards for every referral</p>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="number"
+                      value={polAmount}
+                      onChange={(e) => setPolAmount(e.target.value)}
+                      className="flex-1 bg-transparent border-none text-3xl font-mono font-bold text-foreground focus:outline-none placeholder:text-muted-foreground/30"
+                      placeholder="0.0"
+                    />
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-primary/10 border border-primary/20">
+                      <Zap className="w-4 h-4 text-primary" />
+                      <span className="font-bold text-sm">POL</span>
+                    </div>
                   </div>
-                  {parseFloat(stats.referralBonusPercent) > 0 && (
-                    <span className="ml-auto px-2.5 py-1 rounded-lg bg-purple-500/20 border border-purple-500/30 text-purple-400 text-xs font-bold">
-                      {stats.referralBonusPercent}% Bonus
+                </div>
+
+                <div className="flex items-center justify-center py-2">
+                  <div className="h-px flex-1 bg-white/5" />
+                  <div className="px-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest">You Receive</div>
+                  <div className="h-px flex-1 bg-white/5" />
+                </div>
+
+                <div className="p-5 rounded-2xl bg-primary/5 border border-primary/20 space-y-2">
+                  <div className="flex justify-between text-[10px] font-bold text-primary/60 uppercase tracking-widest">
+                    <span>OKBOND Estimate</span>
+                    <span>Rate: 0.6 / POL</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-3xl font-mono font-black text-primary">
+                      {fmt((parseFloat(polAmount || "0") * TOKENS_PER_POL).toString(), 2)}
                     </span>
+                    <span className="text-sm font-bold text-primary/80">OKBOND</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              {!address ? (
+                <button
+                  onClick={onConnect}
+                  className="w-full py-5 rounded-2xl bg-primary text-primary-foreground font-black text-lg shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-3"
+                >
+                  <Wallet className="w-6 h-6" />
+                  Connect Wallet to Participate
+                </button>
+              ) : !isPolygon ? (
+                <button
+                  onClick={switchToPolygon}
+                  className="w-full py-5 rounded-2xl bg-amber-500 text-black font-black text-lg flex items-center justify-center gap-3"
+                >
+                  <AlertTriangle className="w-6 h-6" />
+                  Switch to Polygon Network
+                </button>
+              ) : (
+                <button
+                  onClick={handleBuy}
+                  disabled={loading || !polAmount || parseFloat(polAmount) < 10}
+                  className="w-full py-5 rounded-2xl bg-primary text-primary-foreground font-black text-lg shadow-lg shadow-primary/20 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 disabled:hover:scale-100 transition-all flex items-center justify-center gap-3"
+                >
+                  {loading ? (
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                  ) : (
+                    <>
+                      <Rocket className="w-6 h-6" />
+                      Buy OKBOND Tokens Now
+                    </>
                   )}
-                </div>
+                </button>
+              )}
 
-                {/* How it works */}
-                <div className="space-y-2.5 mb-5">
-                  {[
-                    { step: "1", text: "Copy your unique referral link below" },
-                    { step: "2", text: "Share it with your network" },
-                    { step: "3", text: "Earn on-chain rewards for every purchase" },
-                  ].map((item) => (
-                    <div key={item.step} className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-full bg-purple-500/20 border border-purple-500/30 text-purple-400 text-xs font-bold flex items-center justify-center flex-shrink-0">
-                        {item.step}
-                      </span>
-                      <span className="text-sm text-muted-foreground">{item.text}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Referral link generator */}
-                {!address ? (
-                  <div className="text-center py-4">
-                    <p className="text-xs text-muted-foreground mb-3">Connect your wallet to generate your referral link</p>
-                    <button
-                      onClick={onConnect}
-                      className="px-5 py-2.5 rounded-xl bg-purple-500/20 border border-purple-500/30 text-purple-400 text-sm font-bold hover:bg-purple-500/30 transition-all"
-                    >
-                      Connect Wallet
-                    </button>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <div>
-                      <label className="text-xs text-muted-foreground font-semibold mb-2 block">Your Referral Link</label>
-                      <div className="flex gap-2">
-                        <div className="flex-1 px-3 py-2.5 rounded-xl bg-muted/30 border border-border text-xs font-mono text-muted-foreground overflow-hidden">
-                          <span className="truncate block">{referralLink}</span>
+              {/* Transaction Status */}
+              <AnimatePresence>
+                {txStatus !== "idle" && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className={`p-4 rounded-2xl border ${
+                      txStatus === "success" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" :
+                      txStatus === "error" ? "bg-red-500/10 border-red-500/20 text-red-400" :
+                      "bg-primary/10 border-primary/20 text-primary"
+                    }`}>
+                      <div className="flex items-start gap-3">
+                        <div className="mt-1">
+                          {txStatus === "pending" || txStatus === "confirming" ? <Loader2 className="w-5 h-5 animate-spin" /> :
+                           txStatus === "success" ? <CheckCircle2 className="w-5 h-5" /> :
+                           <XCircle className="w-5 h-5" />}
                         </div>
-                        <button
-                          onClick={copyReferral}
-                          className="px-3 py-2.5 rounded-xl border border-purple-500/30 bg-purple-500/15 text-purple-400 hover:bg-purple-500/25 transition-all flex items-center gap-1.5 text-xs font-bold whitespace-nowrap"
-                        >
-                          {refCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                          {refCopied ? "Copied!" : "Copy"}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-bold">
+                            {txStatus === "pending" ? "Waiting for Signature..." :
+                             txStatus === "confirming" ? "Confirming on Blockchain..." :
+                             txStatus === "success" ? "Tokens Purchased!" :
+                             "Transaction Failed"}
+                          </p>
+                          {txError && <p className="text-xs opacity-80 mt-1 line-clamp-2">{txError}</p>}
+                          {txHash && (
+                            <a
+                              href={`${POLYGON_SCAN}${txHash}`}
+                              target="_blank"
+                              className="inline-flex items-center gap-1 text-[10px] font-bold uppercase mt-2 hover:underline"
+                            >
+                              View on Explorer <ExternalLink className="w-3 h-3" />
+                            </a>
+                          )}
+                        </div>
+                        <button onClick={resetTx} className="p-1 hover:bg-white/5 rounded-lg transition-colors">
+                          <RefreshCw className="w-4 h-4" />
                         </button>
                       </div>
                     </div>
-
-                    {/* Connected address */}
-                    <div>
-                      <label className="text-xs text-muted-foreground font-semibold mb-2 block">Connected Wallet</label>
-                      <div className="flex gap-2">
-                        <code className="flex-1 px-3 py-2.5 rounded-xl bg-muted/30 border border-border text-xs font-mono text-primary overflow-hidden">
-                          <span className="truncate block">{address}</span>
-                        </code>
-                        <button
-                          onClick={copyAddress}
-                          className="px-3 py-2.5 rounded-xl border border-border hover:border-primary/30 bg-muted/20 hover:bg-primary/8 text-muted-foreground hover:text-primary transition-all"
-                        >
-                          {addrCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* ── Referral Dashboard (always visible when wallet connected) ── */}
-                    <div className="rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/6 to-transparent overflow-hidden">
-                      {/* Dashboard header */}
-                      <div className="flex items-center justify-between px-4 py-3 border-b border-primary/10">
-                        <span className="flex items-center gap-2 text-xs font-bold text-foreground uppercase tracking-wider">
-                          <TrendingUp className="w-3.5 h-3.5 text-primary" />
-                          Referral Dashboard
-                        </span>
-                        <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 2, repeat: Infinity }}
-                          className="w-2 h-2 rounded-full bg-emerald-400" />
-                      </div>
-
-                      {/* Stats grid */}
-                      {userStats ? (
-                        <div className="p-3 space-y-3">
-
-                          {/* Row 1: Earned Tokens + Pending Rewards */}
-                          <div className="grid grid-cols-2 gap-2">
-                            {/* Earned Tokens — from TokensPurchased events */}
-                            <div className="text-center p-3 rounded-xl bg-primary/10 border border-primary/25">
-                              <p className="text-[9px] text-muted-foreground uppercase tracking-wide mb-1 font-bold">Earned Tokens</p>
-                              <p className="text-lg font-extrabold text-primary font-mono leading-none">
-                                {fmt(userStats.earnedTokens, 2)}
-                              </p>
-                              <p className="text-[9px] text-primary/60 font-mono mt-0.5">OKBOND</p>
-                              <p className="text-[8px] text-muted-foreground/50 mt-1">from purchases</p>
-                            </div>
-                            {/* Pending Rewards — POL referral commission */}
-                            <div className="text-center p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/25">
-                              <p className="text-[9px] text-muted-foreground uppercase tracking-wide mb-1 font-bold">Pending Rewards</p>
-                              <p className="text-lg font-extrabold text-emerald-400 font-mono leading-none">
-                                {fmt(userStats.referralEarnings, 4)}
-                              </p>
-                              <p className="text-[9px] text-emerald-400/60 font-mono mt-0.5">POL</p>
-                              <p className="text-[8px] text-muted-foreground/50 mt-1">referral commission</p>
-                            </div>
-                          </div>
-
-                          {/* Row 2: Contributed + Referrals */}
-                          <div className="grid grid-cols-2 gap-2">
-                            <div className="text-center p-2.5 rounded-xl bg-muted/20 border border-border">
-                              <p className="text-[9px] text-muted-foreground uppercase tracking-wide mb-1 font-bold">Contributed</p>
-                              <p className="text-sm font-extrabold text-foreground font-mono leading-none">
-                                {fmt(userStats.contribution, 3)}
-                              </p>
-                              <p className="text-[9px] text-muted-foreground/60 font-mono mt-0.5">POL</p>
-                            </div>
-                            <div className="text-center p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20">
-                              <p className="text-[9px] text-muted-foreground uppercase tracking-wide mb-1 font-bold">Referrals Made</p>
-                              <p className="text-sm font-extrabold text-purple-400 font-mono leading-none">
-                                {userStats.referralCount}
-                              </p>
-                              <p className="text-[9px] text-purple-400/60 font-mono mt-0.5">users</p>
-                            </div>
-                          </div>
-
-                          {/* MLM Tier breakdown when referrals exist */}
-                          {parseInt(userStats.referralCount) > 0 && (
-                            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-muted/15 border border-border">
-                              <Zap className="w-3 h-3 text-primary flex-shrink-0" />
-                              <div className="flex-1 min-w-0">
-                                <p className="text-[9px] font-bold text-foreground uppercase tracking-wider mb-0.5">MLM Tiers Active</p>
-                                <div className="flex gap-3 text-[9px] font-mono text-muted-foreground">
-                                  <span className="text-amber-400 font-bold">L1 5%</span>
-                                  <span className="text-sky-400 font-bold">L2 3%</span>
-                                  <span className="text-purple-400 font-bold">L3 2%</span>
-                                </div>
-                              </div>
-                              <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/15 px-2 py-0.5 rounded-full flex-shrink-0">
-                                Earning
-                              </span>
-                            </div>
-                          )}
-
-                          {/* Referred-by indicator */}
-                          {referrer && referrer.toLowerCase() !== address.toLowerCase() && (
-                            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-500/8 border border-emerald-500/20">
-                              <Gift className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-                              <div className="min-w-0 flex-1">
-                                <p className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider">Referred by</p>
-                                <p className="text-[10px] font-mono text-foreground/60 truncate">
-                                  {referrer.slice(0, 10)}…{referrer.slice(-8)}
-                                </p>
-                              </div>
-                              <span className="flex-shrink-0 text-[9px] font-bold text-emerald-400 bg-emerald-500/15 px-2 py-0.5 rounded-full">Active</span>
-                            </div>
-                          )}
-
-                          {/* Self-referral warning */}
-                          {referrer && referrer.toLowerCase() === address.toLowerCase() && (
-                            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-red-500/8 border border-red-500/20">
-                              <AlertTriangle className="w-3.5 h-3.5 text-red-400 flex-shrink-0" />
-                              <p className="text-[10px] text-red-400/80 font-semibold">Self-referral blocked — you cannot refer yourself</p>
-                            </div>
-                          )}
-
-                          {/* No activity hint */}
-                          {parseFloat(userStats.earnedTokens) === 0 && parseInt(userStats.referralCount) === 0 && (
-                            <p className="text-center text-[10px] text-muted-foreground/50 font-mono pb-1">
-                              Purchase OKBOND or share your referral link to start earning
-                            </p>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center gap-2 py-5 text-xs text-muted-foreground">
-                          <Loader2 className="w-3.5 h-3.5 animate-spin text-primary" />
-                          Loading your stats from chain…
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                  </motion.div>
                 )}
-              </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Column (5 cols) */}
+        <div className="lg:col-span-5 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <StatCard
+              label="My Tokens"
+              value={fmt(userTokens, 2)}
+              sub="OKBOND Balance"
+              icon={<ShieldCheck className="w-5 h-5" />}
+              color="emerald"
+            />
+            <StatCard
+              label="Total Raised"
+              value={`${fmt(totalRaised.toString(), 0)} POL`}
+              sub="Global Participation"
+              icon={<TrendingUp className="w-5 h-5" />}
+              color="primary"
+            />
+          </div>
+
+          {/* Referral Card */}
+          <div className="glass-card rounded-3xl border border-primary/20 p-6 bg-gradient-to-br from-primary/5 to-transparent space-y-5">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                <Users className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-bold text-foreground">Invite & Earn</h3>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">5-Level Referral System</p>
+              </div>
             </div>
 
-            {/* ── Referral Profit Calculator ───────────────────────────────── */}
-            <ReferralCalculator />
-
-            {/* ── Multi-Level Referral Dashboard (wallet connected only) ──────── */}
-            {address && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="glass-card rounded-3xl border border-primary/15 p-5 sm:p-7"
-              >
-                <ReferralDashboard address={address} />
-              </motion.div>
-            )}
-
-            {/* ── Info / Security note ─────────────────────────────────────── */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="glass-card rounded-2xl border border-border/40 p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4"
-            >
-              <ShieldCheck className="w-8 h-8 text-primary flex-shrink-0" />
-              <div className="flex-1">
-                <p className="text-sm font-bold text-foreground">Smart Contract Verified</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  ICO Contract:{" "}
-                  <a
-                    href={`https://polygonscan.com/address/${ICO_CONTRACT_ADDRESS}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mono text-primary hover:underline"
+            <div className="space-y-3">
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Earn instant commissions when your network participates in the ICO. Rewards are distributed across 5 levels.
+              </p>
+              
+              <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-2">
+                <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Your Referral Link</p>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 bg-black/40 rounded-lg px-3 py-2 text-[10px] font-mono text-primary/70 truncate border border-white/5">
+                    {address ? `${SITE_URL}?ref=${address.slice(0, 6)}...${address.slice(-4)}` : "Connect wallet to view"}
+                  </div>
+                  <button
+                    onClick={copyRef}
+                    disabled={!address}
+                    className="p-2 rounded-lg bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-colors disabled:opacity-30"
                   >
-                    0x0134F0…adD16
-                  </a>
-                  {" "}· Polygon PoS · Fixed price $0.15/OKBOND · 1 POL = 0.6 OKBOND
-                </p>
+                    {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  </button>
+                </div>
               </div>
-              <a
-                href={`https://polygonscan.com/address/${ICO_CONTRACT_ADDRESS}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border hover:border-primary/30 text-xs text-muted-foreground hover:text-primary transition-all"
-              >
-                <ExternalLink className="w-3 h-3" />
-                PolygonScan
-              </a>
-            </motion.div>
-          </>
+            </div>
+          </div>
+
+          {/* Security Badge */}
+          <div className="p-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 flex items-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
+              <ShieldCheck className="w-6 h-6 text-emerald-500" />
+            </div>
+            <div>
+              <p className="text-xs font-bold text-foreground">Smart Contract Verified</p>
+              <p className="text-[10px] text-muted-foreground">100% Capital Protection enabled on-chain.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Calculator & Dashboard */}
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+        <ReferralCalculator />
+        {address && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 px-2">
+              <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+              <h3 className="text-sm font-black text-foreground uppercase tracking-[0.2em]">Live Network Performance</h3>
+            </div>
+            <ReferralDashboard address={address} provider={provider} />
+          </div>
         )}
       </div>
-    </section>
+
+    </div>
   );
 }
