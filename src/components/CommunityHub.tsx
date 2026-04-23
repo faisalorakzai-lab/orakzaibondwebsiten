@@ -3,6 +3,8 @@ import { supabase, Profile } from "@/lib/supabase";
 import { Loader2, CheckCircle, XCircle, Award, UserCheck, Building2, Upload, Trash2 } from "lucide-react";
 import { useWallet } from "@/hooks/useWallet";
 
+const ADMIN_WALLET = "0x9b02e2Edd6F58D626aAa91889708dbF39dfa8Cd7";
+
 const BADGE_OPTIONS = [
   { value: null, label: "None", icon: null },
   { value: "blue", label: "Blue (Verified)", icon: Award },
@@ -20,7 +22,6 @@ export default function CommunityHub() {
   const [profiles, setProfiles] = useState<ProfileWithBranding[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
   const [uploadingLogo, setUploadingLogo] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -29,14 +30,25 @@ export default function CommunityHub() {
       setIsAdmin(false);
       return;
     }
+    
+    // Hardcoded check for the owner
+    if (address.toLowerCase() === ADMIN_WALLET.toLowerCase()) {
+      setIsAdmin(true);
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from("profiles")
         .select("badge")
         .eq("address", address.toLowerCase())
         .single();
-      if (error) throw error;
-      setIsAdmin(data?.badge === "team");
+      
+      if (!error && data?.badge === "team") {
+        setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
+      }
     } catch (err) {
       console.error("Error fetching admin status:", err);
       setIsAdmin(false);
@@ -155,12 +167,13 @@ export default function CommunityHub() {
     return (
       <div className="mt-12 space-y-8 max-w-4xl mx-auto text-center text-red-400">
         <p>You do not have administrative privileges to access the Community Hub.</p>
+        <p className="text-xs mt-2 text-muted-foreground">Connected: {address}</p>
       </div>
     );
   }
 
   return (
-    <div className="mt-12 space-y-8 max-w-6xl mx-auto">
+    <div className="mt-12 space-y-8 max-w-6xl mx-auto px-4">
       <h1 className="text-3xl font-black text-foreground mb-8">Community Hub - Admin Control</h1>
 
       {error && (
@@ -193,9 +206,9 @@ export default function CommunityHub() {
           <div className="space-y-4">
             {filteredProfiles.map((profile) => (
               <div key={profile.address} className="p-4 border border-white/10 rounded-xl">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                   <div>
-                    <p className="text-sm text-foreground font-bold">{profile.username} ({profile.address.slice(0, 6)}...{profile.address.slice(-4)})</p>
+                    <p className="text-sm text-foreground font-bold">{profile.username || 'Unnamed'} ({profile.address.slice(0, 6)}...{profile.address.slice(-4)})</p>
                     <p className="text-xs text-muted-foreground">Current Badge: {profile.badge || 'None'}</p>
                   </div>
                   <select
