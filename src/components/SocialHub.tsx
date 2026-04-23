@@ -4,7 +4,7 @@ import {
   User, Edit2, Camera, Send, Image as ImageIcon, 
   BadgeCheck, Shield, Crown, MessageSquare, 
   Loader2, X, Globe, Lock, Heart, UserPlus, UserCheck, MessageCircle,
-  AlertCircle
+  AlertCircle, Upload
 } from "lucide-react";
 import { supabase, Profile, Post, Comment } from "@/lib/supabase";
 import { useWallet } from "@/hooks/useWallet";
@@ -134,14 +134,18 @@ export default function SocialHub() {
     if (!file || !address) return;
 
     setIsSavingProfile(true);
+    setError(null);
     try {
       const fileExt = file.name.split('.').pop();
-      const fileName = `${address.toLowerCase()}-${Math.random()}.${fileExt}`;
+      const fileName = `${address.toLowerCase()}-${Date.now()}.${fileExt}`;
       const filePath = `avatars/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from('social_hub')
-        .upload(filePath, file);
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true
+        });
 
       if (uploadError) throw uploadError;
 
@@ -221,7 +225,7 @@ export default function SocialHub() {
     try {
       if (hasLiked) {
         await supabase.from('likes').delete().eq('post_id', postId).eq('address', address.toLowerCase());
-        setPosts(posts.map(p => p.id === postId ? { ...p, user_has_liked: false, likes_count: p.likes_count - 1 } : p));
+        setPosts(posts.map(p => p.id === postId ? { ...p, user_has_liked: false, likes_count: Math.max(0, p.likes_count - 1) } : p));
       } else {
         await supabase.from('likes').insert({ post_id: postId, address: address.toLowerCase() });
         setPosts(posts.map(p => p.id === postId ? { ...p, user_has_liked: true, likes_count: p.likes_count + 1 } : p));
@@ -300,205 +304,167 @@ export default function SocialHub() {
 
       {/* Profile Section */}
       <div className="glass-card rounded-3xl border border-primary/20 p-6 bg-gradient-to-br from-primary/5 to-transparent">
-        <div className="flex flex-col md:flex-row items-center gap-6">
-          <div className="relative group">
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+          <div className="relative">
             <div className="w-24 h-24 rounded-full border-2 border-primary/30 overflow-hidden bg-black/40">
               {profile?.avatar_url ? (
-                <img src={profile.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-primary/40">
-                  <User size={48} />
-                </div>
-              )}
+                <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
+              ) : <User size={48} className="m-auto mt-6 text-primary/20" />}
             </div>
             {address && (
               <button 
                 onClick={() => setShowEditModal(true)}
-                className="absolute bottom-0 right-0 p-2 rounded-full bg-primary text-black hover:scale-110 transition-transform shadow-lg"
+                className="absolute bottom-0 right-0 p-2 rounded-full bg-primary text-black shadow-lg hover:scale-110 transition-transform"
               >
                 <Edit2 size={14} />
               </button>
             )}
           </div>
-
-          <div className="flex-1 text-center md:text-left space-y-2">
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-              <h3 className="text-2xl font-black text-foreground">
-                {profile?.username || (address ? "Loading..." : "Guest Investor")}
-              </h3>
+          
+          <div className="flex-1 text-center md:text-left">
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
+              <h2 className="text-2xl font-black text-foreground">{profile?.username || 'Orakzai Investor'}</h2>
               {profile?.badge && BADGE_CONFIG[profile.badge] && (
-                <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 ${BADGE_CONFIG[profile.badge].color}`}>
-                  {(() => {
-                    const Icon = BADGE_CONFIG[profile.badge].icon;
-                    return <Icon size={14} />;
-                  })()}
-                  <span className="text-[10px] font-bold uppercase tracking-wider">
+                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20">
+                  {BADGE_CONFIG[profile.badge].isLogo ? (
+                    <img src="/son-of-orakzai-logo.jpg" className="w-3 h-3 rounded-full" />
+                  ) : (
+                    <BadgeCheck size={12} className={BADGE_CONFIG[profile.badge].color} />
+                  )}
+                  <span className={`text-[10px] font-bold uppercase tracking-tighter ${BADGE_CONFIG[profile.badge].color}`}>
                     {BADGE_CONFIG[profile.badge].label}
                   </span>
                 </div>
               )}
             </div>
-            <div className="flex items-center justify-center md:justify-start gap-4 text-xs font-mono text-muted-foreground">
-              <span>{address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "Connect wallet"}</span>
-              <span className="w-1 h-1 rounded-full bg-white/20" />
-              <span>{profile?.followers_count || 0} Followers</span>
-              <span className="w-1 h-1 rounded-full bg-white/20" />
-              <span>{profile?.following_count || 0} Following</span>
+            <p className="text-sm text-muted-foreground mb-4 max-w-md">{profile?.bio || 'Proud member of the Orakzai Bond community.'}</p>
+            
+            <div className="flex items-center justify-center md:justify-start gap-6">
+              <div className="text-center md:text-left">
+                <span className="block text-lg font-black text-foreground">{profile?.followers_count || 0}</span>
+                <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Followers</span>
+              </div>
+              <div className="text-center md:text-left">
+                <span className="block text-lg font-black text-foreground">{profile?.following_count || 0}</span>
+                <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Following</span>
+              </div>
             </div>
-            {profile?.bio && (
-              <p className="text-sm text-muted-foreground/80 max-w-xl italic">
-                "{profile.bio}"
-              </p>
-            )}
           </div>
         </div>
-      </div>
-
-      {/* Post Creation */}
-      <div className="glass-card rounded-3xl border border-white/10 p-6 bg-white/5">
-        {!address ? (
-          <div className="flex flex-col items-center justify-center py-4 space-y-3 text-center">
-            <Lock className="text-primary/40" size={32} />
-            <div>
-              <p className="font-bold text-foreground">Social Hub is Restricted</p>
-              <p className="text-xs text-muted-foreground">Connect your wallet to share ideas and posts</p>
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <textarea
-              value={newPost}
-              onChange={(e) => setNewPost(e.target.value)}
-              placeholder="Share something with the Orakzai community..."
-              className="w-full h-24 bg-black/40 border border-white/10 rounded-2xl p-4 text-sm text-foreground focus:border-primary/50 outline-none transition-all resize-none"
-            />
-            <div className="flex items-center justify-between">
-              <div className="flex gap-2">
-                <button className="p-2 rounded-xl bg-white/5 text-muted-foreground hover:text-primary transition-colors">
-                  <ImageIcon size={20} />
-                </button>
-                <button className="p-2 rounded-xl bg-white/5 text-muted-foreground hover:text-primary transition-colors">
-                  <Globe size={20} />
-                </button>
-              </div>
-              <button
-                onClick={handleCreatePost}
-                disabled={isSubmittingPost || !newPost.trim()}
-                className="flex items-center gap-2 px-6 py-2 rounded-xl bg-primary text-black font-bold text-sm hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
-              >
-                {isSubmittingPost ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />}
-                Post Now
-              </button>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Feed Section */}
       <div className="space-y-6">
-        <div className="flex items-center gap-3 px-2">
-          <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-          <h4 className="text-sm font-black text-foreground uppercase tracking-widest">ThinkTank Live Feed</h4>
-        </div>
+        {address && (
+          <div className="glass-card rounded-3xl border border-primary/20 p-6">
+            <textarea 
+              value={newPost}
+              onChange={(e) => setNewPost(e.target.value)}
+              placeholder="What's on your mind, Investor?"
+              className="w-full h-24 bg-transparent border-none focus:ring-0 text-foreground resize-none text-sm"
+            />
+            <div className="flex items-center justify-between pt-4 border-t border-white/5">
+              <div className="flex gap-4">
+                <button className="text-muted-foreground hover:text-primary transition-colors">
+                  <ImageIcon size={18} />
+                </button>
+                <button className="text-muted-foreground hover:text-primary transition-colors">
+                  <Globe size={18} />
+                </button>
+              </div>
+              <button 
+                onClick={handleCreatePost}
+                disabled={isSubmittingPost || !newPost.trim()}
+                className="px-6 py-2 rounded-xl bg-primary text-black font-black text-xs uppercase tracking-widest flex items-center gap-2 disabled:opacity-50"
+              >
+                {isSubmittingPost ? <Loader2 className="animate-spin" size={14} /> : <Send size={14} />}
+                Share
+              </button>
+            </div>
+          </div>
+        )}
 
         {loading ? (
           <div className="flex justify-center py-12">
             <Loader2 className="animate-spin text-primary" size={32} />
           </div>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid gap-6">
             {posts.map((post) => (
-              <motion.div
+              <motion.div 
                 key={post.id}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass-card rounded-2xl border border-white/5 p-5 bg-white/3 hover:border-white/10 transition-colors"
+                className="glass-card rounded-3xl border border-white/5 p-6 hover:border-primary/20 transition-all group"
               >
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-black/40 border border-white/10 overflow-hidden flex-shrink-0">
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 rounded-full border border-primary/20 overflow-hidden flex-shrink-0 bg-black/40">
                     {post.profiles?.avatar_url ? (
-                      <img src={post.profiles.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-primary/20">
-                        <User size={20} />
-                      </div>
-                    )}
+                      <img src={post.profiles.avatar_url} className="w-full h-full object-cover" />
+                    ) : <User size={24} className="m-auto mt-3 text-primary/10" />}
                   </div>
-                  <div className="flex-1 min-w-0 space-y-3">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-bold text-sm text-foreground truncate max-w-[150px]">
-                        {post.profiles?.username || "Investor"}
-                      </span>
-                      {post.profiles?.badge && BADGE_CONFIG[post.profiles.badge] && (
-                        <div className={`${BADGE_CONFIG[post.profiles.badge].color}`}>
-                          {(() => {
-                            const Icon = BADGE_CONFIG[post.profiles.badge].icon;
-                            return <Icon size={12} />;
-                          })()}
-                        </div>
-                      )}
-                      <span className="text-[10px] text-muted-foreground/40 font-mono">
-                        {post.address.slice(0, 6)}...{post.address.slice(-4)}
-                      </span>
-                      {address && address.toLowerCase() !== post.address.toLowerCase() && (
-                        <button 
-                          onClick={() => handleFollow(post.address)}
-                          className={`ml-2 text-[10px] font-bold uppercase tracking-widest transition-colors ${followingList.includes(post.address.toLowerCase()) ? 'text-primary' : 'text-muted-foreground hover:text-primary'}`}
-                        >
-                          {followingList.includes(post.address.toLowerCase()) ? <UserCheck size={14} className="inline mr-1" /> : <UserPlus size={14} className="inline mr-1" />}
-                          {followingList.includes(post.address.toLowerCase()) ? 'Following' : 'Follow'}
-                        </button>
-                      )}
-                      <span className="text-[10px] text-muted-foreground/40 ml-auto">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-black text-sm text-foreground">{post.profiles?.username || 'Investor'}</span>
+                        {post.profiles?.badge && BADGE_CONFIG[post.profiles.badge] && (
+                          <BadgeCheck size={14} className={BADGE_CONFIG[post.profiles.badge].color} />
+                        )}
+                        <span className="text-[10px] text-muted-foreground/40 font-mono hidden sm:inline">{post.address.slice(0,6)}...{post.address.slice(-4)}</span>
+                      </div>
+                      <span className="text-[10px] text-muted-foreground font-mono">
                         {new Date(post.created_at).toLocaleDateString()}
                       </span>
                     </div>
-                    <p className="text-sm text-muted-foreground/80 leading-relaxed whitespace-pre-wrap">
-                      {post.content}
-                    </p>
                     
-                    {/* Actions: Like & Comment */}
-                    <div className="flex items-center gap-6 pt-2 border-t border-white/5">
+                    <p className="text-sm text-muted-foreground/90 leading-relaxed mb-4">{post.content}</p>
+                    
+                    <div className="flex items-center gap-6 pt-4 border-t border-white/5">
                       <button 
                         onClick={() => handleLike(post.id, !!post.user_has_liked)}
-                        className={`flex items-center gap-2 text-xs font-bold transition-all hover:scale-110 ${post.user_has_liked ? 'text-rose-500' : 'text-muted-foreground hover:text-rose-500'}`}
+                        className={`flex items-center gap-2 text-xs font-bold transition-colors ${post.user_has_liked ? 'text-rose-500' : 'text-muted-foreground hover:text-rose-500'}`}
                       >
-                        <Heart size={16} className={post.user_has_liked ? 'fill-current' : ''} />
-                        {post.likes_count || 0}
+                        <Heart size={16} fill={post.user_has_liked ? "currentColor" : "none"} />
+                        {post.likes_count}
                       </button>
                       <button 
                         onClick={() => {
-                          if (activePostId === post.id) setActivePostId(null);
-                          else {
-                            setActivePostId(post.id);
-                            fetchComments(post.id);
-                          }
+                          setActivePostId(activePostId === post.id ? null : post.id);
+                          if (activePostId !== post.id) fetchComments(post.id);
                         }}
-                        className={`flex items-center gap-2 text-xs font-bold transition-all hover:scale-110 ${activePostId === post.id ? 'text-primary' : 'text-muted-foreground hover:text-primary'}`}
+                        className="flex items-center gap-2 text-xs font-bold text-muted-foreground hover:text-primary transition-colors"
                       >
                         <MessageCircle size={16} />
-                        {post.comments_count || 0}
+                        {post.comments_count}
                       </button>
+                      {address && address.toLowerCase() !== post.address.toLowerCase() && (
+                        <button 
+                          onClick={() => handleFollow(post.address)}
+                          className={`flex items-center gap-2 text-xs font-bold transition-colors ${followingList.includes(post.address.toLowerCase()) ? 'text-primary' : 'text-muted-foreground hover:text-primary'}`}
+                        >
+                          {followingList.includes(post.address.toLowerCase()) ? <UserCheck size={16} /> : <UserPlus size={16} />}
+                          {followingList.includes(post.address.toLowerCase()) ? 'Following' : 'Follow'}
+                        </button>
+                      )}
                     </div>
 
-                    {/* Comments Area */}
                     <AnimatePresence>
                       {activePostId === post.id && (
                         <motion.div 
                           initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
+                          animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
-                          className="overflow-hidden space-y-4 pt-4"
+                          className="overflow-hidden"
                         >
-                          <div className="space-y-3">
-                            {(comments[post.id] || []).map(comment => (
-                              <div key={comment.id} className="flex gap-3 bg-white/5 p-3 rounded-xl">
-                                <div className="w-6 h-6 rounded-full bg-black/40 overflow-hidden flex-shrink-0">
+                          <div className="pt-6 space-y-4">
+                            {comments[post.id]?.map((comment) => (
+                              <div key={comment.id} className="flex gap-3">
+                                <div className="w-8 h-8 rounded-full border border-white/5 overflow-hidden flex-shrink-0 bg-black/40">
                                   {comment.profiles?.avatar_url ? (
-                                    <img src={comment.profiles.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
-                                  ) : <User size={12} className="m-auto mt-1 text-primary/20" />}
+                                    <img src={comment.profiles.avatar_url} className="w-full h-full object-cover" />
+                                  ) : <User size={16} className="m-auto mt-2 text-primary/10" />}
                                 </div>
-                                <div className="flex-1">
+                                <div className="flex-1 bg-white/5 rounded-2xl p-3">
                                   <div className="flex items-center gap-2 mb-1">
                                     <span className="text-[10px] font-bold text-foreground">{comment.profiles?.username || 'Investor'}</span>
                                     <span className="text-[9px] text-muted-foreground/40 font-mono">{comment.address.slice(0,6)}...</span>
@@ -509,7 +475,7 @@ export default function SocialHub() {
                             ))}
                           </div>
                           {address && (
-                            <div className="flex gap-2">
+                            <div className="flex gap-2 pt-4">
                               <input 
                                 type="text" 
                                 value={newComment}
@@ -576,7 +542,14 @@ export default function SocialHub() {
                     className="hidden" 
                     accept="image/*"
                   />
-                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Tap to Upload Photo</p>
+                  <button 
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isSavingProfile}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/20 text-primary text-[10px] uppercase tracking-widest font-bold hover:bg-primary/20 transition-colors"
+                  >
+                    {isSavingProfile ? <Loader2 className="animate-spin" size={12} /> : <Upload size={12} />}
+                    Tap to Upload Photo
+                  </button>
                 </div>
 
                 <div className="space-y-2">
