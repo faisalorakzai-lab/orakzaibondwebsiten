@@ -582,7 +582,7 @@ export default function AdminPage() {
                 <button onClick={() => setMobileMenuOpen(false)} className="p-1 text-muted-foreground">
                   <X className="w-5 h-5" />
                 </button>
-              </div>>
+              </div>
             <p className="text-[10px] text-muted-foreground/50 uppercase tracking-widest font-bold px-3 mb-2">Modules</p>
             {NAV.map((n) => {
               const content = (
@@ -635,7 +635,7 @@ export default function AdminPage() {
             </div>
           </aside>
         </>
-       )}
+      )}
         {/* ── Main area ─────────────────────────────────────────────────────── */}
         <main className="flex-1 overflow-y-auto p-6 max-w-5xl mx-auto w-full">
 
