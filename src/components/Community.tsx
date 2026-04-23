@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import LiveParticipationFeed from "@/components/LiveParticipationFeed";
 import ThinkTank from "@/components/ThinkTank";
+import SocialHub from "@/components/SocialHub";
 
 /* ── Animated counter hook ─────────────────────────────────────────── */
 function useCounter(target: number, duration = 2000) {
@@ -931,6 +932,9 @@ export default function Community() {
 
         {/* ── Orakzai Think Tank ───────────────────────────────── */}
         <ThinkTank />
+
+        {/* ── Orakzai Social Hub ───────────────────────────────── */}
+        <SocialHub />
 
         {/* ── Live Telegram Feed ────────────────────────────────── */}
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
