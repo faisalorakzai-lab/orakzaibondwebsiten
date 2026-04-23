@@ -23,7 +23,7 @@ const TOKEN_PRICE_USD = 0.15;
 const TOKENS_PER_POL  = 0.6;
 
 // Phase 1 closes 60 days from April 10, 2026
-const PHASE1_END = new Date("2026-06-09T00:00:00Z").getTime();
+const PHASE1_END = new Date("2026-04-30T23:59:59Z").getTime();
 const PHASE1_SUPPLY = 75_000;
 
 const ICO_PHASES = [
@@ -145,7 +145,7 @@ function ICOCountdown() {
         <CountBox value={cd.seconds} label="Secs" />
       </div>
       <p className="text-[10px] text-muted-foreground mt-3">
-        After Phase 1 closes, price moves to <strong className="text-amber-400">$0.25</strong>
+        Phase 1 Closes on 30 April 2026. Price moves to <strong className="text-amber-400">$0.25</strong> after.
       </p>
     </motion.div>
   );

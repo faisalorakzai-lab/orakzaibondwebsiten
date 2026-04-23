@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   User, Edit2, Camera, Send, Image as ImageIcon, 
   BadgeCheck, Shield, Crown, MessageSquare, 
-  Loader2, X, Globe, Lock, Heart, UserPlus, UserCheck, MessageCircle
+  Loader2, X, Globe, Lock, Heart, UserPlus, UserCheck, MessageCircle,
+  AlertCircle
 } from "lucide-react";
 import { supabase, Profile, Post, Comment } from "@/lib/supabase";
 import { useWallet } from "@/hooks/useWallet";
@@ -22,16 +23,19 @@ export default function SocialHub() {
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [newPost, setNewPost] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingPost, setIsSubmittingPost] = useState(false);
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [activePostId, setActivePostId] = useState<string | null>(null);
   const [comments, setComments] = useState<Record<string, Comment[]>>({});
   const [newComment, setNewComment] = useState("");
   const [followingList, setFollowingList] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   // Edit Profile Form State
   const [editUsername, setEditUsername] = useState("");
   const [editBio, setEditBio] = useState("");
   const [editAvatar, setEditAvatar] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchProfile = useCallback(async (walletAddr: string) => {
     try {
@@ -81,14 +85,15 @@ export default function SocialHub() {
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      const { data, error: fetchError } = await supabase
         .from('posts')
         .select('*, profiles(*)')
         .order('created_at', { ascending: false })
         .limit(50);
 
+      if (fetchError) throw fetchError;
+
       if (data) {
-        // If logged in, check which posts user has liked
         if (address) {
           const { data: likedPosts } = await supabase
             .from('likes')
@@ -105,8 +110,9 @@ export default function SocialHub() {
           setPosts(data);
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Posts fetch error:", err);
+      setError("Failed to load feed. Check database connection.");
     } finally {
       setLoading(false);
     }
@@ -123,11 +129,41 @@ export default function SocialHub() {
     }
   }, [address, fetchPosts, fetchProfile, fetchFollowing]);
 
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !address) return;
+
+    setIsSavingProfile(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${address.toLowerCase()}-${Math.random()}.${fileExt}`;
+      const filePath = `avatars/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('social_hub')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('social_hub')
+        .getPublicUrl(filePath);
+
+      setEditAvatar(publicUrl);
+    } catch (err: any) {
+      console.error("Upload error:", err);
+      setError(err.message || "Failed to upload image.");
+    } finally {
+      setIsSavingProfile(false);
+    }
+  }
+
   async function handleUpdateProfile() {
     if (!address || !profile) return;
-    setIsSubmitting(true);
+    setIsSavingProfile(true);
+    setError(null);
     try {
-      const { data, error } = await supabase
+      const { data, error: updateError } = await supabase
         .from('profiles')
         .update({
           username: editUsername,
@@ -138,22 +174,26 @@ export default function SocialHub() {
         .select()
         .single();
 
+      if (updateError) throw updateError;
+
       if (data) {
         setProfile(data);
         setShowEditModal(false);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Update profile error:", err);
+      setError(err.message || "Failed to save profile. Check RLS policies.");
     } finally {
-      setIsSubmitting(false);
+      setIsSavingProfile(false);
     }
   }
 
   async function handleCreatePost() {
     if (!address || !newPost.trim()) return;
-    setIsSubmitting(true);
+    setIsSubmittingPost(true);
+    setError(null);
     try {
-      const { data, error } = await supabase
+      const { data, error: postError } = await supabase
         .from('posts')
         .insert({
           address: address.toLowerCase(),
@@ -162,14 +202,17 @@ export default function SocialHub() {
         .select('*, profiles(*)')
         .single();
 
+      if (postError) throw postError;
+
       if (data) {
         setPosts([{...data, user_has_liked: false}, ...posts]);
         setNewPost("");
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Create post error:", err);
+      setError(err.message || "Failed to share post. Check RLS policies.");
     } finally {
-      setIsSubmitting(false);
+      setIsSubmittingPost(false);
     }
   }
 
@@ -231,7 +274,6 @@ export default function SocialHub() {
         await supabase.from('follows').insert({ follower_address: address.toLowerCase(), following_address: targetAddress.toLowerCase() });
         setFollowingList([...followingList, targetAddress.toLowerCase()]);
       }
-      // Refresh current user profile to see updated follower counts if applicable
       fetchProfile(address);
     } catch (err) {
       console.error("Follow error:", err);
@@ -240,6 +282,22 @@ export default function SocialHub() {
 
   return (
     <div className="mt-12 space-y-8 max-w-4xl mx-auto">
+      {/* Error Banner */}
+      <AnimatePresence>
+        {error && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs flex items-center gap-3"
+          >
+            <AlertCircle size={16} />
+            <p className="flex-1">{error}</p>
+            <button onClick={() => setError(null)}><X size={14} /></button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Profile Section */}
       <div className="glass-card rounded-3xl border border-primary/20 p-6 bg-gradient-to-br from-primary/5 to-transparent">
         <div className="flex flex-col md:flex-row items-center gap-6">
@@ -325,10 +383,10 @@ export default function SocialHub() {
               </div>
               <button
                 onClick={handleCreatePost}
-                disabled={isSubmitting || !newPost.trim()}
+                disabled={isSubmittingPost || !newPost.trim()}
                 className="flex items-center gap-2 px-6 py-2 rounded-xl bg-primary text-black font-bold text-sm hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100"
               >
-                {isSubmitting ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />}
+                {isSubmittingPost ? <Loader2 className="animate-spin" size={16} /> : <Send size={16} />}
                 Post Now
               </button>
             </div>
@@ -496,6 +554,31 @@ export default function SocialHub() {
               </div>
 
               <div className="space-y-5">
+                {/* Avatar Upload */}
+                <div className="flex flex-col items-center gap-4 mb-6">
+                  <div className="relative group">
+                    <div className="w-24 h-24 rounded-full border-2 border-primary/30 overflow-hidden bg-black/40">
+                      {editAvatar ? (
+                        <img src={editAvatar} alt="Avatar Preview" className="w-full h-full object-cover" />
+                      ) : <User size={48} className="m-auto mt-6 text-primary/20" />}
+                    </div>
+                    <button 
+                      onClick={() => fileInputRef.current?.click()}
+                      className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full"
+                    >
+                      <Camera size={24} className="text-white" />
+                    </button>
+                  </div>
+                  <input 
+                    type="file" 
+                    ref={fileInputRef} 
+                    onChange={handleFileUpload} 
+                    className="hidden" 
+                    accept="image/*"
+                  />
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Tap to Upload Photo</p>
+                </div>
+
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Username</label>
                   <input
@@ -504,20 +587,6 @@ export default function SocialHub() {
                     onChange={(e) => setEditUsername(e.target.value)}
                     className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary/50 outline-none transition-all"
                   />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Avatar URL</label>
-                  <div className="relative">
-                    <Camera className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={16} />
-                    <input
-                      type="text"
-                      value={editAvatar}
-                      onChange={(e) => setEditAvatar(e.target.value)}
-                      placeholder="https://..."
-                      className="w-full bg-black/40 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm focus:border-primary/50 outline-none transition-all"
-                    />
-                  </div>
                 </div>
 
                 <div className="space-y-2">
@@ -531,10 +600,10 @@ export default function SocialHub() {
 
                 <button
                   onClick={handleUpdateProfile}
-                  disabled={isSubmitting}
+                  disabled={isSavingProfile}
                   className="w-full py-4 rounded-2xl bg-primary text-black font-black text-sm uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
                 >
-                  {isSubmitting ? <Loader2 className="animate-spin mx-auto" size={20} /> : "Save Profile"}
+                  {isSavingProfile ? <Loader2 className="animate-spin mx-auto" size={20} /> : "Save Profile"}
                 </button>
               </div>
             </motion.div>

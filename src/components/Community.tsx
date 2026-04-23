@@ -930,11 +930,11 @@ export default function Community() {
           </motion.div>
         </div>
 
-        {/* ── Orakzai Think Tank ───────────────────────────────── */}
-        <ThinkTank />
-
         {/* ── Orakzai Social Hub ───────────────────────────────── */}
         <SocialHub />
+
+        {/* ── Orakzai Think Tank ───────────────────────────────── */}
+        <ThinkTank />
 
         {/* ── Live Telegram Feed ────────────────────────────────── */}
         <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}

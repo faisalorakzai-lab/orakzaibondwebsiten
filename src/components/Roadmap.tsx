@@ -141,7 +141,7 @@ const PHASES = [
   {
     phase: 1,
     title: "Foundation & Launch",
-    period: "Q2 2026",
+    period: "April 2026",
     color: "from-yellow-500 to-orange-600",
     glowColor: "shadow-yellow-500/40",
     borderColor: "border-yellow-500/50",
@@ -156,7 +156,7 @@ const PHASES = [
   {
     phase: 2,
     title: "Ecosystem Integration",
-    period: "Q3 - Q4 2026",
+    period: "May - Dec 2026",
     color: "from-blue-500 to-cyan-600",
     glowColor: "shadow-blue-500/40",
     borderColor: "border-blue-500/50",
