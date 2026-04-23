@@ -199,11 +199,9 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
       // Attempt to parse the TokensPurchased event from the receipt logs
       for (const log of receipt.logs) {
         try {
-          const parsed = icoContract.interface.parseLog({
-            topics: [...log.topics],
-            data: log.data
-          });
+          const parsed = icoContract.interface.parseLog(log);
           if (parsed?.name === "TokensPurchased") {
+            // In the ABI, 'tokens' is the 3rd input (index 2)
             tokenAmount = parsed.args.tokens || parsed.args[2];
             console.log("Found TokensPurchased event, tokens:", tokenAmount.toString());
             break;
