@@ -167,9 +167,13 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
       return;
     }
     
-    const finalReferrer = (referrer && referrer.startsWith("0x") && referrer.length === 42 && referrer.toLowerCase() !== address.toLowerCase()) 
-      ? referrer 
-      : (userStats?.referrer && userStats.referrer !== ZERO_ADDRESS ? userStats.referrer : ZERO_ADDRESS);
+    // Normalize and validate referrer
+    let finalReferrer = ZERO_ADDRESS;
+    if (referrer && referrer.startsWith("0x") && referrer.length === 42 && referrer.toLowerCase() !== address.toLowerCase()) {
+      finalReferrer = referrer;
+    } else if (userStats?.referrer && userStats.referrer !== ZERO_ADDRESS) {
+      finalReferrer = userStats.referrer;
+    }
 
     setTxStatus("pending");
     setTxError(null);
@@ -181,36 +185,39 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
       
       const value = parseEther(polAmount);
       
-      // Step 1: Purchase Tokens
+      // Step 1: Purchase Tokens on ICO Contract
+      // We pass the referrer to the ICO contract for its internal tracking
       const tx = await icoContract.buyTokens(finalReferrer, { value });
       setTxStatus("confirming");
       setTxHash(tx.hash);
       const receipt = await tx.wait(1);
       
-      // Step 2: Trigger Referral Distribution
-      // Find the TokensPurchased event to get the exact token amount
+      // Step 2: Trigger Referral Distribution on Referral Contract
+      // We MUST extract the token amount from the receipt to pass it to the referral contract
       let tokenAmount = BigInt(0);
-      const event = receipt.logs.find(log => {
+      for (const log of receipt.logs) {
         try {
           const parsed = icoContract.interface.parseLog(log);
-          return parsed?.name === "TokensPurchased";
-        } catch { return false; }
-      });
+          if (parsed?.name === "TokensPurchased") {
+            tokenAmount = parsed.args.tokens;
+            break;
+          }
+        } catch (e) { /* skip logs from other contracts */ }
+      }
 
-      if (event) {
-        const parsed = icoContract.interface.parseLog(event);
-        tokenAmount = parsed?.args?.tokens || BigInt(0);
+      // If TokensPurchased event wasn't found in receipt logs, calculate manually as fallback
+      if (tokenAmount === BigInt(0) && stats?.tokensPerPOL) {
+        tokenAmount = (value * BigInt(stats.tokensPerPOL));
       }
 
       if (tokenAmount > BigInt(0)) {
         try {
-          // This call triggers the 5-level commission distribution
+          // IMPORTANT: This call links the buyer to the referrer and distributes rewards
           const refTx = await refContract.distributeRewards(address, tokenAmount, finalReferrer);
           await refTx.wait(1);
+          console.log("Referral rewards distributed successfully");
         } catch (refErr) {
           console.error("Referral distribution failed:", refErr);
-          // We don't fail the whole buy process if referral fails, 
-          // but we log it for the user.
         }
       }
       
@@ -222,7 +229,7 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
       setTxStatus("error");
       setTxError(err.message || "Transaction failed.");
     }
-  }, [provider, address, userStats, fetchStats, fetchUserStats]);
+  }, [provider, address, userStats, stats, fetchStats, fetchUserStats]);
 
   return { 
     stats, 
