@@ -6,7 +6,6 @@ import {
   Clock, Coins, Users, CheckCircle2, Lock, ChevronDown, ChevronUp, Hash,
 } from "lucide-react";
 import LOTTERY_ABI from "@/lib/contractABI.json";
-import Navbar from "@/components/Navbar";
 import { useWallet } from "@/hooks/useWallet";
 
 const LOTTERY_ADDRESS = "0x5bc55d4b347e39b986864e28604ddca5de6357b7";
@@ -145,8 +144,6 @@ export default function WinnersPage() {
 
   return (
     <div className="min-h-screen w-full bg-background text-foreground flex flex-col overflow-x-hidden">
-      <Navbar address={address} onConnect={connect} />
-
       {/* ── Hero ──────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden pt-28 pb-16 border-b border-primary/10">
         <div className="absolute inset-0 pointer-events-none">
@@ -227,264 +224,142 @@ export default function WinnersPage() {
         {/* ── Round History Table ────────────────────────────────────── */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-2xl font-extrabold text-foreground">Round History</h2>
-              <p className="text-sm text-muted-foreground mt-0.5">All lottery rounds — fully transparent, permanently on-chain</p>
-            </div>
-            <div className="flex items-center gap-3">
-              {lastFetch > 0 && (
-                <span className="text-xs text-muted-foreground/60 font-mono hidden sm:block">
-                  Updated {elapsed(Math.floor(lastFetch / 1000))}
-                </span>
-              )}
-              <button onClick={load} disabled={loading}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-primary/25 bg-primary/8 text-primary text-xs font-semibold hover:bg-primary/15 transition-all disabled:opacity-50">
-                <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-                Refresh
-              </button>
-              <a href={`${EXPLORER}/address/${LOTTERY_ADDRESS}#events`} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-primary/25 bg-primary/8 text-primary text-xs font-semibold hover:bg-primary/15 transition-all">
-                <ExternalLink className="w-3.5 h-3.5" />
-                Polygonscan
-              </a>
+            <h2 className="text-xl font-bold flex items-center gap-2">
+              <RefreshCw className={`w-4 h-4 text-primary ${loading ? "animate-spin" : ""}`} />
+              Round History
+            </h2>
+            <div className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
+              Last Update: {lastFetch ? elapsed(Math.floor(lastFetch / 1000)) : "Never"}
             </div>
           </div>
 
-          {loading ? (
-            <div className="space-y-3">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-20 rounded-2xl border border-primary/10 bg-black/30 animate-pulse" />
-              ))}
-            </div>
-          ) : round ? (
-            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
-              className="rounded-2xl border border-primary/20 overflow-hidden bg-black/30 backdrop-blur">
-
-              {/* Round header row */}
-              <button onClick={() => setExpanded(expanded === round.id ? null : round.id)}
-                className="w-full flex items-center justify-between gap-4 px-6 py-5 hover:bg-primary/5 transition-colors text-left">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/25 flex items-center justify-center flex-shrink-0">
-                    <span className="text-primary font-extrabold text-sm font-mono">R1</span>
+          <div className="space-y-4">
+            {loading && !round ? (
+              <div className="py-20 text-center">
+                <RefreshCw className="w-8 h-8 text-primary/20 animate-spin mx-auto mb-4" />
+                <p className="text-sm text-muted-foreground font-mono">Querying Polygon PoS...</p>
+              </div>
+            ) : round ? (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                className="rounded-3xl border border-primary/20 bg-black/40 overflow-hidden">
+                {/* Header */}
+                <div className="p-6 flex flex-wrap items-center justify-between gap-4 bg-primary/5 border-b border-primary/10">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-black text-xl">
+                      #{round.id}
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground font-mono uppercase tracking-widest">Round ID</p>
+                      <p className="text-sm font-bold text-foreground">{formatTs(round.startTime)}</p>
+                    </div>
                   </div>
-                  <div>
-                    <div className="flex items-center gap-3 mb-0.5">
-                      <span className="font-bold text-foreground">Round 1 — Genesis Lottery</span>
-                      {statusBadge(round.status)}
+                  <div className="flex items-center gap-6">
+                    <div className="text-right hidden sm:block">
+                      <p className="text-[10px] text-muted-foreground uppercase font-bold">Total Pot</p>
+                      <p className="text-lg font-black text-primary">{round.totalPot} OKBOND</p>
                     </div>
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground font-mono">
-                      {round.startTime > 0 && <span><Clock className="w-3 h-3 inline mr-1" />{formatTs(round.startTime)}</span>}
-                      <span><Users className="w-3 h-3 inline mr-1" />{round.playerCount} players</span>
-                      <span><Coins className="w-3 h-3 inline mr-1" />{parseFloat(round.rewardPerWinner).toFixed(2)} OKBOND/winner</span>
-                    </div>
+                    {statusBadge(round.status)}
+                    <button onClick={() => setExpanded(expanded === round.id ? null : round.id)}
+                      className="p-2 rounded-xl hover:bg-white/5 transition-colors">
+                      {expanded === round.id ? <ChevronUp /> : <ChevronDown />}
+                    </button>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 flex-shrink-0">
-                  <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary/20 bg-primary/5 text-primary text-xs font-mono">
-                    <Trophy className="w-3.5 h-3.5" />
-                    {round.winners.length} / 5 winners
-                  </div>
-                  {expanded === round.id ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
-                </div>
-              </button>
 
-              {/* Expanded winner list */}
-              <AnimatePresence>
-                {expanded === round.id && (
-                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }} className="overflow-hidden border-t border-primary/10">
-
-                    {/* Column headers */}
-                    <div className="grid grid-cols-12 gap-3 px-6 py-3 bg-primary/5 text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-widest">
-                      <span className="col-span-1">Rank</span>
-                      <span className="col-span-5">Wallet Address</span>
-                      <span className="col-span-3">Reward</span>
-                      <span className="col-span-2">Status</span>
-                      <span className="col-span-1 text-right">Verify</span>
-                    </div>
-
-                    {round.winners.length > 0 ? (
-                      round.winners.map((w, i) => {
-                        const meta = RANK_META[Math.min(i, RANK_META.length - 1)];
-                        return (
-                          <motion.div key={w.address}
-                            initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}
-                            className="grid grid-cols-12 gap-3 items-center px-6 py-4 border-t border-primary/8 hover:bg-primary/5 transition-colors group">
-
-                            {/* Rank */}
-                            <div className="col-span-1 flex items-center gap-1.5">
-                              <motion.div className={`w-8 h-8 rounded-xl flex items-center justify-center ${meta.color}`}
-                                animate={{ boxShadow: [`0 0 4px ${meta.glow}`, `0 0 14px ${meta.glow}`, `0 0 4px ${meta.glow}`] }}
-                                transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3 }}>
-                                {meta.icon}
-                              </motion.div>
-                            </div>
-
-                            {/* Wallet */}
-                            <div className="col-span-5">
-                              <p className={`font-mono text-sm font-bold ${meta.color}`}>{meta.title}</p>
-                              <p className="font-mono text-xs text-muted-foreground mt-0.5 break-all">
-                                <span className="hidden md:inline">{w.address}</span>
-                                <span className="md:hidden">{shortAddr(w.address)}</span>
-                              </p>
-                            </div>
-
-                            {/* Reward */}
-                            <div className="col-span-3">
-                              <p className="text-sm font-bold text-foreground">
-                                {parseFloat(w.reward).toLocaleString(undefined, { maximumFractionDigits: 2 })} OKBOND
-                              </p>
-                              <p className="text-[10px] text-muted-foreground font-mono">Per-winner share</p>
-                            </div>
-
-                            {/* Claim status */}
-                            <div className="col-span-2">
-                              {w.claimed
-                                ? <span className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold text-green-400 bg-green-500/10 border border-green-500/20"><CheckCircle2 className="w-3 h-3" />Claimed</span>
-                                : <span className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold text-yellow-400 bg-yellow-500/10 border border-yellow-500/20"><Clock className="w-3 h-3" />Pending</span>}
-                            </div>
-
-                            {/* Polygonscan link */}
-                            <div className="col-span-1 flex justify-end">
-                              <a href={`${EXPLORER}/address/${w.address}`} target="_blank" rel="noopener noreferrer"
-                                className="w-8 h-8 rounded-lg border border-primary/20 bg-primary/5 flex items-center justify-center text-primary/40 hover:text-primary hover:border-primary/50 transition-all group-hover:scale-110">
-                                <ExternalLink className="w-3.5 h-3.5" />
-                              </a>
-                            </div>
-                          </motion.div>
-                        );
-                      })
-                    ) : (
-                      <div className="px-6 py-10 text-center">
-                        {round.status === "live" ? (
-                          <div className="space-y-2">
-                            <motion.div className="w-12 h-12 rounded-full bg-yellow-500/10 border border-yellow-500/25 flex items-center justify-center mx-auto"
-                              animate={{ boxShadow: ["0 0 6px rgba(234,179,8,0.2)", "0 0 20px rgba(234,179,8,0.5)", "0 0 6px rgba(234,179,8,0.2)"] }}
-                              transition={{ duration: 2, repeat: Infinity }}>
-                              <Clock className="w-5 h-5 text-yellow-400" />
-                            </motion.div>
-                            <p className="text-sm font-bold text-foreground">Lottery is Live — Winners Not Yet Selected</p>
-                            <p className="text-xs text-muted-foreground">Winners will be selected by the on-chain randomness algorithm at the close of this round.</p>
+                {/* Expanded Content */}
+                <AnimatePresence>
+                  {expanded === round.id && (
+                    <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="overflow-hidden">
+                      <div className="p-6 space-y-6">
+                        {round.winners.length > 0 ? (
+                          <div className="grid gap-3">
+                            <p className="text-[10px] text-muted-foreground uppercase font-black tracking-[0.2em] mb-2">Verified Winners</p>
+                            {round.winners.map((w, idx) => (
+                              <div key={w.address} className="group relative p-4 rounded-2xl border border-white/5 bg-white/5 hover:bg-primary/5 hover:border-primary/20 transition-all">
+                                <div className="flex items-center justify-between relative z-10">
+                                  <div className="flex items-center gap-4">
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border border-white/10 bg-black/40 ${RANK_META[idx]?.color || "text-muted-foreground"}`}>
+                                      {RANK_META[idx]?.icon || <Star className="w-4 h-4" />}
+                                    </div>
+                                    <div>
+                                      <div className="flex items-center gap-2">
+                                        <span className={`text-xs font-black uppercase tracking-widest ${RANK_META[idx]?.color || "text-muted-foreground"}`}>
+                                          {RANK_META[idx]?.title || "Winner"}
+                                        </span>
+                                        {w.claimed && <span className="text-[8px] px-1.5 py-0.5 rounded bg-green-500/20 text-green-400 font-bold uppercase">Claimed</span>}
+                                      </div>
+                                      <p className="text-sm font-mono text-foreground">{shortAddr(w.address)}</p>
+                                    </div>
+                                  </div>
+                                  <div className="text-right">
+                                    <p className="text-xs text-muted-foreground font-mono">Reward</p>
+                                    <p className="text-base font-black text-primary">{parseFloat(w.reward).toFixed(2)} OKBOND</p>
+                                  </div>
+                                  <a href={`${EXPLORER}/address/${w.address}`} target="_blank" rel="noreferrer"
+                                    className="ml-4 p-2 rounded-lg hover:bg-primary/20 text-muted-foreground hover:text-primary transition-all">
+                                    <ExternalLink className="w-4 h-4" />
+                                  </a>
+                                </div>
+                                {/* Rank Glow */}
+                                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none rounded-2xl"
+                                  style={{ background: `radial-gradient(circle at 20px 20px, ${RANK_META[idx]?.glow || "transparent"}, transparent 70%)` }} />
+                              </div>
+                            ))}
                           </div>
                         ) : (
-                          <div className="space-y-2">
-                            <Clock className="w-8 h-8 text-muted-foreground mx-auto" />
-                            <p className="text-sm text-muted-foreground">No round data available yet.</p>
+                          <div className="py-10 text-center border border-dashed border-white/10 rounded-2xl">
+                            <Lock className="w-8 h-8 text-muted-foreground/20 mx-auto mb-3" />
+                            <p className="text-sm text-muted-foreground font-mono">Winners not yet selected for this round.</p>
                           </div>
                         )}
-                      </div>
-                    )}
 
-                    {/* Round footer */}
-                    <div className="flex items-center justify-between px-6 py-3 bg-black/20 border-t border-primary/8 gap-4">
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground/70 font-mono">
-                        <ShieldCheck className="w-3.5 h-3.5 text-green-500/60" />
-                        Contract:{" "}
-                        <a href={`${EXPLORER}/address/${LOTTERY_ADDRESS}`} target="_blank" rel="noopener noreferrer"
-                          className="text-primary/60 hover:text-primary transition-colors">
-                          {LOTTERY_ADDRESS.slice(0, 12)}…{LOTTERY_ADDRESS.slice(-8)}
-                        </a>
+                        <div className="pt-6 border-t border-white/5 flex items-center justify-between">
+                          <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-mono">
+                            <Users className="w-3 h-3" /> {round.playerCount} Total Participants
+                          </div>
+                          <a href={`${EXPLORER}/address/${LOTTERY_ADDRESS}`} target="_blank" rel="noreferrer"
+                            className="text-[10px] font-bold text-primary hover:underline uppercase tracking-widest flex items-center gap-1">
+                            Contract Source <ExternalLink className="w-3 h-3" />
+                          </a>
+                        </div>
                       </div>
-                      <a href={`${EXPLORER}/address/${LOTTERY_ADDRESS}#events`} target="_blank" rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 text-xs text-primary/60 hover:text-primary font-mono transition-colors">
-                        <ExternalLink className="w-3 h-3" />
-                        View all events
-                      </a>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ) : (
-            <div className="text-center py-16 text-muted-foreground">
-              <p className="text-sm">Unable to fetch on-chain data. Please try refreshing.</p>
-            </div>
-          )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ) : (
+              <div className="py-20 text-center border border-dashed border-white/10 rounded-3xl">
+                <Trophy className="w-12 h-12 text-muted-foreground/10 mx-auto mb-4" />
+                <p className="text-muted-foreground font-mono">No round history found on-chain.</p>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* ── Future Rounds Placeholder ─────────────────────────────── */}
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-          className="rounded-2xl border border-dashed border-primary/15 bg-primary/3 p-8 text-center mb-12">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-3">
-            <Hash className="w-5 h-5 text-primary/50" />
+        {/* ── Footer Info ───────────────────────────────────────────── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="p-6 rounded-3xl border border-white/5 bg-white/5">
+            <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-green-400" />
+              Immutable Records
+            </h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              This page pulls data directly from the Orakzai Bond Smart Lottery contract. 
+              Once a winner is selected by the contract, it is impossible for anyone to alter the record.
+            </p>
           </div>
-          <p className="text-sm font-semibold text-foreground/60 mb-1">Round 2, 3, 4… coming soon</p>
-          <p className="text-xs text-muted-foreground max-w-sm mx-auto">Each new lottery round will appear here automatically — fully transparent, always on-chain. All round history is permanent and immutable.</p>
-        </motion.div>
-
-        {/* ── On-chain Proof Panel ──────────────────────────────────── */}
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-          className="rounded-2xl border border-primary/15 overflow-hidden bg-black/40 mb-12">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-primary/10 bg-primary/5">
-            <div className="flex items-center gap-2">
-              <motion.div
-                className="w-6 h-6 rounded-full bg-primary/15 border border-primary/30 flex items-center justify-center"
-                animate={{ boxShadow: ["0 0 4px rgba(234,179,8,0.2)", "0 0 14px rgba(234,179,8,0.6)", "0 0 4px rgba(234,179,8,0.2)"] }}
-                transition={{ duration: 2.5, repeat: Infinity }}>
-                <ShieldCheck className="w-3.5 h-3.5 text-primary" />
-              </motion.div>
-              <span className="text-sm font-bold text-foreground uppercase tracking-widest">On-chain Proof</span>
-            </div>
-            <a href={`${EXPLORER}/address/${LOTTERY_ADDRESS}`} target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-xs text-primary font-mono hover:underline">
-              <ExternalLink className="w-3.5 h-3.5" />
-              Open on Polygonscan
-            </a>
+          <div className="p-6 rounded-3xl border border-white/5 bg-white/5">
+            <h3 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
+              <ExternalLink className="w-4 h-4 text-blue-400" />
+              Verify on PolygonScan
+            </h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              You can verify every transaction, player entry, and winner selection by visiting the 
+              contract address on the official Polygon explorer.
+            </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-primary/8">
-            {[
-              { label: "Lottery Contract",   value: LOTTERY_ADDRESS,   link: `${EXPLORER}/address/${LOTTERY_ADDRESS}` },
-              { label: "OKBOND Token",        value: TOKEN_ADDRESS,     link: `${EXPLORER}/address/${TOKEN_ADDRESS}`   },
-            ].map((c) => (
-              <div key={c.label} className="px-6 py-4 bg-black/30">
-                <p className="text-[10px] font-mono text-muted-foreground/70 uppercase tracking-widest mb-1">{c.label}</p>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs text-primary/80 break-all">{c.value}</span>
-                  <a href={c.link} target="_blank" rel="noopener noreferrer"
-                    className="flex-shrink-0 text-primary/40 hover:text-primary transition-colors">
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="px-6 py-4 grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-primary/8">
-            {[
-              { label: "Network",    value: "Polygon PoS",    color: "text-purple-400" },
-              { label: "Chain ID",   value: "137",            color: "text-blue-400"   },
-              { label: "Standard",   value: "ERC-20 / Custom Lottery", color: "text-green-400"  },
-              { label: "Custody",    value: "Non-Custodial",  color: "text-primary"    },
-            ].map((s) => (
-              <div key={s.label}>
-                <p className="text-[10px] font-mono text-muted-foreground/60 uppercase tracking-wider mb-0.5">{s.label}</p>
-                <p className={`text-xs font-bold font-mono ${s.color}`}>{s.value}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* ── CTA ──────────────────────────────────────────────────── */}
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-          className="text-center">
-          <p className="text-muted-foreground mb-4 text-sm">Want your name on this board?</p>
-          <motion.a href="/#lottery" whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl font-extrabold text-background bg-primary hover:brightness-110 shadow-[0_0_30px_rgba(234,179,8,0.4)] hover:shadow-[0_0_50px_rgba(234,179,8,0.6)] transition-all cursor-pointer">
-            <Trophy className="w-5 h-5" />
-            Enter the Lottery
-          </motion.a>
-        </motion.div>
+        </div>
       </main>
-
-      {/* ── Footer strip ─────────────────────────────────────────────── */}
-      <div className="border-t border-primary/10 py-6 text-center">
-        <p className="text-xs text-muted-foreground/50 font-mono">
-          OKBOND Lottery · Polygon PoS · Contract{" "}
-          <a href={`${EXPLORER}/address/${LOTTERY_ADDRESS}`} target="_blank" rel="noopener noreferrer"
-            className="text-primary/50 hover:text-primary transition-colors">
-            {LOTTERY_ADDRESS.slice(0, 10)}…
-          </a>
-        </p>
-      </div>
     </div>
   );
 }
