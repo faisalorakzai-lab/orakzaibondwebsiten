@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase, Profile } from "@/lib/supabase";
-import { Loader2, CheckCircle, XCircle, Award, UserCheck, Building2, Upload, Trash2 } from "lucide-react";
+import { Loader2, CheckCircle, XCircle, Award, UserCheck, Building2, Upload, Trash2, ExternalLink } from "lucide-react";
+import { Link } from "wouter";
 import { useWallet } from "@/hooks/useWallet";
 
 const ADMIN_WALLET = "0x9b02e2Edd6F58D626aAa91889708dbF39dfa8Cd7";
@@ -222,7 +223,16 @@ export default function CommunityHub() {
               <div key={profile.address} className="p-4 border border-white/10 rounded-xl">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                   <div>
-                    <p className="text-sm text-foreground font-bold">{profile.username || 'Unnamed'} ({profile.address.slice(0, 6)}...{profile.address.slice(-4)})</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm text-foreground font-bold">{profile.username || 'Unnamed'} ({profile.address.slice(0, 6)}...{profile.address.slice(-4)})</p>
+                      {profile.username && (
+                        <Link href={`/profile/${profile.username}`}>
+                          <a className="text-primary hover:text-primary/80 transition-colors">
+                            <ExternalLink size={14} />
+                          </a>
+                        </Link>
+                      )}
+                    </div>
                     <p className="text-xs text-muted-foreground">Current Badge: {profile.badge || 'None'}</p>
                   </div>
                   <select

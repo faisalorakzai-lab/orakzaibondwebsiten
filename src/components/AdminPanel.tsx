@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase, Profile, Post } from "@/lib/supabase";
-import { Loader2, CheckCircle, XCircle, Award, UserCheck, Building2 } from "lucide-react";
+import { Loader2, CheckCircle, XCircle, Award, UserCheck, Building2, ExternalLink } from "lucide-react";
+import { Link } from "wouter";
 import { useWallet } from "@/hooks/useWallet";
 
 const BADGE_OPTIONS = [
@@ -151,7 +152,16 @@ export default function AdminPanel() {
               <div key={post.id} className="p-4 border border-white/10 rounded-xl flex items-center justify-between">
                 <div>
                   <p className="text-sm text-foreground">{post.content}</p>
-                  <p className="text-xs text-muted-foreground">by {post.profiles?.username || 'Unknown'} ({post.address.slice(0, 6)}...{post.address.slice(-4)})</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-xs text-muted-foreground">by {post.profiles?.username || 'Unknown'} ({post.address.slice(0, 6)}...{post.address.slice(-4)})</p>
+                    {post.profiles?.username && (
+                      <Link href={`/profile/${post.profiles.username}`}>
+                        <a className="text-primary hover:text-primary/80 transition-colors">
+                          <ExternalLink size={12} />
+                        </a>
+                      </Link>
+                    )}
+                  </div>
                 </div>
                 <div className="flex gap-2">
                   <button 
@@ -179,7 +189,16 @@ export default function AdminPanel() {
             {profiles.map((profile) => (
               <div key={profile.address} className="p-4 border border-white/10 rounded-xl flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-foreground">{profile.username} ({profile.address.slice(0, 6)}...{profile.address.slice(-4)})</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm text-foreground">{profile.username} ({profile.address.slice(0, 6)}...{profile.address.slice(-4)})</p>
+                    {profile.username && (
+                      <Link href={`/profile/${profile.username}`}>
+                        <a className="text-primary hover:text-primary/80 transition-colors">
+                          <ExternalLink size={14} />
+                        </a>
+                      </Link>
+                    )}
+                  </div>
                   <p className="text-xs text-muted-foreground">Current Badge: {profile.badge || 'None'}</p>
                 </div>
                 <select

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "wouter";
 import { 
   User, Edit2, Camera, Send, Image as ImageIcon, 
   BadgeCheck, Shield, Crown, MessageSquare, 
@@ -404,15 +405,19 @@ export default function SocialHub() {
                 className="glass-card rounded-3xl border border-white/5 p-6 hover:border-primary/20 transition-all group"
               >
                 <div className="flex gap-4">
-                  <div className="w-12 h-12 rounded-full border border-primary/20 overflow-hidden flex-shrink-0 bg-black/40">
-                    {post.profiles?.avatar_url ? (
-                      <img src={post.profiles.avatar_url} className="w-full h-full object-cover" />
-                    ) : <User size={24} className="m-auto mt-3 text-primary/10" />}
-                  </div>
+                  <Link href={`/profile/${post.profiles?.username || 'investor'}`}>
+                    <div className="w-12 h-12 rounded-full border border-primary/20 overflow-hidden flex-shrink-0 bg-black/40 cursor-pointer hover:border-primary/50 transition-all">
+                      {post.profiles?.avatar_url ? (
+                        <img src={post.profiles.avatar_url} className="w-full h-full object-cover" />
+                      ) : <User size={24} className="m-auto mt-3 text-primary/10" />}
+                    </div>
+                  </Link>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-2">
-                        <span className="font-black text-sm text-foreground">{post.profiles?.username || 'Investor'}</span>
+                        <Link href={`/profile/${post.profiles?.username || 'investor'}`}>
+                          <span className="font-black text-sm text-foreground hover:text-primary transition-colors cursor-pointer">{post.profiles?.username || 'Investor'}</span>
+                        </Link>
                         {post.profiles?.branding_logo ? (
                           <img src={post.profiles.branding_logo} alt="Company Logo" className="w-4 h-4 rounded-full object-cover" />
                         ) : post.profiles?.badge && BADGE_CONFIG[post.profiles.badge] ? (
@@ -467,14 +472,18 @@ export default function SocialHub() {
                           <div className="pt-6 space-y-4">
                             {comments[post.id]?.map((comment) => (
                               <div key={comment.id} className="flex gap-3">
-                                <div className="w-8 h-8 rounded-full border border-white/5 overflow-hidden flex-shrink-0 bg-black/40">
-                                  {comment.profiles?.avatar_url ? (
-                                    <img src={comment.profiles.avatar_url} className="w-full h-full object-cover" />
-                                  ) : <User size={16} className="m-auto mt-2 text-primary/10" />}
-                                </div>
+                                <Link href={`/profile/${comment.profiles?.username || 'investor'}`}>
+                                  <div className="w-8 h-8 rounded-full border border-white/5 overflow-hidden flex-shrink-0 bg-black/40 cursor-pointer hover:border-primary/30 transition-all">
+                                    {comment.profiles?.avatar_url ? (
+                                      <img src={comment.profiles.avatar_url} className="w-full h-full object-cover" />
+                                    ) : <User size={16} className="m-auto mt-2 text-primary/10" />}
+                                  </div>
+                                </Link>
                                 <div className="flex-1 bg-white/5 rounded-2xl p-3">
                                   <div className="flex items-center gap-2 mb-1">
-                                    <span className="text-[10px] font-bold text-foreground">{comment.profiles?.username || 'Investor'}</span>
+                                    <Link href={`/profile/${comment.profiles?.username || 'investor'}`}>
+                                      <span className="text-[10px] font-bold text-foreground hover:text-primary transition-colors cursor-pointer">{comment.profiles?.username || 'Investor'}</span>
+                                    </Link>
                                     <span className="text-[9px] text-muted-foreground/40 font-mono">{comment.address.slice(0,6)}...</span>
                                   </div>
                                   <p className="text-xs text-muted-foreground/80">{comment.content}</p>

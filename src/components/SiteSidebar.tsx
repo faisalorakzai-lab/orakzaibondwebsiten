@@ -19,6 +19,7 @@ const NAV_ITEMS = [
 ];
 
 const PAGE_LINKS = [
+  { label: "Profile", icon: <Users    className="w-4 h-4" />, href: "/community" },
   { label: "System",  icon: <Cpu      className="w-4 h-4" />, href: "/system"  },
   { label: "Winners", icon: <Trophy   className="w-4 h-4" />, href: "/winners" },
   { label: "Rules",   icon: <FileText className="w-4 h-4" />, href: "/rules"   },
