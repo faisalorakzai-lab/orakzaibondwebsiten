@@ -724,7 +724,7 @@ export default function Community() {
                 </div>
                 <div className="text-right">
                   <p className="text-xs font-extrabold text-primary font-mono">Faisal Orakzai</p>
-                  <p className="text-[10px] text-muted-foreground/50 font-mono">Orakzai Group · 2024</p>
+                  <p className="text-[10px] text-muted-foreground/50 font-mono">Orakzai Group · 2026</p>
                 </div>
               </div>
             </div>

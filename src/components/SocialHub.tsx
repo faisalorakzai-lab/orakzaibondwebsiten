@@ -10,8 +10,8 @@ import { supabase, Profile, Post, Comment } from "@/lib/supabase";
 import { useWallet } from "@/hooks/useWallet";
 
 const BADGE_CONFIG = {
-  blue: { icon: BadgeCheck, color: "text-blue-400", label: "Verified Investor" },
-  green: { icon: Shield, color: "text-emerald-400", label: "Trusted Leader" },
+  blue: { icon: BadgeCheck, color: "text-blue-400", label: "Verified" },
+  green: { icon: Shield, color: "text-emerald-400", label: "Leader" },
   yellow: { icon: Crown, color: "text-amber-400", label: "VIP" },
   team: { icon: BadgeCheck, color: "text-primary", label: "Official Team", isLogo: true },
 };
