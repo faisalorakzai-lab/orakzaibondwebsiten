@@ -519,8 +519,7 @@ export default function ICOModule({
           </div>
         </motion.div>
 
-        {/* ── Countdown Timer ──────────────────────────────────────────────── */}
-        <ICOCountdown />
+        {/* ── Countdown Timer Removed ──────────────────────────────────────── */}
 
         {/* ── 3 Phase Cards ────────────────────────────────────────────────── */}
         <ICOPhaseCards />

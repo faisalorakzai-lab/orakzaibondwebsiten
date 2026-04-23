@@ -121,9 +121,18 @@ export default function ICOPage() {
                   <div key={i} className="p-4 rounded-2xl border border-white/5 bg-white/5"><div className="text-primary mb-2">{stat.icon}</div><p className="text-[10px] text-muted-foreground uppercase font-bold">{stat.label}</p><p className="text-lg font-black">{stat.value}</p></div>
                 ))}
               </div>
-              <div className="space-y-6">
-                <h3 className="text-sm font-bold text-primary uppercase tracking-widest flex items-center gap-2"><Clock className="w-4 h-4" />Phase 1 Countdown</h3>
-                <div className="flex gap-3 sm:gap-6"><CountBox value={cd.days} label="Days" /><CountBox value={cd.hours} label="Hours" /><CountBox value={cd.minutes} label="Minutes" /><CountBox value={cd.seconds} label="Seconds" /></div>
+              <div className="p-6 rounded-3xl border border-emerald-500/30 bg-emerald-500/5 relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <Rocket className="w-20 h-20 text-emerald-500" />
+                </div>
+                <div className="relative z-10">
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-emerald-500 font-black text-xs uppercase tracking-widest">ICO Phase 1 is LIVE</span>
+                  </div>
+                  <h3 className="text-2xl font-black mb-2">Join the Orakzai Revolution</h3>
+                  <p className="text-sm text-muted-foreground max-w-md">Phase 1 is currently active at the lowest entry price of <span className="text-primary font-bold">$0.15</span>. Secure your OKBOND tokens before the price increases in Phase 2.</p>
+                </div>
               </div>
               {address && (
                 <div className="space-y-6">

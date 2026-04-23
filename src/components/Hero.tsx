@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Clock } from "lucide-react";
+import { Rocket, Zap, ShieldCheck, TrendingUp } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
+import { useICO } from "@/hooks/useICO";
+import { useWallet } from "@/hooks/useWallet";
 
 const coinImage = "/okbond-logo.png";
 const ICO_URL = "/ico";
@@ -45,17 +47,12 @@ const PillarIcon = ({ type }: { type: "cashback" | "protection" | "verified" | "
             </feMerge>
           </filter>
         </defs>
-        {/* 3D Metallic background sphere */}
         <circle cx="32" cy="32" r="28" fill="url(#cashback-grad)" opacity="0.2" filter="url(#cashback-glow)" />
         <circle cx="32" cy="28" r="26" fill="url(#cashback-grad)" opacity="0.1" />
-        {/* Main wallet shape with metallic effect */}
         <rect x="16" y="20" width="32" height="24" rx="4" fill="url(#cashback-grad)" stroke="url(#cashback-gold)" strokeWidth="2" filter="url(#cashback-shadow)" />
-        {/* Metallic highlight */}
         <rect x="16" y="20" width="32" height="6" rx="4" fill="url(#cashback-gold)" opacity="0.3" />
-        {/* Coin slots */}
         <circle cx="24" cy="32" r="3" fill="#fbbf24" filter="url(#cashback-shadow)" />
         <circle cx="40" cy="32" r="3" fill="#fbbf24" filter="url(#cashback-shadow)" />
-        {/* Smile curve */}
         <path d="M 20 28 Q 32 35 44 28" stroke="url(#cashback-gold)" strokeWidth="2" fill="none" strokeLinecap="round" filter="url(#cashback-glow)" />
       </svg>
     ),
@@ -83,11 +80,8 @@ const PillarIcon = ({ type }: { type: "cashback" | "protection" | "verified" | "
             </feMerge>
           </filter>
         </defs>
-        {/* 3D Shield with metallic effect */}
         <path d="M 32 14 L 20 20 L 20 32 Q 20 45 32 50 Q 44 45 44 32 L 44 20 Z" fill="url(#protection-grad)" opacity="0.2" stroke="url(#protection-gold)" strokeWidth="2" filter="url(#protection-glow)" />
-        {/* Metallic highlight on shield */}
         <path d="M 32 14 L 20 20 L 20 28 Q 20 35 32 38 Q 40 35 40 28 L 40 20 Z" fill="url(#protection-gold)" opacity="0.25" />
-        {/* Checkmark */}
         <path d="M 28 32 L 32 36 L 40 26" stroke="url(#protection-gold)" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" filter="url(#protection-glow)" />
       </svg>
     ),
@@ -115,11 +109,8 @@ const PillarIcon = ({ type }: { type: "cashback" | "protection" | "verified" | "
             </feMerge>
           </filter>
         </defs>
-        {/* 3D Circle with metallic effect */}
         <circle cx="32" cy="32" r="18" fill="url(#verified-grad)" opacity="0.2" stroke="url(#verified-gold)" strokeWidth="2" filter="url(#verified-glow)" />
-        {/* Metallic highlight */}
         <circle cx="32" cy="26" r="16" fill="url(#verified-gold)" opacity="0.2" />
-        {/* Checkmark */}
         <path d="M 26 32 L 30 36 L 38 28" stroke="url(#verified-gold)" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" filter="url(#verified-glow)" />
       </svg>
     ),
@@ -147,13 +138,9 @@ const PillarIcon = ({ type }: { type: "cashback" | "protection" | "verified" | "
             </feMerge>
           </filter>
         </defs>
-        {/* Outer ring with metallic effect */}
         <circle cx="32" cy="32" r="16" fill="none" stroke="url(#vesting-grad)" strokeWidth="2" opacity="0.4" filter="url(#vesting-glow)" />
-        {/* Inner circle */}
         <circle cx="32" cy="32" r="12" fill="url(#vesting-grad)" opacity="0.15" stroke="url(#vesting-gold)" strokeWidth="1.5" filter="url(#vesting-shadow)" />
-        {/* Metallic highlight */}
         <circle cx="32" cy="26" r="10" fill="url(#vesting-gold)" opacity="0.2" />
-        {/* Clock hand */}
         <path d="M 32 24 L 32 32 L 38 38" stroke="url(#vesting-gold)" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" filter="url(#vesting-glow)" />
       </svg>
     ),
@@ -196,53 +183,21 @@ export default function Hero({ onConnect, address }: HeroProps) {
   const [coinSpunIn, setCoinSpunIn] = useState(false);
   const [sloganIdx, setSloganIdx] = useState(0);
   const floatControls = useAnimation();
+  
+  const { provider } = useWallet();
+  const { stats } = useICO(provider, address);
 
-  // ── Countdown Logic ──
-  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+  // Phase 1 constants
+  const PHASE1_SUPPLY = 75000;
+  const tokensSold = stats ? parseFloat(stats.totalTokensSold) : 0;
+  const progress = Math.min((tokensSold / PHASE1_SUPPLY) * 100, 100);
 
   useEffect(() => {
-    const target = new Date();
-    target.setDate(target.getDate() + 1);
-    target.setHours(12, 0, 0, 0);
-
-    const updateTimer = () => {
-      const now = new Date().getTime();
-      const distance = target.getTime() - now;
-
-      if (distance < 0) {
-        setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
-        return false;
-      }
-
-      setTimeLeft({
-        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((distance % (1000 * 60)) / 1000),
-      });
-      return true;
-    };
-
-    updateTimer();
-    const timer = setInterval(() => {
-      if (!updateTimer()) clearInterval(timer);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const onCoinAnimationComplete = useCallback(async () => {
-    if (coinSpunIn) return;
-    setCoinSpunIn(true);
-    floatControls.start({
-      y: [0, -22, 0],
-      rotateZ: [0, 2.5, 0, -2.5, 0],
-      transition: { duration: 5.5, repeat: Infinity, ease: "easeInOut" },
-    });
     const cycle = setInterval(() => {
       setSloganIdx((i) => (i + 1) % SLOGANS.length);
     }, 3200);
     return () => clearInterval(cycle);
-  }, [coinSpunIn, floatControls]);
+  }, []);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-20">
@@ -253,31 +208,55 @@ export default function Hero({ onConnect, address }: HeroProps) {
 
       <div className="container mx-auto px-4 relative z-10 flex flex-col items-center text-center">
         
-        {/* Premium Countdown Timer */}
+        {/* Phase 1 Live Progress Bar */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mb-16 p-1 rounded-3xl bg-gradient-to-r from-primary/50 via-yellow-500/60 to-primary/50 shadow-[0_0_40px_rgba(234,179,8,0.4)]"
+          className="w-full max-w-2xl mb-12"
         >
-          <div className="bg-background/95 backdrop-blur-2xl rounded-[22px] px-10 py-8 flex flex-col items-center border border-white/5">
-            <div className="flex items-center gap-3 mb-6">
-              <Clock className="w-6 h-6 text-primary animate-pulse" />
-              <span className="text-primary font-mono text-sm font-black uppercase tracking-[0.3em]">ICO PHASE 1 STARTING IN</span>
-            </div>
-            <div className="flex gap-8 md:gap-14">
-              {[
-                { label: "Hours", value: timeLeft.hours },
-                { label: "Minutes", value: timeLeft.minutes },
-                { label: "Seconds", value: timeLeft.seconds },
-              ].map((unit) => (
-                <div key={unit.label} className="flex flex-col items-center">
-                  <span className="text-5xl md:text-7xl font-black font-mono text-foreground tabular-nums tracking-tighter leading-none">
-                    {String(unit.value || 0).padStart(2, '0')}
-                  </span>
-                  <span className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground/70 mt-2">{unit.label}</span>
+          <div className="bg-background/95 backdrop-blur-2xl rounded-[28px] p-6 md:p-8 border border-white/10 shadow-[0_0_50px_rgba(234,179,8,0.15)] relative overflow-hidden group">
+            {/* Animated background glow */}
+            <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 blur-[80px] rounded-full group-hover:bg-primary/20 transition-all duration-700" />
+            
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+              <div className="flex flex-col items-center md:items-start text-center md:text-left">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="flex h-2 w-2 relative">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </div>
+                  <span className="text-emerald-500 font-black text-xs uppercase tracking-[0.3em]">ICO Phase 1 is LIVE</span>
                 </div>
-              ))}
+                <h2 className="text-3xl md:text-4xl font-black text-foreground flex items-baseline gap-2">
+                  $0.15 <span className="text-xs text-muted-foreground font-bold uppercase tracking-widest">per OKBOND</span>
+                </h2>
+              </div>
+
+              <div className="flex flex-col items-center md:items-end w-full md:w-auto gap-2">
+                <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">
+                  <div className="flex items-center gap-1.5">
+                    <Zap className="w-3 h-3 text-primary" />
+                    <span>Polygon Network</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <ShieldCheck className="w-3 h-3 text-emerald-500" />
+                    <span>Audited</span>
+                  </div>
+                </div>
+                
+                <div className="w-full md:w-64 h-3 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progress}%` }}
+                    transition={{ duration: 1.5, ease: "easeOut" }}
+                    className="h-full bg-gradient-to-r from-primary via-yellow-400 to-primary shadow-[0_0_15px_rgba(234,179,8,0.5)]"
+                  />
+                </div>
+                <div className="flex justify-between w-full md:w-64 text-[10px] font-black uppercase tracking-tighter mt-1">
+                  <span className="text-primary">{tokensSold.toLocaleString()} SOLD</span>
+                  <span className="text-muted-foreground">{PHASE1_SUPPLY.toLocaleString()} TOTAL</span>
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -318,7 +297,6 @@ export default function Hero({ onConnect, address }: HeroProps) {
               </Button>
             )}
             
-            {/* Premium "BUY ICO NOW" Button with Neon Glow */}
             <motion.a
               href={ICO_URL}
               whileHover={{ scale: 1.05, boxShadow: "0 0 60px rgba(234,179,8,0.8), 0 0 100px rgba(234,179,8,0.4)" }}
@@ -328,13 +306,9 @@ export default function Hero({ onConnect, address }: HeroProps) {
                 boxShadow: "0 0 30px rgba(234,179,8,0.5), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 60px rgba(234,179,8,0.3)",
               }}
             >
-              {/* Animated background glow */}
               <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
-              {/* Checkmark SVG */}
-              <svg className="w-6 h-6 relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
+              <Rocket className="w-6 h-6 relative z-10" />
               
               <span className="relative z-10">BUY ICO NOW</span>
             </motion.a>
@@ -354,13 +328,9 @@ export default function Hero({ onConnect, address }: HeroProps) {
                   boxShadow: `0 0 20px rgba(59,130,246,0.3), inset 0 1px 0 rgba(255,255,255,0.1)`,
                 }}
               >
-                {/* Animated neon border glow */}
                 <div className={`absolute inset-0 rounded-2xl border ${pillar.borderColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm`} />
-                
-                {/* Animated gradient overlay on hover */}
                 <div className={`absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:to-blue-500/5 transition-all duration-500 rounded-2xl`} />
 
-                {/* Icon Container with 3D effect */}
                 <div className={`relative w-14 h-14 rounded-xl bg-gradient-to-br ${pillar.color} mb-4 p-3 group-hover:scale-110 transition-transform duration-300`}
                   style={{
                     boxShadow: `0 8px 16px rgba(59,130,246,0.3), inset 0 1px 0 rgba(255,255,255,0.2)`,
@@ -369,7 +339,6 @@ export default function Hero({ onConnect, address }: HeroProps) {
                   <PillarIcon type={pillar.type} />
                 </div>
 
-                {/* Text with modern typography */}
                 <p className="text-base font-black text-foreground leading-snug relative z-10 tracking-tight">{pillar.title}</p>
               </motion.div>
             ))}
