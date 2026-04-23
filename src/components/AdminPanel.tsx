@@ -43,7 +43,7 @@ export default function AdminPanel() {
     try {
       const { data, error } = await supabase
         .from("posts")
-        .select("*, profiles(*)")
+        .select("*, profiles:address(*)")
         .eq("type", "think_tank")
         .eq("status", "pending")
         .order("created_at", { ascending: false });

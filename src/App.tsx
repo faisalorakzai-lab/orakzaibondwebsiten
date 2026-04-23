@@ -23,6 +23,7 @@ import WinnersPage from "./pages/WinnersPage";
 import LotteryPage from "./pages/LotteryPage";
 import AdminPage from "./pages/AdminPage";
 import SecretAdminPage from "./pages/SecretAdminPage";
+import CommunityHubPage from "./pages/CommunityHubPage";
 import NotFound from "./pages/not-found";
 
 console.log("App.tsx module loaded");
@@ -77,6 +78,7 @@ function App() {
           <Route path="/winners" component={WinnersPage} />
           <Route path="/admin" component={AdminPage} />
           <Route path="/secret-admin" component={SecretAdminPage} />
+          <Route path="/community-hub" component={CommunityHubPage} />
           <Route component={NotFound} />
         </Switch>
       </main>

@@ -11,6 +11,7 @@ export type Profile = {
   bio: string | null;
   avatar_url: string | null;
   badge: 'blue' | 'green' | 'yellow' | 'team' | null;
+  branding_logo: string | null;
   followers_count: number;
   following_count: number;
   created_at: string;

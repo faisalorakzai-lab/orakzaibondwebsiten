@@ -12,7 +12,7 @@ import { useWallet } from "@/hooks/useWallet";
 const BADGE_CONFIG = {
   blue: { icon: BadgeCheck, color: "text-blue-400", label: "Verified" },
   green: { icon: Shield, color: "text-emerald-400", label: "Leader" },
-  yellow: { icon: Crown, color: "text-amber-400", label: "VIP" },
+  yellow: { icon: Crown, color: "text-amber-400", label: "Companies & Elite" },
   team: { icon: BadgeCheck, color: "text-primary", label: "Official Team", isLogo: true },
 };
 
@@ -87,7 +87,7 @@ export default function SocialHub() {
     try {
       const { data, error: fetchError } = await supabase
         .from('posts')
-        .select('*, profiles(*)')
+        .select('*, profiles:address(*)')
         .order('created_at', { ascending: false })
         .limit(50);
 
@@ -203,7 +203,7 @@ export default function SocialHub() {
           address: address.toLowerCase(),
           content: newPost,
         })
-        .select('*, profiles(*)')
+        .select('*, profiles:address(*)')
         .single();
 
       if (postError) throw postError;
@@ -238,7 +238,7 @@ export default function SocialHub() {
   async function fetchComments(postId: string) {
     const { data } = await supabase
       .from('comments')
-      .select('*, profiles(*)')
+      .select('*, profiles:address(*)')
       .eq('post_id', postId)
       .order('created_at', { ascending: true });
     if (data) setComments(prev => ({ ...prev, [postId]: data }));
@@ -254,7 +254,7 @@ export default function SocialHub() {
           address: address.toLowerCase(),
           content: newComment
         })
-        .select('*, profiles(*)')
+        .select('*, profiles:address(*)')
         .single();
       
       if (data) {
@@ -324,15 +324,21 @@ export default function SocialHub() {
           <div className="flex-1 text-center md:text-left">
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
               <h2 className="text-2xl font-black text-foreground">{profile?.username || 'Orakzai Investor'}</h2>
-              {profile?.badge && BADGE_CONFIG[profile.badge] && (
+              {(profile?.branding_logo || (profile?.badge && BADGE_CONFIG[profile.badge])) && (
                 <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20">
-                  {BADGE_CONFIG[profile.badge].isLogo ? (
-                    <img src="/son-of-orakzai-logo.jpg" className="w-3 h-3 rounded-full" />
-                  ) : (
-                    <BadgeCheck size={12} className={BADGE_CONFIG[profile.badge].color} />
-                  )}
-                  <span className={`text-[10px] font-bold uppercase tracking-tighter ${BADGE_CONFIG[profile.badge].color}`}>
-                    {BADGE_CONFIG[profile.badge].label}
+                  {profile?.branding_logo ? (
+                    <img src={profile.branding_logo} alt="Company Logo" className="w-4 h-4 rounded-full object-cover" />
+                  ) : profile?.badge && BADGE_CONFIG[profile.badge] ? (
+                    <>
+                      {BADGE_CONFIG[profile.badge].isLogo ? (
+                        <img src="/son-of-orakzai-logo.jpg" className="w-3 h-3 rounded-full" />
+                      ) : (
+                        <BadgeCheck size={12} className={BADGE_CONFIG[profile.badge].color} />
+                      )}
+                    </>
+                  ) : null}
+                  <span className={`text-[10px] font-bold uppercase tracking-tighter ${profile?.badge && BADGE_CONFIG[profile.badge] ? BADGE_CONFIG[profile.badge].color : 'text-primary'}`}>
+                    {profile?.branding_logo ? 'Branded' : (profile?.badge && BADGE_CONFIG[profile.badge] ? BADGE_CONFIG[profile.badge].label : '')}
                   </span>
                 </div>
               )}
@@ -407,9 +413,11 @@ export default function SocialHub() {
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-2">
                         <span className="font-black text-sm text-foreground">{post.profiles?.username || 'Investor'}</span>
-                        {post.profiles?.badge && BADGE_CONFIG[post.profiles.badge] && (
+                        {post.profiles?.branding_logo ? (
+                          <img src={post.profiles.branding_logo} alt="Company Logo" className="w-4 h-4 rounded-full object-cover" />
+                        ) : post.profiles?.badge && BADGE_CONFIG[post.profiles.badge] ? (
                           <BadgeCheck size={14} className={BADGE_CONFIG[post.profiles.badge].color} />
-                        )}
+                        ) : null}
                         <span className="text-[10px] text-muted-foreground/40 font-mono hidden sm:inline">{post.address.slice(0,6)}...{post.address.slice(-4)}</span>
                       </div>
                       <span className="text-[10px] text-muted-foreground font-mono">
