@@ -350,10 +350,10 @@ export default function SecretAdminPage() {
 
       // Load User Rows with Supabase enrichment
       const { data: profiles } = await supabase.from('profiles').select('*');
-      const profileMap = new Map(profiles?.map(p => [p.address.toLowerCase(), p]));
+      const profileMap = new Map((profiles || [])?.map(p => [p.address.toLowerCase(), p]));
 
       const rows: UserRow[] = await Promise.all(
-        plist.map(async (addr: string) => {
+        (plist || []).map(async (addr: string) => {
           const b = await token.balanceOf(addr);
           const p = profileMap.get(addr.toLowerCase());
           return {

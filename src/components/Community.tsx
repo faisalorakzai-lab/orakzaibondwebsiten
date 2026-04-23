@@ -177,7 +177,7 @@ const EVENTS = [
   {
     type: "AMA",
     title: "Ask Me Anything — Faisal Orakzai",
-    date: "May 3, 2025",
+    date: "May 3, 2026",
     time: "8:00 PM PKT",
     platform: "Telegram Live",
     icon: Mic2,
@@ -189,7 +189,7 @@ const EVENTS = [
   {
     type: "LOTTERY",
     title: "Mega Lottery Draw — Phase 1 Final",
-    date: "June 9, 2025",
+    date: "June 9, 2026",
     time: "10:00 PM PKT",
     platform: "On-Chain Draw",
     icon: Trophy,
