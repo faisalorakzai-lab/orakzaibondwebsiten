@@ -35,7 +35,7 @@ const ERC20_ABI = [
 ];
 
 type TxPhase = "idle" | "pending" | "success" | "failed";
-type AdminTab = "dashboard" | "analytics" | "notifications" | "lottery" | "players" | "treasury" | "staking" | "lending";
+type AdminTab = "dashboard" | "analytics" | "notifications" | "lottery" | "players" | "treasury" | "staking" | "lending" | "community";
 
 interface PlayerRow {
   address: string;
@@ -114,10 +114,11 @@ function ChartTip({ active, payload, label, unit = "" }: { active?: boolean; pay
 }
 
 // ── Nav Tabs ──────────────────────────────────────────────────────────────────
-const NAV: { id: AdminTab; label: string; icon: React.ReactNode; soon?: boolean }[] = [
+const NAV: { id: AdminTab; label: string; icon: React.ReactNode; soon?: boolean; external?: string }[] = [
   { id: "dashboard",      label: "Dashboard",    icon: <LayoutDashboard className="w-4 h-4" /> },
   { id: "analytics",      label: "Analytics",    icon: <BarChart2 className="w-4 h-4" /> },
   { id: "notifications",  label: "Alerts",       icon: <Bell className="w-4 h-4" /> },
+  { id: "community",      label: "Community Hub", icon: <Users className="w-4 h-4" />, external: "/community-hub" },
   { id: "lottery",        label: "Lottery",      icon: <Trophy className="w-4 h-4" /> },
   { id: "players",        label: "Players",      icon: <Users className="w-4 h-4" /> },
   { id: "treasury",       label: "Treasury",     icon: <Coins className="w-4 h-4" /> },
@@ -131,6 +132,7 @@ export default function AdminPage() {
   const [switching, setSwitching] = useState(false);
   const [, setLocation] = useLocation();
   const [tab, setTab] = useState<AdminTab>("dashboard");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isAdmin = !!(address && address.toLowerCase() === ADMIN_WALLET.toLowerCase());
 
@@ -452,6 +454,14 @@ export default function AdminPage() {
       {/* ── Top bar ──────────────────────────────────────────────────────────── */}
       <div className="relative z-20 border-b border-border/50 glass-dark px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
+          {isAdmin && (
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg border border-border hover:border-primary/40 text-muted-foreground hover:text-primary transition-all"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+          )}
           <a href="/" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors text-sm">
             <ArrowLeft className="w-4 h-4" />
             <span className="hidden sm:inline">Back to Site</span>
@@ -543,34 +553,79 @@ export default function AdminPage() {
 
       {/* ── Body ──────────────────────────────────────────────────────────────── */}
       <div className="relative z-10 flex flex-1">
-
         {/* ── Sidebar nav ──────────────────────────────────────────────────── */}
         {isAdmin && (
-          <aside className="hidden md:flex flex-col w-56 border-r border-border/50 glass-dark py-6 px-3 gap-1">
-            <p className="text-[10px] text-muted-foreground/50 uppercase tracking-widest font-bold px-3 mb-2">Modules</p>
-            {NAV.map((n) => (
-              <button
-                key={n.id}
-                onClick={() => !n.soon && setTab(n.id)}
-                disabled={!!n.soon}
-                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left
-                  ${n.soon ? "opacity-40 cursor-not-allowed text-muted-foreground"
-                    : tab === n.id
-                    ? "bg-primary/15 text-primary border border-primary/25 shadow-[0_0_10px_rgba(234,179,8,0.15)]"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/30"}`}
-              >
-                {n.icon}
-                <span className="flex-1">{n.label}</span>
-                {n.id === "notifications" && unreadCount > 0 && (
-                  <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground text-[9px] font-extrabold flex items-center justify-center">
-                    {unreadCount > 9 ? "9+" : unreadCount}
-                  </span>
-                )}
-                {n.soon && <span className="text-[9px] uppercase tracking-widest bg-muted/30 text-muted-foreground/60 px-1.5 py-0.5 rounded font-bold">Soon</span>}
-                {!n.soon && tab === n.id && !n.soon && <ChevronRight className="w-3.5 h-3.5 text-primary/60" />}
-              </button>
-            ))}
+          <>
+            {/* Mobile Sidebar Overlay */}
+            <AnimatePresence>
+              {mobileMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
+                />
+              )}
+            </AnimatePresence>
 
+            {/* Sidebar Content */}
+            <aside className={`
+              fixed inset-y-0 left-0 z-50 w-64 glass-dark border-r border-border/50 py-6 px-3 flex flex-col gap-1 transition-transform duration-300 md:relative md:translate-x-0 md:flex md:w-56
+              ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
+            `}>
+              <div className="flex items-center justify-between mb-6 px-3 md:hidden">
+                <div className="flex items-center gap-2">
+                  <img src="/okbond-logo.png" alt="Logo" className="w-6 h-6 rounded-full" />
+                  <span className="font-bold text-sm">Admin Menu</span>
+                </div>
+                <button onClick={() => setMobileMenuOpen(false)} className="p-1 text-muted-foreground">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>>
+            <p className="text-[10px] text-muted-foreground/50 uppercase tracking-widest font-bold px-3 mb-2">Modules</p>
+            {NAV.map((n) => {
+              const content = (
+                <>
+                  {n.icon}
+                  <span className="flex-1">{n.label}</span>
+                  {n.id === "notifications" && unreadCount > 0 && (
+                    <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground text-[9px] font-extrabold flex items-center justify-center">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  )}
+                  {n.soon && <span className="text-[9px] uppercase tracking-widest bg-muted/30 text-muted-foreground/60 px-1.5 py-0.5 rounded font-bold">Soon</span>}
+                  {!n.soon && tab === n.id && !n.soon && <ChevronRight className="w-3.5 h-3.5 text-primary/60" />}
+                </>
+              );
+
+              if (n.external) {
+                return (
+                  <a
+                    key={n.id}
+                    href={n.external}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left text-muted-foreground hover:text-foreground hover:bg-muted/30 border border-transparent cursor-pointer"
+                  >
+                    {content}
+                  </a>
+                );
+              }
+
+              return (
+                <button
+                  key={n.id}
+                  onClick={() => !n.soon && setTab(n.id)}
+                  disabled={!!n.soon}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left
+                    ${n.soon ? "opacity-40 cursor-not-allowed text-muted-foreground"
+                      : tab === n.id
+                      ? "bg-primary/15 text-primary border border-primary/25 shadow-[0_0_10px_rgba(234,179,8,0.15)]"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/30"}`}
+                >
+                  {content}
+                </button>
+              );
+            })}
             <div className="mt-auto px-3 pt-4 border-t border-border/30">
               <p className="text-[10px] text-muted-foreground/40 uppercase tracking-widest mb-1">Contract</p>
               <a href={`${EXPLORER}/address/${LOTTERY_ADDRESS}`} target="_blank" rel="noopener noreferrer"
@@ -579,8 +634,8 @@ export default function AdminPage() {
               </a>
             </div>
           </aside>
-        )}
-
+        </>
+       )}
         {/* ── Main area ─────────────────────────────────────────────────────── */}
         <main className="flex-1 overflow-y-auto p-6 max-w-5xl mx-auto w-full">
 

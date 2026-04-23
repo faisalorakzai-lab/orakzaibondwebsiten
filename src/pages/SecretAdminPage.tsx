@@ -506,41 +506,7 @@ export default function SecretAdminPage() {
       <div className="fixed inset-0 pointer-events-none opacity-30"
         style={{ backgroundImage: `linear-gradient(rgba(0,230,118,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,230,118,0.03) 1px, transparent 1px)`, backgroundSize: "40px 40px" }} />
 
-      {/* ── Top Header ── */}
-      <header className="sticky top-0 z-50 px-6 py-3 flex items-center justify-between"
-        style={{ background: "rgba(2,12,27,0.95)", borderBottom: `1px solid ${NEON}15`, backdropFilter: "blur(12px)" }}>
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl flex items-center justify-center"
-            style={{ background: `${NEON}15`, border: `1px solid ${NEON}30` }}>
-            <ShieldCheck className="w-4 h-4" style={{ color: NEON }} />
-          </div>
-          <div>
-            <p className="text-[10px] font-mono font-bold uppercase tracking-widest" style={{ color: NEON + "70" }}>
-              Command Center · Restricted
-            </p>
-            <p className="text-sm font-extrabold text-white leading-none">Orakzai Admin Portal</p>
-          </div>
-        </div>
 
-        <div className="flex items-center gap-3">
-          {refreshed > 0 && (
-            <span className="text-[10px] font-mono text-gray-600 hidden md:block">
-              Synced {new Date(refreshed).toLocaleTimeString()}
-            </span>
-          )}
-          <button onClick={loadChainData} disabled={loading}
-            className="p-2 rounded-xl transition-all hover:opacity-80"
-            style={{ background: `${NEON}10`, border: `1px solid ${NEON}20` }}>
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} style={{ color: NEON }} />
-          </button>
-          <button onClick={logout}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all hover:opacity-80"
-            style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)", color: "#f87171" }}>
-            <LogOut className="w-3.5 h-3.5" />
-            Logout
-          </button>
-        </div>
-      </header>
 
       <div className="flex">
         {/* ── Sidebar ── */}
