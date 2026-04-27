@@ -21,7 +21,7 @@ const features = [
     description: "Lock OKBOND tokens in high-yield staking pools and earn passive income. Power your portfolio while you sleep." },
   { icon: Globe,  title: "Global Investment Pools",
     description: "Participate in community-governed investment pools spanning global markets, open to anyone, anywhere." },
-  { icon: Lock,   title: "100% Capital Protection",
+  { icon: Lock,   title: "Liquidity-Backed Capital Retention Model",
     description: "Every entry in the OKBOND lottery is fully refundable. Your $10 is safe — always." },
   { icon: Layers, title: "Multi-Industry Ecosystem",
     description: "250+ real-world projects across energy, media, tech and finance — all powered by a single token." },

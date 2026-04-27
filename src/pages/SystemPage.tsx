@@ -225,7 +225,7 @@ export default function SystemPage() {
             <StatCard icon={<Coins className="w-5 h-5" />} label="OKBOND Balance" value="1,250.00" sub="≈ $187.50 USD" trend="up" color="#eab308" glow="rgba(234,179,8,0.25)" />
             <StatCard icon={<Gift className="w-5 h-5" />} label="Lottery Entries" value="25 Tickets" sub="Next Draw: June 9" trend="neutral" color="#22d3ee" glow="rgba(34,211,238,0.25)" />
             <StatCard icon={<Users className="w-5 h-5" />} label="Referral Earnings" value="26.7 POL" sub="≈ $13.35 USD" trend="up" color="#a78bfa" glow="rgba(167,139,250,0.25)" />
-            <StatCard icon={<Shield className="w-5 h-5" />} label="Protected Capital" value="$125.00" sub="100% Refundable" trend="neutral" color="#10b981" glow="rgba(16,185,129,0.25)" />
+            <StatCard icon={<Shield className="w-5 h-5" />} label="Protected Capital" value="$125.00" sub="60% Liquidity-Backed Principal Securityable" trend="neutral" color="#10b981" glow="rgba(16,185,129,0.25)" />
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

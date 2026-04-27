@@ -416,7 +416,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
             transition={{ delay: 0.5 }}
             className="mt-4 flex items-center justify-center gap-2 text-xs text-emerald-400/80">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>100% Capital Protection — your entry is always refundable if you don't win</span>
+            <span>Liquidity-Backed Capital Retention Model — Zero-Loss Participation Mechanism</span>
           </motion.div>
         </motion.div>
 
@@ -433,7 +433,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                 </div>
                 <div>
                   <h3 className="text-2xl font-extrabold text-foreground">Non-Winner Cashback</h3>
-                  <p className="text-xs text-emerald-400/80 font-semibold uppercase tracking-widest mt-0.5">100% Capital Protection Guarantee</p>
+                  <p className="text-xs text-emerald-400/80 font-semibold uppercase tracking-widest mt-0.5">Liquidity-Backed Capital Retention Model Guarantee</p>
                 </div>
               </div>
               <p className="text-muted-foreground text-base leading-relaxed max-w-2xl">
@@ -524,7 +524,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                   {[
                     {
                       q: "What if I win? Do I still get my deposit back?",
-                      a: "No. Winners receive their reward instead of a refund. The reward is typically higher than the entry amount."
+                      a: "No. Winners receive rewards in POL. The reward is typically higher than the entry amount."
                     },
                     {
                       q: "When can I claim my refund?",
@@ -532,7 +532,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                     },
                     {
                       q: "Are there any fees or deductions?",
-                      a: "No. You receive 100% of your original entry deposit. Only standard Polygon network gas fees apply (typically $0.01–$0.10)."
+                      a: "No. You receive 60% Liquidity-Backed Principal Security. Only standard Polygon network gas fees apply (typically $0.01–$0.10)."
                     },
                     {
                       q: "What if I forget to claim my refund?",
@@ -628,7 +628,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                 <span className="text-primary/30">·</span>
                 <span className="flex items-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-400/60" />
-                  100% refund if no win
+                  Zero-Loss Participation Mechanism
                 </span>
               </div>
             </div>

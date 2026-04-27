@@ -158,7 +158,7 @@ const PILLARS = [
   },
   {
     type: "protection" as const,
-    title: "100% Capital Protection",
+    title: "Liquidity-Backed Capital Retention Model",
     color: "from-blue-500 to-blue-600",
     glowColor: "shadow-blue-500/40",
     borderColor: "border-blue-500/50",

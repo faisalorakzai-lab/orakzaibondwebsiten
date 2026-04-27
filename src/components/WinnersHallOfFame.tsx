@@ -462,7 +462,7 @@ export default function WinnersHallOfFame({ provider }: WinnersHallOfFameProps) 
 
             <div className="flex-1">
               <p className="text-xs font-bold text-emerald-400">
-                ✓ 100% Refund Confirmed
+                ✓ 60% Liquidity-Backed Principal Security Confirmed
               </p>
               <p className="text-[11px] text-muted-foreground/65 leading-relaxed">
                 100% of non-winning tokens for this draw have been successfully refunded to all investors.

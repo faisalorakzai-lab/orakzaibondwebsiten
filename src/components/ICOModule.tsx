@@ -566,7 +566,7 @@ export default function ICOModule({
             </div>
             <div>
               <p className="text-xs font-bold text-foreground">Smart Contract Verified</p>
-              <p className="text-[10px] text-muted-foreground">100% Capital Protection enabled on-chain.</p>
+              <p className="text-[10px] text-muted-foreground">Liquidity-Backed Capital Retention Model enabled on-chain.</p>
             </div>
           </div>
         </div>
