@@ -31,14 +31,20 @@ const DOC_LINKS = [
   {
     label: "OKBOND PDF",
     icon: <FileText className="w-4 h-4" />,
-    href: "https://drive.google.com/uc?export=download&id=1ciuxocfbRbwENLaclrpey50EJMxF_pdr",
+    href: "https://drive.google.com/file/d/1ciuxocfbRbwENLaclrpey50EJMxF_pdr/view?usp=drivesdk",
     view: "https://drive.google.com/file/d/1ciuxocfbRbwENLaclrpey50EJMxF_pdr/view?usp=drivesdk",
   },
   {
     label: "Whitepaper",
     icon: <BookOpen className="w-4 h-4" />,
-    href: "https://drive.google.com/uc?export=download&id=1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh",
+    href: "https://drive.google.com/file/d/1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh/view?usp=drivesdk",
     view: "https://drive.google.com/file/d/1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh/view?usp=drivesdk",
+  },
+  {
+    label: "Audit Report",
+    icon: <Shield className="w-4 h-4" />,
+    href: "https://drive.google.com/file/d/1uvONnEDac-Z06mrth6TT94N9bRGecyhN/view?usp=drivesdk",
+    view: "https://drive.google.com/file/d/1uvONnEDac-Z06mrth6TT94N9bRGecyhN/view?usp=drivesdk",
   },
 ];
 

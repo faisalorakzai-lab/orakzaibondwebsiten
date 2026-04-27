@@ -18,7 +18,7 @@ const DOCS = [
     border: "rgba(234,179,8,0.28)",
     glow: "rgba(234,179,8,0.12)",
     iconBg: "rgba(234,179,8,0.12)",
-    dlHref: "https://drive.google.com/uc?export=download&id=1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh",
+    dlHref: "https://drive.google.com/file/d/1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh/view?usp=drivesdk",
     viewHref: "https://drive.google.com/file/d/1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh/view?usp=drivesdk",
   },
   {
@@ -36,7 +36,7 @@ const DOCS = [
     border: "rgba(167,139,250,0.28)",
     glow: "rgba(167,139,250,0.10)",
     iconBg: "rgba(167,139,250,0.12)",
-    dlHref: "https://drive.google.com/uc?export=download&id=1ciuxocfbRbwENLaclrpey50EJMxF_pdr",
+    dlHref: "https://drive.google.com/file/d/1ciuxocfbRbwENLaclrpey50EJMxF_pdr/view?usp=drivesdk",
     viewHref: "https://drive.google.com/file/d/1ciuxocfbRbwENLaclrpey50EJMxF_pdr/view?usp=drivesdk",
   },
   {
@@ -54,8 +54,8 @@ const DOCS = [
     border: "rgba(34,197,94,0.28)",
     glow: "rgba(34,197,94,0.10)",
     iconBg: "rgba(34,197,94,0.12)",
-    dlHref: "https://solidityscan.com/quickscan/0x6F539e4232c045cCAc08e2009d97BdC72815472a/polygonscan/mainnet?ref=etherscan",
-    viewHref: "https://solidityscan.com/quickscan/0x6F539e4232c045cCAc08e2009d97BdC72815472a/polygonscan/mainnet?ref=etherscan",
+    dlHref: "https://drive.google.com/file/d/1uvONnEDac-Z06mrth6TT94N9bRGecyhN/view?usp=drivesdk",
+    viewHref: "https://drive.google.com/file/d/1uvONnEDac-Z06mrth6TT94N9bRGecyhN/view?usp=drivesdk",
   },
   {
     id: "legal",
@@ -72,7 +72,7 @@ const DOCS = [
     border: "rgba(96,165,250,0.28)",
     glow: "rgba(96,165,250,0.10)",
     iconBg: "rgba(96,165,250,0.12)",
-    dlHref: "https://drive.google.com/uc?export=download&id=1ciuxocfbRbwENLaclrpey50EJMxF_pdr",
+    dlHref: "https://drive.google.com/file/d/1ciuxocfbRbwENLaclrpey50EJMxF_pdr/view?usp=drivesdk",
     viewHref: "https://drive.google.com/file/d/1ciuxocfbRbwENLaclrpey50EJMxF_pdr/view?usp=drivesdk",
   },
 ];
