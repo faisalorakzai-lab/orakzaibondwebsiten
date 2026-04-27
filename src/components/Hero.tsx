@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Rocket, Zap, ShieldCheck, TrendingUp } from "lucide-react";
+import { Rocket, Zap, ShieldCheck, TrendingUp, ExternalLink } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import { useICO } from "@/hooks/useICO";
 import { useWallet } from "@/hooks/useWallet";
@@ -197,7 +197,14 @@ export default function Hero({ onConnect, address }: HeroProps) {
     return () => clearInterval(cycle);
   }, []);
 
+  const contracts = [
+    { name: "Token Contract", address: "0x6F539e4232c045cCAc08e2009d97BdC72815472a" },
+    { name: "ICO Contract", address: "0x0134F0ADE4b5e48aCBFF97155691bBC54eBadD16" },
+    { name: "Lottery Contract", address: "0x5BC55d4b347e39B986864E28604Ddca5dE6357B7" }
+  ];
+
   return (
+    <>
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-20">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_60%,rgba(234,179,8,0.13),transparent_70%)] pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_100%_at_50%_50%,transparent_40%,rgba(0,0,0,0.55)_100%)] pointer-events-none" />
@@ -352,5 +359,88 @@ export default function Hero({ onConnect, address }: HeroProps) {
           transition={{ duration: 2.2, repeat: Infinity }} />
       </motion.div>
     </section>
+
+    {/* Smart Contract Governance Section */}
+    <section className="bg-black text-white py-16 px-4 border-t border-yellow-600/30 relative z-10">
+      <div className="max-w-6xl mx-auto text-center">
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-3xl font-black text-primary mb-4 uppercase tracking-[0.2em]"
+        >
+          Verified Smart Contracts
+        </motion.h2>
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1 }}
+          className="text-muted-foreground mb-12 max-w-2xl mx-auto"
+        >
+          Transparency is our core value. Verify our ecosystem on the Polygon Network.
+        </motion.p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {contracts.map((contract, idx) => (
+            <motion.div 
+              key={contract.address}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.1 }}
+              whileHover={{ y: -5 }}
+              className="p-8 bg-zinc-900/50 backdrop-blur-xl border border-yellow-700/30 rounded-3xl hover:border-primary/50 transition-all group"
+            >
+              <h3 className="text-primary font-black mb-4 uppercase tracking-wider">{contract.name}</h3>
+              <p className="text-[10px] font-mono text-muted-foreground break-all mb-6 bg-black/40 p-3 rounded-xl border border-white/5">
+                {contract.address}
+              </p>
+              <a 
+                href={`https://polygonscan.com/address/${contract.address}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs bg-primary text-primary-foreground px-6 py-3 rounded-full font-black hover:bg-primary/90 transition-all shadow-[0_0_15px_rgba(234,179,8,0.3)]"
+              >
+                View on PolygonScan
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Document Links */}
+        <div className="mt-20 flex flex-wrap justify-center gap-4">
+          <a 
+            href="https://drive.google.com/file/d/1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh/view?usp=drivesdk" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="px-6 py-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-sm font-bold transition-all flex items-center gap-2"
+          >
+            <ShieldCheck className="w-4 h-4 text-primary" />
+            Whitepaper
+          </a>
+          <a 
+            href="https://drive.google.com/file/d/1ciuxocfbRbwENLaclrpey50EJMxF_pdr/view?usp=drivesdk" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="px-6 py-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-sm font-bold transition-all flex items-center gap-2"
+          >
+            <ShieldCheck className="w-4 h-4 text-primary" />
+            OKBOND PDF
+          </a>
+          <a 
+            href="https://drive.google.com/file/d/1uvONnEDac-Z06mrth6TT94N9bRGecyhN/view?usp=drivesdk" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="px-6 py-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-sm font-bold transition-all flex items-center gap-2"
+          >
+            <ShieldCheck className="w-4 h-4 text-primary" />
+            Audit Report
+          </a>
+        </div>
+      </div>
+    </section>
+    </>
   );
 }
