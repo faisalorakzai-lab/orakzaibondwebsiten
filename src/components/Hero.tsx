@@ -320,11 +320,10 @@ export default function Hero({ onConnect, address }: HeroProps) {
 
         <div className="max-w-5xl">
           <RevealText>
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter text-foreground mb-8 leading-[0.85]">
-              Orakzai Bond<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-yellow-300 to-yellow-200 hero-glow-text">
-                OKBOND
-              </span>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-8 leading-[1.02] imperial-tagline">
+              Orakzai Bond:
+              <br className="hidden sm:block" />
+              <span className="block mt-2">The Sovereign Gateway to Next-Generation Wealth.</span>
             </h1>
           </RevealText>
 
@@ -424,9 +423,14 @@ export default function Hero({ onConnect, address }: HeroProps) {
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
               whileHover={{ y: -5 }}
-              className="p-8 bg-zinc-900/50 backdrop-blur-xl border border-yellow-700/30 rounded-3xl hover:border-primary/50 transition-all group"
+              className="glass-card p-8 rounded-3xl group"
             >
-              <h3 className="text-primary font-black mb-4 uppercase tracking-wider">{contract.name}</h3>
+              <div className="flex items-center justify-between mb-4 gap-2">
+                <h3 className="text-primary font-black uppercase tracking-wider">{contract.name}</h3>
+                <span className="verified-osg" title="Verified by Orakzai Sovereign Governance">
+                  Verified by OSG
+                </span>
+              </div>
               <p className="text-[10px] font-mono text-muted-foreground break-all mb-6 bg-black/40 p-3 rounded-xl border border-white/5">
                 {contract.address}
               </p>
