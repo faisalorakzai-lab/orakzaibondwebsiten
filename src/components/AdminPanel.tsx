@@ -4,6 +4,8 @@ import { Loader2, CheckCircle, XCircle, Award, UserCheck, Building2, ExternalLin
 import { Link } from "wouter";
 import { useWallet } from "@/hooks/useWallet";
 
+const ADMIN_WALLET = "0x9b02e2edd6f58d626aaa91889708dbf39dfa8cd7";
+
 const BADGE_OPTIONS = [
   { value: null, label: "None" },
   { value: "blue", label: "Blue (Verified)", icon: Award },
@@ -20,26 +22,16 @@ export default function AdminPanel() {
   const [loadingProfiles, setLoadingProfiles] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchAdminStatus = useCallback(async () => {
-    if (!address) {
-      setIsAdmin(false);
-      return;
-    }
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("badge")
-        .eq("address", address.toLowerCase())
-        .single();
-      if (error) throw error;
-      setIsAdmin(data?.badge === "team");
-    } catch (err) {
-      console.error("Error fetching admin status:", err);
+  useEffect(() => {
+    if (address && address.toLowerCase() === ADMIN_WALLET.toLowerCase()) {
+      setIsAdmin(true);
+    } else {
       setIsAdmin(false);
     }
   }, [address]);
 
   const fetchPendingThinkTankPosts = useCallback(async () => {
+    if (!isAdmin) return;
     setLoadingPosts(true);
     try {
       const { data, error } = await supabase
@@ -56,9 +48,10 @@ export default function AdminPanel() {
     } finally {
       setLoadingPosts(false);
     }
-  }, []);
+  }, [isAdmin]);
 
   const fetchProfiles = useCallback(async () => {
+    if (!isAdmin) return;
     setLoadingProfiles(true);
     try {
       const { data, error } = await supabase
@@ -73,15 +66,14 @@ export default function AdminPanel() {
     } finally {
       setLoadingProfiles(false);
     }
-  }, []);
+  }, [isAdmin]);
 
   useEffect(() => {
-    fetchAdminStatus();
-    if (address) {
+    if (isAdmin) {
       fetchPendingThinkTankPosts();
       fetchProfiles();
     }
-  }, [address, fetchAdminStatus, fetchPendingThinkTankPosts, fetchProfiles]);
+  }, [isAdmin, fetchPendingThinkTankPosts, fetchProfiles]);
 
   const handlePostApproval = async (postId: string, newStatus: "approved" | "rejected") => {
     try {
@@ -111,20 +103,8 @@ export default function AdminPanel() {
     }
   };
 
-  if (!address) {
-    return (
-      <div className="mt-12 space-y-8 max-w-4xl mx-auto text-center text-red-400">
-        <p>Please connect your wallet to access the Admin Panel.</p>
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className="mt-12 space-y-8 max-w-4xl mx-auto text-center text-red-400">
-        <p>You do not have administrative privileges to view this page.</p>
-      </div>
-    );
+  if (!address || !isAdmin) {
+    return null;
   }
 
   return (

@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase, Profile } from "@/lib/supabase";
-import { Loader2, CheckCircle, XCircle, Award, UserCheck, Building2, Upload, Trash2, ExternalLink } from "lucide-react";
+import { Loader2, XCircle, Award, UserCheck, Building2, Upload, Trash2, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
 import { useWallet } from "@/hooks/useWallet";
 
-const ADMIN_WALLET = "0x9b02e2Edd6F58D626aAa91889708dbF39dfa8Cd7";
+const ADMIN_WALLET = "0x9b02e2edd6f58d626aaa91889708dbf39dfa8cd7";
 
 const BADGE_OPTIONS = [
   { value: null, label: "None", icon: null },
@@ -27,41 +27,15 @@ export default function CommunityHub() {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    console.log("Connected Address:", address);
-  }, [address]);
-
-  const fetchAdminStatus = useCallback(async () => {
-    if (!address) {
-      setIsAdmin(false);
-      return;
-    }
-    
-    // Case-insensitive hardcoded check for the owner
-    if (address.toLowerCase() === ADMIN_WALLET.toLowerCase()) {
-      console.log("Admin access granted via whitelist");
+    if (address && address.toLowerCase() === ADMIN_WALLET.toLowerCase()) {
       setIsAdmin(true);
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("badge")
-        .eq("address", address.toLowerCase())
-        .single();
-      
-      if (!error && data?.badge === "team") {
-        setIsAdmin(true);
-      } else {
-        setIsAdmin(false);
-      }
-    } catch (err) {
-      console.error("Error fetching admin status:", err);
+    } else {
       setIsAdmin(false);
     }
   }, [address]);
 
   const fetchProfiles = useCallback(async () => {
+    if (!isAdmin) return;
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -76,14 +50,13 @@ export default function CommunityHub() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isAdmin]);
 
   useEffect(() => {
-    fetchAdminStatus();
-    if (address) {
+    if (isAdmin) {
       fetchProfiles();
     }
-  }, [address, fetchAdminStatus, fetchProfiles]);
+  }, [isAdmin, fetchProfiles]);
 
   const handleBadgeUpdate = async (profileAddress: string, newBadge: Profile["badge"]) => {
     try {
@@ -161,30 +134,8 @@ export default function CommunityHub() {
     p.address.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // TEMPORARY: If address is present, allow access for debugging if whitelist fails
-  // But we'll stick to the requested logic first.
-  
-  if (!address) {
-    return (
-      <div className="mt-12 space-y-8 max-w-4xl mx-auto text-center text-red-400">
-        <p>Please connect your wallet to access the Community Hub.</p>
-      </div>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className="mt-12 space-y-8 max-w-4xl mx-auto text-center text-red-400">
-        <p>You do not have administrative privileges to access the Community Hub.</p>
-        <p className="text-xs mt-2 text-muted-foreground">Connected: {address}</p>
-        <button 
-          onClick={() => setIsAdmin(true)} 
-          className="mt-4 px-4 py-2 bg-primary/20 text-primary rounded-lg text-xs"
-        >
-          Debug: Force Enter
-        </button>
-      </div>
-    );
+  if (!address || !isAdmin) {
+    return null;
   }
 
   return (
