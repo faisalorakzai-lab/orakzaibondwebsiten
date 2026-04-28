@@ -70,7 +70,7 @@ const UTILITY_DRIVERS = [
   {
     icon: <Shield className="w-6 h-6" />,
     title: "High-Utility Staking",
-    description: "Holding OKBOND gives exclusive access to the Mega Liquidity-Backed Principal Security, Staking Rewards, and priority investment in Orakzai Properties.",
+    description: "Holding OKBOND gives exclusive access to the Mega Lottery, Staking Rewards, and priority investment in Orakzai Properties.",
   },
   {
     icon: <Lock className="w-6 h-6" />,

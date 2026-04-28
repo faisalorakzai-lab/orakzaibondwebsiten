@@ -73,7 +73,7 @@ const faqs = [
   { q: "Do I need POL to buy OKBOND?", a: "Yes. OKBOND is priced in POL (Polygon's native token). You need POL in your wallet to cover the token cost plus a small gas fee (~$0.01)." },
   { q: "Where can I get POL?", a: "Buy POL on Binance, Coinbase, or any major exchange, then withdraw to your Polygon PoS wallet address." },
   { q: "Is it safe to connect my wallet?", a: "Yes. Connecting only allows the site to read your address. No funds move unless you explicitly approve a transaction." },
-  { q: "What happens if I need a refund?", a: "OKBOND's Safety Vault guarantees 100% refund of your Liquidity-Backed Principal Security entry deposit — no questions asked." },
+  { q: "What happens if I need a refund?", a: "OKBOND's Safety Vault guarantees 100% refund of your Lottery entry deposit — no questions asked." },
 ];
 
 export default function GuidePage() {

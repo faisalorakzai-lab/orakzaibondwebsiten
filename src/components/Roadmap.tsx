@@ -99,7 +99,7 @@ export default function Roadmap() {
       period: "2026 Q3",
       icon: Zap,
       milestones: [
-        "Launch of the Mega Liquidity-Backed Principal Security & Staking Dashboard.",
+        "Launch of the Mega Lottery & Staking Dashboard.",
         "Implementation of the Zero-Loss Participation Mechanism (100% Cashback for non-winners via contract)."
       ]
     },

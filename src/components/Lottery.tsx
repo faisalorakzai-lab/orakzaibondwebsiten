@@ -340,10 +340,10 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
           </span>
           <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-5">
             OKBOND{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-200">Liquidity-Backed Principal Security</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-200">Lottery</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto mb-8">
-            Enter the decentralized Liquidity-Backed Principal Security using OKBOND tokens. 5 winners share the prize pool — secured on Polygon, no middlemen.
+            Enter the decentralized Lottery using OKBOND tokens. 5 winners share the prize pool — secured on Polygon, no middlemen.
           </p>
 
           {/* ── Public Trust Badge Strip (always visible) ── */}
@@ -533,7 +533,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                     },
                     {
                       q: "Are there any fees or deductions?",
-                      a: "No. You receive 60% Liquidity-Backed Principal Security. Only standard Polygon network gas fees apply (typically $0.01–$0.10)."
+                      a: "No. You receive 60% Lottery. Only standard Polygon network gas fees apply (typically $0.01–$0.10)."
                     },
                     {
                       q: "What if I forget to claim my refund?",

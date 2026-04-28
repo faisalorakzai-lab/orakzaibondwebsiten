@@ -93,9 +93,9 @@ export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps
             <span className="hover:text-primary transition-colors cursor-pointer">Home</span>
           </Link>
 
-          {/* 2. Liquidity-Backed Principal Security */}
+          {/* 2. Lottery */}
           <Link href="/lottery">
-            <span className="hover:text-primary transition-colors cursor-pointer font-semibold text-primary/80">Liquidity-Backed Principal Security</span>
+            <span className="hover:text-primary transition-colors cursor-pointer font-semibold text-primary/80">Lottery</span>
           </Link>
 
           {/* 3. Token */}

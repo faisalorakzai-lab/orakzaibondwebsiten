@@ -22,7 +22,7 @@ const features = [
   { icon: Globe,  title: "Global Investment Pools",
     description: "Participate in community-governed investment pools spanning global markets, open to anyone, anywhere." },
   { icon: Lock,   title: "Liquidity-Backed Capital Retention Model",
-    description: "Every entry in the OKBOND Liquidity-Backed Principal Security is fully refundable. Your $10 is safe — always." },
+    description: "Every entry in the OKBOND Lottery is fully refundable. Your $10 is safe — always." },
   { icon: Layers, title: "Multi-Industry Ecosystem",
     description: "Global Sovereign Infrastructure across energy, media, tech and finance — all powered by a single token." },
   { icon: TrendingUp, title: "567% ROI Potential",
@@ -58,7 +58,7 @@ const values = [
   { icon: CheckCircle, label: "Transparency", desc: "All contracts are open-source and verified on PolygonScan." },
   { icon: Users,       label: "Community First", desc: "Token holders vote on major decisions via on-chain governance." },
   { icon: Target,      label: "Real Utility",    desc: "OKBOND is the fuel for Global Sovereign Infrastructure — not just speculation." },
-  { icon: Shield,      label: "Protection",      desc: "Capital protection is hardcoded into the Liquidity-Backed Principal Security smart contract." },
+  { icon: Shield,      label: "Protection",      desc: "Capital protection is hardcoded into the Lottery smart contract." },
 ];
 
 export default function AboutPage() {

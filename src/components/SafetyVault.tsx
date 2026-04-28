@@ -5,7 +5,7 @@ const CARDS = [
   {
     icon: ShieldCheck,
     title: "Asset Protection",
-    desc: "Every entry token is locked inside our audited smart contract for the full duration of the Liquidity-Backed Principal Security. No admin can touch them — the contract holds sole custody until the draw is complete.",
+    desc: "Every entry token is locked inside our audited smart contract for the full duration of the Lottery. No admin can touch them — the contract holds sole custody until the draw is complete.",
     accent: "from-primary/20 to-primary/5",
     border: "border-primary/30",
     glow: "shadow-primary/20",

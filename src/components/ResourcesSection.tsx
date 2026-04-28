@@ -10,7 +10,7 @@ const DOCS = [
     title: "OKBOND Whitepaper",
     subtitle: "Technical & Financial Backbone",
     description:
-      "Deep-dive into OKBOND's smart contract architecture, Polygon PoS integration, Liquidity-Backed Principal Security algorithm, on-chain randomness, token distribution, and governance model.",
+      "Deep-dive into OKBOND's smart contract architecture, Polygon PoS integration, Lottery algorithm, on-chain randomness, token distribution, and governance model.",
     size: "2.4 MB",
     pages: "38 Pages",
     accent: "#EAB308",

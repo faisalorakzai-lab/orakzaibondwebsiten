@@ -4,12 +4,12 @@ import { Ticket, RotateCcw, Users, Zap, Trophy, ShieldCheck } from "lucide-react
 
 // ── Simulated activity templates ──────────────────────────────────────────────
 const ACTIVITY_TEMPLATES = [
-  { type: "enter",    icon: Ticket,      color: "text-primary",      bg: "bg-primary/10 border-primary/20",      label: "entered the Liquidity-Backed Principal Security" },
+  { type: "enter",    icon: Ticket,      color: "text-primary",      bg: "bg-primary/10 border-primary/20",      label: "entered the Lottery" },
   { type: "refund",   icon: RotateCcw,   color: "text-emerald-400",  bg: "bg-emerald-500/10 border-emerald-500/20", label: "just claimed a refund" },
   { type: "referral", icon: Users,       color: "text-purple-400",   bg: "bg-purple-500/10 border-purple-500/20",   label: "joined the Referral program" },
   { type: "ico",      icon: Zap,         color: "text-amber-400",    bg: "bg-amber-500/10 border-amber-500/20",     label: "purchased OKBOND tokens" },
   { type: "phase1",   icon: Ticket,      color: "text-primary",      bg: "bg-primary/10 border-primary/20",      label: "entered Phase 1 ICO" },
-  { type: "winner",   icon: Trophy,      color: "text-yellow-400",   bg: "bg-yellow-500/10 border-yellow-500/20",   label: "🏆 won the Liquidity-Backed Principal Security!" },
+  { type: "winner",   icon: Trophy,      color: "text-yellow-400",   bg: "bg-yellow-500/10 border-yellow-500/20",   label: "🏆 won the Lottery!" },
   { type: "vault",    icon: ShieldCheck, color: "text-blue-400",     bg: "bg-blue-500/10 border-blue-500/20",       label: "assets secured in vault" },
 ] as const;
 

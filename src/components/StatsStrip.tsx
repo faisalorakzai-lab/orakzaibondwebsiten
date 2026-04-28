@@ -49,13 +49,13 @@ export default function StatsStrip({ provider }: Props) {
     const rpcProvider = provider ?? (eth ? new BrowserProvider(eth) : null);
     if (!rpcProvider) return; // no provider available, keep static defaults
     try {
-      const Liquidity-Backed Principal Security = new Contract(LOTTERY_ADDRESS, LOTTERY_ABI, rpcProvider);
+      const Lottery = new Contract(LOTTERY_ADDRESS, LOTTERY_ABI, rpcProvider);
       const token   = new Contract(TOKEN_ADDRESS, ERC20_SUPPLY_ABI, rpcProvider);
 
       const [polBal, supply, players] = await Promise.all([
         rpcProvider.getBalance(LOTTERY_ADDRESS),
         token.totalSupply() as Promise<bigint>,
-        countPlayers(Liquidity-Backed Principal Security),
+        countPlayers(Lottery),
       ]);
 
       const polFmt = parseFloat(formatUnits(polBal, 18)).toLocaleString(undefined, { maximumFractionDigits: 3 });
@@ -66,7 +66,7 @@ export default function StatsStrip({ provider }: Props) {
         { icon: <Users className="w-3.5 h-3.5" />, label: "Total Players", value: String(players), change: "live" },
         { icon: <TrendingUp className="w-3.5 h-3.5" />, label: "OKBOND Supply", value: supplyFmt, change: "live" },
         { icon: <Activity className="w-3.5 h-3.5" />, label: "Network", value: "Polygon PoS" },
-        { icon: <Zap className="w-3.5 h-3.5" />, label: "Liquidity-Backed Principal Security", value: "Active" },
+        { icon: <Zap className="w-3.5 h-3.5" />, label: "Lottery", value: "Active" },
       ]);
     } catch {
       setStats((prev) => prev.map((s) => ({ ...s, value: s.value === "Loading…" ? "—" : s.value })));

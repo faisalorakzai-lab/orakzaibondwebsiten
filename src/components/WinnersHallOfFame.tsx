@@ -197,7 +197,7 @@ function HeroCard({ winner }: { winner: Winner }) {
             </motion.span>
           ))}
           <span className="text-xs font-mono text-muted-foreground/40 mx-2">
-            On-chain Liquidity-Backed Principal Security draw · June 9, 2026
+            On-chain Lottery draw · June 9, 2026
           </span>
           {["🏆", "⭐", "🥇", "⭐", "🏆"].map((e, i) => (
             <motion.span key={i + 5} className="text-2xl"
@@ -462,7 +462,7 @@ export default function WinnersHallOfFame({ provider }: WinnersHallOfFameProps) 
 
             <div className="flex-1">
               <p className="text-xs font-bold text-emerald-400">
-                ✓ 60% Liquidity-Backed Principal Security Confirmed
+                ✓ 60% Lottery Confirmed
               </p>
               <p className="text-[11px] text-muted-foreground/65 leading-relaxed">
                 100% of non-winning tokens for this draw have been successfully refunded to all investors.
@@ -486,7 +486,7 @@ export default function WinnersHallOfFame({ provider }: WinnersHallOfFameProps) 
         <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
           className="text-center text-[11px] text-muted-foreground/35 mt-5 font-mono">
           * Wallet addresses partially anonymised for display. Full addresses verifiable on Polygonscan.
-          {!live && " · Live winners populate automatically after Liquidity-Backed Principal Security draw completes."}
+          {!live && " · Live winners populate automatically after Lottery draw completes."}
         </motion.p>
       </div>
     </section>

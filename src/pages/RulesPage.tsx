@@ -97,7 +97,7 @@ export default function RulesPage() {
               </span>
             </h1>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto mb-6">
-              By interacting with the OKBOND Liquidity-Backed Principal Security smart contract, you confirm that you have read,
+              By interacting with the OKBOND Lottery smart contract, you confirm that you have read,
               understood, and accepted all terms on this page.
             </p>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-primary/20 bg-primary/5 text-xs text-muted-foreground font-mono">
@@ -118,7 +118,7 @@ export default function RulesPage() {
               Risk <span className="text-primary">Disclaimer</span>
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-6 max-w-3xl">
-              Participation in the OKBOND Liquidity-Backed Principal Security involves financial risk. Please read the following
+              Participation in the OKBOND Lottery involves financial risk. Please read the following
               disclosures carefully before committing any tokens.
             </p>
           </Reveal>
@@ -132,7 +132,7 @@ export default function RulesPage() {
                 <p className="text-sm text-orange-200/70 leading-relaxed">
                   Cryptocurrency and decentralised finance (DeFi) activities carry substantial risk of financial
                   loss. OKBOND tokens, like all cryptocurrencies, are highly volatile and may decrease
-                  significantly in value. The Liquidity-Backed Principal Security outcome is probabilistic — most participants will not win.
+                  significantly in value. The Lottery outcome is probabilistic — most participants will not win.
                   Never participate with funds you cannot afford to lose.
                 </p>
               </div>
@@ -144,7 +144,7 @@ export default function RulesPage() {
               {
                 icon: <XCircle className="w-4 h-4" />,
                 title: "No Guaranteed Returns",
-                desc: "Participating in the OKBOND Liquidity-Backed Principal Security does not guarantee any financial return. The Liquidity-Backed Principal Security is a probabilistic event — the majority of participants do not win.",
+                desc: "Participating in the OKBOND Lottery does not guarantee any financial return. The Lottery is a probabilistic event — the majority of participants do not win.",
                 color: "text-red-400", border: "border-red-500/20 bg-red-500/5",
               },
               {
@@ -179,7 +179,7 @@ export default function RulesPage() {
           </div>
 
           <Clause n="1.1" title="Acceptance of Risk">
-            <p>By calling <code className="text-primary/80 bg-primary/10 px-1.5 py-0.5 rounded text-xs">enterLiquidity-Backed Principal Security()</code> on the OKBOND smart contract, you acknowledge and accept all risks associated with participation, including but not limited to: loss of deposited tokens if you are not selected as a winner, smart contract risk, market risk, and regulatory risk in your jurisdiction.</p>
+            <p>By calling <code className="text-primary/80 bg-primary/10 px-1.5 py-0.5 rounded text-xs">enterLottery()</code> on the OKBOND smart contract, you acknowledge and accept all risks associated with participation, including but not limited to: loss of deposited tokens if you are not selected as a winner, smart contract risk, market risk, and regulatory risk in your jurisdiction.</p>
           </Clause>
           <Clause n="1.2" title="No Financial Advice">
             <p>Nothing on this website, in the OKBOND smart contract, or in any communication by Orakzai Bond or the Orakzai Group constitutes financial, investment, tax, or legal advice. All information is provided for educational and informational purposes only.</p>
@@ -203,12 +203,12 @@ export default function RulesPage() {
               Refund <span className="text-primary">Conditions</span>
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-6 max-w-3xl">
-              The OKBOND Liquidity-Backed Principal Security is unique in its capital protection mechanism. Non-winners are entitled
+              The OKBOND Lottery is unique in its capital protection mechanism. Non-winners are entitled
               to a full refund of their entry fee.
             </p>
           </Reveal>
           <Clause n="2.1" title="Automatic Eligibility">
-            <p>All participants who are not selected as winners in a given Liquidity-Backed Principal Security round are automatically eligible to claim a 100% refund of their entry fee (e.g., 50 OKBOND).</p>
+            <p>All participants who are not selected as winners in a given Lottery round are automatically eligible to claim a 100% refund of their entry fee (e.g., 50 OKBOND).</p>
           </Clause>
           <Clause n="2.2" title="Claiming Process">
             <p>Refunds are not automatically sent to your wallet. You must manually trigger the refund by calling the <code className="text-primary/80 bg-primary/10 px-1.5 py-0.5 rounded text-xs">claimRefund()</code> function on the smart contract after the round has concluded.</p>

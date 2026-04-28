@@ -24,7 +24,7 @@ const LOTTERY_ABI = [
   "function getBalance() view returns (uint256)",
   "function pickWinner() external",
   "function refundAll() external",
-  "function Liquidity-Backed Principal SecurityId() view returns (uint256)",
+  "function contractId() view returns (uint256)",
   "function entryFee() view returns (uint256)",
 ];
 const ERC20_ABI = [
@@ -42,7 +42,7 @@ const GOLD   = "#EAB308";
 const NAVY   = "#020c1b";
 const CARD   = "rgba(5,15,35,0.85)";
 
-type Tab = "dashboard" | "Liquidity-Backed Principal Security" | "ideas" | "users" | "community";
+type Tab = "dashboard" | "contract" | "ideas" | "users" | "community";
 type TxPhase = "idle" | "pending" | "success" | "failed";
 
 interface Idea {
@@ -296,13 +296,13 @@ export default function SecretAdminPage() {
   const [poolSize, setPoolSize]     = useState("0");
   const [welfare, setWelfare]       = useState("0");
 
-  // Liquidity-Backed Principal Security winners
+  // contract winners
   const [winPhase, setWinPhase] = useState<TxPhase>("idle");
   const [winHash, setWinHash]   = useState("");
   const [refPhase, setRefPhase] = useState<TxPhase>("idle");
   const [refHash, setRefHash]   = useState("");
 
-  // Liquidity-Backed Principal Security dates
+  // contract dates
   const [drawDate, setDrawDate]   = useState("");
   const [savedDate, setSavedDate] = useState("");
 
@@ -332,13 +332,13 @@ export default function SecretAdminPage() {
     setLoading(true);
     try {
       const bp = new BrowserProvider(window.ethereum as ethers.Eip1193Provider);
-      const Liquidity-Backed Principal Security = new Contract(LOTTERY_ADDRESS, LOTTERY_ABI, bp);
+      const contract = new Contract(LOTTERY_ADDRESS, LOTTERY_ABI, bp);
       const token   = new Contract(TOKEN_ADDRESS, ERC20_ABI, bp);
       const ico     = new Contract(ICO_ADDRESS, ICO_ABI, bp);
 
       const [plist, bal, sold] = await Promise.all([
-        Liquidity-Backed Principal Security.getPlayers(),
-        Liquidity-Backed Principal Security.getBalance(),
+        contract.getPlayers(),
+        contract.getBalance(),
         ico.tokensSold(),
       ]);
 
@@ -455,8 +455,8 @@ export default function SecretAdminPage() {
     try {
       const bp = await getProvider();
       const signer = await bp.getSigner();
-      const Liquidity-Backed Principal Security = new Contract(LOTTERY_ADDRESS, LOTTERY_ABI, signer);
-      const tx = await Liquidity-Backed Principal Security.pickWinner();
+      const contract = new Contract(LOTTERY_ADDRESS, LOTTERY_ABI, signer);
+      const tx = await contract.pickWinner();
       setWinHash(tx.hash);
       await tx.wait();
       setWinPhase("success");
@@ -469,8 +469,8 @@ export default function SecretAdminPage() {
     try {
       const bp = await getProvider();
       const signer = await bp.getSigner();
-      const Liquidity-Backed Principal Security = new Contract(LOTTERY_ADDRESS, LOTTERY_ABI, signer);
-      const tx = await Liquidity-Backed Principal Security.refundAll();
+      const contract = new Contract(LOTTERY_ADDRESS, LOTTERY_ABI, signer);
+      const tx = await contract.refundAll();
       setRefHash(tx.hash);
       await tx.wait();
       setRefPhase("success");
@@ -491,7 +491,7 @@ export default function SecretAdminPage() {
 
   const TABS: { id: Tab; icon: React.ElementType; label: string }[] = [
     { id: "dashboard", icon: Activity,      label: "Dashboard"   },
-    { id: "Liquidity-Backed Principal Security",   icon: Trophy,        label: "Liquidity-Backed Principal Security"     },
+    { id: "contract",   icon: Trophy,        label: "contract"     },
     { id: "community", icon: Siren,         label: "Community"   },
     { id: "ideas",     icon: ThumbsUp,      label: "Idea Box"    },
     { id: "users",     icon: Users,         label: "Users"       },
@@ -553,8 +553,8 @@ export default function SecretAdminPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
                   <StatCard icon={Coins}    label="Total Tokens Sold"       value={tokensSold} sub="OKBOND Supply" color={GOLD}          glow={GOLD + "40"}    />
-                  <StatCard icon={Users}    label="Total Users Connected"   value={usersCount} sub="Liquidity-Backed Principal Security Players"  color={NEON}          glow={NEON + "40"}    />
-                  <StatCard icon={Database} label="Current Liquidity-Backed Principal Security Pool"    value={poolSize}   sub="Polygon Network" color="#818cf8"       glow="#818cf840"      />
+                  <StatCard icon={Users}    label="Total Users Connected"   value={usersCount} sub="contract Players"  color={NEON}          glow={NEON + "40"}    />
+                  <StatCard icon={Database} label="Current contract Pool"    value={poolSize}   sub="Polygon Network" color="#818cf8"       glow="#818cf840"      />
                   <StatCard icon={Heart}    label="Total Welfare Fund"      value={welfare}    sub="10% of Pool (Est.)" color="#f472b6"    glow="#f472b640"      />
                 </div>
 
@@ -564,7 +564,7 @@ export default function SecretAdminPage() {
                     Quick Actions
                   </p>
                   <div className="flex flex-wrap gap-3">
-                    <CmdButton label="Go to Liquidity-Backed Principal Security Control" icon={Trophy}    color={GOLD}   onClick={() => setTab("Liquidity-Backed Principal Security")} />
+                    <CmdButton label="Go to contract Control" icon={Trophy}    color={GOLD}   onClick={() => setTab("contract")} />
                     <CmdButton label="Review Ideas"          icon={ThumbsUp}  color={NEON}   onClick={() => setTab("ideas")}   />
                     <CmdButton label="View Users"            icon={Users}     color="#818cf8" onClick={() => setTab("users")}  />
                     <CmdButton label="Refresh Chain Data"    icon={RefreshCw} color={NEON}   onClick={loadChainData} disabled={loading} outline />
@@ -644,7 +644,7 @@ export default function SecretAdminPage() {
               </motion.div>
             )}
             
-            {/* Rest of tabs (Liquidity-Backed Principal Security, Community, Ideas) follow existing logic... */}
+            {/* Rest of tabs (contract, Community, Ideas) follow existing logic... */}
 
           </AnimatePresence>
         </main>
