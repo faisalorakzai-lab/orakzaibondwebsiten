@@ -388,7 +388,7 @@ export default function SocialHub() {
               <button 
                 onClick={handleCreatePost}
                 disabled={isSubmittingPost || !newPost.trim()}
-                className="px-6 py-2 rounded-xl bg-primary text-black font-black text-xs uppercase tracking-widest flex items-center gap-2 disabled:opacity-50"
+                className="px-6 py-2 rounded-xl bg-transparent border-2 border-primary text-primary font-black text-xs uppercase tracking-widest flex items-center gap-2 disabled:opacity-50 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(234,179,8,0.4)] transition-all duration-300 active:scale-95"
               >
                 {isSubmittingPost ? <Loader2 className="animate-spin" size={14} /> : <Send size={14} />}
                 Share

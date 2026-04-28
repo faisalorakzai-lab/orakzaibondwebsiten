@@ -35,8 +35,9 @@ export default function Community() {
           <div className="flex items-center gap-4">
             <div className="relative group">
               <div className="absolute -inset-1 bg-primary/20 rounded-full blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
-              <button className="relative p-2.5 rounded-full bg-white/10 border border-cyan-400/40 text-cyan-400 hover:border-cyan-400 transition-all duration-300 shadow-[0_0_15px_rgba(0,255,255,0.1)] hover:shadow-[0_0_25px_rgba(0,255,255,0.4)]">
-                <Search size={20} className="drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]" />
+              <button className="relative p-2.5 rounded-full bg-white/10 border border-cyan-400/40 text-cyan-400 hover:border-cyan-400 transition-all duration-300 shadow-[0_0_15px_rgba(0,255,255,0.1)] hover:shadow-[0_0_25px_rgba(0,255,255,0.4)] overflow-hidden">
+                <div className="absolute inset-0 bg-cyan-400/10 blur-xl group-hover:bg-cyan-400/20 transition-colors"></div>
+                <Search size={20} className="relative z-10 drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]" />
               </button>
             </div>
           </div>
@@ -44,9 +45,10 @@ export default function Community() {
           <div className="flex items-center gap-4">
             <div className="relative group">
               <div className="absolute -inset-1 bg-primary/20 rounded-full blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
-              <button className="relative p-2.5 rounded-full bg-white/10 border border-cyan-400/40 text-cyan-400 hover:border-cyan-400 transition-all duration-300 shadow-[0_0_15px_rgba(0,255,255,0.1)] hover:shadow-[0_0_25px_rgba(0,255,255,0.4)]">
-                <Bell size={20} className="drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]" />
-                <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-cyan-400 rounded-full border-2 border-black animate-pulse shadow-[0_0_10px_rgba(0,255,255,1)]"></span>
+              <button className="relative p-2.5 rounded-full bg-white/10 border border-cyan-400/40 text-cyan-400 hover:border-cyan-400 transition-all duration-300 shadow-[0_0_15px_rgba(0,255,255,0.1)] hover:shadow-[0_0_25px_rgba(0,255,255,0.4)] overflow-hidden">
+                <div className="absolute inset-0 bg-cyan-400/10 blur-xl group-hover:bg-cyan-400/20 transition-colors"></div>
+                <Bell size={20} className="relative z-10 drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]" />
+                <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-cyan-400 rounded-full border-2 border-black animate-pulse shadow-[0_0_10px_rgba(0,255,255,1)] z-20"></span>
               </button>
             </div>
           </div>
