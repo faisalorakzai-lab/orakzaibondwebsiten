@@ -1047,93 +1047,115 @@ function IntegrityBadge() {
 
 function Signature() {
   return (
-    <motion.svg
+    <motion.div
       data-testid="signature-faisal"
-      viewBox="0 0 600 160"
-      width="100%"
-      style={{ maxWidth: 460, height: "auto" }}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.5 }}
       role="img"
-      aria-label="Faisal Orakzai signature"
+      aria-label="Faisal — signature"
+      className="relative inline-flex flex-col items-center"
+      style={{ maxWidth: 460 }}
     >
-      <defs>
-        <linearGradient id="okSigGold" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#BF953F" />
-          <stop offset="30%" stopColor="#FCF6BA" />
-          <stop offset="50%" stopColor="#B38728" />
-          <stop offset="70%" stopColor="#FBF5B7" />
-          <stop offset="100%" stopColor="#AA771C" />
-        </linearGradient>
-        <filter id="okSigGlow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-          <feMerge>
-            <feMergeNode in="coloredBlur" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
-      </defs>
-
-      <motion.path
-        d="M 30 95 C 35 70, 50 45, 75 50 C 95 55, 80 95, 60 105 C 50 110, 55 75, 75 70 C 100 65, 130 60, 150 80 Q 165 95, 175 75 C 180 65, 175 55, 165 60 C 155 65, 158 90, 175 90 C 195 90, 200 60, 215 70 C 225 75, 220 95, 210 100 C 200 105, 200 80, 215 75 Q 235 70, 245 90 C 250 100, 260 95, 265 80 Q 270 60, 280 75 C 285 85, 295 75, 295 60 L 295 100"
-        fill="none"
-        stroke="url(#okSigGold)"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        filter="url(#okSigGlow)"
+      <FontInjectorSignature />
+      <motion.span
         variants={{
-          hidden: { pathLength: 0, opacity: 0 },
+          hidden: { opacity: 0, y: 14, filter: "blur(6px)" },
           visible: {
-            pathLength: 1,
             opacity: 1,
-            transition: {
-              pathLength: { duration: 2.2, ease: "easeInOut" },
-              opacity: { duration: 0.3 },
-            },
+            y: 0,
+            filter: "blur(0px)",
+            transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
           },
         }}
-      />
+        style={{
+          fontFamily: "'Mr Dafoe', 'Allura', 'Dancing Script', cursive",
+          fontWeight: 400,
+          fontSize: "clamp(3.5rem, 8vw, 5.75rem)",
+          lineHeight: 1,
+          letterSpacing: "-0.01em",
+          background:
+            "linear-gradient(135deg, #BF953F 0%, #FCF6BA 30%, #B38728 50%, #FBF5B7 70%, #AA771C 100%)",
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          color: "transparent",
+          filter:
+            "drop-shadow(0 0 10px rgba(252,246,186,0.45)) drop-shadow(0 0 22px rgba(191,149,63,0.35))",
+          paddingBottom: "0.15em",
+          transform: "rotate(-4deg)",
+          transformOrigin: "center",
+        }}
+      >
+        Faisal
+      </motion.span>
 
-      <motion.path
-        d="M 320 95 C 320 75, 340 60, 360 70 C 380 80, 375 105, 355 105 C 340 105, 335 85, 350 78 C 365 72, 380 85, 385 95 Q 390 105, 400 95 C 410 85, 405 70, 395 75 C 388 80, 395 100, 410 95 Q 425 90, 425 75 L 425 100 M 432 70 L 432 100 M 432 85 C 440 80, 455 75, 465 90 Q 475 105, 485 95 C 495 85, 480 70, 470 78 Q 460 85, 470 95 C 480 105, 500 95, 510 80 L 522 95 M 530 85 L 545 70 M 545 85 L 530 100 M 555 70 L 555 100 C 555 90, 565 70, 575 90"
-        fill="none"
-        stroke="url(#okSigGold)"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        filter="url(#okSigGlow)"
-        variants={{
-          hidden: { pathLength: 0, opacity: 0 },
-          visible: {
-            pathLength: 1,
-            opacity: 1,
-            transition: {
-              pathLength: { duration: 2.4, ease: "easeInOut", delay: 0.6 },
-              opacity: { duration: 0.3, delay: 0.6 },
-            },
-          },
-        }}
-      />
+      <motion.svg
+        viewBox="0 0 360 30"
+        width="100%"
+        style={{ marginTop: "-0.5rem", maxWidth: 360, height: "auto" }}
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient id="okSigUnderline" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#BF953F" stopOpacity="0" />
+            <stop offset="20%" stopColor="#FCF6BA" />
+            <stop offset="50%" stopColor="#B38728" />
+            <stop offset="80%" stopColor="#FBF5B7" />
+            <stop offset="100%" stopColor="#AA771C" stopOpacity="0" />
+          </linearGradient>
+          <filter id="okSigUnderlineGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="1.6" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
 
-      <motion.path
-        d="M 25 130 Q 200 145, 400 132 T 580 128"
-        fill="none"
-        stroke="url(#okSigGold)"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        opacity="0.7"
-        variants={{
-          hidden: { pathLength: 0, opacity: 0 },
-          visible: {
-            pathLength: 1,
-            opacity: 0.7,
-            transition: { duration: 1.4, ease: "easeInOut", delay: 2.0 },
-          },
-        }}
-      />
-    </motion.svg>
+        <motion.path
+          d="M 10 18 Q 100 4, 200 14 T 350 10"
+          fill="none"
+          stroke="url(#okSigUnderline)"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          filter="url(#okSigUnderlineGlow)"
+          variants={{
+            hidden: { pathLength: 0, opacity: 0 },
+            visible: {
+              pathLength: 1,
+              opacity: 1,
+              transition: { duration: 1.6, ease: "easeInOut", delay: 0.6 },
+            },
+          }}
+        />
+
+        <motion.path
+          d="M 340 10 Q 352 6, 348 18 Q 342 24, 348 14"
+          fill="none"
+          stroke="url(#okSigUnderline)"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+          filter="url(#okSigUnderlineGlow)"
+          variants={{
+            hidden: { pathLength: 0, opacity: 0 },
+            visible: {
+              pathLength: 1,
+              opacity: 1,
+              transition: { duration: 0.8, ease: "easeInOut", delay: 1.6 },
+            },
+          }}
+        />
+      </motion.svg>
+    </motion.div>
+  );
+}
+
+function FontInjectorSignature() {
+  return (
+    <style>{`
+      @import url('https://fonts.googleapis.com/css2?family=Mr+Dafoe&family=Allura&display=swap');
+    `}</style>
   );
 }
 
