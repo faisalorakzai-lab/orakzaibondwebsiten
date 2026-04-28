@@ -8,6 +8,10 @@ import {
   Quote,
   ChevronDown,
   ShieldCheck,
+  Linkedin,
+  Facebook,
+  Instagram,
+  Send,
 } from "lucide-react";
 
 /* =============================================================================
@@ -816,7 +820,17 @@ function ClosingSection() {
           </p>
         </div>
 
-        <div className="mt-16">
+        <div className="mt-12 flex flex-col items-center gap-3">
+          <p
+            className="text-[10px] uppercase"
+            style={{ letterSpacing: "0.32em", color: "#8a6a1c" }}
+          >
+            Connect with the Founder
+          </p>
+          <SocialBar />
+        </div>
+
+        <div className="mt-14">
           <GoldButton href="/roadmap" testId="button-roadmap-cta" large>
             View the Sovereign Roadmap
             <ArrowRight className="ml-2.5 h-5 w-5" />
@@ -1053,9 +1067,9 @@ function Signature() {
       whileInView="visible"
       viewport={{ once: true, amount: 0.5 }}
       role="img"
-      aria-label="Faisal — signature"
+      aria-label="Faisal Orakzai — signature"
       className="relative inline-flex flex-col items-center"
-      style={{ maxWidth: 460 }}
+      style={{ maxWidth: 620 }}
     >
       <FontInjectorSignature />
       <motion.span
@@ -1071,9 +1085,10 @@ function Signature() {
         style={{
           fontFamily: "'Mr Dafoe', 'Allura', 'Dancing Script', cursive",
           fontWeight: 400,
-          fontSize: "clamp(3.5rem, 8vw, 5.75rem)",
+          fontSize: "clamp(2.75rem, 7vw, 4.75rem)",
           lineHeight: 1,
-          letterSpacing: "-0.01em",
+          letterSpacing: "-0.005em",
+          whiteSpace: "nowrap",
           background:
             "linear-gradient(135deg, #BF953F 0%, #FCF6BA 30%, #B38728 50%, #FBF5B7 70%, #AA771C 100%)",
           WebkitBackgroundClip: "text",
@@ -1082,18 +1097,18 @@ function Signature() {
           color: "transparent",
           filter:
             "drop-shadow(0 0 10px rgba(252,246,186,0.45)) drop-shadow(0 0 22px rgba(191,149,63,0.35))",
-          paddingBottom: "0.15em",
-          transform: "rotate(-4deg)",
+          paddingBottom: "0.18em",
+          transform: "rotate(-3deg)",
           transformOrigin: "center",
         }}
       >
-        Faisal
+        Faisal Orakzai
       </motion.span>
 
       <motion.svg
-        viewBox="0 0 360 30"
+        viewBox="0 0 480 30"
         width="100%"
-        style={{ marginTop: "-0.5rem", maxWidth: 360, height: "auto" }}
+        style={{ marginTop: "-0.5rem", maxWidth: 480, height: "auto" }}
         aria-hidden="true"
       >
         <defs>
@@ -1114,7 +1129,7 @@ function Signature() {
         </defs>
 
         <motion.path
-          d="M 10 18 Q 100 4, 200 14 T 350 10"
+          d="M 14 18 Q 130 4, 260 14 T 460 10"
           fill="none"
           stroke="url(#okSigUnderline)"
           strokeWidth="1.6"
@@ -1131,7 +1146,7 @@ function Signature() {
         />
 
         <motion.path
-          d="M 340 10 Q 352 6, 348 18 Q 342 24, 348 14"
+          d="M 452 10 Q 466 6, 462 18 Q 456 24, 462 14"
           fill="none"
           stroke="url(#okSigUnderline)"
           strokeWidth="1.4"
@@ -1147,6 +1162,143 @@ function Signature() {
           }}
         />
       </motion.svg>
+    </motion.div>
+  );
+}
+
+function SocialBar() {
+  const SOCIALS: {
+    name: string;
+    href: string;
+    icon: React.ReactNode;
+    badge?: string;
+    highlight?: boolean;
+  }[] = [
+    {
+      name: "X",
+      href: "https://x.com/orakzaifaisal",
+      icon: (
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+        </svg>
+      ),
+    },
+    {
+      name: "Telegram",
+      href: "https://t.me/FaisalOrakzai1",
+      icon: <Send style={{ width: 20, height: 20 }} strokeWidth={1.6} aria-hidden="true" />,
+    },
+    {
+      name: "Facebook",
+      href: "https://www.facebook.com/faisalorakzaiofficial",
+      icon: <Facebook style={{ width: 20, height: 20 }} strokeWidth={1.6} aria-hidden="true" />,
+    },
+    {
+      name: "Instagram",
+      href: "https://www.instagram.com/orakzaifaisal",
+      icon: <Instagram style={{ width: 20, height: 20 }} strokeWidth={1.6} aria-hidden="true" />,
+    },
+    {
+      name: "Crunchbase",
+      href: "https://www.crunchbase.com/person/faisal-orakzai",
+      badge: "Rank #988",
+      highlight: true,
+      icon: (
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+          <path d="M9.5 8.2c-2.1 0-3.8 1.7-3.8 3.8s1.7 3.8 3.8 3.8c1.3 0 2.4-.6 3.1-1.6l-1.6-.9c-.3.4-.9.7-1.5.7-1.1 0-2-.9-2-2s.9-2 2-2c.6 0 1.1.3 1.5.7l1.6-.9C11.9 8.8 10.8 8.2 9.5 8.2zM16.4 8.2c-.7 0-1.4.2-1.9.6V5.5h-1.8v10.1h1.8v-.4c.5.4 1.2.6 1.9.6 2.1 0 3.8-1.7 3.8-3.8s-1.7-3.8-3.8-3.8zm-.2 5.8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
+        </svg>
+      ),
+    },
+    {
+      name: "LinkedIn",
+      href: "https://www.linkedin.com/in/orakzaifaisal",
+      badge: "Premium",
+      icon: <Linkedin style={{ width: 20, height: 20 }} strokeWidth={1.6} aria-hidden="true" />,
+    },
+  ];
+
+  return (
+    <motion.div
+      data-testid="social-bar"
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.4 }}
+      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      className="relative mx-auto inline-flex flex-wrap items-center justify-center gap-2 rounded-full px-5 py-3"
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(20,18,12,0.78) 0%, rgba(10,9,6,0.92) 100%)",
+        backdropFilter: "blur(16px) saturate(140%)",
+        WebkitBackdropFilter: "blur(16px) saturate(140%)",
+        border: "1px solid rgba(252,246,186,0.22)",
+        boxShadow:
+          "0 12px 36px -12px rgba(191,149,63,0.35), 0 0 0 1px rgba(252,246,186,0.04) inset",
+      }}
+    >
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-full"
+        style={{
+          padding: "1px",
+          background:
+            "linear-gradient(135deg, #BF953F 0%, #FCF6BA 30%, #B38728 50%, #FBF5B7 70%, #AA771C 100%)",
+          WebkitMask:
+            "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+          opacity: 0.55,
+        }}
+      />
+      {SOCIALS.map((s) => (
+        <a
+          key={s.name}
+          href={s.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-testid={`social-link-${s.name.toLowerCase()}`}
+          aria-label={`${s.name}${s.badge ? " — " + s.badge : ""}`}
+          className="group relative inline-flex items-center gap-2 rounded-full px-3 py-2"
+          style={{
+            color: "#c9b87a",
+            transition: "all 300ms ease",
+            textDecoration: "none",
+          }}
+          onMouseEnter={(e) => {
+            const el = e.currentTarget as HTMLAnchorElement;
+            el.style.transform = "scale(1.08)";
+            el.style.color = "#FCF6BA";
+            el.style.boxShadow =
+              "0 0 18px rgba(252,246,186,0.55), 0 0 36px rgba(191,149,63,0.35), inset 0 0 0 1px rgba(252,246,186,0.4)";
+            el.style.background =
+              "radial-gradient(circle at center, rgba(252,246,186,0.08), transparent 70%)";
+          }}
+          onMouseLeave={(e) => {
+            const el = e.currentTarget as HTMLAnchorElement;
+            el.style.transform = "";
+            el.style.color = "#c9b87a";
+            el.style.boxShadow = "";
+            el.style.background = "";
+          }}
+        >
+          <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-full">
+            {s.icon}
+          </span>
+          {s.badge && (
+            <span
+              className="hidden text-[10px] font-medium uppercase sm:inline"
+              style={{
+                letterSpacing: "0.16em",
+                color: s.highlight ? "#FFD700" : "#c9b87a",
+                textShadow: s.highlight
+                  ? "0 0 8px rgba(255,215,0,0.55)"
+                  : "none",
+              }}
+            >
+              {s.badge}
+            </span>
+          )}
+        </a>
+      ))}
     </motion.div>
   );
 }
