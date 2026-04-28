@@ -28,6 +28,9 @@ import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/not-found";
 import AdminGate from "./components/AdminGate";
 import WhatsAppBot from "./components/WhatsAppBot";
+import LiveVaultStatus from "./components/LiveVaultStatus";
+import MarcusAILiveLog from "./components/MarcusAILiveLog";
+import SovereignGuarantee from "./components/SovereignGuarantee";
 
 console.log("App.tsx module loaded");
 
@@ -58,7 +61,12 @@ function App() {
       <main className="flex-1 lg:pl-[60px]">
         <Switch>
           <Route path="/">
-            <Hero onConnect={connect} address={address} />
+            <>
+              <Hero onConnect={connect} address={address} />
+              <LiveVaultStatus />
+              <MarcusAILiveLog />
+              <SovereignGuarantee />
+            </>
           </Route>
           <Route path="/about" component={AboutPage} />
           <Route path="/founder" component={FounderPage} />
