@@ -39,7 +39,7 @@ const SOCIALS = [
     memberLabel: "Members",
     href: "https://t.me/orakzaibond",
     perks: ["Daily Market Analysis", "Instant Support", "Live Announcements"],
-    desc: "The heartbeat of the OKBOND movement. Get real-time lottery alerts, ICO news, and direct access to the team.",
+    desc: "The heartbeat of the OKBOND movement. Get real-time Liquidity-Backed Principal Security alerts, ICO news, and direct access to the team.",
     color: "#38BDF8",
     glow: "rgba(56,189,248,0.4)",
     borderHex: "#38BDF828",
@@ -145,7 +145,7 @@ const TIERS = [
     popular: true,
     benefits: [
       { label: "All Bronze Benefits",   available: true },
-      { label: "1.2× Lottery Odds",     available: true },
+      { label: "1.2× Liquidity-Backed Principal Security Odds",     available: true },
       { label: "Exclusive Airdrops",    available: true },
       { label: "3-Level Referrals",     available: true },
       { label: "Strategy Sessions",     available: false },
@@ -165,7 +165,7 @@ const TIERS = [
     benefits: [
       { label: "All Silver Benefits",                 available: true },
       { label: "VIP Telegram Access",                 available: true },
-      { label: "Priority Lottery Entry",             available: true },
+      { label: "Priority Liquidity-Backed Principal Security Entry",             available: true },
       { label: "Exclusive Airdrops",                 available: true },
       { label: "Private Strategy Sessions w/ Faisal", available: true },
     ],
@@ -188,7 +188,7 @@ const EVENTS = [
   },
   {
     type: "LOTTERY",
-    title: "Mega Lottery Draw — Phase 1 Final",
+    title: "Mega Liquidity-Backed Principal Security Draw — Phase 1 Final",
     date: "June 9, 2026",
     time: "10:00 PM PKT",
     platform: "On-Chain Draw",

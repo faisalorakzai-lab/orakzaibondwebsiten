@@ -36,7 +36,7 @@ const SOCIALS = [
 
 const STATS = [
   { value: "12+",  label: "Companies", icon: Building2 },
-  { value: "250+", label: "Projects",  icon: Globe      },
+  { value: "Global Sovereign Infrastructure", label: "Projects",  icon: Globe      },
   { value: "Rank 2523", label: "Crunchbase World", icon: BadgeCheck  },
 ];
 

@@ -125,6 +125,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [copied, setCopied]           = useState(false);
   const [showAdmin, setShowAdmin]     = useState(false);
+  const OWNER_WALLET = "0x9b02e2edd6f58d626aaa91889708dbf39dfa8cd7";
   const [switching, setSwitching]     = useState(false);
   const [currency, setCurrency]       = useState<"OKBOND" | "USD" | "EUR" | "PKR">("OKBOND");
   // Referral reward state: null = not tried, true = sent, false = failed/no referrer
@@ -339,10 +340,10 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
           </span>
           <h2 className="text-4xl md:text-5xl font-extrabold text-foreground mb-5">
             OKBOND{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-200">Lottery</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-200">Liquidity-Backed Principal Security</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto mb-8">
-            Enter the decentralized lottery using OKBOND tokens. 5 winners share the prize pool — secured on Polygon, no middlemen.
+            Enter the decentralized Liquidity-Backed Principal Security using OKBOND tokens. 5 winners share the prize pool — secured on Polygon, no middlemen.
           </p>
 
           {/* ── Public Trust Badge Strip (always visible) ── */}
@@ -376,7 +377,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
             {[
               {
                 step: "01", icon: Ticket, title: "Enter Draw",
-                desc: "Purchase your lottery entry using OKBOND tokens. One ticket per wallet, fully transparent.",
+                desc: "Purchase your entry using OKBOND tokens. One entry per wallet, fully transparent.",
                 color: "text-primary", ring: "border-primary/40 bg-primary/10 shadow-[0_0_18px_rgba(234,179,8,0.2)]",
               },
               {
@@ -650,7 +651,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="font-extrabold text-xl text-foreground">Orakzai Lottery</h3>
+                    <h3 className="font-extrabold text-xl text-foreground">Orakzai Principal Security</h3>
                     {!loading && (
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                         cs.winnersSelected ? "bg-purple-500/15 text-purple-400 border border-purple-500/25"
@@ -1131,21 +1132,22 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
           )}
 
           {/* ── Admin Panel ── */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
-            className="rounded-2xl border border-border bg-card overflow-hidden">
-            <button onClick={() => setShowAdmin((v) => !v)}
-              className="w-full flex items-center justify-between px-6 py-4 hover:bg-muted/20 transition-colors">
-              <div className="flex items-center gap-2">
-                <Lock className="w-4 h-4 text-muted-foreground" />
-                <span className="text-sm font-semibold text-muted-foreground">Admin Panel</span>
-                <span className="text-xs text-muted-foreground/60">(owner only)</span>
-              </div>
-              <span className="text-xs text-muted-foreground">{showAdmin ? "▲ hide" : "▼ show"}</span>
-            </button>
-            <AnimatePresence>
-              {showAdmin && (
-                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
-                  className="border-t border-border px-6 py-5 space-y-4">
+          {address?.toLowerCase() === OWNER_WALLET.toLowerCase() && (
+            <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}
+              className="rounded-2xl border border-border bg-card overflow-hidden">
+              <button onClick={() => setShowAdmin((v) => !v)}
+                className="w-full flex items-center justify-between px-6 py-4 hover:bg-muted/20 transition-colors">
+                <div className="flex items-center gap-2">
+                  <Lock className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm font-semibold text-muted-foreground">Admin Panel</span>
+                  <span className="text-xs text-muted-foreground/60">(owner only)</span>
+                </div>
+                <span className="text-xs text-muted-foreground">{showAdmin ? "▲ hide" : "▼ show"}</span>
+              </button>
+              <AnimatePresence>
+                {showAdmin && (
+                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
+                    className="border-t border-border px-6 py-5 space-y-4">
                   <p className="text-xs text-muted-foreground">
                     Only the contract owner wallet can use these functions. Calls from non-owner wallets will revert on-chain.
                   </p>
@@ -1193,13 +1195,11 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                     <p className="text-xs text-muted-foreground/60">
                       "Select Winners" unlocks after the lock duration expires.
                     </p>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
-
-          {/* ── Info pills ── */}
+                  )}                </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          )}{/* ── Info pills ── */}
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }}
             className="grid grid-cols-3 gap-4">
             {[

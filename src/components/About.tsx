@@ -160,7 +160,7 @@ export default function About() {
             </div>
             <div className="flex items-center gap-2">
               <MapPin className="w-3 h-3 text-primary/50" />
-              <span className="text-muted-foreground font-mono">250+ Worldwide Projects</span>
+              <span className="text-muted-foreground font-mono">Global Sovereign Infrastructure</span>
             </div>
           </div>
         </motion.div>

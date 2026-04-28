@@ -21,9 +21,9 @@ interface TokenDetailsProps {
 const UTILITIES = [
   {
     icon: Ticket,
-    title: "Lottery Entry",
+    title: "Liquidity-Backed Principal Security Entry",
     subtitle: "Capital Protected Participation",
-    desc: "Buy lottery entries with full capital protection. Every $10 ticket is 100% refundable via smart contract.",
+    desc: "Buy Liquidity-Backed Principal Security entries with full capital protection. Every $10 ticket is 100% refundable via smart contract.",
     badge: "Live",
     badgeColor: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
     glow: "hover:shadow-[0_0_28px_rgba(52,211,153,0.12)]",

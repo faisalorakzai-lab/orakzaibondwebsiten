@@ -10,7 +10,7 @@ const DOCS = [
     title: "OKBOND Whitepaper",
     subtitle: "Technical & Financial Backbone",
     description:
-      "Deep-dive into OKBOND's smart contract architecture, Polygon PoS integration, lottery algorithm, on-chain randomness, token distribution, and governance model.",
+      "Deep-dive into OKBOND's smart contract architecture, Polygon PoS integration, Liquidity-Backed Principal Security algorithm, on-chain randomness, token distribution, and governance model.",
     size: "2.4 MB",
     pages: "38 Pages",
     accent: "#EAB308",
@@ -28,7 +28,7 @@ const DOCS = [
     title: "Orakzai Group Pitch Deck",
     subtitle: "12 Companies · Future Vision",
     description:
-      "A visual overview of the entire Orakzai Group ecosystem — 12 operating companies, 250+ projects, strategic roadmap, revenue model, and the OKBOND investment opportunity.",
+      "A visual overview of the entire Orakzai Group ecosystem — 12 operating companies, Global Sovereign Infrastructure, strategic roadmap, revenue model, and the OKBOND investment opportunity.",
     size: "5.1 MB",
     pages: "52 Slides",
     accent: "#a78bfa",

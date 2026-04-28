@@ -22,9 +22,9 @@ const features = [
   { icon: Globe,  title: "Global Investment Pools",
     description: "Participate in community-governed investment pools spanning global markets, open to anyone, anywhere." },
   { icon: Lock,   title: "Liquidity-Backed Capital Retention Model",
-    description: "Every entry in the OKBOND lottery is fully refundable. Your $10 is safe — always." },
+    description: "Every entry in the OKBOND Liquidity-Backed Principal Security is fully refundable. Your $10 is safe — always." },
   { icon: Layers, title: "Multi-Industry Ecosystem",
-    description: "250+ real-world projects across energy, media, tech and finance — all powered by a single token." },
+    description: "Global Sovereign Infrastructure across energy, media, tech and finance — all powered by a single token." },
   { icon: TrendingUp, title: "567% ROI Potential",
     description: "Buy at $0.15 ICO Phase 1, list at $1.00 — that's a 567% return for early believers." },
 ];
@@ -57,8 +57,8 @@ const CONTINENTS = [
 const values = [
   { icon: CheckCircle, label: "Transparency", desc: "All contracts are open-source and verified on PolygonScan." },
   { icon: Users,       label: "Community First", desc: "Token holders vote on major decisions via on-chain governance." },
-  { icon: Target,      label: "Real Utility",    desc: "OKBOND is the fuel for 250+ projects — not just speculation." },
-  { icon: Shield,      label: "Protection",      desc: "Capital protection is hardcoded into the lottery smart contract." },
+  { icon: Target,      label: "Real Utility",    desc: "OKBOND is the fuel for Global Sovereign Infrastructure — not just speculation." },
+  { icon: Shield,      label: "Protection",      desc: "Capital protection is hardcoded into the Liquidity-Backed Principal Security smart contract." },
 ];
 
 export default function AboutPage() {
@@ -132,7 +132,7 @@ export default function AboutPage() {
       <section className="px-4 pb-16">
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { value: "250+",   label: "Future Projects" },
+            { value: "Global Sovereign",   label: "Infrastructure" },
             { value: "10M",    label: "Total Supply" },
             { value: "$0.15",  label: "ICO Phase 1 Price" },
             { value: "567%",   label: "Target ROI" },

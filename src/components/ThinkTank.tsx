@@ -44,7 +44,7 @@ const SEED_IDEAS: Idea[] = [
     id: "seed-2",
     title: "OKBOND Mobile App with Push Alerts",
     category: "Product",
-    description: "A dedicated iOS/Android app for tracking lottery entries, staking rewards, and ICO phases — with push notifications.",
+    description: "A dedicated iOS/Android app for tracking Liquidity-Backed Principal Security entries, staking rewards, and ICO phases — with push notifications.",
     author: "0x7c44…F921",
     timestamp: Date.now() - 1000 * 60 * 60 * 14,
     upvotes: 38,

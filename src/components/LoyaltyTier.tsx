@@ -39,7 +39,7 @@ const TIERS = [
     min: 501,
     max: 5000,
     Icon: Star,
-    perk: "1.2× Lottery Chance Multiplier",
+    perk: "1.2× Liquidity-Backed Principal Security Chance Multiplier",
     perkIcon: Zap,
     gradient: "from-slate-400 via-slate-200 to-slate-400",
     shimmer: "from-transparent via-white/40 to-transparent",

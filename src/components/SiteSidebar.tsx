@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "wouter";
+import { useWallet } from "@/hooks/useWallet";
 import {
   ChevronRight, ChevronLeft, Home, Info, Coins, Ticket,
   PieChart, Map, Cpu, Trophy, Users, Shield, FileText,
@@ -11,7 +12,7 @@ const NAV_ITEMS = [
   { id: "hero",       label: "Home",        icon: <Home       className="w-4 h-4" />, href: "/"           },
   { id: "about",      label: "About",       icon: <Info       className="w-4 h-4" />, href: "/about"      },
   { id: "token",      label: "Token",       icon: <Coins      className="w-4 h-4" />, href: "/token"      },
-  { id: "lottery",    label: "Lottery",     icon: <Ticket     className="w-4 h-4" />, href: "/lottery"     },
+  { id: "Liquidity-Backed Principal Security",    label: "Liquidity-Backed Principal Security",     icon: <Ticket     className="w-4 h-4" />, href: "/Liquidity-Backed Principal Security"     },
   { id: "tokenomics", label: "Tokenomics",  icon: <PieChart   className="w-4 h-4" />, href: "/tokenomics" },
   { id: "roadmap",    label: "Roadmap",     icon: <Map        className="w-4 h-4" />, href: "/roadmap"    },
   { id: "ico",        label: "ICO / Buy",   icon: <Rocket     className="w-4 h-4" />, href: "/ico"        },
@@ -63,6 +64,8 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
   const [activeSection, setActiveSection] = useState("hero");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [location, setLocation] = useLocation();
+  const { address } = useWallet();
+  const OWNER_WALLET = "0x9b02e2edd6f58d626aaa91889708dbf39dfa8cd7";
 
   useImperativeHandle(ref, () => ({
     toggleMobile: () => setMobileOpen(p => !p),
@@ -180,7 +183,12 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
         {(expanded || mobile) && (
           <p className="text-[9px] text-muted-foreground/50 uppercase tracking-widest font-bold px-2 mb-2">Pages</p>
         )}
-        {PAGE_LINKS.map((link) => (
+        {PAGE_LINKS.filter(link => {
+          if (link.label === "Admin") {
+            return address?.toLowerCase() === OWNER_WALLET.toLowerCase();
+          }
+          return true;
+        }).map((link) => (
           <button
             key={link.label}
             onClick={() => navigateTo(link.href)}

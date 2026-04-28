@@ -35,7 +35,7 @@ const ERC20_ABI = [
 ];
 
 type TxPhase = "idle" | "pending" | "success" | "failed";
-type AdminTab = "dashboard" | "analytics" | "notifications" | "lottery" | "players" | "treasury" | "staking" | "lending" | "community";
+type AdminTab = "dashboard" | "analytics" | "notifications" | "Liquidity-Backed Principal Security" | "players" | "treasury" | "staking" | "lending" | "community";
 
 interface PlayerRow {
   address: string;
@@ -108,7 +108,7 @@ const NAV: { id: AdminTab; label: string; icon: JSX.Element; soon?: boolean; ext
   { id: "dashboard",     label: "Dashboard",     icon: <LayoutDashboard className="w-4 h-4" /> },
   { id: "analytics",     label: "Analytics",     icon: <TrendingUp className="w-4 h-4" /> },
   { id: "notifications", label: "System Alerts", icon: <Bell className="w-4 h-4" /> },
-  { id: "lottery",       label: "Lottery",       icon: <Trophy className="w-4 h-4" /> },
+  { id: "Liquidity-Backed Principal Security",       label: "Liquidity-Backed Principal Security",       icon: <Trophy className="w-4 h-4" /> },
   { id: "players",       label: "Players",       icon: <Users className="w-4 h-4" /> },
   { id: "treasury",      label: "Treasury",      icon: <Database className="w-4 h-4" /> },
   { id: "community",     label: "Community Hub", icon: <ShieldCheck className="w-4 h-4" />, external: "/community-hub" },
@@ -132,7 +132,7 @@ export default function AdminPage() {
   }, [address, isAdmin, setLocation]);
 
   // ── Contract state ─────────────────────────────────────────────────────────
-  const [lotteryStarted,  setLotteryStarted]  = useState(false);
+  const [Liquidity-Backed Principal SecurityStarted,  setLiquidity-Backed Principal SecurityStarted]  = useState(false);
   const [winnersSelected, setWinnersSelected] = useState(false);
   const [entryAmount,     setEntryAmount]     = useState(0n);
   const [rewardPerWinner, setRewardPerWinner] = useState(0n);
@@ -168,7 +168,7 @@ export default function AdminPage() {
       const token    = new Contract(TOKEN_ADDRESS, ERC20_ABI, provider);
 
       const [started, selected, entry, reward, start, lock, pBal, oBal, tSup] = await Promise.all([
-        contract.lotteryStarted(),
+        contract.Liquidity-Backed Principal SecurityStarted(),
         contract.winnersSelected(),
         contract.entryAmount(),
         contract.rewardPerWinner(),
@@ -179,7 +179,7 @@ export default function AdminPage() {
         token.totalSupply(),
       ]);
 
-      setLotteryStarted(started);
+      setLiquidity-Backed Principal SecurityStarted(started);
       setWinnersSelected(selected);
       setEntryAmount(entry);
       setRewardPerWinner(reward);
@@ -248,8 +248,8 @@ export default function AdminPage() {
       setTxMsg("Transaction sent. Waiting for confirmation...");
       await tx.wait();
       setTxPhase("success");
-      setTxMsg("Lottery closed successfully.");
-      addNotif("success", "Lottery Closed", "Force close transaction confirmed on-chain.");
+      setTxMsg("Liquidity-Backed Principal Security closed successfully.");
+      addNotif("success", "Liquidity-Backed Principal Security Closed", "Force close transaction confirmed on-chain.");
       fetchState();
     } catch (err) {
       setTxPhase("failed");
@@ -301,18 +301,18 @@ export default function AdminPage() {
                   <PowerOff className="w-6 h-6 text-red-400" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-foreground text-lg">Force Close Lottery?</h3>
+                  <h3 className="font-extrabold text-foreground text-lg">Force Close Liquidity-Backed Principal Security?</h3>
                   <p className="text-xs text-muted-foreground">Yeh action blockchain par permanent hai</p>
                 </div>
               </div>
               <div className="space-y-3 mb-6">
                 <div className="p-3 rounded-xl bg-red-500/5 border border-red-500/20 text-xs text-red-300 leading-relaxed">
                   <strong className="block mb-1">⚠️ Warning:</strong>
-                  Lottery abhi bhi active hai aur lock timer expire nahi hua. Force close karne se contract <code>selectWinners()</code> call karega — blockchain reject kar sakta hai agar contract mein timer check hai.
+                  Liquidity-Backed Principal Security abhi bhi active hai aur lock timer expire nahi hua. Force close karne se contract <code>selectWinners()</code> call karega — blockchain reject kar sakta hai agar contract mein timer check hai.
                 </div>
                 <div className="p-3 rounded-xl bg-yellow-500/5 border border-yellow-500/20 text-xs text-yellow-300 leading-relaxed">
                   <strong className="block mb-1">Kya hoga:</strong>
-                  5 winners on-chain select ho jayenge, players reward claim kar sakenge, aur lottery permanently close ho jayegi.
+                  5 winners on-chain select ho jayenge, players reward claim kar sakenge, aur Liquidity-Backed Principal Security permanently close ho jayegi.
                 </div>
               </div>
               <div className="flex gap-3">
@@ -592,23 +592,23 @@ export default function AdminPage() {
                       </div>
                       <div className="relative z-10">
                         <div className="flex items-center gap-2 mb-6">
-                          <div className={`w-2.5 h-2.5 rounded-full ${lotteryStarted ? "bg-green-500 animate-pulse" : "bg-red-500"}`} />
+                          <div className={`w-2.5 h-2.5 rounded-full ${Liquidity-Backed Principal SecurityStarted ? "bg-green-500 animate-pulse" : "bg-red-500"}`} />
                           <span className="text-xs font-bold uppercase tracking-widest text-primary/80">
-                            {lotteryStarted ? "Lottery Active" : "Lottery Inactive"}
+                            {Liquidity-Backed Principal SecurityStarted ? "Liquidity-Backed Principal Security Active" : "Liquidity-Backed Principal Security Inactive"}
                           </span>
                         </div>
                         <h3 className="text-4xl font-black text-foreground mb-4">
-                          {lotteryStarted ? "Round is LIVE" : "Ready to Start"}
+                          {Liquidity-Backed Principal SecurityStarted ? "Round is LIVE" : "Ready to Start"}
                         </h3>
                         <p className="text-muted-foreground max-w-md mb-8 leading-relaxed">
-                          {lotteryStarted
+                          {Liquidity-Backed Principal SecurityStarted
                             ? "Players are currently entering the pool. You can monitor entries in real-time or force close the round if needed."
-                            : "The contract is idle. You can initiate a new round from the Lottery Control tab."}
+                            : "The contract is idle. You can initiate a new round from the Liquidity-Backed Principal Security Control tab."}
                         </p>
                         <div className="flex flex-wrap gap-4">
-                          <button onClick={() => setTab("lottery")}
+                          <button onClick={() => setTab("Liquidity-Backed Principal Security")}
                             className="px-6 py-3 rounded-xl bg-primary text-primary-foreground font-extrabold text-sm hover:bg-primary/90 transition-all flex items-center gap-2">
-                            Manage Lottery <ArrowRightLeft className="w-4 h-4" />
+                            Manage Liquidity-Backed Principal Security <ArrowRightLeft className="w-4 h-4" />
                           </button>
                           <button onClick={() => setTab("analytics")}
                             className="px-6 py-3 rounded-xl border border-primary/30 text-primary font-bold text-sm hover:bg-primary/5 transition-all">
@@ -662,7 +662,7 @@ export default function AdminPage() {
                     <h1 className="text-2xl font-extrabold text-foreground">
                       Analytics <span className="text-primary">Dashboard</span>
                     </h1>
-                    <p className="text-muted-foreground text-sm mt-1">Live on-chain metrics and lottery performance data.</p>
+                    <p className="text-muted-foreground text-sm mt-1">Live on-chain metrics and Liquidity-Backed Principal Security performance data.</p>
                   </div>
 
                   {/* KPI strip */}
@@ -817,9 +817,9 @@ export default function AdminPage() {
               )}
 
               {/* ── LOTTERY tab ───────────────────────────────────────────── */}
-              {tab === "lottery" && (
-                <motion.div key="lottery" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-6">
-                  <h2 className="text-2xl font-extrabold text-foreground">Lottery <span className="text-primary">Control</span></h2>
+              {tab === "Liquidity-Backed Principal Security" && (
+                <motion.div key="Liquidity-Backed Principal Security" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-6">
+                  <h2 className="text-2xl font-extrabold text-foreground">Liquidity-Backed Principal Security <span className="text-primary">Control</span></h2>
                   <div className="grid md:grid-cols-3 gap-4">
                     {[
                       { label: "Entry Amount", value: `${entryFmt} OKBOND` },
@@ -833,10 +833,10 @@ export default function AdminPage() {
                     ))}
                   </div>
                   <div className="glass-card rounded-2xl border border-border p-6">
-                    <p className="text-sm font-semibold text-foreground mb-4">Lottery Status</p>
+                    <p className="text-sm font-semibold text-foreground mb-4">Liquidity-Backed Principal Security Status</p>
                     <div className="flex items-center gap-3 mb-4">
-                      <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border ${lotteryStarted ? "bg-green-500/10 border-green-500/30 text-green-400" : "bg-red-500/10 border-red-500/30 text-red-400"}`}>
-                        {lotteryStarted ? "Active" : "Inactive"}
+                      <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border ${Liquidity-Backed Principal SecurityStarted ? "bg-green-500/10 border-green-500/30 text-green-400" : "bg-red-500/10 border-red-500/30 text-red-400"}`}>
+                        {Liquidity-Backed Principal SecurityStarted ? "Active" : "Inactive"}
                       </div>
                       <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border ${winnersSelected ? "bg-blue-500/10 border-blue-500/30 text-blue-400" : "bg-muted/10 border-border text-muted-foreground"}`}>
                         {winnersSelected ? "Winners Selected" : "Pending Selection"}
@@ -862,7 +862,7 @@ export default function AdminPage() {
                       <div className="space-y-3">
                         <button
                           onClick={() => setShowCloseConfirm(true)}
-                          disabled={!lotteryStarted || loading}
+                          disabled={!Liquidity-Backed Principal SecurityStarted || loading}
                           className="w-full h-12 rounded-xl bg-red-600 hover:bg-red-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-extrabold text-sm transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.2)]"
                         >
                           <PowerOff className="w-4 h-4" /> Force Close Round
@@ -908,7 +908,7 @@ export default function AdminPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h2 className="text-2xl font-extrabold text-foreground">Players <span className="text-primary">Registry</span></h2>
-                      <p className="text-muted-foreground text-sm mt-0.5">{players.length} participant{players.length !== 1 ? "s" : ""} in current lottery</p>
+                      <p className="text-muted-foreground text-sm mt-0.5">{players.length} participant{players.length !== 1 ? "s" : ""} in current Liquidity-Backed Principal Security</p>
                     </div>
                     <button onClick={fetchPlayers} disabled={playersLoading}
                       className="flex items-center gap-2 px-4 py-2 rounded-xl border border-border text-sm text-muted-foreground hover:text-primary hover:border-primary/30 transition-all">
@@ -1035,7 +1035,7 @@ export default function AdminPage() {
                       <div className="mt-4 flex gap-3 flex-wrap">
                         <a href={`${EXPLORER}/address/${LOTTERY_ADDRESS}`} target="_blank" rel="noopener noreferrer"
                           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 transition-all">
-                          <ExternalLink className="w-3 h-3" /> Lottery Contract
+                          <ExternalLink className="w-3 h-3" /> Liquidity-Backed Principal Security Contract
                         </a>
                         <a href={`${EXPLORER}/token/${TOKEN_ADDRESS}`} target="_blank" rel="noopener noreferrer"
                           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs border border-border bg-muted/20 text-muted-foreground hover:text-primary hover:border-primary/30 transition-all">

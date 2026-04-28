@@ -151,7 +151,7 @@ const PillarIcon = ({ type }: { type: "cashback" | "protection" | "verified" | "
 const PILLARS = [
   {
     type: "cashback" as const,
-    title: "Lottery Non-Winner Cashback",
+    title: "Liquidity-Backed Principal Security Non-Winner Cashback",
     color: "from-blue-500 to-blue-600",
     glowColor: "shadow-blue-500/40",
     borderColor: "border-blue-500/50",
@@ -200,7 +200,7 @@ export default function Hero({ onConnect, address }: HeroProps) {
   const contracts = [
     { name: "Token Contract", address: "0x6F539e4232c045cCAc08e2009d97BdC72815472a" },
     { name: "ICO Contract", address: "0x0134F0ADE4b5e48aCBFF97155691bBC54eBadD16" },
-    { name: "Lottery Contract", address: "0x5BC55d4b347e39B986864E28604Ddca5dE6357B7" }
+    { name: "Liquidity-Backed Principal Security Contract", address: "0x5BC55d4b347e39B986864E28604Ddca5dE6357B7" }
   ];
 
   return (

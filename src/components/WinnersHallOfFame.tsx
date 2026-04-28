@@ -197,7 +197,7 @@ function HeroCard({ winner }: { winner: Winner }) {
             </motion.span>
           ))}
           <span className="text-xs font-mono text-muted-foreground/40 mx-2">
-            On-chain lottery draw · June 9, 2026
+            On-chain Liquidity-Backed Principal Security draw · June 9, 2026
           </span>
           {["🏆", "⭐", "🥇", "⭐", "🏆"].map((e, i) => (
             <motion.span key={i + 5} className="text-2xl"
@@ -486,7 +486,7 @@ export default function WinnersHallOfFame({ provider }: WinnersHallOfFameProps) 
         <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
           className="text-center text-[11px] text-muted-foreground/35 mt-5 font-mono">
           * Wallet addresses partially anonymised for display. Full addresses verifiable on Polygonscan.
-          {!live && " · Live winners populate automatically after lottery draw completes."}
+          {!live && " · Live winners populate automatically after Liquidity-Backed Principal Security draw completes."}
         </motion.p>
       </div>
     </section>

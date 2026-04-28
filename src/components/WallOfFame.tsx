@@ -76,7 +76,7 @@ export default function WallOfFame({ provider }: WallOfFameProps) {
           </h2>
           <p className="text-muted-foreground max-w-lg mx-auto">
             {live
-              ? "On-chain verified OKBOND lottery winners — blockchain-proven champions."
+              ? "On-chain verified OKBOND Liquidity-Backed Principal Security winners — blockchain-proven champions."
               : "Our elite winners are immortalised on-chain. Every wallet, a throne. Every address, a legacy."}
           </p>
         </motion.div>
@@ -123,7 +123,7 @@ export default function WallOfFame({ provider }: WallOfFameProps) {
         {!live && (
           <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
             className="text-center text-xs text-muted-foreground/60 mt-6 font-mono">
-            * Addresses partially anonymised for privacy. Live winners populate after lottery completion.
+            * Addresses partially anonymised for privacy. Live winners populate after Liquidity-Backed Principal Security completion.
           </motion.p>
         )}
       </div>

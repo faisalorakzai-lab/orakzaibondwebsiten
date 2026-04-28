@@ -26,7 +26,7 @@ const TICKER_ITEMS = [
   "🚀 Faisal Orakzai just launched the Orakzai Think Tank — submit your ideas and win OKBOND rewards!",
   "🎰 New Jackpot of 10,000 OKBOND is LIVE — Enter before June 9, 2026!",
   "📈 OKBOND Phase 1 ICO: $0.15 — Target Listing Price $1.00 (+567% ROI)",
-  "🏆 Lottery Draw scheduled for June 9, 2026 at 10:00 PM PKT — Don't miss it!",
+  "🏆 Liquidity-Backed Principal Security Draw scheduled for June 9, 2026 at 10:00 PM PKT — Don't miss it!",
   "💡 Orakzai Think Tank is LIVE — Best community ideas win OKBOND bounties!",
   "🌐 Orakzai Bond now live on Polygon PoS — Low fees, instant finality",
   "🔥 Phase 2 ICO at $0.25 coming soon — Buy Phase 1 before it locks!",
@@ -57,9 +57,9 @@ function generateChartData() {
 /* ── Mock transactions ────────────────────────────────────────────────── */
 const MOCK_TXS = [
   { id: "tx1",  date: "May 10, 2026", type: "Buy",            amount: "500 OKBOND",  value: "$75.00",  status: "completed", hash: "0xab12..." },
-  { id: "tx2",  date: "May 08, 2026", type: "Lottery Entry",  amount: "50 OKBOND",   value: "$7.50",   status: "completed", hash: "0xcd34..." },
+  { id: "tx2",  date: "May 08, 2026", type: "Liquidity-Backed Principal Security Entry",  amount: "50 OKBOND",   value: "$7.50",   status: "completed", hash: "0xcd34..." },
   { id: "tx3",  date: "May 05, 2026", type: "Referral Bonus", amount: "2.5 POL",     value: "$1.25",   status: "completed", hash: "0xef56..." },
-  { id: "tx4",  date: "Apr 29, 2026", type: "Lottery Entry",  amount: "50 OKBOND",   value: "$7.50",   status: "refunded",  hash: "0x7890..." },
+  { id: "tx4",  date: "Apr 29, 2026", type: "Liquidity-Backed Principal Security Entry",  amount: "50 OKBOND",   value: "$7.50",   status: "refunded",  hash: "0x7890..." },
   { id: "tx5",  date: "Apr 22, 2026", type: "Buy",            amount: "200 OKBOND",  value: "$30.00",  status: "completed", hash: "0xabc1..." },
   { id: "tx6",  date: "Apr 15, 2026", type: "Referral Bonus", amount: "1.2 POL",     value: "$0.60",   status: "completed", hash: "0xdef2..." },
 ];
@@ -223,7 +223,7 @@ export default function SystemPage() {
           {/* Stats Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
             <StatCard icon={<Coins className="w-5 h-5" />} label="OKBOND Balance" value="1,250.00" sub="≈ $187.50 USD" trend="up" color="#eab308" glow="rgba(234,179,8,0.25)" />
-            <StatCard icon={<Gift className="w-5 h-5" />} label="Lottery Entries" value="25 Tickets" sub="Next Draw: June 9" trend="neutral" color="#22d3ee" glow="rgba(34,211,238,0.25)" />
+            <StatCard icon={<Gift className="w-5 h-5" />} label="Liquidity-Backed Principal Security Entries" value="25 Tickets" sub="Next Draw: June 9" trend="neutral" color="#22d3ee" glow="rgba(34,211,238,0.25)" />
             <StatCard icon={<Users className="w-5 h-5" />} label="Referral Earnings" value="26.7 POL" sub="≈ $13.35 USD" trend="up" color="#a78bfa" glow="rgba(167,139,250,0.25)" />
             <StatCard icon={<Shield className="w-5 h-5" />} label="Protected Capital" value="$125.00" sub="60% Liquidity-Backed Principal Securityable" trend="neutral" color="#10b981" glow="rgba(16,185,129,0.25)" />
           </div>

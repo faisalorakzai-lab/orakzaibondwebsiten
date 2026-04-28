@@ -25,7 +25,7 @@ const STATIC_NEWS = [
     dotColor: "bg-blue-400",
     Icon: FileText,
     title: "Whitepaper v1.0 Released",
-    body: "The official Orakzai Bond whitepaper is now available. Full tokenomics, lottery mechanics, ICO structure, and roadmap — all in one document.",
+    body: "The official Orakzai Bond whitepaper is now available. Full tokenomics, Liquidity-Backed Principal Security mechanics, ICO structure, and roadmap — all in one document.",
     date: "Apr 9, 2026",
     link: TELEGRAM_URL,
     external: true,

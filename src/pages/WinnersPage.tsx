@@ -80,7 +80,7 @@ export default function WinnersPage() {
         rewardBN,
       ] = await Promise.all([
         c.winnersSelected()      as Promise<boolean>,
-        c.lotteryStarted()       as Promise<boolean>,
+        c.Liquidity-Backed Principal SecurityStarted()       as Promise<boolean>,
         c.startTime()            as Promise<bigint>,
         c.rewardPerWinner()      as Promise<bigint>,
       ]);
@@ -344,7 +344,7 @@ export default function WinnersPage() {
               Immutable Records
             </h3>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              This page pulls data directly from the Orakzai Bond Smart Lottery contract. 
+              This page pulls data directly from the Orakzai Bond Smart Liquidity-Backed Principal Security contract. 
               Once a winner is selected by the contract, it is impossible for anyone to alter the record.
             </p>
           </div>

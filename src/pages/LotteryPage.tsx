@@ -30,13 +30,13 @@ export default function LotteryPage() {
             >
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest">
                 <Trophy className="w-3.5 h-3.5" />
-                Sovereign Smart Lottery
+                Sovereign Smart Liquidity-Backed Principal Security
               </div>
               <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
                 Win Big with <span className="text-primary">Zero Risk</span>
               </h1>
               <p className="text-muted-foreground text-lg max-w-2xl">
-                Participate in our unique smart lottery where capital is 100% protected. 
+                Participate in our unique smart Liquidity-Backed Principal Security where capital is 100% protected. 
                 Winners take the prize, non-winners get their full deposit back.
               </p>
             </motion.div>
@@ -88,7 +88,7 @@ export default function LotteryPage() {
           ))}
         </div>
 
-        {/* Main Lottery Component */}
+        {/* Main Component */}
         <div className="relative">
           <div className="absolute -inset-4 bg-primary/5 blur-3xl rounded-full pointer-events-none" />
           <Lottery 

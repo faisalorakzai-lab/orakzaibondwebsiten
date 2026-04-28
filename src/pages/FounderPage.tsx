@@ -5,7 +5,7 @@ import { Link } from "wouter";
 
 const STATS = [
   { value: "12+", label: "Companies", icon: Building2 },
-  { value: "250+", label: "Projects", icon: Globe },
+  { value: "Global Sovereign Infrastructure", label: "Projects", icon: Globe },
   { value: "Rank 2523", label: "Crunchbase", icon: BadgeCheck },
 ];
 
@@ -144,7 +144,7 @@ export default function FounderPage() {
               <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} className="space-y-8">
                 <div>
                   <p className="text-primary font-mono text-sm font-black uppercase tracking-widest mb-4">About</p>
-                  <p className="text-lg text-muted-foreground leading-relaxed mb-6">Faisal Orakzai is a visionary entrepreneur and blockchain pioneer who has revolutionized the decentralized finance landscape. With over a decade of experience in emerging technologies, he has successfully built and scaled a global ecosystem of 250+ projects under the Orakzai Group.</p>
+                  <p className="text-lg text-muted-foreground leading-relaxed mb-6">Faisal Orakzai is a visionary entrepreneur and blockchain pioneer who has revolutionized the decentralized finance landscape. With over a decade of experience in emerging technologies, he has successfully built and scaled a global ecosystem of Global Sovereign Infrastructure under the Orakzai Group.</p>
                   <p className="text-lg text-muted-foreground leading-relaxed">His commitment to innovation, capital protection, and community empowerment has made Orakzai Bond the premier choice for serious investors seeking exposure to cutting-edge blockchain infrastructure on Polygon.</p>
                 </div>
 
