@@ -5,7 +5,7 @@ import {
   User, Edit2, Camera, Send, Image as ImageIcon, 
   BadgeCheck, Shield, Crown,
   Loader2, X, Globe, Heart, UserPlus, UserCheck, MessageCircle,
-  AlertCircle, Repeat2, Share2, TrendingUp, Trophy, Flame
+  AlertCircle, Repeat2, Share2, TrendingUp, Trophy, Flame, CornerDownRight
 } from "lucide-react";
 import SovereignGrid from "./SovereignGrid";
 import { supabase, Profile, Post, Comment } from "@/lib/supabase";
@@ -62,6 +62,13 @@ export default function SocialHub() {
   const [repostedIds, setRepostedIds] = useState<Set<string>>(new Set());
   const [repostCounts, setRepostCounts] = useState<Record<string, number>>({});
   const [sharedToast, setSharedToast] = useState<string | null>(null);
+  const [likedComments, setLikedComments] = useState<Set<string>>(() => {
+    try { return new Set<string>(JSON.parse(localStorage.getItem('okbond_liked_comments') || '[]')); } catch { return new Set(); }
+  });
+  const [commentLikeCounts, setCommentLikeCounts] = useState<Record<string, number>>(() => {
+    try { return JSON.parse(localStorage.getItem('okbond_comment_like_counts') || '{}'); } catch { return {}; }
+  });
+  const [replyTarget, setReplyTarget] = useState<Record<string, string | null>>({});
 
   // Edit Profile Form State
   const [editUsername, setEditUsername] = useState("");
@@ -299,6 +306,31 @@ export default function SocialHub() {
     }
   }
 
+  function handleToggleCommentLike(commentId: string) {
+    setLikedComments(prev => {
+      const next = new Set(prev);
+      const wasLiked = next.has(commentId);
+      if (wasLiked) next.delete(commentId); else next.add(commentId);
+      try { localStorage.setItem('okbond_liked_comments', JSON.stringify(Array.from(next))); } catch {}
+      setCommentLikeCounts(c => {
+        const updated = { ...c, [commentId]: Math.max(0, (c[commentId] || 0) + (wasLiked ? -1 : 1)) };
+        try { localStorage.setItem('okbond_comment_like_counts', JSON.stringify(updated)); } catch {}
+        return updated;
+      });
+      return next;
+    });
+  }
+
+  function handleStartReply(postId: string, username: string) {
+    setReplyTarget(prev => ({ ...prev, [postId]: username }));
+    setNewComment(`@${username} `);
+    setActivePostId(postId);
+    setTimeout(() => {
+      const input = document.querySelector<HTMLInputElement>(`#post-${postId} input[type="text"]`);
+      input?.focus();
+    }, 50);
+  }
+
   function handleRepost(postId: string) {
     setRepostedIds(prev => {
       const next = new Set(prev);
@@ -429,22 +461,10 @@ export default function SocialHub() {
           <div className="flex-1 text-center md:text-left">
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-1">
               <h2 className="text-xl font-black text-foreground tracking-tight neon-heading">{profile?.username || 'Orakzai Investor'}</h2>
-              {(profile?.branding_logo || (profile?.badge && BADGE_CONFIG[profile.badge])) && (
+              {profile?.branding_logo && (
                 <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 branded-tag-pulse">
-                  {profile?.branding_logo ? (
-                    <img src={profile.branding_logo} alt="Company Logo" className="w-3 h-3 rounded-full object-cover" />
-                  ) : profile?.badge && BADGE_CONFIG[profile.badge] ? (
-                    <>
-                      {BADGE_CONFIG[profile.badge].isLogo ? (
-                        <img src="/son-of-orakzai-logo.jpg" className="w-2.5 h-2.5 rounded-full" />
-                      ) : (
-                        <BadgeCheck size={10} className={BADGE_CONFIG[profile.badge].color} />
-                      )}
-                    </>
-                  ) : null}
-                  <span className={`text-[9px] font-bold uppercase tracking-tighter ${profile?.badge && BADGE_CONFIG[profile.badge] ? BADGE_CONFIG[profile.badge].color : 'text-primary'}`}>
-                    {profile?.branding_logo ? 'Branded' : (profile?.badge && BADGE_CONFIG[profile.badge] ? BADGE_CONFIG[profile.badge].label : '')}
-                  </span>
+                  <img src={profile.branding_logo} alt="Company Logo" className="w-3 h-3 rounded-full object-cover" />
+                  <span className="text-[9px] font-bold uppercase tracking-tighter text-primary">Branded</span>
                 </div>
               )}
             </div>
@@ -541,13 +561,9 @@ export default function SocialHub() {
                             <span className="font-bold text-[15px] text-foreground hover:underline transition-all cursor-pointer truncate">{username}</span>
                           </Link>
 
-                          {/* Verified gold tick (default for all members; brand logo overrides) */}
-                          {post.profiles?.branding_logo ? (
+                          {/* Brand logo (verified ticks are admin-managed; not shown by default) */}
+                          {post.profiles?.branding_logo && (
                             <img src={post.profiles.branding_logo} alt="Brand" className="w-4 h-4 rounded-full object-cover" />
-                          ) : post.profiles?.badge && BADGE_CONFIG[post.profiles.badge] ? (
-                            <BadgeCheck size={16} className={`${BADGE_CONFIG[post.profiles.badge].color} fill-current`} aria-label={BADGE_CONFIG[post.profiles.badge].label} />
-                          ) : (
-                            <BadgeCheck size={16} className="text-primary fill-current" aria-label="Verified" />
                           )}
 
                           {/* Gray handle */}
@@ -651,46 +667,82 @@ export default function SocialHub() {
                               className="overflow-hidden"
                             >
                               <div className="pt-5 space-y-4">
-                                {comments[post.id]?.map((comment) => (
-                                  <div key={comment.id} className="flex gap-3">
-                                    <Link href={`/profile/${comment.profiles?.username || 'investor'}`}>
-                                      <div className="w-8 h-8 rounded-full border border-primary/20 overflow-hidden flex-shrink-0 bg-black/40 cursor-pointer hover:border-primary/50 transition-all">
-                                        {comment.profiles?.avatar_url ? (
-                                          <img src={comment.profiles.avatar_url} className="w-full h-full object-cover" />
-                                        ) : <User size={16} className="m-auto mt-2 text-primary/30" />}
+                                {comments[post.id]?.map((comment) => {
+                                  const isReply = /^@\w+\s/.test(comment.content || '');
+                                  const liked = likedComments.has(comment.id);
+                                  const likeCount = commentLikeCounts[comment.id] ?? 0;
+                                  const cUser = comment.profiles?.username || 'investor';
+                                  return (
+                                    <div key={comment.id} className={`flex gap-3 ${isReply ? 'ml-10 pl-3 border-l-2 border-primary/20' : ''}`}>
+                                      <Link href={`/profile/${cUser}`}>
+                                        <div className="w-8 h-8 rounded-full border border-primary/20 overflow-hidden flex-shrink-0 bg-black/40 cursor-pointer hover:border-primary/50 transition-all">
+                                          {comment.profiles?.avatar_url ? (
+                                            <img src={comment.profiles.avatar_url} className="w-full h-full object-cover" />
+                                          ) : <User size={16} className="m-auto mt-2 text-primary/30" />}
+                                        </div>
+                                      </Link>
+                                      <div className="flex-1 bg-white/5 border border-primary/10 rounded-xl p-3">
+                                        <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                                          {isReply && <CornerDownRight size={11} className="text-primary/60" />}
+                                          <Link href={`/profile/${cUser}`}>
+                                            <span className="text-xs font-bold text-foreground hover:text-primary transition-colors cursor-pointer">{comment.profiles?.username || 'Investor'}</span>
+                                          </Link>
+                                          <span className="text-[11px] text-muted-foreground/70">{toHandle(comment.profiles?.username, comment.address)}</span>
+                                          <span className="text-muted-foreground/40 text-[10px]">·</span>
+                                          <span className="text-[10px] text-muted-foreground/60">{timeAgo(comment.created_at)}</span>
+                                        </div>
+                                        <p className="text-xs text-foreground/85 whitespace-pre-wrap break-words">{comment.content}</p>
+                                        <div className="flex items-center gap-4 mt-2 pt-2 border-t border-primary/5">
+                                          <button
+                                            onClick={() => handleToggleCommentLike(comment.id)}
+                                            className={`flex items-center gap-1 text-[10px] font-semibold transition-colors ${liked ? 'text-red-400' : 'text-muted-foreground/70 hover:text-red-400'}`}
+                                            aria-label="Like comment"
+                                          >
+                                            <Heart size={11} className={liked ? 'fill-current' : ''} />
+                                            <span>{likeCount > 0 ? likeCount : 'Like'}</span>
+                                          </button>
+                                          {address && (
+                                            <button
+                                              onClick={() => handleStartReply(post.id, cUser)}
+                                              className="flex items-center gap-1 text-[10px] font-semibold text-muted-foreground/70 hover:text-primary transition-colors"
+                                              aria-label="Reply to comment"
+                                            >
+                                              <CornerDownRight size={11} />
+                                              <span>Reply</span>
+                                            </button>
+                                          )}
+                                        </div>
                                       </div>
-                                    </Link>
-                                    <div className="flex-1 bg-white/5 border border-primary/10 rounded-xl p-3">
-                                      <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                                        <Link href={`/profile/${comment.profiles?.username || 'investor'}`}>
-                                          <span className="text-xs font-bold text-foreground hover:text-primary transition-colors cursor-pointer">{comment.profiles?.username || 'Investor'}</span>
-                                        </Link>
-                                        <BadgeCheck size={12} className="text-primary fill-current" />
-                                        <span className="text-[11px] text-muted-foreground/70">{toHandle(comment.profiles?.username, comment.address)}</span>
-                                        <span className="text-muted-foreground/40 text-[10px]">·</span>
-                                        <span className="text-[10px] text-muted-foreground/60">{timeAgo(comment.created_at)}</span>
-                                      </div>
-                                      <p className="text-xs text-foreground/85">{comment.content}</p>
                                     </div>
-                                  </div>
-                                ))}
+                                  );
+                                })}
                               </div>
                               {address && (
-                                <div className="flex gap-2 pt-4">
-                                  <input 
-                                    type="text" 
-                                    value={newComment}
-                                    onChange={(e) => setNewComment(e.target.value)}
-                                    placeholder="Write a comment..."
-                                    className="flex-1 bg-black/40 border border-primary/20 rounded-xl px-4 py-2 text-xs text-foreground focus:border-primary/60 outline-none"
-                                  />
-                                  <button 
-                                    onClick={() => handleAddComment(post.id)}
-                                    className="p-2 rounded-xl bg-primary text-black hover:shadow-[0_0_15px_rgba(234,179,8,0.4)] transition-shadow"
-                                    aria-label="Send comment"
-                                  >
-                                    <Send size={14} />
-                                  </button>
+                                <div className="pt-4">
+                                  {replyTarget[post.id] && (
+                                    <div className="flex items-center justify-between mb-2 px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/20">
+                                      <span className="text-[10px] text-primary/90 font-semibold">Replying to @{replyTarget[post.id]}</span>
+                                      <button onClick={() => { setReplyTarget(p => ({ ...p, [post.id]: null })); setNewComment(''); }} className="text-primary/70 hover:text-primary">
+                                        <X size={12} />
+                                      </button>
+                                    </div>
+                                  )}
+                                  <div className="flex gap-2">
+                                    <input 
+                                      type="text" 
+                                      value={newComment}
+                                      onChange={(e) => setNewComment(e.target.value)}
+                                      placeholder={replyTarget[post.id] ? `Reply to @${replyTarget[post.id]}...` : "Write a comment..."}
+                                      className="flex-1 bg-black/40 border border-primary/20 rounded-xl px-4 py-2 text-xs text-foreground focus:border-primary/60 outline-none"
+                                    />
+                                    <button 
+                                      onClick={() => { handleAddComment(post.id); setReplyTarget(p => ({ ...p, [post.id]: null })); }}
+                                      className="p-2 rounded-xl bg-primary text-black hover:shadow-[0_0_15px_rgba(234,179,8,0.4)] transition-shadow"
+                                      aria-label="Send comment"
+                                    >
+                                      <Send size={14} />
+                                    </button>
+                                  </div>
                                 </div>
                               )}
                             </motion.div>
@@ -731,7 +783,9 @@ export default function SocialHub() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1 flex-wrap mb-0.5">
                               <span className="text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors">{username}</span>
-                              <BadgeCheck size={11} className="text-primary fill-current flex-shrink-0" />
+                              {p.profiles?.branding_logo && (
+                                <img src={p.profiles.branding_logo} alt="Brand" className="w-3 h-3 rounded-full object-cover flex-shrink-0" />
+                              )}
                               <span className="text-[10px] text-muted-foreground/60 truncate">{handle}</span>
                             </div>
                             <p className="text-[11px] text-muted-foreground/80 line-clamp-2 leading-snug">{p.content}</p>
@@ -779,7 +833,9 @@ export default function SocialHub() {
                           <Link href={`/profile/${username}`}>
                             <span className="text-xs font-bold text-foreground hover:text-primary transition-colors cursor-pointer truncate">{username}</span>
                           </Link>
-                          <BadgeCheck size={11} className="text-primary fill-current flex-shrink-0" />
+                          {p.branding_logo && (
+                            <img src={p.branding_logo} alt="Brand" className="w-3 h-3 rounded-full object-cover flex-shrink-0" />
+                          )}
                         </div>
                         <span className="text-[10px] text-muted-foreground/60 truncate block">{handle}</span>
                       </div>
