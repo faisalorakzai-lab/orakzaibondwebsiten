@@ -69,6 +69,10 @@ export default function SocialHub() {
     try { return JSON.parse(localStorage.getItem('okbond_comment_like_counts') || '{}'); } catch { return {}; }
   });
   const [replyTarget, setReplyTarget] = useState<Record<string, string | null>>({});
+  const [postImageFile, setPostImageFile] = useState<File | null>(null);
+  const [postImagePreview, setPostImagePreview] = useState<string | null>(null);
+  const [isUploadingPostImage, setIsUploadingPostImage] = useState(false);
+  const postImageInputRef = useRef<HTMLInputElement>(null);
 
   // Edit Profile Form State
   const [editUsername, setEditUsername] = useState("");
@@ -231,17 +235,67 @@ export default function SocialHub() {
     }
   }
 
+  function handlePickPostImage() {
+    postImageInputRef.current?.click();
+  }
+
+  function handlePostImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setError("Please select an image file.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Image must be smaller than 5MB.");
+      return;
+    }
+    setError(null);
+    setPostImageFile(file);
+    const reader = new FileReader();
+    reader.onload = (ev) => setPostImagePreview(ev.target?.result as string);
+    reader.readAsDataURL(file);
+  }
+
+  function clearPostImage() {
+    setPostImageFile(null);
+    setPostImagePreview(null);
+  }
+
+  async function uploadPostImage(file: File): Promise<string | null> {
+    if (!address) return null;
+    const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+    const path = `posts/${address.toLowerCase()}-${Date.now()}.${ext}`;
+    const { error: upErr } = await supabase.storage
+      .from("social_hub")
+      .upload(path, file, { cacheControl: "3600", upsert: false, contentType: file.type });
+    if (upErr) throw upErr;
+    const { data: { publicUrl } } = supabase.storage.from("social_hub").getPublicUrl(path);
+    return publicUrl;
+  }
+
   async function handleCreatePost() {
-    if (!address || !newPost.trim()) return;
+    if (!address || (!newPost.trim() && !postImageFile)) return;
     setIsSubmittingPost(true);
     setError(null);
     try {
+      let imageUrl: string | null = null;
+      if (postImageFile) {
+        setIsUploadingPostImage(true);
+        imageUrl = await uploadPostImage(postImageFile);
+        setIsUploadingPostImage(false);
+      }
+
+      const insertPayload: Record<string, any> = {
+        address: address.toLowerCase(),
+        content: newPost,
+      };
+      if (imageUrl) insertPayload.image_url = imageUrl;
+
       const { data, error: postError } = await supabase
         .from('posts')
-        .insert({
-          address: address.toLowerCase(),
-          content: newPost,
-        })
+        .insert(insertPayload)
         .select('*, profiles:address(*)')
         .single();
 
@@ -250,10 +304,12 @@ export default function SocialHub() {
       if (data) {
         setPosts([{...data, user_has_liked: false}, ...posts]);
         setNewPost("");
+        clearPostImage();
       }
     } catch (err: any) {
       console.error("Create post error:", err);
       setError(err.message || "Failed to share post. Check RLS policies.");
+      setIsUploadingPostImage(false);
     } finally {
       setIsSubmittingPost(false);
     }
@@ -499,18 +555,55 @@ export default function SocialHub() {
                 placeholder="What's on your mind, Investor?"
                 className="w-full h-20 bg-transparent border-none focus:ring-0 text-foreground resize-none text-sm placeholder:text-muted-foreground/60"
               />
+
+              {/* Hidden file input for post image */}
+              <input
+                ref={postImageInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handlePostImageChange}
+                className="hidden"
+              />
+
+              {/* Image preview */}
+              {postImagePreview && (
+                <div className="relative mt-2 mb-1 rounded-xl overflow-hidden border border-primary/30 bg-black/40 max-w-md">
+                  <img src={postImagePreview} alt="Selected media" className="w-full max-h-72 object-contain" />
+                  <button
+                    type="button"
+                    onClick={clearPostImage}
+                    className="absolute top-2 right-2 p-1.5 rounded-full bg-black/70 border border-primary/40 text-primary hover:bg-black hover:shadow-[0_0_12px_rgba(234,179,8,0.5)] transition-all"
+                    aria-label="Remove image"
+                  >
+                    <X size={14} />
+                  </button>
+                  {isUploadingPostImage && (
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                      <Loader2 className="animate-spin text-primary" size={26} />
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div className="flex items-center justify-between pt-3 border-t border-primary/15">
                 <div className="flex gap-4">
-                  <button type="button" className="text-muted-foreground hover:text-primary transition-colors" aria-label="Add image">
+                  <button
+                    type="button"
+                    onClick={handlePickPostImage}
+                    disabled={isSubmittingPost}
+                    className={`transition-colors ${postImagePreview ? 'text-primary' : 'text-muted-foreground hover:text-primary'} disabled:opacity-50`}
+                    aria-label="Add image"
+                    title="Add image"
+                  >
                     <ImageIcon size={18} />
                   </button>
-                  <button type="button" className="text-muted-foreground hover:text-primary transition-colors" aria-label="Audience">
+                  <button type="button" className="text-muted-foreground hover:text-primary transition-colors" aria-label="Audience" title="Public">
                     <Globe size={18} />
                   </button>
                 </div>
                 <button 
                   onClick={handleCreatePost}
-                  disabled={isSubmittingPost || !newPost.trim()}
+                  disabled={isSubmittingPost || (!newPost.trim() && !postImageFile)}
                   className="px-5 py-2 rounded-xl bg-transparent border-2 border-primary text-primary font-black text-xs uppercase tracking-widest flex items-center gap-2 disabled:opacity-50 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(234,179,8,0.4)] transition-all duration-300 active:scale-95"
                 >
                   {isSubmittingPost ? <Loader2 className="animate-spin" size={14} /> : <Send size={14} />}

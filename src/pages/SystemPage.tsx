@@ -4,7 +4,7 @@ import {
   Wallet, Copy, Check, TrendingUp, TrendingDown, Users, Gift,
   Shield, LogOut, Coins, BarChart3, Clock, ChevronRight,
   ExternalLink, Star, Zap, Activity, RefreshCw, Lock,
-  CheckCircle2, XCircle, ArrowUpRight, Bell,
+  CheckCircle2, XCircle, ArrowUpRight, Bell, Globe,
 } from "lucide-react";
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
