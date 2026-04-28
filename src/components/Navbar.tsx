@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,66 @@ const LANGUAGES = [
   { code: "ar", label: "Arabic",   native: "العربية"   },
   { code: "zh", label: "Chinese",  native: "中文"       },
 ];
+
+
+// ── Marcus Status Pill ──────────────────────────────────────────────────────
+// Polls /api/marcus-status. Shows "Marcus Live" (green) when the OpenAI brain
+// is wired up, or "Marcus Standby" (amber) when running on scripted fallbacks.
+function MarcusStatusPill() {
+  const [status, setStatus] = useState<"live" | "standby" | "unknown">("unknown");
+
+  useEffect(() => {
+    let cancelled = false;
+    const ping = () => {
+      fetch("/api/marcus-status", { cache: "no-store" })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((d) => {
+          if (cancelled) return;
+          setStatus(d && d.status === "live" ? "live" : "standby");
+        })
+        .catch(() => {
+          if (!cancelled) setStatus("standby");
+        });
+    };
+    ping();
+    const id = window.setInterval(ping, 60_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(id);
+    };
+  }, []);
+
+  const isLive = status === "live";
+  const dot = isLive ? "#22c55e" : "#eab308";
+  const fg  = isLive ? "#4ade80" : "#fbbf24";
+  const bg  = isLive ? "rgba(34,197,94,0.08)" : "rgba(234,179,8,0.06)";
+  const bd  = isLive ? "rgba(34,197,94,0.45)" : "rgba(234,179,8,0.40)";
+
+  return (
+    <div
+      className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border text-[10px] font-mono font-semibold tracking-widest uppercase transition-all select-none"
+      style={{ borderColor: bd, background: bg, color: fg }}
+      title={isLive ? "Marcus AI brain online" : "Marcus AI in standby (scripted fallbacks)"}
+      aria-label={isLive ? "Marcus AI live" : "Marcus AI standby"}
+    >
+      <span
+        className="block w-1.5 h-1.5 rounded-full"
+        style={{
+          background: dot,
+          boxShadow: `0 0 6px ${dot}`,
+          animation: "marcusPillPulse 1.8s ease-in-out infinite",
+        }}
+      />
+      <span>Marcus {isLive ? "Live" : "Standby"}</span>
+      <style>{`
+        @keyframes marcusPillPulse {
+          0%, 100% { opacity: 1; }
+          50%      { opacity: 0.45; }
+        }
+      `}</style>
+    </div>
+  );
+}
 
 export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps) {
   const truncatedAddress = address
@@ -132,8 +192,11 @@ export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps
           </Link>
         </div>
 
-        {/* ── Right side: Language + Wallet ─────────────────────────────────── */}
+        {/* ── Right side: Marcus Status + Language + Wallet ─────────────────── */}
         <div className="flex items-center gap-3">
+
+          {/* Marcus AI live/standby status pill */}
+          <MarcusStatusPill />
 
           {/* Language dropdown */}
           <div className="relative hidden sm:block">

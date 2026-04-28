@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { loadAdminProof } from "@/lib/adminAuth";
+import { useLocation } from "wouter";
 
 const GOLD = "#EAB308";
 const GOLD_DEEP = "#A16207";
@@ -75,6 +76,60 @@ function pickMaleVoice(): SpeechSynthesisVoice | null {
   return voices.find((v) => /^en/i.test(v.lang)) || voices[0] || null;
 }
 
+
+function playRoyalChime() {
+  try {
+    const Ctor: any = (window as any).AudioContext || (window as any).webkitAudioContext;
+    if (!Ctor) return;
+    const ctx = new Ctor();
+    const now = ctx.currentTime;
+    // Premium triadic chime: D5 → G5 → D6 (rising perfect-fifth-octave, signature crystalline tone)
+    const notes = [
+      { freq: 587.33, t: 0.00, dur: 1.6, gain: 0.18 },
+      { freq: 783.99, t: 0.10, dur: 1.7, gain: 0.16 },
+      { freq: 1174.66, t: 0.22, dur: 1.9, gain: 0.13 },
+    ];
+    notes.forEach(({ freq, t, dur, gain: g }) => {
+      const osc = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+      gainNode.gain.setValueAtTime(0, now + t);
+      gainNode.gain.linearRampToValueAtTime(g, now + t + 0.04);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + t + dur);
+      osc.connect(gainNode).connect(ctx.destination);
+      osc.start(now + t);
+      osc.stop(now + t + dur + 0.05);
+    });
+    window.setTimeout(() => { try { ctx.close(); } catch {} }, 2200);
+  } catch {
+    /* audio context unavailable — silent fallback */
+  }
+}
+
+// Voice-navigation routes: each maps a spoken keyword to a path.
+// /whitepaper triggers a server-side download (vercel.json rewrite) — must use full navigation.
+const NAV_ROUTES: Record<string, { path: string; external: boolean; label: string }> = {
+  home:        { path: "/",           external: false, label: "the home page" },
+  roadmap:     { path: "/roadmap",    external: false, label: "the roadmap" },
+  whitepaper:  { path: "/whitepaper", external: true,  label: "the whitepaper" },
+  tokenomics:  { path: "/tokenomics", external: false, label: "tokenomics" },
+  ico:         { path: "/ico",        external: false, label: "the ICO page" },
+  about:       { path: "/about",      external: false, label: "the about page" },
+  founder:     { path: "/founder",    external: false, label: "the founder page" },
+  community:   { path: "/community",  external: false, label: "the community page" },
+  contact:     { path: "/contact",    external: false, label: "contact" },
+  token:       { path: "/token",      external: false, label: "the token page" },
+  lottery:     { path: "/lottery",    external: false, label: "the lottery" },
+  documents:   { path: "/documents",  external: false, label: "documents" },
+};
+const NAV_RX = new RegExp(
+  "\\bmarcus[, ]+(?:go to |open |take me to |show |bring up |navigate to )?(?:the )?(" +
+    Object.keys(NAV_ROUTES).join("|") +
+    ")\\b",
+  "i"
+);
+
 function timeAwareSalutation(isAdmin: boolean): string {
   const h = new Date().getHours();
   let part: string;
@@ -94,6 +149,7 @@ export default function MarcusOrb() {
   const [wakeFlash, setWakeFlash] = useState(false);
   const [adminPresent, setAdminPresent] = useState(false);
   const [eliteMode, setEliteMode] = useState(false);
+  const [, setLocation] = useLocation();
 
   const recognitionRef = useRef<any>(null);
   const rafRef = useRef<number | null>(null);
@@ -340,6 +396,26 @@ export default function MarcusOrb() {
         triggerWakeFlash();
         return;
       }
+      // Voice navigation — "Marcus, Roadmap" / "Marcus, Whitepaper" / etc.
+      const navMatch = text.match(NAV_RX);
+      if (navMatch) {
+        const key = navMatch[1].toLowerCase();
+        const route = NAV_ROUTES[key];
+        if (route) {
+          triggerWakeFlash();
+          speak(`Opening ${route.label}.`);
+          window.setTimeout(() => {
+            if (route.external) {
+              window.location.href = route.path;
+            } else {
+              setLocation(route.path);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+          }, 700);
+          return;
+        }
+      }
+
       // Chairman briefing
       if (/\bmarcus[, ]+(briefing|brief me|status report|the briefing)\b/.test(text)) {
         triggerWakeFlash();
@@ -370,7 +446,7 @@ export default function MarcusOrb() {
         askMarcus(text);
       }
     },
-    [askMarcus, open, state, triggerWakeFlash, runBriefing, cancelSpeech]
+    [askMarcus, open, state, triggerWakeFlash, runBriefing, cancelSpeech, setLocation, speak]
   );
 
   const startRecognition = useCallback(() => {
@@ -438,6 +514,12 @@ export default function MarcusOrb() {
       };
     }
     startRecognition();
+    // Royal Chime: signature notification before the first welcome of the session
+    if (!sessionStorage.getItem("marcus.chime.played")) {
+      playRoyalChime();
+      sessionStorage.setItem("marcus.chime.played", "1");
+      await new Promise((r) => window.setTimeout(r, 850));
+    }
     const greeting = `${timeAwareSalutation(adminRef.current)} ${
       adminRef.current
         ? "The Sovereign Grid is online. Say, Marcus briefing, for the operational update."
@@ -607,6 +689,28 @@ export default function MarcusOrb() {
           )}
         </AnimatePresence>
 
+        {/* Ambient Pulse — viewport-wide gold breathing glow synced to Marcus's state */}
+        <div
+          aria-hidden
+          style={{
+            position: "fixed",
+            top: 0, left: 0, right: 0, bottom: 0,
+            pointerEvents: "none",
+            zIndex: 9997,
+            boxShadow:
+              state === "speaking"
+                ? "inset 0 0 90px 2px rgba(234,179,8,0.42), inset 0 0 180px rgba(234,179,8,0.18)"
+                : state === "listening"
+                ? "inset 0 0 70px 1px rgba(234,179,8,0.28), inset 0 0 140px rgba(234,179,8,0.12)"
+                : state === "thinking"
+                ? "inset 0 0 50px 1px rgba(234,179,8,0.22), inset 0 0 110px rgba(234,179,8,0.09)"
+                : "none",
+            animation:
+              state === "idle" ? "marcusAmbientBreath 6s ease-in-out infinite" : "none",
+            transition: "box-shadow 1.2s cubic-bezier(0.4,0,0.6,1)",
+          }}
+        />
+
         <div className="relative ml-auto" style={{ width: 64, height: 64 }}>
           {/* Chairman-online green dot (admin session active) */}
           {adminPresent && (
@@ -701,6 +805,10 @@ export default function MarcusOrb() {
           @keyframes marcusChairmanPulse {
             0%, 100% { transform: scale(1);    opacity: 1;   }
             50%      { transform: scale(1.25); opacity: 0.75;}
+          }
+          @keyframes marcusAmbientBreath {
+            0%, 100% { box-shadow: inset 0 0 24px rgba(234,179,8,0.06), inset 0 0 60px rgba(234,179,8,0.03); }
+            50%      { box-shadow: inset 0 0 55px rgba(234,179,8,0.18), inset 0 0 130px rgba(234,179,8,0.10); }
           }
           @keyframes marcusEliteRing {
             0%   { transform: scale(0.85); opacity: 0.95; }
