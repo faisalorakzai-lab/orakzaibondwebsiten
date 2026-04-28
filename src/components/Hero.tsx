@@ -301,12 +301,12 @@ export default function Hero({ onConnect, address }: HeroProps) {
                   </div>
                 </div>
                 
-                <div className="w-full md:w-64 h-3 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                <div className="w-full md:w-64 h-3 bg-white/5 rounded-full overflow-hidden border border-white/5 relative">
                   <motion.div 
                     initial={{ width: 0 }}
                     animate={{ width: `${progress}%` }}
                     transition={{ duration: 1.5, ease: "easeOut" }}
-                    className="h-full bg-gradient-to-r from-primary via-yellow-400 to-primary shadow-[0_0_15px_rgba(234,179,8,0.5)] animate-slow-pulse"
+                    className="h-full bg-gradient-to-r from-primary via-yellow-400 to-primary shadow-[0_0_15px_rgba(234,179,8,0.5)] animate-slow-pulse relative z-10"
                   />
                 </div>
                 <div className="flex justify-between w-full md:w-64 text-[10px] font-black uppercase tracking-tighter mt-1">

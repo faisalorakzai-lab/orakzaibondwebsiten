@@ -151,7 +151,9 @@ export default function ParticleBackground() {
       animId = requestAnimationFrame(frame);
     }
 
-    const ro = new ResizeObserver(init);
+    const ro = new ResizeObserver(() => {
+      resize();
+    });
     ro.observe(canvas);
     init();
     frame();
