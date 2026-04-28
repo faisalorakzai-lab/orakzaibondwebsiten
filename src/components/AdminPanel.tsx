@@ -23,7 +23,7 @@ export default function AdminPanel() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (address && address.toLowerCase() === ADMIN_WALLET.toLowerCase()) {
+    if (address && address.toLowerCase() === ADMIN_WALLET.toLowerCase()) { /* fix: case-insensitive check */
       setIsAdmin(true);
     } else {
       setIsAdmin(false);

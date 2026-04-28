@@ -27,7 +27,7 @@ export default function CommunityHub() {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    if (address && address.toLowerCase() === ADMIN_WALLET.toLowerCase()) {
+    if (address && address.toLowerCase() === ADMIN_WALLET.toLowerCase()) { /* fix: case-insensitive check */
       setIsAdmin(true);
     } else {
       setIsAdmin(false);

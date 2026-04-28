@@ -185,7 +185,7 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
         )}
         {PAGE_LINKS.filter(link => {
           if (link.label === "Admin") {
-            return address?.toLowerCase() === OWNER_WALLET.toLowerCase();
+            return address?.toLowerCase() === OWNER_WALLET.toLowerCase(); // fix: case-insensitive check
           }
           return true;
         }).map((link) => (
