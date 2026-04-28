@@ -197,7 +197,7 @@ function ICOPhaseCards() {
   );
 }
 
-// ── Referral Profit Calculator ────────────────────────────────────────────────
+// ── SGI Yield Calculator ──────────────────────────────────────────────────────
 function ReferralCalculator() {
   const [investors, setInvestors] = useState("");
   const [result, setResult]       = useState<{ l1: number; l2: number; l3: number; l4: number; l5: number; total: number } | null>(null);
@@ -233,8 +233,8 @@ function ReferralCalculator() {
           <TrendingUp className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h3 className="font-extrabold text-foreground">Referral Profit Calculator</h3>
-          <p className="text-xs text-muted-foreground">Estimate your 5-level MLM earnings</p>
+          <h3 className="font-extrabold text-foreground">SGI Yield Calculator</h3>
+          <p className="text-xs text-muted-foreground">Estimate your 5-tier Strategic Growth Incentive earnings</p>
         </div>
         <div className="ml-auto px-2.5 py-1 rounded-lg bg-primary/15 border border-primary/25 text-primary text-[10px] font-extrabold tracking-widest">
           📊 LIVE CALC
@@ -524,62 +524,90 @@ export default function ICOModule({
             />
           </div>
 
-          {/* Referral Card */}
-          <div className="glass-card rounded-3xl border border-primary/20 p-6 bg-gradient-to-br from-primary/5 to-transparent space-y-5">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                <Users className="w-5 h-5 text-primary" />
+          {/* SGI Invite Card */}
+          <div
+            className="relative rounded-3xl p-6 space-y-5 overflow-hidden"
+            style={{
+              background: "linear-gradient(135deg, #0a0a0a 0%, #141008 100%)",
+              border: "1px solid rgba(245,197,24,0.3)",
+              boxShadow: "0 18px 50px -16px rgba(0,0,0,0.7), inset 0 1px 0 rgba(245,197,24,0.15)",
+            }}
+          >
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F5C518]/70 to-transparent" />
+            <div className="absolute -top-24 -right-20 w-56 h-56 rounded-full bg-[#F5C518]/10 blur-3xl pointer-events-none" />
+
+            <div className="relative flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#F5C518]/25 to-[#F5C518]/5 border border-[#F5C518]/40 flex items-center justify-center">
+                <Users className="w-5 h-5 text-[#F5C518]" />
               </div>
-              <div>
-                <h3 className="font-bold text-foreground">Invite & Earn</h3>
-                <p className="text-[10px] text-muted-foreground uppercase tracking-widest">5-Level Referral System</p>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-black text-[#F5C518] truncate">Strategic Growth Incentive</h3>
+                <p className="text-[9px] text-[#F5C518]/60 uppercase tracking-[0.2em] font-black">SGI · 5-Tier Architecture</p>
               </div>
+              <span className="px-2 py-1 rounded-md bg-black border border-[#F5C518]/40 text-[9px] font-black uppercase tracking-widest text-[#F5C518]">
+                ICO Only
+              </span>
             </div>
 
-            <div className="space-y-3">
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Earn instant commissions when your network participates in the ICO. Rewards are distributed across 5 levels.
+            <div className="relative space-y-3">
+              <p className="text-xs text-white/60 leading-relaxed">
+                Earn instant commissions when your network participates in the ICO. Rewards source from a 50/50 founder-equity & staking-reserve split, settled fully on-chain.
               </p>
-              
-              <div className="p-3 rounded-xl bg-black/40 border border-white/5 space-y-2">
-                <p className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Your Referral Link</p>
+
+              <div className="p-3 rounded-2xl bg-black border border-[#F5C518]/15 space-y-2">
+                <div className="flex items-center justify-between">
+                  <p className="text-[9px] font-black text-[#F5C518]/60 uppercase tracking-[0.2em]">Your SGI Invite Link</p>
+                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#F5C518]/10 border border-[#F5C518]/30">
+                    <ShieldCheck className="w-2.5 h-2.5 text-[#F5C518]" />
+                    <span className="text-[8px] font-black uppercase tracking-widest text-[#F5C518]">OSG</span>
+                  </span>
+                </div>
                 <div className="flex items-center gap-2">
-                  <div className="flex-1 bg-black/40 rounded-lg px-3 py-2 text-[10px] font-mono text-primary/70 truncate border border-white/5">
+                  <div className="flex-1 bg-black rounded-lg px-3 py-2 text-[10px] font-mono text-[#F5C518]/80 truncate border border-[#F5C518]/10">
                     {address ? `${SITE_URL}?ref=${address.slice(0, 6)}...${address.slice(-4)}` : "Connect wallet to view"}
                   </div>
                   <button
                     onClick={copyRef}
                     disabled={!address}
-                    className="p-2 rounded-lg bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 transition-colors disabled:opacity-30"
+                    className="group relative overflow-hidden p-2 rounded-lg bg-gradient-to-b from-[#F5C518] via-[#D4A017] to-[#9C7B0A] text-black shadow-[0_4px_14px_-2px_rgba(245,197,24,0.5),inset_0_1px_0_rgba(255,255,255,0.35)] hover:shadow-[0_6px_20px_-2px_rgba(245,197,24,0.7)] active:scale-95 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
                   >
                     {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                   </button>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Security Badge */}
-          <div className="p-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
-              <ShieldCheck className="w-6 h-6 text-emerald-500" />
+          {/* OSG Smart Contract Badge */}
+          <div
+            className="relative rounded-2xl p-4 flex items-center gap-4 overflow-hidden"
+            style={{
+              background: "linear-gradient(135deg, #0a0a0a 0%, #141008 100%)",
+              border: "1px solid rgba(245,197,24,0.3)",
+            }}
+          >
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#F5C518]/60 to-transparent" />
+            <div className="relative w-11 h-11 rounded-full bg-gradient-to-br from-[#F5C518]/25 to-[#F5C518]/5 border border-[#F5C518]/40 flex items-center justify-center flex-shrink-0">
+              <ShieldCheck className="w-5 h-5 text-[#F5C518]" />
+              <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[#F5C518] animate-pulse border border-black" />
             </div>
-            <div>
-              <p className="text-xs font-bold text-foreground">Smart Contract Verified</p>
-              <p className="text-[10px] text-muted-foreground">Liquidity-Backed Capital Retention Model enabled on-chain.</p>
+            <div className="relative min-w-0 flex-1">
+              <p className="text-xs font-black text-[#F5C518] uppercase tracking-wider">Verified by OSG</p>
+              <p className="text-[10px] text-white/50 leading-relaxed">SGI rewards are pre-locked & auto-distributed. No human approval required.</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 4. Calculator & Dashboard */}
+      {/* 4. SGI Calculator & Dashboard */}
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
         <ReferralCalculator />
         {address && (
           <div className="space-y-4">
             <div className="flex items-center gap-3 px-2">
-              <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-              <h3 className="text-sm font-black text-foreground uppercase tracking-[0.2em]">Live Network Performance</h3>
+              <div className="h-2 w-2 rounded-full bg-[#F5C518] animate-pulse" />
+              <h3 className="text-sm font-black text-[#F5C518] uppercase tracking-[0.25em]">SGI · Live Network Performance</h3>
             </div>
             <ReferralDashboard address={address} provider={provider} />
           </div>
