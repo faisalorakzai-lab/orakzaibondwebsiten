@@ -39,13 +39,14 @@ export function buildSiweMessage(address: string, nonce: string, issuedAt: numbe
   const issuedISO = new Date(issuedAt).toISOString();
   const expiresISO = new Date(expiresAt).toISOString();
   return [
-    `${domain} wants you to sign in with your Ethereum account:`,
+    `${domain} wants you to sign in with your Polygon account:`,
     address,
     "",
     "Sign in to access the OKBOND Admin Panel. This will not trigger a blockchain transaction or cost gas.",
     "",
     `URI: https://${domain}`,
     `Version: 1`,
+    `Network: Polygon Mainnet`,
     `Chain ID: 137`,
     `Nonce: ${nonce}`,
     `Issued At: ${issuedISO}`,

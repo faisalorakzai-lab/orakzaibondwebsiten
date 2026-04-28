@@ -40,6 +40,10 @@ export default function AdminGate({ children }: AdminGateProps) {
       setErrorMsg("Connected wallet is not authorized.");
       return;
     }
+    if (!isPolygon) {
+      setErrorMsg("Please switch to Polygon Mainnet (chain ID 137) before signing in.");
+      return;
+    }
     setSigning(true);
     setErrorMsg(null);
     try {
@@ -117,30 +121,36 @@ export default function AdminGate({ children }: AdminGateProps) {
             Admin Sign-In Required
           </h1>
           <p className="text-sm text-muted-foreground text-center mb-2">
-            Sign a message with your wallet to prove ownership.
+            Sign a message on Polygon Mainnet to prove wallet ownership.
           </p>
           <p className="text-[11px] text-muted-foreground/70 font-mono text-center mb-6 break-all">
             {ADMIN_WALLET}
           </p>
 
           {!isPolygon && (
-            <button
-              onClick={switchToPolygon}
-              className="w-full mb-3 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-amber-500/40 bg-amber-500/10 text-amber-300 text-sm font-semibold hover:bg-amber-500/20 transition"
-            >
-              Switch to Polygon
-            </button>
+            <div className="mb-4 p-3 rounded-xl border border-amber-500/40 bg-amber-500/10 text-center">
+              <p className="text-xs text-amber-300 font-semibold mb-2">
+                Wrong network — Polygon Mainnet (chain ID 137) required.
+              </p>
+              <button
+                onClick={switchToPolygon}
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-amber-500/20 text-amber-200 text-sm font-semibold hover:bg-amber-500/30 transition"
+              >
+                Switch to Polygon Mainnet
+              </button>
+            </div>
           )}
 
           <button
             onClick={handleSignIn}
-            disabled={signing}
+            disabled={signing || !isPolygon}
             className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed"
+            title={!isPolygon ? "Switch to Polygon Mainnet first" : undefined}
           >
             {signing ? (
               <><Loader2 className="w-4 h-4 animate-spin" /> Waiting for signature…</>
             ) : (
-              <><ShieldCheck className="w-4 h-4" /> Sign In With Ethereum</>
+              <><ShieldCheck className="w-4 h-4" /> Sign In With Polygon</>
             )}
           </button>
 
@@ -148,7 +158,7 @@ export default function AdminGate({ children }: AdminGateProps) {
             <p className="mt-4 text-xs text-red-400 text-center">{errorMsg}</p>
           )}
           <p className="mt-5 text-[11px] text-muted-foreground/60 text-center">
-            This signature does not trigger a transaction or cost gas. Session expires in 1 hour.
+            Polygon Mainnet only. This signature does not trigger a transaction or cost gas. Session expires in 1 hour.
           </p>
         </motion.div>
       </div>
