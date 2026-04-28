@@ -9,8 +9,10 @@ export default function TokenomicsPage() {
   }, []);
 
   return (
-    <main className="flex-1">
-      <Tokenomics />
+    <main className="flex-1 midnight-page">
+      <div className="relative z-10">
+        <Tokenomics />
+      </div>
     </main>
   );
 }

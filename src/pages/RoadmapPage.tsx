@@ -9,8 +9,10 @@ export default function RoadmapPage() {
   }, []);
 
   return (
-    <main className="flex-1">
-      <Roadmap />
+    <main className="flex-1 midnight-page">
+      <div className="relative z-10">
+        <Roadmap />
+      </div>
     </main>
   );
 }

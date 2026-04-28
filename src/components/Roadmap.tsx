@@ -165,10 +165,10 @@ export default function Roadmap() {
           viewport={{ once: true }}
           className="text-center mb-20"
         >
-          <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-foreground mb-6 uppercase">
-            Strategic <span className="text-primary drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]">Roadmap</span>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground mb-6" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
+            Strategic <span className="heading-midnight-gold drop-shadow-[0_0_25px_rgba(245,197,24,0.55)]">Roadmap</span>
           </h2>
-          <div className="w-24 h-1 bg-primary mx-auto mb-6" />
+          <div className="w-24 h-1 mx-auto mb-6" style={{ background: "linear-gradient(135deg, #BF953F 0%, #FCF6BA 30%, #B38728 50%, #FBF5B7 70%, #AA771C 100%)" }} />
           <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
             The professional evolution of the Orakzai Group ecosystem, from OKBOND dominance to a sovereign global grid.
           </p>
@@ -178,7 +178,7 @@ export default function Roadmap() {
         <div className="max-w-5xl mx-auto mb-24">
           <div className="flex items-center gap-4 mb-12">
             <div className="h-px flex-1 bg-gradient-to-r from-transparent to-primary/30" />
-            <h3 className="text-3xl font-bold text-primary px-6 py-2 glass-gold rounded-full">
+            <h3 className="text-2xl md:text-3xl font-semibold px-6 py-2 glass-card-gold rounded-full heading-midnight-gold" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
               Stage 1: The OKBOND Dominance (2026 - 2027)
             </h3>
             <div className="h-px flex-1 bg-gradient-to-l from-transparent to-primary/30" />
@@ -199,7 +199,7 @@ export default function Roadmap() {
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center gap-4 mb-12">
             <div className="h-px flex-1 bg-gradient-to-r from-transparent to-primary/30" />
-            <h3 className="text-3xl font-bold text-primary px-6 py-2 glass-gold rounded-full">
+            <h3 className="text-2xl md:text-3xl font-semibold px-6 py-2 glass-card-gold rounded-full heading-midnight-gold" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
               Stage 2: The Sovereign Grid Expansion (2028 - 2029)
             </h3>
             <div className="h-px flex-1 bg-gradient-to-l from-transparent to-primary/30" />

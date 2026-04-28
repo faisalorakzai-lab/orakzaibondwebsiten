@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Lexend:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -57,9 +57,10 @@
   --color-sidebar-accent-border: var(--sidebar-accent-border);
   --color-sidebar-ring: hsl(var(--sidebar-ring));
 
-  --font-sans: 'Space Grotesk', 'Inter', sans-serif;
-  --font-heading: 'Syncopate', sans-serif;
-  --font-serif: Georgia, serif;
+  --font-sans: 'Inter', 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
   --font-mono: Menlo, monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
@@ -68,35 +69,35 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* Dark-only theme — gold & black */
+/* Dark-only theme — Midnight Gold (deep matte black + 24K gold) */
 :root {
-  --button-outline: rgba(255,255,255, .10);
-  --badge-outline: rgba(255,255,255, .05);
+  --button-outline: rgba(245, 197, 24, .15);
+  --badge-outline: rgba(245, 197, 24, .08);
   --opaque-button-border-intensity: 9;
-  --elevate-1: rgba(255,255,255, .04);
-  --elevate-2: rgba(255,255,255, .09);
+  --elevate-1: rgba(245, 197, 24, .05);
+  --elevate-2: rgba(245, 197, 24, .10);
 
-  /* Deep dark navy-black background */
-  --background: 222 47% 8%;
+  /* Deep matte black — Midnight #050505 */
+  --background: 0 0% 2%;
   --foreground: 45 20% 95%;
 
-  --card: 222 35% 11%;
+  --card: 0 0% 4%;
   --card-foreground: 45 20% 95%;
-  --card-border: 222 20% 16%;
+  --card-border: 45 70% 45%;
 
-  --popover: 222 35% 11%;
+  --popover: 0 0% 4%;
   --popover-foreground: 45 20% 95%;
-  --popover-border: 222 20% 16%;
+  --popover-border: 45 70% 45%;
 
   /* Gold primary */
   --primary: 49 91% 53%;
   --primary-foreground: 0 0% 5%;
 
-  --secondary: 222 25% 14%;
+  --secondary: 0 0% 6%;
   --secondary-foreground: 45 20% 95%;
 
-  --muted: 222 25% 13%;
-  --muted-foreground: 45 10% 52%;
+  --muted: 0 0% 6%;
+  --muted-foreground: 45 10% 60%;
 
   /* Gold accent */
   --accent: 49 91% 53%;
@@ -105,24 +106,24 @@
   --destructive: 0 84% 60%;
   --destructive-foreground: 45 20% 95%;
 
-  --border: 222 20% 17%;
-  --input: 222 20% 17%;
+  --border: 45 50% 30%;
+  --input: 45 50% 30%;
   --ring: 49 91% 53%;
 
-  /* Chart colors — gold family */
+  /* Chart colors — full gold family (no blue) */
   --chart-1: 49 91% 53%;
-  --chart-2: 38 90% 48%;
-  --chart-3: 32 85% 42%;
-  --chart-4: 28 80% 36%;
-  --chart-5: 220 60% 50%;
+  --chart-2: 43 89% 50%;
+  --chart-3: 38 90% 48%;
+  --chart-4: 32 85% 42%;
+  --chart-5: 28 80% 36%;
 
   /* Sidebar */
-  --sidebar: 222 40% 10%;
+  --sidebar: 0 0% 3%;
   --sidebar-foreground: 45 20% 95%;
-  --sidebar-border: 222 20% 17%;
+  --sidebar-border: 45 50% 30%;
   --sidebar-primary: 49 91% 53%;
   --sidebar-primary-foreground: 0 0% 5%;
-  --sidebar-accent: 222 25% 14%;
+  --sidebar-accent: 0 0% 6%;
   --sidebar-accent-foreground: 45 20% 95%;
   --sidebar-ring: 49 91% 53%;
 
@@ -149,46 +150,46 @@
   --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
 }
 
-/* Force dark — this is a dark-only site */
+/* Force dark — Midnight Gold dark-only site */
 .dark {
-  --button-outline: rgba(255,255,255, .10);
-  --badge-outline: rgba(255,255,255, .05);
+  --button-outline: rgba(245, 197, 24, .15);
+  --badge-outline: rgba(245, 197, 24, .08);
   --opaque-button-border-intensity: 9;
-  --elevate-1: rgba(255,255,255, .04);
-  --elevate-2: rgba(255,255,255, .09);
+  --elevate-1: rgba(245, 197, 24, .05);
+  --elevate-2: rgba(245, 197, 24, .10);
 
-  --background: 222 47% 8%;
+  --background: 0 0% 2%;
   --foreground: 45 20% 95%;
-  --card: 222 35% 11%;
+  --card: 0 0% 4%;
   --card-foreground: 45 20% 95%;
-  --card-border: 222 20% 16%;
-  --popover: 222 35% 11%;
+  --card-border: 45 70% 45%;
+  --popover: 0 0% 4%;
   --popover-foreground: 45 20% 95%;
-  --popover-border: 222 20% 16%;
+  --popover-border: 45 70% 45%;
   --primary: 49 91% 53%;
   --primary-foreground: 0 0% 5%;
-  --secondary: 222 25% 14%;
+  --secondary: 0 0% 6%;
   --secondary-foreground: 45 20% 95%;
-  --muted: 222 25% 13%;
-  --muted-foreground: 45 10% 52%;
+  --muted: 0 0% 6%;
+  --muted-foreground: 45 10% 60%;
   --accent: 49 91% 53%;
   --accent-foreground: 0 0% 5%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 45 20% 95%;
-  --border: 222 20% 17%;
-  --input: 222 20% 17%;
+  --border: 45 50% 30%;
+  --input: 45 50% 30%;
   --ring: 49 91% 53%;
   --chart-1: 49 91% 53%;
-  --chart-2: 38 90% 48%;
-  --chart-3: 32 85% 42%;
-  --chart-4: 28 80% 36%;
-  --chart-5: 220 60% 50%;
-  --sidebar: 222 40% 10%;
+  --chart-2: 43 89% 50%;
+  --chart-3: 38 90% 48%;
+  --chart-4: 32 85% 42%;
+  --chart-5: 28 80% 36%;
+  --sidebar: 0 0% 3%;
   --sidebar-foreground: 45 20% 95%;
-  --sidebar-border: 222 20% 17%;
+  --sidebar-border: 45 50% 30%;
   --sidebar-primary: 49 91% 53%;
   --sidebar-primary-foreground: 0 0% 5%;
-  --sidebar-accent: 222 25% 14%;
+  --sidebar-accent: 0 0% 6%;
   --sidebar-accent-foreground: 45 20% 95%;
   --sidebar-ring: 49 91% 53%;
   --shadow-2xs: 0px 1px 2px 0px rgba(0,0,0,0.5);
@@ -206,13 +207,25 @@
     @apply border-border;
   }
 
+  html, body {
+    background: #050505 !important;
+  }
+
   body {
-    @apply font-sans antialiased bg-background text-foreground;
-    background: hsl(222, 47%, 8%);
+    @apply font-sans antialiased text-foreground;
+    background-color: #050505;
+    font-family: 'Inter', 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Midnight Gold global headings — Playfair Display */
+  h1, h2, h3, h4, h5, h6,
+  .font-heading, .font-display {
+    font-family: 'Playfair Display', Georgia, serif;
+    letter-spacing: -0.015em;
   }
 }
 
@@ -634,4 +647,256 @@
   border-radius: 9999px;
   border: 2px solid #10B981;
   animation: live-pulse 1.4s ease-out infinite;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   MIDNIGHT GOLD GLOBAL THEME — Founder Page parity
+   Deep matte black (#050505) + 24K gold linear gradient
+   ════════════════════════════════════════════════════════════════════ */
+
+/* 24K Gold linear gradient — the canonical Founder Page palette */
+:root {
+  --mg-midnight: #050505;
+  --mg-midnight-soft: #0a0a0a;
+  --mg-gold-1: #BF953F;
+  --mg-gold-2: #FCF6BA;
+  --mg-gold-3: #B38728;
+  --mg-gold-4: #FBF5B7;
+  --mg-gold-5: #AA771C;
+  --mg-gold-line: rgba(245, 197, 24, 0.35);
+  --mg-gold-line-strong: rgba(245, 197, 24, 0.65);
+  --mg-gold-glow: rgba(245, 197, 24, 0.45);
+  --mg-gold-gradient: linear-gradient(135deg, #BF953F 0%, #FCF6BA 30%, #B38728 50%, #FBF5B7 70%, #AA771C 100%);
+}
+
+/* ── Glassmorphic Gold Card — matches $OKBOND Mission card ─────────── */
+.glass-card-gold {
+  position: relative;
+  background: linear-gradient(155deg, rgba(20, 18, 12, 0.72) 0%, rgba(10, 9, 6, 0.85) 100%);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(252, 246, 186, 0.18);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow:
+    0 30px 60px -30px rgba(191, 149, 63, 0.25),
+    0 0 0 1px rgba(252, 246, 186, 0.04) inset,
+    0 0 24px -6px rgba(245, 197, 24, 0.18);
+  transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 400ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.glass-card-gold:hover {
+  border-color: rgba(252, 246, 186, 0.45);
+  box-shadow:
+    0 40px 70px -30px rgba(191, 149, 63, 0.45),
+    0 0 0 1px rgba(252, 246, 186, 0.12) inset,
+    0 0 38px -4px rgba(245, 197, 24, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Subtle gold ring — overlays inside .glass-card-gold for hairline gold edge */
+.gold-ring-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--mg-gold-gradient);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ── 24K Gold gradient text ───────────────────────────────────────── */
+.gold-text-gradient {
+  background: var(--mg-gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ── 24K Gold gradient button (replaces blue/cyan CTAs) ───────────── */
+.gold-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  font-family: 'Inter', 'Lexend', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #050505;
+  background: var(--mg-gold-gradient);
+  border: 1px solid rgba(252, 246, 186, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(252, 246, 186, 0.15) inset,
+    0 8px 24px -6px rgba(245, 197, 24, 0.5),
+    0 0 28px -4px rgba(245, 197, 24, 0.35);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.gold-button:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow:
+    0 0 0 1px rgba(252, 246, 186, 0.3) inset,
+    0 12px 32px -6px rgba(245, 197, 24, 0.7),
+    0 0 48px -4px rgba(245, 197, 24, 0.55);
+}
+
+.gold-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+
+.gold-button:hover::after {
+  transform: translateX(100%);
+}
+
+/* Outline gold button variant */
+.gold-button-outline {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  font-family: 'Inter', 'Lexend', sans-serif;
+  font-weight: 700;
+  color: #FCF6BA;
+  background: rgba(10, 9, 6, 0.6);
+  border: 1px solid rgba(245, 197, 24, 0.45);
+  box-shadow: 0 0 0 1px rgba(252, 246, 186, 0.04) inset;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+}
+
+.gold-button-outline:hover {
+  border-color: rgba(252, 246, 186, 0.85);
+  color: #FCF6BA;
+  box-shadow:
+    0 0 0 1px rgba(252, 246, 186, 0.18) inset,
+    0 0 28px -4px rgba(245, 197, 24, 0.55);
+  transform: translateY(-1px);
+}
+
+/* ── Synchronized gold hover glow — for buttons, social icons, etc. ─ */
+.gold-hover-glow {
+  transition: filter 0.35s ease,
+              color 0.35s ease,
+              box-shadow 0.35s ease,
+              transform 0.35s ease;
+}
+
+.gold-hover-glow:hover {
+  color: #FCF6BA !important;
+  filter: drop-shadow(0 0 8px rgba(245, 197, 24, 0.8))
+          drop-shadow(0 0 18px rgba(245, 197, 24, 0.45));
+  transform: translateY(-2px);
+}
+
+/* Thin hairline gold border — for inputs, tables, chips */
+.gold-border-thin {
+  border: 1px solid rgba(245, 197, 24, 0.28);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gold-border-thin:hover,
+.gold-border-thin:focus-within {
+  border-color: rgba(252, 246, 186, 0.6);
+  box-shadow: 0 0 0 1px rgba(252, 246, 186, 0.1) inset,
+              0 0 22px -4px rgba(245, 197, 24, 0.4);
+}
+
+/* ── Gold scroll glow — subtle gold radiance triggered on scroll ────── */
+@keyframes gold-scroll-radiance {
+  0% {
+    box-shadow:
+      0 0 0 1px rgba(245, 197, 24, 0.12) inset,
+      0 0 18px -6px rgba(245, 197, 24, 0.25);
+    border-color: rgba(245, 197, 24, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(252, 246, 186, 0.25) inset,
+      0 0 32px -2px rgba(245, 197, 24, 0.5);
+    border-color: rgba(252, 246, 186, 0.55);
+  }
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(245, 197, 24, 0.12) inset,
+      0 0 18px -6px rgba(245, 197, 24, 0.25);
+    border-color: rgba(245, 197, 24, 0.2);
+  }
+}
+
+.gold-scroll-glow {
+  animation: gold-scroll-radiance 5s ease-in-out infinite;
+}
+
+/* Heading variant — Founder Page tagline-style gradient */
+.heading-midnight-gold {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  background: var(--mg-gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ── Page wrapper — applies the deep matte black + gold dust feel ──── */
+.midnight-page {
+  position: relative;
+  background: #050505;
+  min-height: 100vh;
+  color: #f3ecd1;
+}
+
+.midnight-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 0%, rgba(245, 197, 24, 0.06), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 100%, rgba(245, 197, 24, 0.04), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Override any blue/cyan utility leakage on dashboard */
+.midnight-page .text-blue-400,
+.midnight-page .text-blue-500,
+.midnight-page .text-cyan-400,
+.midnight-page .text-cyan-500,
+.midnight-page .text-sky-400,
+.midnight-page .text-sky-500 {
+  color: #FCF6BA !important;
+}
+
+.midnight-page .border-blue-400\/20,
+.midnight-page .border-blue-500\/20,
+.midnight-page .border-cyan-400\/20,
+.midnight-page .border-cyan-500\/20 {
+  border-color: rgba(245, 197, 24, 0.3) !important;
+}
+
+.midnight-page .bg-blue-500\/10,
+.midnight-page .bg-cyan-500\/10,
+.midnight-page .bg-sky-500\/10 {
+  background-color: rgba(245, 197, 24, 0.08) !important;
 }

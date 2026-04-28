@@ -4,54 +4,55 @@ import { CheckCircle2, TrendingUp, ArrowLeft, Zap, Shield, Repeat, Lock } from "
 import { useState } from "react";
 import { Link } from "wouter";
 
+// Midnight Gold — full 24K gold family palette (no blue/cyan/pink)
 const TOKENOMICS_DATA = [
   {
     name: "Staking Rewards",
     value: 28,
     amount: "2,800,000",
-    color: "#eab308",
+    color: "#FCF6BA",
     description: "Distributed to active stakers and long-term holders",
   },
   {
     name: "Community & Ecosystem",
     value: 20,
     amount: "2,000,000",
-    color: "#f59e0b",
+    color: "#F5C518",
     description: "Allocated for ecosystem growth and community initiatives",
   },
   {
     name: "Liquidity Pool",
     value: 20,
     amount: "2,000,000",
-    color: "#3b82f6",
+    color: "#D4A017",
     description: "Locked liquidity to ensure stable trading and market depth",
   },
   {
     name: "Development",
     value: 12,
     amount: "1,200,000",
-    color: "#10b981",
+    color: "#BF953F",
     description: "Reserved for platform upgrades and technical infrastructure",
   },
   {
     name: "Team & Advisors",
     value: 8,
     amount: "800,000",
-    color: "#8b5cf6",
+    color: "#B38728",
     description: "Incentives for core team and strategic advisors",
   },
   {
     name: "Team Lock-up",
     value: 6,
     amount: "600,000",
-    color: "#ec4899",
+    color: "#9C7B0A",
     description: "Strictly locked for 12 months to ensure long-term commitment",
   },
   {
     name: "Public Sale",
     value: 6,
     amount: "600,000",
-    color: "#f97316",
+    color: "#AA771C",
     description: "Exclusive scarcity phase for early public participants",
   },
 ];
@@ -163,9 +164,9 @@ export default function Tokenomics() {
             <TrendingUp className="w-3.5 h-3.5" />
             Official Token Distribution
           </span>
-          <h2 className="text-6xl md:text-7xl font-black tracking-tighter text-foreground mb-6 leading-[0.85]">
+          <h2 className="text-6xl md:text-7xl font-bold tracking-tight text-foreground mb-6 leading-[0.95] font-heading" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
             OKBOND<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-yellow-300 to-primary drop-shadow-[0_0_50px_rgba(234,179,8,0.7)]">
+            <span className="heading-midnight-gold drop-shadow-[0_0_50px_rgba(245,197,24,0.55)]">
               Tokenomics
             </span>
           </h2>
@@ -181,10 +182,7 @@ export default function Tokenomics() {
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative p-8 rounded-3xl backdrop-blur-xl border border-primary/30 bg-gradient-to-br from-white/8 to-white/3 flex items-center justify-center overflow-hidden group"
-            style={{
-              boxShadow: "0 0 40px rgba(234,179,8,0.2), inset 0 1px 0 rgba(255,255,255,0.1)",
-            }}
+            className="relative p-8 rounded-3xl glass-card-gold flex items-center justify-center overflow-hidden group"
           >
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,rgba(234,179,8,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -362,11 +360,8 @@ export default function Tokenomics() {
                 className="group"
               >
                 <motion.div
-                  whileHover={{ y: -8, boxShadow: "0 0 40px rgba(234,179,8,0.3)" }}
-                  className="relative p-8 rounded-3xl backdrop-blur-xl border border-primary/30 bg-gradient-to-br from-white/8 to-white/3 transition-all duration-300 overflow-hidden h-full"
-                  style={{
-                    boxShadow: "0 0 20px rgba(59,130,246,0.2), inset 0 1px 0 rgba(255,255,255,0.1)",
-                  }}
+                  whileHover={{ y: -8, boxShadow: "0 0 40px rgba(245,197,24,0.4)" }}
+                  className="relative p-8 rounded-3xl glass-card-gold transition-all duration-300 overflow-hidden h-full"
                 >
                   <div className="absolute inset-0 rounded-3xl border border-primary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
                   
@@ -391,7 +386,7 @@ export default function Tokenomics() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative p-12 rounded-3xl backdrop-blur-xl border border-primary/30 bg-gradient-to-br from-white/8 to-white/3 overflow-hidden mb-20"
+          className="relative p-12 rounded-3xl glass-card-gold overflow-hidden mb-20"
           style={{
             boxShadow: "0 0 40px rgba(234,179,8,0.2), inset 0 1px 0 rgba(255,255,255,0.1)",
           }}
@@ -442,11 +437,8 @@ export default function Tokenomics() {
                 className="group"
               >
                 <motion.div
-                  whileHover={{ y: -8, boxShadow: "0 0 40px rgba(234,179,8,0.3)" }}
-                  className="relative p-8 rounded-3xl backdrop-blur-xl border border-primary/30 bg-gradient-to-br from-white/8 to-white/3 transition-all duration-300 overflow-hidden h-full"
-                  style={{
-                    boxShadow: "0 0 20px rgba(59,130,246,0.2), inset 0 1px 0 rgba(255,255,255,0.1)",
-                  }}
+                  whileHover={{ y: -8, boxShadow: "0 0 40px rgba(245,197,24,0.4)" }}
+                  className="relative p-8 rounded-3xl glass-card-gold transition-all duration-300 overflow-hidden h-full"
                 >
                   <div className="absolute inset-0 rounded-3xl border border-primary/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
 

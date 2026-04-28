@@ -10,9 +10,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useWallet } from "@/hooks/useWallet";
 
 const BADGE_CONFIG = {
-  blue: { icon: BadgeCheck, color: "text-blue-400", label: "Verified" },
-  green: { icon: Shield, color: "text-emerald-400", label: "Leader" },
-  yellow: { icon: Crown, color: "text-amber-400", label: "Companies & Elite" },
+  blue: { icon: BadgeCheck, color: "text-[#FCF6BA]", label: "Verified" },
+  green: { icon: Shield, color: "text-[#BF953F]", label: "Leader" },
+  yellow: { icon: Crown, color: "text-[#FCF6BA]", label: "Companies & Elite" },
   team: { icon: BadgeCheck, color: "text-primary", label: "Official Team", isLogo: true },
 };
 
@@ -161,17 +161,17 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen pt-28 pb-20 px-4">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <div className="min-h-screen pt-28 pb-20 px-4 midnight-page">
+      <div className="max-w-4xl mx-auto space-y-8 relative z-10">
         <button 
           onClick={() => setLocation("/community")}
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-4"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-4 gold-hover-glow"
         >
           <ArrowLeft size={16} /> Back to Community
         </button>
 
-        {/* Profile Header */}
-        <div className="glass-card rounded-3xl border border-primary/20 p-8 bg-gradient-to-br from-primary/5 to-transparent">
+        {/* Profile Header — Midnight Gold frosted-glass card */}
+        <div className="glass-card-gold rounded-3xl p-8">
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
             <div className="relative">
               <div className="w-32 h-32 rounded-full border-4 border-primary/30 overflow-hidden bg-black/40 shadow-2xl">
@@ -247,7 +247,7 @@ export default function ProfilePage() {
           </h2>
           
           {posts.length === 0 ? (
-            <div className="glass-card rounded-3xl border border-white/5 p-12 text-center">
+            <div className="glass-card-gold rounded-3xl p-12 text-center">
               <p className="text-muted-foreground">No posts yet from this investor.</p>
             </div>
           ) : (
@@ -257,7 +257,7 @@ export default function ProfilePage() {
                   key={post.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="glass-card rounded-3xl border border-white/5 p-6 hover:border-primary/20 transition-all group"
+                  className="glass-card-gold rounded-3xl p-6 group"
                 >
                   <div className="flex gap-4">
                     <div className="w-12 h-12 rounded-full border border-primary/20 overflow-hidden flex-shrink-0 bg-black/40">
