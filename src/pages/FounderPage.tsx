@@ -136,8 +136,9 @@ function Hero() {
             Founder Profile
           </p>
 
-          <div className="mb-6">
+          <div className="mb-6 flex flex-wrap items-center gap-3">
             <IntegrityBadge />
+            <CrunchbaseBadge />
           </div>
 
           <h1
@@ -919,6 +920,89 @@ function GoldButton({
         {children}
       </span>
     </Tag>
+  );
+}
+
+function CrunchbaseBadge() {
+  return (
+    <motion.a
+      href="https://www.crunchbase.com/person/faisal-orakzai"
+      target="_blank"
+      rel="noopener noreferrer"
+      data-testid="badge-crunchbase"
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -2, scale: 1.02 }}
+      className="group relative inline-flex items-center gap-3 rounded-full px-4 py-2 no-underline"
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(20,18,12,0.78) 0%, rgba(10,9,6,0.92) 100%)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        border: "1px solid rgba(255,215,0,0.55)",
+        boxShadow:
+          "0 0 18px rgba(255,215,0,0.25), 0 0 36px rgba(255,215,0,0.12), 0 6px 18px rgba(0,0,0,0.5)",
+        textDecoration: "none",
+      }}
+      aria-label="Crunchbase Global Rank #988 — view profile"
+    >
+      <span
+        className="relative flex h-6 w-6 items-center justify-center rounded-md"
+        style={{
+          background:
+            "linear-gradient(135deg, #FFD700 0%, #FCF6BA 50%, #BF953F 100%)",
+          boxShadow: "0 0 10px rgba(255,215,0,0.55)",
+        }}
+        aria-hidden="true"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="14"
+          height="14"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9.5 8.2c-2.1 0-3.8 1.7-3.8 3.8s1.7 3.8 3.8 3.8c1.3 0 2.4-.6 3.1-1.6l-1.6-.9c-.3.4-.9.7-1.5.7-1.1 0-2-.9-2-2s.9-2 2-2c.6 0 1.1.3 1.5.7l1.6-.9C11.9 8.8 10.8 8.2 9.5 8.2z M16.4 8.2c-.7 0-1.4.2-1.9.6V5.5h-1.8v10.1h1.8v-.4c.5.4 1.2.6 1.9.6 2.1 0 3.8-1.7 3.8-3.8s-1.7-3.8-3.8-3.8z m-.2 5.8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"
+            fill="#05060A"
+          />
+        </svg>
+      </span>
+
+      <span className="relative flex flex-col leading-none">
+        <span
+          className="text-[8px] uppercase"
+          style={{
+            letterSpacing: "0.28em",
+            color: "rgba(255,215,0,0.7)",
+          }}
+        >
+          Crunchbase Global Rank
+        </span>
+        <span
+          className="mt-1 text-sm font-semibold"
+          style={{
+            color: "#FFD700",
+            letterSpacing: "0.04em",
+            textShadow:
+              "0 0 8px rgba(255,215,0,0.55), 0 0 16px rgba(255,215,0,0.3)",
+            fontFamily: "'Playfair Display', Georgia, serif",
+          }}
+        >
+          #988
+        </span>
+      </span>
+
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -translate-x-full rounded-full transition-transform duration-1000 ease-out group-hover:translate-x-full"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent, rgba(255,215,0,0.18), transparent)",
+        }}
+      />
+    </motion.a>
   );
 }
 
