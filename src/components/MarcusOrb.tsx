@@ -711,6 +711,22 @@ export default function MarcusOrb() {
           }}
         />
 
+        {/* Crimson Edge-Glow — Elite Priority signal. Synced 1:1 with the
+            12s WhatsApp spotlight: bright opening flash, settles to a subtle
+            crimson breath, fades cleanly to nothing. */}
+        {eliteMode && (
+          <div
+            aria-hidden
+            style={{
+              position: "fixed",
+              top: 0, left: 0, right: 0, bottom: 0,
+              pointerEvents: "none",
+              zIndex: 9996,
+              animation: "marcusEliteEdgeGlow 12s ease-in-out forwards",
+            }}
+          />
+        )}
+
         <div className="relative ml-auto" style={{ width: 64, height: 64 }}>
           {/* Chairman-online green dot (admin session active) */}
           {adminPresent && (
@@ -809,6 +825,16 @@ export default function MarcusOrb() {
           @keyframes marcusAmbientBreath {
             0%, 100% { box-shadow: inset 0 0 24px rgba(234,179,8,0.06), inset 0 0 60px rgba(234,179,8,0.03); }
             50%      { box-shadow: inset 0 0 55px rgba(234,179,8,0.18), inset 0 0 130px rgba(234,179,8,0.10); }
+          }
+          @keyframes marcusEliteEdgeGlow {
+            0%   { box-shadow: inset 0 0 0px 0px rgba(220,38,38,0); }
+            4%   { box-shadow: inset 0 0 110px 4px rgba(220,38,38,0.55), inset 0 0 220px rgba(220,38,38,0.22); }
+            12%  { box-shadow: inset 0 0 60px 1px rgba(220,38,38,0.30), inset 0 0 140px rgba(220,38,38,0.12); }
+            28%  { box-shadow: inset 0 0 75px 2px rgba(220,38,38,0.38), inset 0 0 160px rgba(220,38,38,0.15); }
+            50%  { box-shadow: inset 0 0 50px 1px rgba(220,38,38,0.22), inset 0 0 120px rgba(220,38,38,0.08); }
+            72%  { box-shadow: inset 0 0 60px 1px rgba(220,38,38,0.26), inset 0 0 130px rgba(220,38,38,0.10); }
+            92%  { box-shadow: inset 0 0 28px 0px rgba(220,38,38,0.10), inset 0 0 70px rgba(220,38,38,0.04); }
+            100% { box-shadow: inset 0 0 0px 0px rgba(220,38,38,0); }
           }
           @keyframes marcusEliteRing {
             0%   { transform: scale(0.85); opacity: 0.95; }
