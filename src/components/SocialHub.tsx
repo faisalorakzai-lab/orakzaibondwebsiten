@@ -7,6 +7,7 @@ import {
   Loader2, X, Globe, Lock, Heart, UserPlus, UserCheck, MessageCircle,
   AlertCircle, Upload
 } from "lucide-react";
+import SovereignGrid from "./SovereignGrid";
 import { supabase, Profile, Post, Comment } from "@/lib/supabase";
 import { useWallet } from "@/hooks/useWallet";
 
@@ -304,8 +305,13 @@ export default function SocialHub() {
       </AnimatePresence>
 
       {/* USER PROFILE CARD - SECONDARY FOCUS */}
-      <div className="glass-card-deep-space rounded-3xl p-6">
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
+      <div className="glass-card-deep-space rounded-3xl p-8 mb-8 relative overflow-hidden">
+        {/* OSG 3D Sphere Integration */}
+        <div className="absolute top-4 right-4 opacity-80 hover:opacity-100 transition-opacity">
+          <SovereignGrid />
+        </div>
+
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-6 relative z-10">
           <div className="relative">
             <div className="w-20 h-20 rounded-full border-2 border-primary/30 overflow-hidden bg-black/40 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
               {profile?.avatar_url ? (
