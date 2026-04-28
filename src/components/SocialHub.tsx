@@ -8,6 +8,7 @@ import {
   AlertCircle, Repeat2, Share2, TrendingUp, Trophy, Flame, CornerDownRight
 } from "lucide-react";
 import SovereignGrid from "./SovereignGrid";
+import ImageLightbox from "./ImageLightbox";
 import { supabase, Profile, Post, Comment } from "@/lib/supabase";
 import { useWallet } from "@/hooks/useWallet";
 
@@ -73,6 +74,7 @@ export default function SocialHub() {
   const [postImagePreview, setPostImagePreview] = useState<string | null>(null);
   const [isUploadingPostImage, setIsUploadingPostImage] = useState(false);
   const postImageInputRef = useRef<HTMLInputElement>(null);
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
   // Edit Profile Form State
   const [editUsername, setEditUsername] = useState("");
@@ -690,9 +692,14 @@ export default function SocialHub() {
 
                         {/* Optional image */}
                         {post.image_url && (
-                          <div className="rounded-xl overflow-hidden border border-primary/20 mb-3">
-                            <img src={post.image_url} alt="Post media" className="w-full max-h-96 object-cover" />
-                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setLightboxImage(post.image_url!)}
+                            className="block w-full rounded-xl overflow-hidden border border-primary/20 mb-3 group/img relative cursor-zoom-in hover:border-primary/50 hover:shadow-[0_0_18px_rgba(234,179,8,0.18)] transition-all"
+                            aria-label="View image full screen"
+                          >
+                            <img src={post.image_url} alt="Post media" className="w-full max-h-96 object-cover transition-transform duration-300 group-hover/img:scale-[1.01]" />
+                          </button>
                         )}
 
                         {/* Interactive bar: Like • Comment • Repost • Share */}
@@ -956,6 +963,9 @@ export default function SocialHub() {
           </div>
         </aside>
       </div>
+
+      {/* Full-screen Image Viewer */}
+      <ImageLightbox src={lightboxImage} onClose={() => setLightboxImage(null)} />
 
       {/* Edit Profile Modal */}
       <AnimatePresence>
