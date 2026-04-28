@@ -28,7 +28,7 @@ export default function Community() {
 
   return (
     <section className="relative py-8 px-4 overflow-hidden bg-black/30">
-      <div className="max-w-5xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10">
         
         {/* ── YEAR 2100 TOP BAR ─────────────────────────────────── */}
         <div className="flex items-center justify-between mb-8 px-2">

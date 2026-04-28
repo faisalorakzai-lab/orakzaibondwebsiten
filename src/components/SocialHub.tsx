@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { 
   User, Edit2, Camera, Send, Image as ImageIcon, 
-  BadgeCheck, Shield, Crown, MessageSquare, 
-  Loader2, X, Globe, Lock, Heart, UserPlus, UserCheck, MessageCircle,
-  AlertCircle, Upload
+  BadgeCheck, Shield, Crown,
+  Loader2, X, Globe, Heart, UserPlus, UserCheck, MessageCircle,
+  AlertCircle, Repeat2, Share2, TrendingUp, Trophy, Flame
 } from "lucide-react";
 import SovereignGrid from "./SovereignGrid";
 import { supabase, Profile, Post, Comment } from "@/lib/supabase";
@@ -17,6 +17,33 @@ const BADGE_CONFIG = {
   yellow: { icon: Crown, color: "text-amber-400", label: "Companies & Elite" },
   team: { icon: BadgeCheck, color: "text-primary", label: "Official Team", isLogo: true },
 };
+
+/* ── Helpers ───────────────────────────────────────────────────────── */
+function toHandle(name?: string | null, address?: string): string {
+  const base = (name || "").trim().toLowerCase().replace(/[^a-z0-9_]+/g, "_").replace(/_+/g, "_").replace(/^_|_$/g, "");
+  if (base) return `@${base}`;
+  if (address) return `@${address.slice(2, 8).toLowerCase()}`;
+  return "@investor";
+}
+
+function timeAgo(iso: string): string {
+  const diff = Math.max(0, Date.now() - new Date(iso).getTime());
+  const s = Math.floor(diff / 1000);
+  if (s < 60) return `${s}s`;
+  const m = Math.floor(s / 60);
+  if (m < 60) return `${m}m`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h`;
+  const d = Math.floor(h / 24);
+  if (d < 7) return `${d}d`;
+  return new Date(iso).toLocaleDateString();
+}
+
+function formatCount(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}K`;
+  return `${n}`;
+}
 
 export default function SocialHub() {
   const { address } = useWallet();
@@ -32,6 +59,9 @@ export default function SocialHub() {
   const [newComment, setNewComment] = useState("");
   const [followingList, setFollowingList] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [repostedIds, setRepostedIds] = useState<Set<string>>(new Set());
+  const [repostCounts, setRepostCounts] = useState<Record<string, number>>({});
+  const [sharedToast, setSharedToast] = useState<string | null>(null);
 
   // Edit Profile Form State
   const [editUsername, setEditUsername] = useState("");
@@ -269,6 +299,38 @@ export default function SocialHub() {
     }
   }
 
+  function handleRepost(postId: string) {
+    setRepostedIds(prev => {
+      const next = new Set(prev);
+      const isRe = next.has(postId);
+      if (isRe) next.delete(postId); else next.add(postId);
+      setRepostCounts(c => ({ ...c, [postId]: (c[postId] || 0) + (isRe ? -1 : 1) }));
+      return next;
+    });
+  }
+
+  async function handleShare(post: Post) {
+    const url = `${window.location.origin}/community#post-${post.id}`;
+    const text = `${post.profiles?.username || 'Investor'} on Orakzai Bond: ${post.content.slice(0, 140)}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'Orakzai Bond', text, url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        setSharedToast('Link copied to clipboard');
+        setTimeout(() => setSharedToast(null), 2000);
+      }
+    } catch {
+      try {
+        await navigator.clipboard.writeText(url);
+        setSharedToast('Link copied to clipboard');
+        setTimeout(() => setSharedToast(null), 2000);
+      } catch {
+        /* ignore */
+      }
+    }
+  }
+
   async function handleFollow(targetAddress: string) {
     if (!address || address.toLowerCase() === targetAddress.toLowerCase()) return;
     const isFollowing = followingList.includes(targetAddress.toLowerCase());
@@ -286,8 +348,30 @@ export default function SocialHub() {
     }
   }
 
+  // Sidebar widget data — derived from posts, no extra API call
+  const trendingPosts = useMemo(() => {
+    return [...posts]
+      .sort((a, b) => (b.likes_count + b.comments_count) - (a.likes_count + a.comments_count))
+      .slice(0, 5);
+  }, [posts]);
+
+  const topHolders = useMemo(() => {
+    const seen = new Set<string>();
+    const list: Profile[] = [];
+    for (const p of posts) {
+      if (!p.profiles) continue;
+      const key = p.profiles.address?.toLowerCase();
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      list.push(p.profiles);
+    }
+    return list
+      .sort((a, b) => (b.followers_count || 0) - (a.followers_count || 0))
+      .slice(0, 5);
+  }, [posts]);
+
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
+    <div className="space-y-8 max-w-7xl mx-auto">
       {/* Error Banner */}
       <AnimatePresence>
         {error && (
@@ -300,6 +384,20 @@ export default function SocialHub() {
             <AlertCircle size={16} />
             <p className="flex-1">{error}</p>
             <button onClick={() => setError(null)}><X size={14} /></button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Share toast */}
+      <AnimatePresence>
+        {sharedToast && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="fixed top-24 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-xl bg-primary text-black text-xs font-bold uppercase tracking-widest shadow-[0_0_30px_rgba(234,179,8,0.5)]"
+          >
+            {sharedToast}
           </motion.div>
         )}
       </AnimatePresence>
@@ -366,163 +464,348 @@ export default function SocialHub() {
         </div>
       </div>
 
-      {/* Feed Section */}
-      <div className="space-y-6">
-        {address && (
-          <div className="glass-card-deep-space rounded-3xl p-6">
-            <textarea 
-              value={newPost}
-              onChange={(e) => setNewPost(e.target.value)}
-              placeholder="What's on your mind, Investor?"
-              className="w-full h-24 bg-transparent border-none focus:ring-0 text-foreground resize-none text-sm"
-            />
-            <div className="flex items-center justify-between pt-4 border-t border-white/5">
-              <div className="flex gap-4">
-                <button className="text-muted-foreground hover:text-primary transition-colors">
-                  <ImageIcon size={18} />
-                </button>
-                <button className="text-muted-foreground hover:text-primary transition-colors">
-                  <Globe size={18} />
+      {/* ── TWO-COLUMN LAYOUT: Feed (left) + Trending widget (right) ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-6">
+
+        {/* LEFT / CENTER — Feed */}
+        <div className="space-y-5 min-w-0">
+          {address && (
+            <div
+              className="rounded-xl p-5 bg-black/60 border border-primary/40 shadow-[0_0_20px_rgba(234,179,8,0.08)]"
+            >
+              <textarea 
+                value={newPost}
+                onChange={(e) => setNewPost(e.target.value)}
+                placeholder="What's on your mind, Investor?"
+                className="w-full h-20 bg-transparent border-none focus:ring-0 text-foreground resize-none text-sm placeholder:text-muted-foreground/60"
+              />
+              <div className="flex items-center justify-between pt-3 border-t border-primary/15">
+                <div className="flex gap-4">
+                  <button type="button" className="text-muted-foreground hover:text-primary transition-colors" aria-label="Add image">
+                    <ImageIcon size={18} />
+                  </button>
+                  <button type="button" className="text-muted-foreground hover:text-primary transition-colors" aria-label="Audience">
+                    <Globe size={18} />
+                  </button>
+                </div>
+                <button 
+                  onClick={handleCreatePost}
+                  disabled={isSubmittingPost || !newPost.trim()}
+                  className="px-5 py-2 rounded-xl bg-transparent border-2 border-primary text-primary font-black text-xs uppercase tracking-widest flex items-center gap-2 disabled:opacity-50 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(234,179,8,0.4)] transition-all duration-300 active:scale-95"
+                >
+                  {isSubmittingPost ? <Loader2 className="animate-spin" size={14} /> : <Send size={14} />}
+                  Post
                 </button>
               </div>
-              <button 
-                onClick={handleCreatePost}
-                disabled={isSubmittingPost || !newPost.trim()}
-                className="px-6 py-2 rounded-xl bg-transparent border-2 border-primary text-primary font-black text-xs uppercase tracking-widest flex items-center gap-2 disabled:opacity-50 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(234,179,8,0.4)] transition-all duration-300 active:scale-95"
-              >
-                {isSubmittingPost ? <Loader2 className="animate-spin" size={14} /> : <Send size={14} />}
-                Share
-              </button>
             </div>
-          </div>
-        )}
+          )}
 
-        {loading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="animate-spin text-primary" size={32} />
-          </div>
-        ) : (
-          <div className="grid gap-6">
-            {posts.map((post) => (
-              <motion.div 
-                key={post.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="glass-card-deep-space rounded-3xl p-6 hover:shadow-lg transition-all group"
-              >
-                <div className="flex gap-4">
-                  <Link href={`/profile/${post.profiles?.username || 'investor'}`}>
-                    <div className="w-12 h-12 rounded-full border border-primary/20 overflow-hidden flex-shrink-0 bg-black/40 cursor-pointer hover:border-primary/50 transition-all">
-                      {post.profiles?.avatar_url ? (
-                        <img src={post.profiles.avatar_url} className="w-full h-full object-cover" />
-                      ) : <User size={24} className="m-auto mt-3 text-primary/10" />}
-                    </div>
-                  </Link>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="flex items-center gap-2">
-                        <Link href={`/profile/${post.profiles?.username || 'investor'}`}>
-                          <span className="font-black text-sm text-foreground hover:text-primary transition-colors cursor-pointer">{post.profiles?.username || 'Investor'}</span>
-                        </Link>
-                        {post.profiles?.branding_logo ? (
-                          <img src={post.profiles.branding_logo} alt="Company Logo" className="w-4 h-4 rounded-full object-cover" />
-                        ) : post.profiles?.badge && BADGE_CONFIG[post.profiles.badge] ? (
-                          <BadgeCheck size={14} className={BADGE_CONFIG[post.profiles.badge].color} />
-                        ) : null}
-                        <span className="text-[10px] text-muted-foreground/40 font-mono hidden sm:inline">{post.address.slice(0,6)}...{post.address.slice(-4)}</span>
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <Loader2 className="animate-spin text-primary" size={32} />
+            </div>
+          ) : posts.length === 0 ? (
+            <div className="rounded-xl p-8 bg-black/60 border border-primary/40 text-center">
+              <p className="text-sm text-muted-foreground">No posts yet. Be the first to share something with the community.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {posts.map((post) => {
+                const username = post.profiles?.username || 'Investor';
+                const handle = toHandle(post.profiles?.username, post.address);
+                const isReposted = repostedIds.has(post.id);
+                const repostCount = repostCounts[post.id] || 0;
+                return (
+                  <motion.article 
+                    key={post.id}
+                    id={`post-${post.id}`}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="rounded-xl p-5 bg-black/60 border border-primary/40 hover:border-primary/70 hover:shadow-[0_0_24px_rgba(234,179,8,0.15)] transition-all duration-300"
+                  >
+                    <div className="flex gap-3">
+                      {/* Avatar */}
+                      <Link href={`/profile/${post.profiles?.username || 'investor'}`}>
+                        <div className="w-11 h-11 rounded-full border border-primary/40 overflow-hidden flex-shrink-0 bg-black/40 cursor-pointer hover:border-primary transition-all">
+                          {post.profiles?.avatar_url ? (
+                            <img src={post.profiles.avatar_url} alt={username} className="w-full h-full object-cover" />
+                          ) : <User size={22} className="m-auto mt-2.5 text-primary/30" />}
+                        </div>
+                      </Link>
+
+                      <div className="flex-1 min-w-0">
+                        {/* Identity row: name • verified gold tick • gray @handle • • • time */}
+                        <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
+                          <Link href={`/profile/${post.profiles?.username || 'investor'}`}>
+                            <span className="font-bold text-[15px] text-foreground hover:underline transition-all cursor-pointer truncate">{username}</span>
+                          </Link>
+
+                          {/* Verified gold tick (default for all members; brand logo overrides) */}
+                          {post.profiles?.branding_logo ? (
+                            <img src={post.profiles.branding_logo} alt="Brand" className="w-4 h-4 rounded-full object-cover" />
+                          ) : post.profiles?.badge && BADGE_CONFIG[post.profiles.badge] ? (
+                            <BadgeCheck size={16} className={`${BADGE_CONFIG[post.profiles.badge].color} fill-current`} aria-label={BADGE_CONFIG[post.profiles.badge].label} />
+                          ) : (
+                            <BadgeCheck size={16} className="text-primary fill-current" aria-label="Verified" />
+                          )}
+
+                          {/* Gray handle */}
+                          <span className="text-[13px] text-muted-foreground/70 truncate">{handle}</span>
+
+                          {/* Separator + time */}
+                          <span className="text-muted-foreground/40 text-xs">·</span>
+                          <span className="text-[12px] text-muted-foreground/70" title={new Date(post.created_at).toLocaleString()}>
+                            {timeAgo(post.created_at)}
+                          </span>
+                        </div>
+
+                        {/* Wallet snippet */}
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-[10px] text-muted-foreground/50 font-mono">
+                            {post.address.slice(0,6)}…{post.address.slice(-4)}
+                          </span>
+                          {address && address.toLowerCase() !== post.address.toLowerCase() && (
+                            <button 
+                              onClick={() => handleFollow(post.address)}
+                              className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider transition-colors ${followingList.includes(post.address.toLowerCase()) ? 'text-primary' : 'text-muted-foreground hover:text-primary'}`}
+                            >
+                              {followingList.includes(post.address.toLowerCase()) ? <UserCheck size={11} /> : <UserPlus size={11} />}
+                              {followingList.includes(post.address.toLowerCase()) ? 'Following' : 'Follow'}
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <p className="text-[15px] text-foreground/90 leading-relaxed mb-3 whitespace-pre-wrap break-words">{post.content}</p>
+
+                        {/* Optional image */}
+                        {post.image_url && (
+                          <div className="rounded-xl overflow-hidden border border-primary/20 mb-3">
+                            <img src={post.image_url} alt="Post media" className="w-full max-h-96 object-cover" />
+                          </div>
+                        )}
+
+                        {/* Interactive bar: Like • Comment • Repost • Share */}
+                        <div className="flex items-center justify-between pt-3 border-t border-primary/15 max-w-md">
+                          <button 
+                            type="button"
+                            onClick={() => {
+                              setActivePostId(activePostId === post.id ? null : post.id);
+                              if (activePostId !== post.id) fetchComments(post.id);
+                            }}
+                            className="group flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-primary transition-colors"
+                            aria-label="Comments"
+                          >
+                            <span className="p-1.5 rounded-full group-hover:bg-primary/10 transition-colors">
+                              <MessageCircle size={16} />
+                            </span>
+                            <span>{formatCount(post.comments_count || 0)}</span>
+                          </button>
+
+                          <button 
+                            type="button"
+                            onClick={() => handleRepost(post.id)}
+                            className={`group flex items-center gap-1.5 text-xs font-medium transition-colors ${isReposted ? 'text-emerald-400' : 'text-muted-foreground hover:text-emerald-400'}`}
+                            aria-label="Repost"
+                            aria-pressed={isReposted}
+                          >
+                            <span className="p-1.5 rounded-full group-hover:bg-emerald-400/10 transition-colors">
+                              <Repeat2 size={16} />
+                            </span>
+                            <span>{formatCount(repostCount)}</span>
+                          </button>
+
+                          <button 
+                            type="button"
+                            onClick={() => handleLike(post.id, !!post.user_has_liked)}
+                            className={`group flex items-center gap-1.5 text-xs font-medium transition-colors ${post.user_has_liked ? 'text-rose-500' : 'text-muted-foreground hover:text-rose-500'}`}
+                            aria-label="Like"
+                            aria-pressed={!!post.user_has_liked}
+                          >
+                            <span className="p-1.5 rounded-full group-hover:bg-rose-500/10 transition-colors">
+                              <Heart size={16} fill={post.user_has_liked ? "currentColor" : "none"} />
+                            </span>
+                            <span>{formatCount(post.likes_count || 0)}</span>
+                          </button>
+
+                          <button 
+                            type="button"
+                            onClick={() => handleShare(post)}
+                            className="group flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-primary transition-colors"
+                            aria-label="Share"
+                          >
+                            <span className="p-1.5 rounded-full group-hover:bg-primary/10 transition-colors">
+                              <Share2 size={16} />
+                            </span>
+                          </button>
+                        </div>
+
+                        {/* Comments panel */}
+                        <AnimatePresence>
+                          {activePostId === post.id && (
+                            <motion.div 
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="pt-5 space-y-4">
+                                {comments[post.id]?.map((comment) => (
+                                  <div key={comment.id} className="flex gap-3">
+                                    <Link href={`/profile/${comment.profiles?.username || 'investor'}`}>
+                                      <div className="w-8 h-8 rounded-full border border-primary/20 overflow-hidden flex-shrink-0 bg-black/40 cursor-pointer hover:border-primary/50 transition-all">
+                                        {comment.profiles?.avatar_url ? (
+                                          <img src={comment.profiles.avatar_url} className="w-full h-full object-cover" />
+                                        ) : <User size={16} className="m-auto mt-2 text-primary/30" />}
+                                      </div>
+                                    </Link>
+                                    <div className="flex-1 bg-white/5 border border-primary/10 rounded-xl p-3">
+                                      <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                                        <Link href={`/profile/${comment.profiles?.username || 'investor'}`}>
+                                          <span className="text-xs font-bold text-foreground hover:text-primary transition-colors cursor-pointer">{comment.profiles?.username || 'Investor'}</span>
+                                        </Link>
+                                        <BadgeCheck size={12} className="text-primary fill-current" />
+                                        <span className="text-[11px] text-muted-foreground/70">{toHandle(comment.profiles?.username, comment.address)}</span>
+                                        <span className="text-muted-foreground/40 text-[10px]">·</span>
+                                        <span className="text-[10px] text-muted-foreground/60">{timeAgo(comment.created_at)}</span>
+                                      </div>
+                                      <p className="text-xs text-foreground/85">{comment.content}</p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                              {address && (
+                                <div className="flex gap-2 pt-4">
+                                  <input 
+                                    type="text" 
+                                    value={newComment}
+                                    onChange={(e) => setNewComment(e.target.value)}
+                                    placeholder="Write a comment..."
+                                    className="flex-1 bg-black/40 border border-primary/20 rounded-xl px-4 py-2 text-xs text-foreground focus:border-primary/60 outline-none"
+                                  />
+                                  <button 
+                                    onClick={() => handleAddComment(post.id)}
+                                    className="p-2 rounded-xl bg-primary text-black hover:shadow-[0_0_15px_rgba(234,179,8,0.4)] transition-shadow"
+                                    aria-label="Send comment"
+                                  >
+                                    <Send size={14} />
+                                  </button>
+                                </div>
+                              )}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
-                      <span className="text-[10px] text-muted-foreground font-mono">
-                        {new Date(post.created_at).toLocaleDateString()}
-                      </span>
                     </div>
-                    
-                    <p className="text-sm text-muted-foreground/90 leading-relaxed mb-4">{post.content}</p>
-                    
-                    <div className="flex items-center gap-6 pt-4 border-t border-white/5">
-                      <button 
-                        onClick={() => handleLike(post.id, !!post.user_has_liked)}
-                        className={`flex items-center gap-2 text-xs font-bold transition-colors ${post.user_has_liked ? 'text-rose-500' : 'text-muted-foreground hover:text-rose-500'}`}
+                  </motion.article>
+                );
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* RIGHT — Sidebar (Trending + Top Holders) */}
+        <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
+          {/* Trending */}
+          <div className="rounded-xl p-5 bg-black/60 border border-primary/40">
+            <div className="flex items-center gap-2 mb-4">
+              <TrendingUp size={16} className="text-primary" />
+              <h3 className="text-xs font-black uppercase tracking-widest text-primary">Trending Now</h3>
+            </div>
+            {trendingPosts.length === 0 ? (
+              <p className="text-[11px] text-muted-foreground/70">No trending posts yet.</p>
+            ) : (
+              <ul className="space-y-3">
+                {trendingPosts.map((p, idx) => {
+                  const username = p.profiles?.username || 'Investor';
+                  const handle = toHandle(p.profiles?.username, p.address);
+                  return (
+                    <li key={p.id}>
+                      <a 
+                        href={`#post-${p.id}`}
+                        className="group block rounded-lg p-2 -m-2 hover:bg-primary/5 transition-colors"
                       >
-                        <Heart size={16} fill={post.user_has_liked ? "currentColor" : "none"} />
-                        {post.likes_count}
-                      </button>
-                      <button 
-                        onClick={() => {
-                          setActivePostId(activePostId === post.id ? null : post.id);
-                          if (activePostId !== post.id) fetchComments(post.id);
-                        }}
-                        className="flex items-center gap-2 text-xs font-bold text-muted-foreground hover:text-primary transition-colors"
-                      >
-                        <MessageCircle size={16} />
-                        {post.comments_count}
-                      </button>
-                      {address && address.toLowerCase() !== post.address.toLowerCase() && (
-                        <button 
-                          onClick={() => handleFollow(post.address)}
-                          className={`flex items-center gap-2 text-xs font-bold transition-colors ${followingList.includes(post.address.toLowerCase()) ? 'text-primary' : 'text-muted-foreground hover:text-primary'}`}
+                        <div className="flex items-start gap-2">
+                          <span className="text-[11px] font-black text-primary/60 w-4 mt-0.5">{idx + 1}</span>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1 flex-wrap mb-0.5">
+                              <span className="text-xs font-bold text-foreground truncate group-hover:text-primary transition-colors">{username}</span>
+                              <BadgeCheck size={11} className="text-primary fill-current flex-shrink-0" />
+                              <span className="text-[10px] text-muted-foreground/60 truncate">{handle}</span>
+                            </div>
+                            <p className="text-[11px] text-muted-foreground/80 line-clamp-2 leading-snug">{p.content}</p>
+                            <div className="flex items-center gap-3 mt-1 text-[10px] text-muted-foreground/60">
+                              <span className="flex items-center gap-1"><Heart size={9} /> {formatCount(p.likes_count || 0)}</span>
+                              <span className="flex items-center gap-1"><MessageCircle size={9} /> {formatCount(p.comments_count || 0)}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+
+          {/* Top Holders */}
+          <div className="rounded-xl p-5 bg-black/60 border border-primary/40">
+            <div className="flex items-center gap-2 mb-4">
+              <Trophy size={16} className="text-primary" />
+              <h3 className="text-xs font-black uppercase tracking-widest text-primary">Top Holders</h3>
+            </div>
+            {topHolders.length === 0 ? (
+              <p className="text-[11px] text-muted-foreground/70">Top holders will appear here.</p>
+            ) : (
+              <ul className="space-y-3">
+                {topHolders.map((p, idx) => {
+                  const username = p.username || 'Investor';
+                  const handle = toHandle(p.username, p.address);
+                  const isFollowing = followingList.includes(p.address.toLowerCase());
+                  const isSelf = address?.toLowerCase() === p.address.toLowerCase();
+                  return (
+                    <li key={p.address} className="flex items-center gap-3">
+                      <span className="text-[11px] font-black text-primary/60 w-4 flex-shrink-0">{idx + 1}</span>
+                      <Link href={`/profile/${username}`}>
+                        <div className="w-9 h-9 rounded-full border border-primary/40 overflow-hidden flex-shrink-0 bg-black/40 cursor-pointer hover:border-primary transition-all">
+                          {p.avatar_url ? (
+                            <img src={p.avatar_url} alt={username} className="w-full h-full object-cover" />
+                          ) : <User size={18} className="m-auto mt-1.5 text-primary/30" />}
+                        </div>
+                      </Link>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1">
+                          <Link href={`/profile/${username}`}>
+                            <span className="text-xs font-bold text-foreground hover:text-primary transition-colors cursor-pointer truncate">{username}</span>
+                          </Link>
+                          <BadgeCheck size={11} className="text-primary fill-current flex-shrink-0" />
+                        </div>
+                        <span className="text-[10px] text-muted-foreground/60 truncate block">{handle}</span>
+                      </div>
+                      {!isSelf && address && (
+                        <button
+                          onClick={() => handleFollow(p.address)}
+                          className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border transition-all ${isFollowing ? 'border-primary/40 text-primary bg-primary/10' : 'border-primary text-primary hover:bg-primary hover:text-black'}`}
                         >
-                          {followingList.includes(post.address.toLowerCase()) ? <UserCheck size={16} /> : <UserPlus size={16} />}
-                          {followingList.includes(post.address.toLowerCase()) ? 'Following' : 'Follow'}
+                          {isFollowing ? 'Following' : 'Follow'}
                         </button>
                       )}
-                    </div>
-
-                    <AnimatePresence>
-                      {activePostId === post.id && (
-                        <motion.div 
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="pt-6 space-y-4">
-                            {comments[post.id]?.map((comment) => (
-                              <div key={comment.id} className="flex gap-3">
-                                <Link href={`/profile/${comment.profiles?.username || 'investor'}`}>
-                                  <div className="w-8 h-8 rounded-full border border-white/5 overflow-hidden flex-shrink-0 bg-black/40 cursor-pointer hover:border-primary/30 transition-all">
-                                    {comment.profiles?.avatar_url ? (
-                                      <img src={comment.profiles.avatar_url} className="w-full h-full object-cover" />
-                                    ) : <User size={16} className="m-auto mt-2 text-primary/10" />}
-                                  </div>
-                                </Link>
-                                <div className="flex-1 bg-white/5 rounded-2xl p-3">
-                                  <div className="flex items-center gap-2 mb-1">
-                                    <Link href={`/profile/${comment.profiles?.username || 'investor'}`}>
-                                      <span className="text-[10px] font-bold text-foreground hover:text-primary transition-colors cursor-pointer">{comment.profiles?.username || 'Investor'}</span>
-                                    </Link>
-                                    <span className="text-[9px] text-muted-foreground/40 font-mono">{comment.address.slice(0,6)}...</span>
-                                  </div>
-                                  <p className="text-xs text-muted-foreground/80">{comment.content}</p>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                          {address && (
-                            <div className="flex gap-2 pt-4">
-                              <input 
-                                type="text" 
-                                value={newComment}
-                                onChange={(e) => setNewComment(e.target.value)}
-                                placeholder="Write a comment..."
-                                className="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-2 text-xs text-foreground focus:border-primary/50 outline-none"
-                              />
-                              <button 
-                                onClick={() => handleAddComment(post.id)}
-                                className="p-2 rounded-xl bg-primary text-black"
-                              >
-                                <Send size={14} />
-                              </button>
-                            </div>
-                          )}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
-        )}
+
+          {/* Footer note */}
+          <div className="rounded-xl p-4 bg-black/40 border border-primary/20 flex items-start gap-2">
+            <Flame size={14} className="text-primary mt-0.5 flex-shrink-0" />
+            <p className="text-[10px] text-muted-foreground/70 leading-relaxed">
+              Powered by Orakzai Bond community. Be respectful — every post represents the brotherhood.
+            </p>
+          </div>
+        </aside>
       </div>
 
       {/* Edit Profile Modal */}
