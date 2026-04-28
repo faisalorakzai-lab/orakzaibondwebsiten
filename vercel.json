@@ -1,8 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm install --frozen-lockfile=false && pnpm --filter @workspace/orakzai-bond build",
-  "outputDirectory": "dist/public",
-  "installCommand": "npm install -g pnpm@9 && pnpm install --frozen-lockfile=false",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install --legacy-peer-deps",
   "framework": null,
   "redirects": [
     {
@@ -28,7 +28,7 @@
   ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ],
