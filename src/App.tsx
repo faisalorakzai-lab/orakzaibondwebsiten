@@ -26,6 +26,7 @@ import SecretAdminPage from "./pages/SecretAdminPage";
 import CommunityHubPage from "./pages/CommunityHubPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/not-found";
+import AdminGate from "./components/AdminGate";
 
 console.log("App.tsx module loaded");
 
@@ -77,8 +78,16 @@ function App() {
           <Route path="/tokenomics" component={TokenomicsPage} />
           <Route path="/system" component={SystemPage} />
           <Route path="/winners" component={WinnersPage} />
-          <Route path="/admin" component={AdminPage} />
-          <Route path="/secret-admin" component={SecretAdminPage} />
+          <Route path="/admin">
+            <AdminGate>
+              <AdminPage />
+            </AdminGate>
+          </Route>
+          <Route path="/secret-admin">
+            <AdminGate>
+              <SecretAdminPage />
+            </AdminGate>
+          </Route>
           <Route path="/community-hub" component={CommunityHubPage} />
           <Route path="/profile/:username" component={ProfilePage} />
           <Route component={NotFound} />
