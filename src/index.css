@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -58,6 +58,7 @@
   --color-sidebar-ring: hsl(var(--sidebar-ring));
 
   --font-sans: 'Space Grotesk', 'Inter', sans-serif;
+  --font-heading: 'Syncopate', sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
 
@@ -338,6 +339,28 @@
 
 .gold-glow {
   animation: gold-pulse 3s ease-in-out infinite;
+}
+
+.neon-heading {
+  font-family: var(--font-heading);
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+@keyframes branded-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+    border-color: rgba(255, 215, 0, 0.6);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+    border-color: rgba(255, 215, 0, 1);
+    transform: scale(1.05);
+  }
+}
+
+.branded-tag-pulse {
+  animation: branded-pulse 3s ease-in-out infinite;
 }
 
 .shimmer {

@@ -494,9 +494,9 @@ export default function ThinkTank() {
                 </motion.div>
                 <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-primary/70">Innovation Hub</span>
               </div>
-              <h3 className="text-2xl font-extrabold text-foreground">
+              <h3 className="text-2xl font-extrabold text-foreground neon-heading">
                 Orakzai{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-yellow-200 to-primary">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-yellow-200 to-cyan-400">
                   Think Tank
                 </span>
               </h3>

@@ -103,9 +103,9 @@ export default function Community() {
           viewport={{ once: true }} transition={{ duration: 0.65 }} className="mt-10">
           <div className="text-center mb-5">
             <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-primary/60 mb-1">Live Activity</p>
-            <h3 className="text-xl font-extrabold text-foreground">
+            <h3 className="text-xl font-extrabold text-foreground neon-heading">
               Community{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-200">Live Feed</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-yellow-200">Live Feed</span>
             </h3>
           </div>
           <LiveParticipationFeed />

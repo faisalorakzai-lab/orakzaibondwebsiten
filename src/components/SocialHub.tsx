@@ -324,9 +324,9 @@ export default function SocialHub() {
           
           <div className="flex-1 text-center md:text-left">
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-1">
-              <h2 className="text-xl font-black text-foreground tracking-tight">{profile?.username || 'Orakzai Investor'}</h2>
+              <h2 className="text-xl font-black text-foreground tracking-tight neon-heading">{profile?.username || 'Orakzai Investor'}</h2>
               {(profile?.branding_logo || (profile?.badge && BADGE_CONFIG[profile.badge])) && (
-                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20">
+                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 branded-tag-pulse">
                   {profile?.branding_logo ? (
                     <img src={profile.branding_logo} alt="Company Logo" className="w-3 h-3 rounded-full object-cover" />
                   ) : profile?.badge && BADGE_CONFIG[profile.badge] ? (
