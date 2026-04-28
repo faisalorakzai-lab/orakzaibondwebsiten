@@ -27,6 +27,7 @@ import CommunityHubPage from "./pages/CommunityHubPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/not-found";
 import AdminGate from "./components/AdminGate";
+import WhatsAppBot from "./components/WhatsAppBot";
 
 console.log("App.tsx module loaded");
 
@@ -97,6 +98,9 @@ function App() {
       <div className="lg:pl-[60px]">
         <Footer />
       </div>
+
+      {/* Floating WhatsApp widget — visible on every page */}
+      <WhatsAppBot />
     </div>
   );
 }
