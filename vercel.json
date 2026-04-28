@@ -1,50 +1,49 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npm install --legacy-peer-deps",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "installCommand": "npm install --legacy-peer-deps",
-  "framework": null,
+  "framework": "vite",
   "redirects": [
     {
       "source": "/whitepaper",
-      "destination": "/pdfs/whitepaper.pdf",
+      "destination": "https://drive.google.com/uc?export=download&id=1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh",
+      "permanent": false
+    },
+    {
+      "source": "/Whitepaper",
+      "destination": "https://drive.google.com/uc?export=download&id=1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh",
       "permanent": false
     },
     {
       "source": "/pdf",
-      "destination": "/pdfs/marketing.pdf",
+      "destination": "https://drive.google.com/uc?export=download&id=1ciuxocfbRbwENLaclrpey50EJMxF_pdr",
+      "permanent": false
+    },
+    {
+      "source": "/PDF",
+      "destination": "https://drive.google.com/uc?export=download&id=1ciuxocfbRbwENLaclrpey50EJMxF_pdr",
       "permanent": false
     },
     {
       "source": "/Auditreport",
-      "destination": "/pdfs/audit-report.pdf",
+      "destination": "https://drive.google.com/uc?export=download&id=1uvONnEDac-Z06mrth6TT94N9bRGecyhN",
       "permanent": false
     },
     {
       "source": "/auditreport",
-      "destination": "/pdfs/audit-report.pdf",
+      "destination": "https://drive.google.com/uc?export=download&id=1uvONnEDac-Z06mrth6TT94N9bRGecyhN",
+      "permanent": false
+    },
+    {
+      "source": "/audit-report",
+      "destination": "https://drive.google.com/uc?export=download&id=1uvONnEDac-Z06mrth6TT94N9bRGecyhN",
       "permanent": false
     }
   ],
   "rewrites": [
     {
-      "source": "/((?!api/).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/pdfs/(.*)",
-      "headers": [
-        { "key": "Content-Type", "value": "application/pdf" },
-        { "key": "Cache-Control", "value": "public, max-age=3600" }
-      ]
-    },
-    {
-      "source": "/assets/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
     }
   ]
 }
