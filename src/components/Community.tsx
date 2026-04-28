@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Megaphone, Pin } from "lucide-react";
+import { Megaphone, Pin, Search, Bell } from "lucide-react";
 import LiveParticipationFeed from "@/components/LiveParticipationFeed";
 import ThinkTank from "@/components/ThinkTank";
 import SocialHub from "@/components/SocialHub";
@@ -27,12 +27,38 @@ export default function Community() {
   });
 
   return (
-    <section className="relative py-12 px-4 overflow-hidden">
+    <section className="relative py-8 px-4 overflow-hidden">
       <div className="max-w-5xl mx-auto relative z-10">
         
+        {/* ── YEAR 2100 TOP BAR ─────────────────────────────────── */}
+        <div className="flex items-center justify-between mb-8 px-2">
+          <div className="flex items-center gap-4">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-primary/20 rounded-full blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+              <button className="relative p-2.5 rounded-full bg-black/40 border border-primary/30 text-primary hover:border-primary transition-all duration-300 shadow-[0_0_15px_rgba(234,179,8,0.1)] hover:shadow-[0_0_25px_rgba(234,179,8,0.4)]">
+                <Search size={20} className="drop-shadow-[0_0_8px_rgba(234,179,8,0.8)]" />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-primary/20 rounded-full blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+              <button className="relative p-2.5 rounded-full bg-black/40 border border-primary/30 text-primary hover:border-primary transition-all duration-300 shadow-[0_0_15px_rgba(234,179,8,0.1)] hover:shadow-[0_0_25px_rgba(234,179,8,0.4)]">
+                <Bell size={20} className="drop-shadow-[0_0_8px_rgba(234,179,8,0.8)]" />
+                <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-primary rounded-full border-2 border-black animate-pulse shadow-[0_0_10px_rgba(234,179,8,1)]"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Orakzai Social Hub (Contains Profile Card) ────────── */}
+        {/* SocialHub is modified to show profile card at top */}
+        <SocialHub />
+
         {/* ── Official Announcements ─────────────────────────────── */}
         {adminPosts.length > 0 && (
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-14">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="my-14">
             <div className="flex items-center gap-2 mb-4">
               <Megaphone className="w-4 h-4 text-primary" />
               <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-primary/60">
@@ -68,9 +94,6 @@ export default function Community() {
             </div>
           </motion.div>
         )}
-
-        {/* ── Orakzai Social Hub ───────────────────────────────── */}
-        <SocialHub />
 
         {/* ── Orakzai Think Tank ───────────────────────────────── */}
         <ThinkTank />

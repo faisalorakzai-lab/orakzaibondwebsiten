@@ -286,7 +286,7 @@ export default function SocialHub() {
   }
 
   return (
-    <div className="mt-12 space-y-8 max-w-4xl mx-auto">
+    <div className="space-y-8 max-w-4xl mx-auto">
       {/* Error Banner */}
       <AnimatePresence>
         {error && (
@@ -303,57 +303,57 @@ export default function SocialHub() {
         )}
       </AnimatePresence>
 
-      {/* Profile Section */}
-      <div className="glass-card rounded-3xl border border-primary/20 p-6 bg-gradient-to-br from-primary/5 to-transparent">
+      {/* USER PROFILE CARD - SECONDARY FOCUS */}
+      <div className="glass-card rounded-3xl border border-primary/20 p-6 bg-gradient-to-br from-primary/5 to-transparent shadow-[0_0_30px_rgba(234,179,8,0.05)]">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
           <div className="relative">
-            <div className="w-24 h-24 rounded-full border-2 border-primary/30 overflow-hidden bg-black/40">
+            <div className="w-20 h-20 rounded-full border-2 border-primary/30 overflow-hidden bg-black/40 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
               {profile?.avatar_url ? (
                 <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
-              ) : <User size={48} className="m-auto mt-6 text-primary/20" />}
+              ) : <User size={40} className="m-auto mt-5 text-primary/20" />}
             </div>
             {address && (
               <button 
                 onClick={() => setShowEditModal(true)}
-                className="absolute bottom-0 right-0 p-2 rounded-full bg-primary text-black shadow-lg hover:scale-110 transition-transform"
+                className="absolute bottom-0 right-0 p-1.5 rounded-full bg-primary text-black shadow-lg hover:scale-110 transition-transform"
               >
-                <Edit2 size={14} />
+                <Edit2 size={12} />
               </button>
             )}
           </div>
           
           <div className="flex-1 text-center md:text-left">
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-2">
-              <h2 className="text-2xl font-black text-foreground">{profile?.username || 'Orakzai Investor'}</h2>
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-1">
+              <h2 className="text-xl font-black text-foreground tracking-tight">{profile?.username || 'Orakzai Investor'}</h2>
               {(profile?.branding_logo || (profile?.badge && BADGE_CONFIG[profile.badge])) && (
                 <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20">
                   {profile?.branding_logo ? (
-                    <img src={profile.branding_logo} alt="Company Logo" className="w-4 h-4 rounded-full object-cover" />
+                    <img src={profile.branding_logo} alt="Company Logo" className="w-3 h-3 rounded-full object-cover" />
                   ) : profile?.badge && BADGE_CONFIG[profile.badge] ? (
                     <>
                       {BADGE_CONFIG[profile.badge].isLogo ? (
-                        <img src="/son-of-orakzai-logo.jpg" className="w-3 h-3 rounded-full" />
+                        <img src="/son-of-orakzai-logo.jpg" className="w-2.5 h-2.5 rounded-full" />
                       ) : (
-                        <BadgeCheck size={12} className={BADGE_CONFIG[profile.badge].color} />
+                        <BadgeCheck size={10} className={BADGE_CONFIG[profile.badge].color} />
                       )}
                     </>
                   ) : null}
-                  <span className={`text-[10px] font-bold uppercase tracking-tighter ${profile?.badge && BADGE_CONFIG[profile.badge] ? BADGE_CONFIG[profile.badge].color : 'text-primary'}`}>
+                  <span className={`text-[9px] font-bold uppercase tracking-tighter ${profile?.badge && BADGE_CONFIG[profile.badge] ? BADGE_CONFIG[profile.badge].color : 'text-primary'}`}>
                     {profile?.branding_logo ? 'Branded' : (profile?.badge && BADGE_CONFIG[profile.badge] ? BADGE_CONFIG[profile.badge].label : '')}
                   </span>
                 </div>
               )}
             </div>
-            <p className="text-sm text-muted-foreground mb-4 max-w-md">{profile?.bio || 'Proud member of the Orakzai Bond community.'}</p>
+            <p className="text-xs text-muted-foreground mb-3 max-w-md line-clamp-2">{profile?.bio || 'Proud member of the Orakzai Bond community.'}</p>
             
             <div className="flex items-center justify-center md:justify-start gap-6">
               <div className="text-center md:text-left">
-                <span className="block text-lg font-black text-foreground">{profile?.followers_count || 0}</span>
-                <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Followers</span>
+                <span className="block text-base font-black text-foreground">{profile?.followers_count || 0}</span>
+                <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">Followers</span>
               </div>
               <div className="text-center md:text-left">
-                <span className="block text-lg font-black text-foreground">{profile?.following_count || 0}</span>
-                <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Following</span>
+                <span className="block text-base font-black text-foreground">{profile?.following_count || 0}</span>
+                <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">Following</span>
               </div>
             </div>
           </div>
@@ -522,78 +522,71 @@ export default function SocialHub() {
       {/* Edit Profile Modal */}
       <AnimatePresence>
         {showEditModal && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-md glass-card rounded-3xl border border-primary/30 p-8 bg-[#0a0c20]"
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="glass-card w-full max-w-md rounded-3xl border border-primary/20 p-8"
             >
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-black text-foreground">Edit Profile</h3>
-                <button onClick={() => setShowEditModal(false)} className="text-muted-foreground hover:text-white">
-                  <X size={20} />
+              <div className="flex items-center justify-between mb-8">
+                <h3 className="text-xl font-black text-foreground uppercase tracking-widest">Edit Profile</h3>
+                <button onClick={() => setShowEditModal(false)} className="text-muted-foreground hover:text-primary transition-colors">
+                  <X size={24} />
                 </button>
               </div>
 
-              <div className="space-y-5">
-                {/* Avatar Upload */}
-                <div className="flex flex-col items-center gap-4 mb-6">
+              <div className="space-y-6">
+                <div className="flex flex-col items-center gap-4">
                   <div className="relative group">
                     <div className="w-24 h-24 rounded-full border-2 border-primary/30 overflow-hidden bg-black/40">
                       {editAvatar ? (
-                        <img src={editAvatar} alt="Avatar Preview" className="w-full h-full object-cover" />
+                        <img src={editAvatar} className="w-full h-full object-cover" />
                       ) : <User size={48} className="m-auto mt-6 text-primary/20" />}
                     </div>
                     <button 
                       onClick={() => fileInputRef.current?.click()}
-                      className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full"
+                      className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-full"
                     >
-                      <Camera size={24} className="text-white" />
+                      <Camera className="text-white" />
                     </button>
+                    <input 
+                      type="file" 
+                      ref={fileInputRef} 
+                      onChange={handleFileUpload} 
+                      className="hidden" 
+                      accept="image/*"
+                    />
                   </div>
-                  <input 
-                    type="file" 
-                    ref={fileInputRef} 
-                    onChange={handleFileUpload} 
-                    className="hidden" 
-                    accept="image/*"
-                  />
-                  <button 
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={isSavingProfile}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/20 text-primary text-[10px] uppercase tracking-widest font-bold hover:bg-primary/20 transition-colors"
-                  >
-                    {isSavingProfile ? <Loader2 className="animate-spin" size={12} /> : <Upload size={12} />}
-                    Tap to Upload Photo
-                  </button>
+                  <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">Click to change avatar</p>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Username</label>
-                  <input
-                    type="text"
+                  <label className="text-[10px] text-primary font-bold uppercase tracking-widest">Username</label>
+                  <input 
+                    type="text" 
                     value={editUsername}
                     onChange={(e) => setEditUsername(e.target.value)}
-                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary/50 outline-none transition-all"
+                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-foreground focus:border-primary/50 outline-none transition-all"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Bio</label>
-                  <textarea
+                  <label className="text-[10px] text-primary font-bold uppercase tracking-widest">Bio</label>
+                  <textarea 
                     value={editBio}
                     onChange={(e) => setEditBio(e.target.value)}
-                    className="w-full h-24 bg-black/40 border border-white/10 rounded-xl p-4 text-sm focus:border-primary/50 outline-none transition-all resize-none"
+                    className="w-full h-24 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-foreground focus:border-primary/50 outline-none transition-all resize-none"
                   />
                 </div>
 
-                <button
+                <button 
                   onClick={handleUpdateProfile}
                   disabled={isSavingProfile}
-                  className="w-full py-4 rounded-2xl bg-primary text-black font-black text-sm uppercase tracking-widest hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
+                  className="w-full py-4 rounded-2xl bg-primary text-black font-black uppercase tracking-widest text-sm shadow-[0_0_30px_rgba(234,179,8,0.3)] hover:shadow-[0_0_50px_rgba(234,179,8,0.5)] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                 >
-                  {isSavingProfile ? <Loader2 className="animate-spin mx-auto" size={20} /> : "Save Profile"}
+                  {isSavingProfile && <Loader2 className="animate-spin" size={18} />}
+                  Save Changes
                 </button>
               </div>
             </motion.div>
