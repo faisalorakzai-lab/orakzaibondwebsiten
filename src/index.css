@@ -315,15 +315,11 @@
 
 /* ── Deep Space Glassmorphic Card ──────────────────────────────────── */
 .glass-card-deep-space {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(10, 12, 20, 0.6);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid transparent;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)),
-    linear-gradient(135deg, #00FFFF, #FFD700);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
+  border: 1px solid rgba(234, 179, 8, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
 }
 
 /* ── Gold glow keyframes ──────────────────────────────────────────── */
@@ -425,9 +421,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: #000000;
+  background: #05070a;
   pointer-events: none;
-  z-index: 0;
+  z-index: -2;
   overflow: hidden;
 }
 
@@ -465,7 +461,7 @@
 /* ── Deep Space Community Page ────────────────────────────────────── */
 .community-page-deep-space {
   position: relative;
-  background: #000000;
+  background: transparent;
   z-index: 1;
 }
 
@@ -476,7 +472,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: #000000;
+  background: radial-gradient(circle at 50% 50%, #0a0c14 0%, #05070a 100%);
   z-index: -1;
   pointer-events: none;
 }

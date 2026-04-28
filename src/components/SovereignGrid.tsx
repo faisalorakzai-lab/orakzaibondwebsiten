@@ -75,10 +75,17 @@ function GridSphere() {
 
 export default function SovereignGrid() {
   return (
-    <div className="w-32 h-32 relative pointer-events-none">
+    <div className="w-32 h-32 relative pointer-events-none overflow-hidden">
       <div className="absolute inset-0 bg-primary/5 rounded-full blur-2xl animate-pulse" />
       <Suspense fallback={<div className="w-full h-full flex items-center justify-center text-[8px] text-primary/40">Loading OSG...</div>}>
-        <Canvas camera={{ position: [0, 0, 3], fov: 45 }} gl={{ antialias: true, alpha: true }}>
+        <Canvas 
+          camera={{ position: [0, 0, 3], fov: 45 }} 
+          gl={{ antialias: true, alpha: true }}
+          onCreated={({ gl }) => {
+            gl.setClearColor(0x000000, 0);
+          }}
+          onError={(e) => console.error("Canvas error:", e)}
+        >
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
           <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>

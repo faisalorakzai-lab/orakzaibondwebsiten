@@ -163,16 +163,7 @@ function IdeaCard({ idea, session, onUpvote }: { idea: Idea; session: string; on
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.97 }}
       transition={{ duration: 0.35 }}
-      className="relative rounded-2xl p-5 group transition-all duration-300"
-      style={{
-        background: "rgba(255, 255, 255, 0.1)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        border: "1px solid transparent",
-        backgroundImage: "linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), linear-gradient(135deg, #00FFFF, #FFD700)",
-        backgroundOrigin: "border-box",
-        backgroundClip: "padding-box, border-box",
-      }}
+      className="relative rounded-2xl p-5 group transition-all duration-300 border border-white/10 bg-white/5 backdrop-blur-xl hover:border-cyan-400/30"
       onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "0 0 24px rgba(0,255,255,0.15)"; }}
       onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}>
 
