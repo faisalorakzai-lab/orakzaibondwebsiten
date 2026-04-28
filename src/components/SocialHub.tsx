@@ -304,7 +304,7 @@ export default function SocialHub() {
       </AnimatePresence>
 
       {/* USER PROFILE CARD - SECONDARY FOCUS */}
-      <div className="glass-card rounded-3xl border border-primary/20 p-6 bg-gradient-to-br from-primary/5 to-transparent shadow-[0_0_30px_rgba(234,179,8,0.05)]">
+      <div className="glass-card-deep-space rounded-3xl p-6">
         <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
           <div className="relative">
             <div className="w-20 h-20 rounded-full border-2 border-primary/30 overflow-hidden bg-black/40 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
@@ -363,7 +363,7 @@ export default function SocialHub() {
       {/* Feed Section */}
       <div className="space-y-6">
         {address && (
-          <div className="glass-card rounded-3xl border border-primary/20 p-6">
+          <div className="glass-card-deep-space rounded-3xl p-6">
             <textarea 
               value={newPost}
               onChange={(e) => setNewPost(e.target.value)}
@@ -402,7 +402,7 @@ export default function SocialHub() {
                 key={post.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass-card rounded-3xl border border-white/5 p-6 hover:border-primary/20 transition-all group"
+                className="glass-card-deep-space rounded-3xl p-6 hover:shadow-lg transition-all group"
               >
                 <div className="flex gap-4">
                   <Link href={`/profile/${post.profiles?.username || 'investor'}`}>

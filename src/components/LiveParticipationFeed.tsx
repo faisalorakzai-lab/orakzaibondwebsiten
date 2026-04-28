@@ -76,7 +76,7 @@ export default function LiveParticipationFeed() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.55 }}
-      className="glass-card rounded-3xl border border-primary/20 p-6 bg-gradient-to-br from-primary/5 to-transparent"
+      className="glass-card-deep-space rounded-3xl p-6"
     >
       {/* Header */}
       <div className="flex items-center justify-between mb-5">

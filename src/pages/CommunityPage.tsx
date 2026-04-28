@@ -9,8 +9,11 @@ export default function CommunityPage() {
   }, []);
 
   return (
-    <main className="flex-1 pt-20">
-      <Community />
-    </main>
+    <>
+      <div className="starfield-bg" />
+      <main className="flex-1 pt-20 community-page-deep-space relative z-10">
+        <Community />
+      </main>
+    </>
   );
 }

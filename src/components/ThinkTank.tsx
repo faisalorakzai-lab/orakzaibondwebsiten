@@ -163,17 +163,21 @@ function IdeaCard({ idea, session, onUpvote }: { idea: Idea; session: string; on
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.97 }}
       transition={{ duration: 0.35 }}
-      className="relative rounded-2xl border border-white/8 p-5 group transition-all duration-300 hover:border-primary/25"
+      className="relative rounded-2xl p-5 group transition-all duration-300"
       style={{
-        background: "rgba(8,10,28,0.75)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
+        background: "rgba(255, 255, 255, 0.1)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        border: "1px solid transparent",
+        backgroundImage: "linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), linear-gradient(135deg, #00FFFF, #FFD700)",
+        backgroundOrigin: "border-box",
+        backgroundClip: "padding-box, border-box",
       }}
-      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "0 0 24px rgba(234,179,8,0.08)"; }}
+      onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "0 0 24px rgba(0,255,255,0.15)"; }}
       onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.boxShadow = "none"; }}>
 
-      {/* Gold left accent line */}
-      <div className="absolute left-0 top-4 bottom-4 w-0.5 rounded-full bg-gradient-to-b from-primary/60 via-primary/30 to-transparent" />
+      {/* Cyan left accent line */}
+      <div className="absolute left-0 top-4 bottom-4 w-0.5 rounded-full bg-gradient-to-b from-cyan-400/60 via-cyan-400/30 to-transparent" />
 
       {/* Header row */}
       <div className="flex items-start justify-between gap-3 mb-2.5 pl-3">
