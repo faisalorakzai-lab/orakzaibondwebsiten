@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, useAnimation, useInView } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Rocket, Zap, ShieldCheck, TrendingUp, ExternalLink } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
@@ -20,7 +20,67 @@ const SLOGANS = [
   "One Ecosystem. Infinite Potential.",
 ];
 
-// Premium 3D Metallic Style Icons as SVG components with enhanced effects
+// Counter component for dynamic sold text
+const DynamicCounter = ({ value }: { value: number }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  
+  useEffect(() => {
+    let start = displayValue;
+    const end = value;
+    if (start === end) return;
+    
+    const duration = 2000;
+    const startTime = performance.now();
+    
+    const updateCounter = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      
+      // Ease out expo
+      const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      const current = Math.floor(easeProgress * (end - start) + start);
+      
+      setDisplayValue(current);
+      
+      if (progress < 1) {
+        requestAnimationFrame(updateCounter);
+      }
+    };
+    
+    requestAnimationFrame(updateCounter);
+  }, [value]);
+  
+  return <span>{displayValue.toLocaleString()}</span>;
+};
+
+// Reveal animation variant
+const revealVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.8, ease: "easeOut" }
+  }
+};
+
+const RevealText = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={revealVariants}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+// Premium 3D Metallic Style Icons
 const PillarIcon = ({ type }: { type: "cashback" | "protection" | "verified" | "vesting" }) => {
   const iconMap = {
     cashback: (
@@ -153,29 +213,21 @@ const PILLARS = [
     type: "cashback" as const,
     title: "Lottery Non-Winner Cashback",
     color: "from-blue-500 to-blue-600",
-    glowColor: "shadow-blue-500/40",
-    borderColor: "border-blue-500/50",
   },
   {
     type: "protection" as const,
     title: "Liquidity-Backed Capital Retention Model",
     color: "from-blue-500 to-blue-600",
-    glowColor: "shadow-blue-500/40",
-    borderColor: "border-blue-500/50",
   },
   {
     type: "verified" as const,
     title: "Verified Smart Contract",
     color: "from-blue-500 to-blue-600",
-    glowColor: "shadow-blue-500/40",
-    borderColor: "border-blue-500/50",
   },
   {
     type: "vesting" as const,
     title: "60-Day Secure Vesting",
     color: "from-blue-500 to-blue-600",
-    glowColor: "shadow-blue-500/40",
-    borderColor: "border-blue-500/50",
   },
 ];
 
@@ -254,11 +306,11 @@ export default function Hero({ onConnect, address }: HeroProps) {
                     initial={{ width: 0 }}
                     animate={{ width: `${progress}%` }}
                     transition={{ duration: 1.5, ease: "easeOut" }}
-                    className="h-full bg-gradient-to-r from-primary via-yellow-400 to-primary shadow-[0_0_15px_rgba(234,179,8,0.5)]"
+                    className="h-full bg-gradient-to-r from-primary via-yellow-400 to-primary shadow-[0_0_15px_rgba(234,179,8,0.5)] animate-slow-pulse"
                   />
                 </div>
                 <div className="flex justify-between w-full md:w-64 text-[10px] font-black uppercase tracking-tighter mt-1">
-                  <span className="text-primary">{tokensSold.toLocaleString()} SOLD</span>
+                  <span className="text-primary"><DynamicCounter value={tokensSold} /> SOLD</span>
                   <span className="text-muted-foreground">{PHASE1_SUPPLY.toLocaleString()} TOTAL</span>
                 </div>
               </div>
@@ -266,58 +318,56 @@ export default function Hero({ onConnect, address }: HeroProps) {
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="max-w-5xl"
-        >
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter text-foreground mb-8 leading-[0.85]">
-            Orakzai Bond<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-yellow-300 to-yellow-200 drop-shadow-[0_0_50px_rgba(234,179,8,0.7)]">
-              OKBOND
-            </span>
-          </h1>
+        <div className="max-w-5xl">
+          <RevealText>
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter text-foreground mb-8 leading-[0.85]">
+              Orakzai Bond<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-yellow-300 to-yellow-200 hero-glow-text">
+                OKBOND
+              </span>
+            </h1>
+          </RevealText>
 
-          <div className="h-12 mb-10">
-            <motion.p
-              key={sloganIdx}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              className="text-2xl md:text-3xl font-bold text-primary/85 italic"
-            >
-              "{SLOGANS[sloganIdx]}"
-            </motion.p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-14">
-            {!address && (
-              <Button
-                onClick={onConnect}
-                size="lg"
-                className="w-full sm:w-auto text-lg h-16 px-12 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-black shadow-[0_0_40px_rgba(234,179,8,0.5)] hover:shadow-[0_0_60px_rgba(234,179,8,0.8)] transition-all duration-300"
+          <RevealText>
+            <div className="h-12 mb-10">
+              <motion.p
+                key={sloganIdx}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                className="text-2xl md:text-3xl font-bold text-primary/85 italic"
               >
-                Connect Wallet
-              </Button>
-            )}
-            
-            <motion.a
-              href={ICO_URL}
-              whileHover={{ scale: 1.05, boxShadow: "0 0 60px rgba(234,179,8,0.8), 0 0 100px rgba(234,179,8,0.4)" }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 text-lg h-16 px-12 rounded-full font-black bg-gradient-to-r from-primary via-yellow-400 to-primary text-primary-foreground transition-all duration-300 relative overflow-hidden group"
-              style={{
-                boxShadow: "0 0 30px rgba(234,179,8,0.5), inset 0 1px 0 rgba(255,255,255,0.2), 0 0 60px rgba(234,179,8,0.3)",
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                "{SLOGANS[sloganIdx]}"
+              </motion.p>
+            </div>
+          </RevealText>
+
+          <RevealText>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-14">
+              {!address && (
+                <Button
+                  onClick={onConnect}
+                  size="lg"
+                  className="w-full sm:w-auto text-lg h-16 px-12 rounded-full metallic-gold animate-shine-sweep text-primary-foreground font-black shadow-[0_0_40px_rgba(234,179,8,0.5)] hover:shadow-[0_0_60px_rgba(234,179,8,0.8)] transition-all duration-300"
+                >
+                  Connect Wallet
+                </Button>
+              )}
               
-              <Rocket className="w-6 h-6 relative z-10" />
-              
-              <span className="relative z-10">BUY ICO NOW</span>
-            </motion.a>
-          </div>
+              <motion.a
+                href={ICO_URL}
+                whileHover={{ scale: 1.05, boxShadow: "0 0 60px rgba(234,179,8,0.8), 0 0 100px rgba(234,179,8,0.4)" }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 text-lg h-16 px-12 rounded-full font-black bg-gradient-to-r from-primary via-yellow-400 to-primary text-primary-foreground transition-all duration-300 relative overflow-hidden group hero-glow-button"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <Rocket className="w-6 h-6 relative z-10" />
+                
+                <span className="relative z-10">BUY ICO NOW</span>
+              </motion.a>
+            </div>
+          </RevealText>
 
           {/* 4 Pillars Section with Glass-Morphism & Neon Borders */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
@@ -325,22 +375,13 @@ export default function Hero({ onConnect, address }: HeroProps) {
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
                 transition={{ delay: 0.2 + idx * 0.1 }}
-                whileHover={{ y: -6, boxShadow: `0 0 40px rgba(59,130,246,0.6)` }}
-                className={`relative p-6 rounded-2xl backdrop-blur-xl border ${pillar.borderColor} bg-gradient-to-br from-white/8 to-white/3 transition-all duration-300 overflow-hidden group`}
-                style={{
-                  boxShadow: `0 0 20px rgba(59,130,246,0.3), inset 0 1px 0 rgba(255,255,255,0.1)`,
-                }}
+                whileHover={{ y: -6, boxShadow: `0 0 40px rgba(234,179,8,0.3)` }}
+                className="glass-gold-premium p-6 rounded-2xl transition-all duration-300 overflow-hidden group"
               >
-                <div className={`absolute inset-0 rounded-2xl border ${pillar.borderColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm`} />
-                <div className={`absolute inset-0 bg-gradient-to-br from-blue-500/0 to-blue-500/0 group-hover:from-blue-500/5 group-hover:to-blue-500/5 transition-all duration-500 rounded-2xl`} />
-
-                <div className={`relative w-14 h-14 rounded-xl bg-gradient-to-br ${pillar.color} mb-4 p-3 group-hover:scale-110 transition-transform duration-300`}
-                  style={{
-                    boxShadow: `0 8px 16px rgba(59,130,246,0.3), inset 0 1px 0 rgba(255,255,255,0.2)`,
-                  }}
-                >
+                <div className={`relative w-14 h-14 rounded-xl bg-gradient-to-br ${pillar.color} mb-4 p-3 group-hover:scale-110 transition-transform duration-300 shadow-[0_8px_16px_rgba(59,130,246,0.3),_inset_0_1px_0_rgba(255,255,255,0.2)]`}>
                   <PillarIcon type={pillar.type} />
                 </div>
 
@@ -348,7 +389,7 @@ export default function Hero({ onConnect, address }: HeroProps) {
               </motion.div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </div>
 
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5 }}
@@ -363,23 +404,16 @@ export default function Hero({ onConnect, address }: HeroProps) {
     {/* Smart Contract Governance Section */}
     <section className="bg-black text-white py-16 px-4 border-t border-yellow-600/30 relative z-10">
       <div className="max-w-6xl mx-auto text-center">
-        <motion.h2 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-3xl font-black text-primary mb-4 uppercase tracking-[0.2em]"
-        >
-          Verified Smart Contracts
-        </motion.h2>
-        <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          className="text-muted-foreground mb-12 max-w-2xl mx-auto"
-        >
-          Transparency is our core value. Verify our ecosystem on the Polygon Network.
-        </motion.p>
+        <RevealText>
+          <h2 className="text-3xl font-black text-primary mb-4 uppercase tracking-[0.2em]">
+            Verified Smart Contracts
+          </h2>
+        </RevealText>
+        <RevealText>
+          <p className="text-muted-foreground mb-12 max-w-2xl mx-auto">
+            Transparency is our core value. Verify our ecosystem on the Polygon Network.
+          </p>
+        </RevealText>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {contracts.map((contract, idx) => (

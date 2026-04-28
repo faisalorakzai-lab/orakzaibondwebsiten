@@ -195,7 +195,7 @@ export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps
           ) : (
             <Button
               onClick={onConnect}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-full px-6 py-5 shadow-[0_0_20px_rgba(234,179,8,0.4)] transition-all hover:shadow-[0_0_35px_rgba(234,179,8,0.7)] hover:-translate-y-0.5"
+              className="metallic-gold animate-shine-sweep text-primary-foreground font-bold rounded-full px-6 py-5 shadow-[0_0_20px_rgba(234,179,8,0.4)] transition-all hover:shadow-[0_0_35px_rgba(234,179,8,0.7)] hover:-translate-y-0.5"
             >
               Connect Wallet
             </Button>
