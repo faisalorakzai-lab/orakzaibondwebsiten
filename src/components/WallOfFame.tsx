@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { BrowserProvider, Contract } from "ethers";
 import { Trophy, Crown, Star } from "lucide-react";
 import LOTTERY_ABI from "@/lib/contractABI.json";
+import { useHolders } from "@/hooks/useHolders";
 
 const LOTTERY_ADDRESS = "0x5bc55d4b347e39b986864e28604ddca5de6357b7";
 
@@ -15,7 +16,8 @@ interface Winner {
   display: string;
 }
 
-// Static showcase winners (shown when no live data / not started)
+// Static showcase shown only when neither on-chain lottery winners nor the
+// Supabase `holders` table has any data.
 const SHOWCASE: Winner[] = [
   { address: "0xAbCd...4f2e", display: "0xAbCd…4f2e" },
   { address: "0x7712...99aA", display: "0x7712…99aA" },
@@ -33,6 +35,9 @@ const RANKS = [
 export default function WallOfFame({ provider }: WallOfFameProps) {
   const [winners, setWinners] = useState<Winner[]>([]);
   const [live, setLive] = useState(false);
+
+  // Real Elite Leaderboard data from Supabase `holders` table
+  const { holders } = useHolders(5);
 
   const fetchWinners = useCallback(async () => {
     if (!provider) return;
@@ -55,7 +60,24 @@ export default function WallOfFame({ provider }: WallOfFameProps) {
 
   useEffect(() => { fetchWinners(); }, [fetchWinners]);
 
-  const display = live ? winners : SHOWCASE;
+  // Display priority:
+  //   1. on-chain lottery winners (after a draw)
+  //   2. real holders pulled from Supabase
+  //   3. baked-in showcase (so the section never appears empty)
+  const supabaseHolders: Winner[] = holders.map((h) => ({
+    address: h.address,
+    display: h.display_name || `${h.address.slice(0, 6)}…${h.address.slice(-4)}`,
+  }));
+  const display = live
+    ? winners
+    : supabaseHolders.length > 0
+      ? supabaseHolders
+      : SHOWCASE;
+  const dataSource: "onchain" | "supabase" | "showcase" = live
+    ? "onchain"
+    : supabaseHolders.length > 0
+      ? "supabase"
+      : "showcase";
 
   return (
     <section className="py-20 relative overflow-hidden">
@@ -66,7 +88,9 @@ export default function WallOfFame({ provider }: WallOfFameProps) {
           className="text-center mb-12">
           <span className="inline-flex items-center gap-2 mb-3 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-mono font-semibold uppercase tracking-widest">
             <Trophy className="w-3.5 h-3.5" />
-            {live ? "Live Winners" : "Wall of Fame"}
+            {dataSource === "onchain"   && "Live Winners"}
+            {dataSource === "supabase"  && "Elite Leaderboard · Live"}
+            {dataSource === "showcase"  && "Wall of Fame"}
           </span>
           <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-3">
             Global{" "}
@@ -75,9 +99,9 @@ export default function WallOfFame({ provider }: WallOfFameProps) {
             </span>
           </h2>
           <p className="text-muted-foreground max-w-lg mx-auto">
-            {live
-              ? "On-chain verified OKBOND Lottery winners — blockchain-proven champions."
-              : "Our elite winners are immortalised on-chain. Every wallet, a throne. Every address, a legacy."}
+            {dataSource === "onchain"  && "On-chain verified OKBOND Lottery winners — blockchain-proven champions."}
+            {dataSource === "supabase" && "Our top OKBOND holders, ranked live from the on-chain registry. Every wallet, a throne."}
+            {dataSource === "showcase" && "Our elite holders are immortalised on-chain. Every wallet, a throne. Every address, a legacy."}
           </p>
         </motion.div>
 

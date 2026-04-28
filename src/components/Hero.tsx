@@ -310,7 +310,10 @@ export default function Hero({ onConnect, address }: HeroProps) {
                   />
                 </div>
                 <div className="flex justify-between w-full md:w-64 text-[10px] font-black uppercase tracking-tighter mt-1">
-                  <span className="text-primary"><DynamicCounter value={tokensSold} /> SOLD</span>
+                  <span className="text-primary inline-flex items-center gap-1.5">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" aria-hidden />
+                    <DynamicCounter value={tokensSold} /> SOLD · LIVE ON-CHAIN
+                  </span>
                   <span className="text-muted-foreground">{PHASE1_SUPPLY.toLocaleString()} TOTAL</span>
                 </div>
               </div>
