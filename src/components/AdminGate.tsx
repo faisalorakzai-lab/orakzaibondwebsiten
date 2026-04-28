@@ -31,6 +31,31 @@ export default function AdminGate({ children }: AdminGateProps) {
     setHydrated(true);
   }, [address]);
 
+  /* ── HIDE FROM SEARCH ENGINES ─────────────────────────────────────────
+     Inject <meta name="robots" content="noindex,nofollow,noarchive">
+     and X-Robots-Tag header (via meta) for the entire admin route tree.
+     ──────────────────────────────────────────────────────────────────── */
+  useEffect(() => {
+    const meta = document.createElement("meta");
+    meta.name = "robots";
+    meta.content = "noindex, nofollow, noarchive, nosnippet, noimageindex";
+    document.head.appendChild(meta);
+
+    const xRobots = document.createElement("meta");
+    xRobots.httpEquiv = "X-Robots-Tag";
+    xRobots.content = "noindex, nofollow";
+    document.head.appendChild(xRobots);
+
+    const prevTitle = document.title;
+    document.title = "Restricted";
+
+    return () => {
+      meta.remove();
+      xRobots.remove();
+      document.title = prevTitle;
+    };
+  }, []);
+
   const handleSignIn = useCallback(async () => {
     if (!provider || !address) {
       setErrorMsg("Wallet not connected.");

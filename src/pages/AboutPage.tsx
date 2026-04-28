@@ -667,16 +667,27 @@ export default function AboutPage() {
               </div>
               <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#07090f] to-transparent pointer-events-none" />
               <div className="relative z-10 p-7">
-                <div className="flex gap-5 items-start mb-6">
+                <div className="flex flex-col md:flex-row gap-6 items-start mb-6">
+                  {/* Chairman Portrait — high-resolution Visual Authority frame */}
                   <motion.div
-                    animate={{ boxShadow: ["0 0 12px rgba(234,179,8,0.25)", "0 0 30px rgba(234,179,8,0.5)", "0 0 12px rgba(234,179,8,0.25)"] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                    className="w-20 h-20 rounded-2xl border-2 border-primary/50 flex-shrink-0 relative overflow-hidden"
-                    style={{ transform: "perspective(400px) rotateX(8deg) rotateY(-6deg)" }}>
-                    <img src="/faisal-orakzai.jpg" alt="Faisal Orakzai" className="w-full h-full object-cover object-top" />
-                    <motion.div className="absolute inset-0"
-                      style={{ background: "linear-gradient(135deg,transparent 30%,rgba(234,179,8,0.12) 50%,transparent 70%)" }}
-                      animate={{ x: ["-100%", "200%"] }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} />
+                    animate={{ boxShadow: ["0 0 18px rgba(234,179,8,0.3)", "0 0 42px rgba(234,179,8,0.55)", "0 0 18px rgba(234,179,8,0.3)"] }}
+                    transition={{ duration: 3.5, repeat: Infinity }}
+                    className="w-40 h-52 md:w-44 md:h-56 rounded-2xl border-2 border-primary/60 flex-shrink-0 relative overflow-hidden"
+                    style={{
+                      transform: "perspective(500px) rotateX(6deg) rotateY(-5deg)",
+                      background: "linear-gradient(135deg, #0a0a0a 0%, #050505 100%)",
+                    }}>
+                    <img
+                      src="/chairman-portrait.jpg"
+                      alt="Faisal Orakzai — Chairman, Orakzai Group"
+                      className="w-full h-full object-cover object-center"
+                      loading="eager"
+                      decoding="async"
+                      style={{ display: "block" }}
+                    />
+                    <motion.div className="absolute inset-0 pointer-events-none"
+                      style={{ background: "linear-gradient(135deg,transparent 30%,rgba(252,246,186,0.18) 50%,transparent 70%)" }}
+                      animate={{ x: ["-100%", "200%"] }} transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }} />
                   </motion.div>
                   <div>
                     <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-primary/60 mb-1">The Founder's Corner</p>

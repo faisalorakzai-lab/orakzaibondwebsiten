@@ -450,35 +450,46 @@ export default function Hero({ onConnect, address }: HeroProps) {
           ))}
         </div>
 
-        {/* Document Links */}
-        <div className="mt-20 flex flex-wrap justify-center gap-4">
-          <a 
-            href="https://drive.google.com/file/d/1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh/view?usp=drivesdk" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="px-6 py-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-sm font-bold transition-all flex items-center gap-2"
-          >
-            <ShieldCheck className="w-4 h-4 text-primary" />
-            Whitepaper
-          </a>
-          <a 
-            href="https://drive.google.com/file/d/1ciuxocfbRbwENLaclrpey50EJMxF_pdr/view?usp=drivesdk" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="px-6 py-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-sm font-bold transition-all flex items-center gap-2"
-          >
-            <ShieldCheck className="w-4 h-4 text-primary" />
-            OKBOND PDF
-          </a>
-          <a 
-            href="https://drive.google.com/file/d/1uvONnEDac-Z06mrth6TT94N9bRGecyhN/view?usp=drivesdk" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="px-6 py-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-sm font-bold transition-all flex items-center gap-2"
-          >
-            <ShieldCheck className="w-4 h-4 text-primary" />
-            Audit Report
-          </a>
+        {/* Document Direct-Download Buttons — Midnight Gold */}
+        <div className="mt-20 flex flex-col items-center gap-5">
+          <p className="text-xs font-mono uppercase tracking-[0.25em] text-primary/70">
+            Official Documents · Instant Download
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <a
+              href="https://drive.google.com/uc?export=download&id=1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh"
+              download="OKBOND-Whitepaper.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="gold-button gold-hover-glow"
+              data-testid="download-whitepaper"
+            >
+              <ShieldCheck className="w-4 h-4" />
+              Whitepaper
+            </a>
+            <a
+              href="https://drive.google.com/uc?export=download&id=1ciuxocfbRbwENLaclrpey50EJMxF_pdr"
+              download="OKBOND-Marketing.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="gold-button-outline gold-hover-glow"
+              data-testid="download-marketing"
+            >
+              <ShieldCheck className="w-4 h-4" />
+              Marketing PDF
+            </a>
+            <a
+              href="https://drive.google.com/uc?export=download&id=1uvONnEDac-Z06mrth6TT94N9bRGecyhN"
+              download="OKBOND-Audit-Report.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="gold-button-outline gold-hover-glow"
+              data-testid="download-audit"
+            >
+              <ShieldCheck className="w-4 h-4" />
+              Audit Report
+            </a>
+          </div>
         </div>
       </div>
     </section>
