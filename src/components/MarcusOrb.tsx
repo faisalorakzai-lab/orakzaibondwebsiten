@@ -7,10 +7,10 @@ const GOLD = "#EAB308";
 const GOLD_DEEP = "#A16207";
 
 const FALLBACK_GREETING_INVESTOR =
-  "Marcus here, Digital Chief of Staff for the Orakzai Group. Founded by Mr. Faisal Orakzai — building since the age of twelve, now nineteen, leading twelve mother companies toward Vision twenty-one-hundred. How may I be of service?";
+  "Marcus here, Digital Chief of Staff for the Orakzai Group. Founded by Chairman Faisal Orakzai — building since the age of twelve, now nineteen, leading twelve mother companies toward Vision twenty-one-hundred. How may I be of service?";
 
 const FALLBACK_GREETING_CHAIRMAN =
-  "Welcome back, Chairman. The OKBOND Grid is online and the Orakzai Group is steady. The Founder is currently overseeing operations.";
+  "Welcome back, Chairman Orakzai. The Orakzai Bond Grid is online and the Group is steady. The Founder is currently overseeing operations.";
 
 const INVESTOR_FALLBACK =
   "Orakzai Bond is the sovereign financial layer of the Group — a liquidity-backed capital retention model on Polygon, anchored by the Trust Trifecta and the Sovereign Guarantee, all aligned to the Vision twenty-one-hundred horizon. For private onboarding with the team, I am routing you to our WhatsApp concierge.";
@@ -137,7 +137,7 @@ function timeAwareSalutation(isAdmin: boolean): string {
   else if (h < 17) part = "Good Afternoon";
   else if (h < 22) part = "Good Evening";
   else part = "Greetings";
-  return isAdmin ? `${part}, Chairman.` : `${part}, Investor.`;
+  return isAdmin ? `${part}, Chairman Orakzai.` : `${part}, Investor.`;
 }
 
 export default function MarcusOrb() {
@@ -391,11 +391,40 @@ export default function MarcusOrb() {
         feedLine = ` Latest from the community feed. ${trimmed}`;
       }
 
-      const briefing = `Chairman briefing. ${priceLine} ${tvlLine} ${walletLine}${feedLine} The OKBOND Grid stands online and the Founder is overseeing operations.`;
+      // STRATEGY MODE — translate raw numbers into Chief-of-Staff posture.
+      let strategyLine = "";
+      if (price && Number.isFinite(price.usd) && Number.isFinite(price.change24h)) {
+        const ch = price.change24h;
+        if (ch <= -2) {
+          strategyLine =
+            " Posture, sir: this is an accumulation window. I recommend we hold reserve dry-powder steady and let the Grid absorb supply quietly.";
+        } else if (ch >= 2) {
+          strategyLine =
+            " Posture, sir: distribution discipline is in order. Velocity is hot — I would protect realised value and let the Sovereign Guarantee narrate the strength.";
+        } else {
+          strategyLine =
+            " Posture, sir: we are in a coiling phase. I recommend we tighten the community narrative and pre-position the next dispatch to bias the breakout upward.";
+        }
+      }
+      let communityLine = "";
+      if (wallets > 0) {
+        if (wallets < 500) {
+          communityLine =
+            " Community velocity is in its founder-phase — every wallet onboarded compounds disproportionately, so I would prioritise concierge outreach.";
+        } else if (wallets < 5000) {
+          communityLine =
+            " Community velocity is in its institutional curve — I would now layer the elite-priority pipeline on top of the retail flywheel.";
+        } else {
+          communityLine =
+            " Community velocity has crossed the network-effect threshold — I would now harden custody and accelerate the Vision twenty-one-hundred narrative on every channel.";
+        }
+      }
+
+      const briefing = `Chairman Orakzai, your briefing. ${priceLine} ${tvlLine} ${walletLine}${feedLine}${strategyLine}${communityLine} The Orakzai Bond Grid stands online and the Founder is overseeing operations.`;
       speak(briefing);
     } catch {
       speak(
-        "Chairman briefing partial. The OKBOND Grid is online. The Founder is currently overseeing operations."
+        "Chairman Orakzai, partial briefing only. The Orakzai Bond Grid is online and the Founder is currently overseeing operations."
       );
     }
   }, [speak]);
