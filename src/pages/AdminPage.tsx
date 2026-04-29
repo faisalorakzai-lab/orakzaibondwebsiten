@@ -7,7 +7,7 @@ import {
   XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
 import {
-  ShieldCheck, Loader2, CheckCircle2, ExternalLink,
+  ShieldCheck, Loader2, CheckCircle2, ExternalLink, Bot,
   Play, Crown, Users, Coins, Clock, AlertTriangle,
   RefreshCw, Lock, Wallet, ArrowLeft, LayoutDashboard,
   TrendingUp, Database, CreditCard, Layers, Trophy, Check,
@@ -20,6 +20,7 @@ import LOTTERY_ABI from "@/lib/contractABI.json";
 import ParticleBackground from "@/components/ParticleBackground";
 import FoundersVault from "@/components/FoundersVault";
 import { Crosshair, Shield } from "lucide-react";
+import MarcusAutoReply from "@/components/MarcusAutoReply";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const ADMIN_WALLET    = "0x9b02e2Edd6F58D626aAa91889708dbF39dfa8Cd7";
@@ -37,7 +38,7 @@ const ERC20_ABI = [
 ];
 
 type TxPhase = "idle" | "pending" | "success" | "failed";
-type AdminTab = "dashboard" | "analytics" | "notifications" | "Lottery" | "players" | "treasury" | "vault" | "staking" | "lending" | "community" | "threat" | "defense";
+type AdminTab = "dashboard" | "analytics" | "notifications" | "Lottery" | "players" | "treasury" | "vault" | "staking" | "lending" | "community" | "threat" | "defense" | "ai-settings";
 
 interface PlayerRow {
   address: string;
@@ -117,6 +118,7 @@ const NAV: { id: AdminTab; label: string; icon: JSX.Element; soon?: boolean; ext
   { id: "threat",        label: "Threat Console",  icon: <Crosshair className="w-4 h-4" />, external: "/threat-console" },
   { id: "defense",       label: "Marcus Defense",  icon: <Shield className="w-4 h-4" />,    external: "/marcus-defense" },
   { id: "community",     label: "Community Hub", icon: <ShieldCheck className="w-4 h-4" />, external: "/community-hub" },
+  { id: "ai-settings",  label: "AI Settings",   icon: <Bot className="w-4 h-4" /> },
   { id: "staking",       label: "Staking",       icon: <Layers className="w-4 h-4" />, soon: true },
   { id: "lending",       label: "Lending",       icon: <CreditCard className="w-4 h-4" />, soon: true },
 ];
@@ -124,6 +126,8 @@ const NAV: { id: AdminTab; label: string; icon: JSX.Element; soon?: boolean; ext
 export default function AdminPage() {
   const { address, provider, isPolygon, connect, switchToPolygon } = useWallet();
   const [switching, setSwitching] = useState(false);
+  const [marcusEnabled, setMarcusEnabled] = useState(false);
+  const [stakingAPY, setStakingAPY] = useState<number>(18);
   const [, setLocation] = useLocation();
   const [tab, setTab] = useState<AdminTab>("dashboard");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -1106,6 +1110,69 @@ export default function AdminPage() {
                   </div>
                 </motion.div>
               )}
+
+              {/* ── AI SETTINGS tab ─────────────────────────────────── */}
+              {tab === "ai-settings" && (
+                <motion.div key="ai-settings" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-6">
+                  <div>
+                    <h2 className="text-2xl font-extrabold text-foreground">AI <span className="text-primary">Settings</span></h2>
+                    <p className="text-muted-foreground text-sm mt-0.5">Configure Marcus AI and staking parameters.</p>
+                  </div>
+
+                  <MarcusAutoReply enabled={marcusEnabled} onToggle={setMarcusEnabled} />
+
+                  <div className="glass-gold rounded-2xl border border-primary/20 p-6 space-y-4">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/25 flex items-center justify-center">
+                        <Layers className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-foreground">$OKBOND Staking APY</h3>
+                        <p className="text-xs text-muted-foreground">Set the Annual Percentage Yield shown in the calculator</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs text-muted-foreground uppercase tracking-wider font-bold">
+                        Interest Rate (APY %)
+                      </label>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="number"
+                          value={stakingAPY}
+                          onChange={(e) => setStakingAPY(Math.max(0, Math.min(1000, Number(e.target.value))))}
+                          min="0"
+                          max="1000"
+                          step="0.5"
+                          className="w-40 px-4 py-3 rounded-xl bg-black/40 border border-primary/20 text-foreground font-mono font-bold text-xl placeholder-muted-foreground focus:border-primary/60 focus:outline-none transition-colors text-center"
+                        />
+                        <span className="text-primary font-extrabold text-2xl">%</span>
+                      </div>
+                      <div className="flex gap-2 flex-wrap mt-2">
+                        {[12, 18, 24, 36, 48].map((v) => (
+                          <button
+                            key={v}
+                            onClick={() => setStakingAPY(v)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
+                              stakingAPY === v
+                                ? "bg-primary/20 border-primary/40 text-primary"
+                                : "bg-muted/10 border-border text-muted-foreground hover:border-primary/30 hover:text-primary"
+                            }`}
+                          >
+                            {v}%
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-primary/5 border border-primary/15 text-xs text-muted-foreground">
+                      <Info className="w-3.5 h-3.5 text-primary inline mr-1.5 mb-0.5" />
+                      This APY is displayed in the $OKBOND Smart Calculator on the Investment page.
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
             </AnimatePresence>
           )}
         </main>
