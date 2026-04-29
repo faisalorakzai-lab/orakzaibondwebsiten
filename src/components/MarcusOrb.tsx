@@ -489,6 +489,34 @@ export default function MarcusOrb() {
     return () => window.clearInterval(id);
   }, []);
 
+  // Pre-warm the Marcus Edge function + upstream Gemini connection on mount.
+  // Saves ~300ms on the very first user prompt by eliminating cold-start
+  // latency on both the Vercel Edge runtime and the Google API socket.
+  // Idempotent, no side effects, low-priority — never blocks the UI.
+  useEffect(() => {
+    let cancelled = false;
+    const fire = () => {
+      if (cancelled) return;
+      try {
+        fetch("/api/marcus-warmup", {
+          method: "POST",
+          keepalive: true,
+          headers: { "content-type": "application/json" },
+          body: "{}",
+        }).catch(() => { /* warmup failures are intentionally silent */ });
+      } catch { /* noop */ }
+    };
+    const ric = (window as any).requestIdleCallback as
+      | ((cb: () => void, opts?: { timeout: number }) => number)
+      | undefined;
+    if (typeof ric === "function") {
+      ric(fire, { timeout: 1500 });
+    } else {
+      window.setTimeout(fire, 250);
+    }
+    return () => { cancelled = true; };
+  }, []);
+
   // Mirror "open" → openRef so async callbacks (speak.onend, etc.) read the latest value.
   useEffect(() => { openRef.current = open; }, [open]);
 
