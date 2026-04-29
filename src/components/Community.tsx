@@ -468,12 +468,60 @@ export default function Community() {
                         {post.pinned && (
                           <Pin className="w-3.5 h-3.5 flex-shrink-0" style={{ color: c.text }} />
                         )}
-                        <div className="min-w-0">
+                        <div className="min-w-0 w-full">
                           <p className="text-sm font-bold text-white mb-1">{post.title}</p>
                           <p className="text-xs text-foreground/70 leading-relaxed">{post.body}</p>
                           <p className="text-[10px] font-mono mt-1.5" style={{ color: c.text + "80" }}>
                             {new Date(post.ts).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })} · Orakzai Admin
                           </p>
+
+                          {/* GOLDEN SIGNATURE — slow gold-ink fade-in on pinned dispatches */}
+                          {post.pinned && (
+                            <motion.div
+                              data-testid={`dispatch-signature-${post.id}`}
+                              initial={{ opacity: 0, y: 6, filter: "blur(4px)" }}
+                              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                              viewport={{ once: true, amount: 0.6 }}
+                              transition={{ duration: 2.4, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+                              className="mt-4 flex flex-col items-end pr-1"
+                              aria-label="Signed: Faisal Orakzai"
+                              role="img"
+                            >
+                              <span
+                                className="block"
+                                style={{
+                                  fontFamily: "'Mr Dafoe', 'Allura', 'Dancing Script', cursive",
+                                  fontWeight: 400,
+                                  fontSize: "clamp(1.6rem, 3.6vw, 2.6rem)",
+                                  lineHeight: 1,
+                                  letterSpacing: "-0.005em",
+                                  whiteSpace: "nowrap",
+                                  background:
+                                    "linear-gradient(135deg, #BF953F 0%, #FCF6BA 30%, #B38728 50%, #FBF5B7 70%, #AA771C 100%)",
+                                  WebkitBackgroundClip: "text",
+                                  backgroundClip: "text",
+                                  WebkitTextFillColor: "transparent",
+                                  color: "transparent",
+                                  filter:
+                                    "drop-shadow(0 0 6px rgba(252,246,186,0.45)) drop-shadow(0 0 14px rgba(191,149,63,0.35))",
+                                  paddingBottom: "0.18em",
+                                  transform: "rotate(-2.5deg)",
+                                  transformOrigin: "right center",
+                                }}
+                              >
+                                Faisal Orakzai
+                              </span>
+                              <span
+                                className="mt-1 text-[9px] uppercase"
+                                style={{
+                                  letterSpacing: "0.32em",
+                                  color: "#8a6a1c",
+                                }}
+                              >
+                                Founder &amp; Chairman, Orakzai Group
+                              </span>
+                            </motion.div>
+                          )}
                         </div>
                       </div>
                     </div>
