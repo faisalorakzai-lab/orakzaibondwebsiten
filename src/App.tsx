@@ -25,7 +25,6 @@ import LotteryPage from "./pages/LotteryPage";
 import AdminPage from "./pages/AdminPage";
 import SecretAdminPage from "./pages/SecretAdminPage";
 import ThreatConsolePage from "./pages/ThreatConsolePage";
-import MarcusDefensePage from "./pages/MarcusDefensePage";
 import CommunityHubPage from "./pages/CommunityHubPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/not-found";
@@ -37,8 +36,6 @@ import SovereignGuarantee from "./components/SovereignGuarantee";
 import MarcusOrb from "./components/MarcusOrb";
 import PresenceGlow from "./components/PresenceGlow";
 import FilmGrain from "./components/FilmGrain";
-import AIBriefingTicker from "./components/AIBriefingTicker";
-import OKBONDHeatmap from "./components/OKBONDHeatmap";
 // FounderSection intentionally NOT imported on the homepage — the founder
 // block lives on its dedicated /founder page (FounderPage.tsx). Reverting
 // the unauthorized homepage embed per Chairman's directive.
@@ -77,10 +74,6 @@ function App() {
         <SiteSidebar ref={sidebarRef} />
       </ErrorBoundary>
 
-      <ErrorBoundary scope="AIBriefingTicker" silent>
-        <AIBriefingTicker />
-      </ErrorBoundary>
-
       <main className="flex-1 lg:pl-[60px]">
         {/* Route-level boundary. Keyed on `location` so a thrown render in
             FounderPage/etc. produces a friendly "Terminal interruption"
@@ -94,7 +87,6 @@ function App() {
                 <LiveVaultStatus />
                 <MarcusAILiveLog />
                 <SovereignGuarantee />
-                <OKBONDHeatmap />
               </>
             </Route>
             <Route path="/about" component={AboutPage} />
@@ -129,11 +121,6 @@ function App() {
             <Route path="/threat-console">
               <AdminGate>
                 <ThreatConsolePage />
-              </AdminGate>
-            </Route>
-            <Route path="/marcus-defense">
-              <AdminGate>
-                <MarcusDefensePage />
               </AdminGate>
             </Route>
             <Route path="/community-hub" component={CommunityHubPage} />
