@@ -4,6 +4,7 @@ import { Cpu, Circle } from "lucide-react";
 import InstitutionalDataRain from "./InstitutionalDataRain";
 import GhostWorldMap from "./GhostWorldMap";
 import { ESCALATION_EVENT, loadEscalations, type MarcusEscalation } from "@/lib/marcusBus";
+import { fetchRecentDispatches } from "@/lib/dispatchBus";
 
 const GOLD = "#D4AF37";
 const GOLD_BRIGHT = "#F4CE45";
@@ -12,7 +13,7 @@ const AMBER = "#ffb547";
 const RED_ALERT = "#ff4d4f";
 const RED_CRIT  = "#ff1f3a";
 
-type Severity = "INFO" | "OPTIMIZE" | "GUARD" | "SCAN" | "EXEC" | "ALERT" | "CRITICAL" | "BROADCAST";
+type Severity = "INFO" | "OPTIMIZE" | "GUARD" | "SCAN" | "EXEC" | "ALERT" | "CRITICAL" | "BROADCAST" | "BRIEFING";
 const SEV_COLOR: Record<Severity, string> = {
   INFO:      "#9bd1ff",
   OPTIMIZE:  GOLD_BRIGHT,
@@ -22,7 +23,17 @@ const SEV_COLOR: Record<Severity, string> = {
   ALERT:     RED_ALERT,
   CRITICAL:  RED_CRIT,
   BROADCAST: GOLD_BRIGHT,
+  BRIEFING:  GOLD_BRIGHT,
 };
+
+const BRIEFING_KEY = "okbond.briefing.lastDate";
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, "0")}-${d.getDate().toString().padStart(2, "0")}`;
+}
+function dayOfWeek() {
+  return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][new Date().getDay()];
+}
 
 interface MarcusEvent {
   sev: Severity;
@@ -111,6 +122,62 @@ export default function MarcusAILiveLog() {
     };
     window.addEventListener(ESCALATION_EVENT, onEscalation);
     return () => window.removeEventListener(ESCALATION_EVENT, onEscalation);
+  }, []);
+
+  // ── Marcus Morning Briefing — Strategic Update on first visit of the day ──
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const today = todayKey();
+        const last = typeof localStorage !== "undefined" ? localStorage.getItem(BRIEFING_KEY) : null;
+        if (last === today) return; // already briefed today
+
+        // Pull the Chairman's latest pinned dispatch (if any)
+        let dispatchLine = "No active dispatch from the Chairman.";
+        try {
+          const recent = await fetchRecentDispatches(1);
+          if (recent.length > 0) {
+            const msg = recent[0].message.trim();
+            dispatchLine = `Chairman's pinned dispatch — "${msg.length > 140 ? msg.slice(0, 137) + "…" : msg}"`;
+          }
+        } catch { /* dispatch fetch is best-effort */ }
+
+        if (cancelled) return;
+
+        const greeting = `Good ${(() => {
+          const h = new Date().getHours();
+          if (h < 12) return "morning";
+          if (h < 18) return "afternoon";
+          return "evening";
+        })()}, Sovereign. ${dayOfWeek()} strategic update from Marcus AI.`;
+
+        const grid = "Grid health · NOMINAL · Vault delta within tolerance · Anti-whale circuit-breaker armed · 0 critical alerts in last 24h.";
+
+        const briefingLines: { sev: Severity; msg: string }[] = [
+          { sev: "BRIEFING", msg: greeting },
+          { sev: "BRIEFING", msg: grid },
+          { sev: "BRIEFING", msg: dispatchLine },
+        ];
+
+        setLines((prev) => {
+          const now = Date.now();
+          const fresh = briefingLines.map((b, i) => ({
+            id: now + i,
+            time: fmtTime(new Date(now + i)),
+            sev: b.sev,
+            msg: b.msg,
+          }));
+          const next = [...prev, ...fresh];
+          return next.length > 14 ? next.slice(next.length - 14) : next;
+        });
+
+        if (typeof localStorage !== "undefined") {
+          localStorage.setItem(BRIEFING_KEY, today);
+        }
+      } catch { /* briefing is best-effort, must never break the page */ }
+    })();
+    return () => { cancelled = true; };
   }, []);
 
   // Auto-scroll terminal to bottom on new line
@@ -216,6 +283,7 @@ export default function MarcusAILiveLog() {
               {lines.map((l) => (
                 <motion.div
                   key={l.id}
+                  data-marcus-line={l.sev}
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.25 }}

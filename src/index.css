@@ -996,3 +996,44 @@ body::before {
   0%, 100% { opacity: 0.85; transform: scale(1); }
   50%      { opacity: 1.00; transform: scale(1.18); }
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+   PRESTIGE FRAMEWORK — True Gold Hairline System (Executive Terminal Finish)
+   ─────────────────────────────────────────────────────────────────────────── */
+:root {
+  --gold-true:      #d4af37;
+  --gold-bright:    #f4ce45;
+  --gold-deep:      #a07a14;
+  --gold-hairline:  rgba(212, 175, 55, 0.45);
+  --gold-hairline-soft: rgba(212, 175, 55, 0.25);
+}
+
+/* Universal 0.5px True Gold hairline — opt-in via class, won't break legacy */
+.prestige-border {
+  border: 0.5px solid var(--gold-hairline) !important;
+  box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.08);
+}
+.prestige-border-top    { border-top:    0.5px solid var(--gold-hairline) !important; }
+.prestige-border-bottom { border-bottom: 0.5px solid var(--gold-hairline) !important; }
+
+/* Slight global tightening of hairline rendering on high-DPR displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .glass-dark {
+    border-color: var(--gold-hairline) !important;
+  }
+}
+
+/* BRIEFING line emphasis inside Marcus terminal — gold gradient backplate */
+[data-marcus-line="BRIEFING"] {
+  background: linear-gradient(90deg, rgba(212,175,55,0.10), transparent 70%);
+  border-left: 1.5px solid var(--gold-bright);
+  padding-left: 8px;
+  margin-left: -8px;
+  border-radius: 2px;
+}
+
+/* Make every Playfair display header sit a touch tighter and richer */
+.font-display, .font-serif, .font-heading {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  letter-spacing: 0.005em;
+}

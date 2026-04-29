@@ -351,7 +351,9 @@ export default function ThreatConsolePage() {
               </div>
               <div>
                 <p className="text-[10px] tracking-[0.3em] uppercase" style={{ color: "#eab308aa" }}>Sovereign · Tier-Ω</p>
-                <h1 className="text-2xl font-extrabold tracking-tight text-foreground">
+                <h1
+                  className="text-2xl font-extrabold tracking-tight text-foreground"
+                  style={{ fontFamily: "'Playfair Display', Georgia, serif", letterSpacing: "0.005em" }}>
                   Threat Console
                   {isChairman && (
                     <span className="ml-3 text-[10px] font-mono px-2 py-0.5 rounded uppercase tracking-widest"

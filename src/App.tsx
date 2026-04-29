@@ -34,6 +34,7 @@ import MarcusAILiveLog from "./components/MarcusAILiveLog";
 import SovereignGuarantee from "./components/SovereignGuarantee";
 import MarcusOrb from "./components/MarcusOrb";
 import PresenceGlow from "./components/PresenceGlow";
+import FilmGrain from "./components/FilmGrain";
 
 console.log("App.tsx module loaded");
 
@@ -121,6 +122,9 @@ function App() {
       {/* Floating WhatsApp widget — visible on every page */}
       <WhatsAppBot />
       <MarcusOrb />
+
+      {/* Cinematic 1% film-grain overlay — Executive Terminal Finish */}
+      <FilmGrain />
     </div>
   );
 }

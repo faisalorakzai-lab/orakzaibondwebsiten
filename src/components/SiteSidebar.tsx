@@ -7,6 +7,7 @@ import {
   PieChart, Map, Cpu, Trophy, Users, Shield, FileText,
   Crown, ExternalLink, Twitter, Send, Mail, Download, BookOpen, Rocket,
 } from "lucide-react";
+import ReserveWidget from "./ReserveWidget";
 
 const NAV_ITEMS = [
   { id: "hero",       label: "Home",        icon: <Home       className="w-4 h-4" />, href: "/"           },
@@ -243,6 +244,16 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
             {(expanded || mobile) && <Download className="w-3 h-3 opacity-50 flex-shrink-0" />}
           </a>
         ))}
+
+        {/* ── Reserve Transparency Widget ───────────────────────────────── */}
+        <div className={`my-3 border-t border-border/30 ${!expanded && !mobile ? "mx-2" : "mx-1"}`} />
+        {(expanded || mobile) ? (
+          <div className="px-1">
+            <ReserveWidget />
+          </div>
+        ) : (
+          <ReserveWidget compact />
+        )}
       </div>
 
       <div className={`border-t border-border/30 py-3 px-2 space-y-1`}>

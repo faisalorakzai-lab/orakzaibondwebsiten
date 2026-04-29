@@ -362,9 +362,18 @@ export default function AdminPage() {
             >
               <img src="/okbond-logo.png" alt="OKBOND" className="w-full h-full object-cover" />
             </motion.div>
-            <div>
-              <span className="font-extrabold text-foreground text-sm">Orakzai Admin</span>
-              <span className="ml-2 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-primary/10 text-primary border border-primary/20 tracking-widest">
+            <div className="flex items-center gap-2">
+              <span
+                className="text-foreground text-base leading-none"
+                style={{
+                  fontFamily: "'Playfair Display', Georgia, serif",
+                  fontWeight: 700,
+                  letterSpacing: "0.01em",
+                }}>
+                OKBOND <span className="text-primary italic font-semibold">·</span>{" "}
+                <span className="italic" style={{ color: "#f4ce45" }}>Command Center</span>
+              </span>
+              <span className="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-primary/10 text-primary border border-primary/20 tracking-widest">
                 OWNER ONLY
               </span>
             </div>
