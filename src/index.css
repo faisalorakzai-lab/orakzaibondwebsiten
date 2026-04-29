@@ -1200,3 +1200,38 @@ body::before {
   border-color: rgba(191,149,63,0.32) !important;
   box-shadow: 0 12px 40px rgba(0,0,0,0.65), 0 0 28px rgba(191,149,63,0.12) !important;
 }
+/* ═══════════════════════════════════════════════════════════════════
+   MISSING UTILITY CLASSES — Emergency Fix
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Deep-space neural grid background — Community page, etc. */
+.neural-grid-strong {
+  position: relative;
+  background: linear-gradient(180deg, #050505 0%, #080810 50%, #050505 100%);
+}
+.neural-grid-strong::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(191,149,63,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(191,149,63,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Midnight deep black — Roadmap page, etc. */
+.midnight-page {
+  background: #05060A;
+  min-height: 100vh;
+  position: relative;
+}
+.midnight-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(191,149,63,0.04) 0%, transparent 65%);
+  pointer-events: none;
+}
+
