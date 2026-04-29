@@ -531,55 +531,24 @@ export default function SocialHub() {
         )}
       </AnimatePresence>
 
-      {/* USER PROFILE CARD - SECONDARY FOCUS */}
-      <div className="glass-card-deep-space rounded-3xl p-8 mb-8 relative overflow-hidden">
-        {/* OSG 3D Sphere Integration */}
-        <div className="absolute top-4 right-4 opacity-80 hover:opacity-100 transition-opacity">
-          <SovereignGrid />
+      {/* Subtle profile-edit access — replaces the heavy profile card */}
+      {address && (
+        <div className="flex justify-end -mt-2 mb-1">
+          <button
+            onClick={() => setShowEditModal(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-mono uppercase tracking-[0.18em] transition-colors hover:bg-primary/15"
+            style={{
+              color: "#F4CE45",
+              background: "rgba(212,175,55,0.08)",
+              border: "1px solid rgba(212,175,55,0.35)",
+            }}
+            data-testid="open-profile-edit"
+          >
+            <Edit2 size={11} />
+            Edit Identity
+          </button>
         </div>
-
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-6 relative z-10">
-          <div className="relative">
-            <div className="w-20 h-20 rounded-full border-2 border-primary/30 overflow-hidden bg-black/40 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
-              {profile?.avatar_url ? (
-                <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
-              ) : <User size={40} className="m-auto mt-5 text-primary/20" />}
-            </div>
-            {address && (
-              <button 
-                onClick={() => setShowEditModal(true)}
-                className="absolute bottom-0 right-0 p-1.5 rounded-full bg-primary text-black shadow-lg hover:scale-110 transition-transform"
-              >
-                <Edit2 size={12} />
-              </button>
-            )}
-          </div>
-          
-          <div className="flex-1 text-center md:text-left">
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-1">
-              <h2 className="text-xl font-black text-foreground tracking-tight neon-heading">{profile?.username || 'Orakzai Investor'}</h2>
-              {profile?.branding_logo && (
-                <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20 branded-tag-pulse">
-                  <img src={profile.branding_logo} alt="Company Logo" className="w-3 h-3 rounded-full object-cover" />
-                  <span className="text-[9px] font-bold uppercase tracking-tighter text-primary">Branded</span>
-                </div>
-              )}
-            </div>
-            <p className="text-xs text-muted-foreground mb-3 max-w-md line-clamp-2">{profile?.bio || 'Proud member of the Orakzai Bond community.'}</p>
-            
-            <div className="flex items-center justify-center md:justify-start gap-6">
-              <div className="text-center md:text-left">
-                <span className="block text-base font-black text-foreground">{profile?.followers_count || 0}</span>
-                <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">Followers</span>
-              </div>
-              <div className="text-center md:text-left">
-                <span className="block text-base font-black text-foreground">{profile?.following_count || 0}</span>
-                <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">Following</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      )}
 
       {/* ── TWO-COLUMN LAYOUT: Feed (left) + Trending widget (right) ── */}
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_320px] gap-6">

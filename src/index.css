@@ -927,3 +927,52 @@ body::before {
   position: relative;
   z-index: 1;
 }
+
+
+/* ── Sovereign Neural Grid (Community page) ────────────────────────── */
+.neural-grid-strong {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(212,175,55,0.06) 0%, transparent 60%),
+    #04050a;
+}
+.neural-grid-strong::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(212,175,55,0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,175,55,0.18) 1px, transparent 1px),
+    linear-gradient(rgba(212,175,55,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,175,55,0.06) 1px, transparent 1px);
+  background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+  background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
+  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.55) 55%, transparent 90%);
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.55) 55%, transparent 90%);
+  animation: neural-grid-drift 28s linear infinite;
+}
+.neural-grid-strong::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 28%, rgba(212,175,55,0.18), transparent 18%),
+    radial-gradient(circle at 78% 22%, rgba(212,175,55,0.14), transparent 16%),
+    radial-gradient(circle at 32% 78%, rgba(212,175,55,0.10), transparent 18%),
+    radial-gradient(circle at 86% 84%, rgba(212,175,55,0.16), transparent 18%);
+  filter: blur(0.5px);
+  animation: neural-nodes-pulse 6s ease-in-out infinite;
+}
+@keyframes neural-grid-drift {
+  0%   { background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px; }
+  100% { background-position: 96px 96px, 96px 96px, 24px 24px, 24px 24px; }
+}
+@keyframes neural-nodes-pulse {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 0.55; }
+}

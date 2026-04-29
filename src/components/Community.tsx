@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Megaphone, Pin, Search, Bell, X, User, Loader2, MessageCircle, Heart } from "lucide-react";
+import { Megaphone, Pin, Search, Bell, X, User, Loader2, MessageCircle, Heart, Activity, Radio } from "lucide-react";
 import { Link } from "wouter";
 import LiveParticipationFeed from "@/components/LiveParticipationFeed";
 import ThinkTank from "@/components/ThinkTank";
@@ -30,7 +30,90 @@ function timeAgo(iso: string): string {
   return `${Math.floor(d/86400)}d`;
 }
 
-/* ── Main Component ─────────────────────────────────────────────────── */
+
+/* Sovereign Status Bar — slim glassmorphism strip with live metrics */
+function SovereignStatusBar() {
+  const [pulse, setPulse] = useState(74.2);
+  const [conns, setConns] = useState(8142);
+  const [clock, setClock] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => {
+      setClock(new Date());
+      setPulse((p) => {
+        const drift = (Math.random() - 0.5) * 3.6;
+        const next = Math.max(60, Math.min(96, p + drift));
+        return Math.round(next * 10) / 10;
+      });
+      setConns((c) => c + (Math.random() < 0.42 ? 1 : 0));
+    }, 1500);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div
+      className="rounded-xl px-4 py-2.5 flex items-center justify-between gap-x-5 gap-y-2 flex-wrap"
+      style={{
+        background: "linear-gradient(180deg, rgba(20,16,8,0.55), rgba(8,6,3,0.55))",
+        backdropFilter: "blur(14px)",
+        WebkitBackdropFilter: "blur(14px)",
+        border: "1px solid rgba(212,175,55,0.35)",
+        boxShadow: "0 4px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(212,175,55,0.18)",
+      }}
+    >
+      {/* Active Sovereign Connections */}
+      <div className="flex items-center gap-2 min-w-0">
+        <span className="relative flex h-2 w-2 flex-shrink-0">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: "#22c55e" }} />
+          <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "#22c55e" }} />
+        </span>
+        <Activity className="w-3 h-3 flex-shrink-0" style={{ color: "rgba(244,206,69,0.85)" }} />
+        <span className="text-[10px] font-mono uppercase tracking-[0.18em] whitespace-nowrap" style={{ color: "rgba(212,175,55,0.7)" }}>
+          Active Sovereign Connections
+        </span>
+        <span className="text-xs font-bold tabular-nums" style={{ color: "#F4CE45" }}>
+          {conns.toLocaleString()}
+        </span>
+      </div>
+
+      <div className="hidden md:block h-4 w-px" style={{ background: "rgba(212,175,55,0.25)" }} />
+
+      {/* Grid Pulse */}
+      <div className="flex items-center gap-2 flex-1 min-w-[200px] max-w-md">
+        <Radio className="w-3 h-3 flex-shrink-0" style={{ color: "rgba(244,206,69,0.85)" }} />
+        <span className="text-[10px] font-mono uppercase tracking-[0.18em] flex-shrink-0" style={{ color: "rgba(212,175,55,0.7)" }}>
+          Grid Pulse
+        </span>
+        <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(212,175,55,0.1)" }}>
+          <div
+            className="h-full rounded-full transition-all duration-700 ease-out"
+            style={{
+              width: `${pulse}%`,
+              background: "linear-gradient(90deg, #F4CE45, #D4AF37, #A07A1F)",
+              boxShadow: "0 0 12px rgba(212,175,55,0.7)",
+            }}
+          />
+        </div>
+        <span className="text-xs font-bold tabular-nums w-12 text-right" style={{ color: "#F4CE45" }}>
+          {pulse.toFixed(1)}%
+        </span>
+      </div>
+
+      <div className="hidden md:block h-4 w-px" style={{ background: "rgba(212,175,55,0.25)" }} />
+
+      {/* Sync clock */}
+      <div className="flex items-center gap-2 flex-shrink-0">
+        <span className="text-[10px] font-mono uppercase tracking-[0.18em]" style={{ color: "rgba(212,175,55,0.7)" }}>
+          Sync
+        </span>
+        <span className="text-xs font-mono tabular-nums" style={{ color: "#F4CE45" }}>
+          {clock.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* Main Component */
 export default function Community() {
   const [adminPosts] = useState<AdminPost[]>(() => {
     try { return JSON.parse(localStorage.getItem("okbond_admin_posts") || "[]"); } catch { return []; }
@@ -111,21 +194,41 @@ export default function Community() {
   }, [notifOpen]);
 
   return (
-    <section className="relative py-8 px-4 overflow-hidden bg-black/30">
+    <section className="relative pt-2 pb-4 px-4 overflow-hidden">
       <div className="max-w-7xl mx-auto relative z-10">
-        
-        {/* ── YEAR 2100 TOP BAR ─────────────────────────────────── */}
-        <div className="flex items-center justify-between mb-8 px-2 relative z-30">
-          <div className="flex items-center gap-4">
-            <div className="relative group" ref={searchRef}>
+
+        {/* SOVEREIGN COMMUNITY — Executive Header */}
+        <header className="relative z-30 mb-3">
+          <div className="flex items-end justify-between gap-3 px-1">
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-mono uppercase tracking-[0.3em] mb-1.5" style={{ color: "rgba(212,175,55,0.7)" }}>
+                Orakzai Bond · Communications Channel
+              </p>
+              <h1
+                className="leading-none tracking-tight truncate"
+                style={{
+                  color: "#F4CE45",
+                  fontFamily: "'Playfair Display', serif",
+                  fontWeight: 800,
+                  fontSize: "clamp(1.5rem, 4.4vw, 2.4rem)",
+                  textShadow: "0 0 24px rgba(212,175,55,0.35)",
+                  letterSpacing: "0.01em",
+                }}
+              >
+                Sovereign Community
+              </h1>
+              <div className="mt-2 h-px w-24" style={{ background: "linear-gradient(90deg, #D4AF37, transparent)" }} />
+            </div>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="relative group" ref={searchRef}>
               <div className="absolute -inset-1 bg-primary/20 rounded-full blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
               <button
                 onClick={() => { setSearchOpen(o => !o); setNotifOpen(false); }}
-                className="relative p-2.5 rounded-full bg-white/10 border border-cyan-400/40 text-cyan-400 hover:border-cyan-400 transition-all duration-300 shadow-[0_0_15px_rgba(0,255,255,0.1)] hover:shadow-[0_0_25px_rgba(0,255,255,0.4)] overflow-hidden"
+                className="relative p-2 rounded-full transition-all duration-300 overflow-hidden"
+                style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.4)", color: "#F4CE45", boxShadow: "0 0 14px rgba(212,175,55,0.15)" }}
                 aria-label="Search users"
               >
-                <div className="absolute inset-0 bg-cyan-400/10 blur-xl group-hover:bg-cyan-400/20 transition-colors"></div>
-                <Search size={20} className="relative z-10 drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]" />
+                <Search size={18} className="relative z-10 drop-shadow-[0_0_6px_rgba(212,175,55,0.6)]" />
               </button>
 
               <AnimatePresence>
@@ -197,20 +300,17 @@ export default function Community() {
                 )}
               </AnimatePresence>
             </div>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="relative group" ref={notifRef}>
+              <div className="relative group" ref={notifRef}>
               <div className="absolute -inset-1 bg-primary/20 rounded-full blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
               <button
                 onClick={() => { setNotifOpen(o => !o); setSearchOpen(false); }}
-                className="relative p-2.5 rounded-full bg-white/10 border border-cyan-400/40 text-cyan-400 hover:border-cyan-400 transition-all duration-300 shadow-[0_0_15px_rgba(0,255,255,0.1)] hover:shadow-[0_0_25px_rgba(0,255,255,0.4)] overflow-hidden"
+                className="relative p-2 rounded-full transition-all duration-300 overflow-hidden"
+                style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.4)", color: "#F4CE45", boxShadow: "0 0 14px rgba(212,175,55,0.15)" }}
                 aria-label="Notifications"
               >
-                <div className="absolute inset-0 bg-cyan-400/10 blur-xl group-hover:bg-cyan-400/20 transition-colors"></div>
-                <Bell size={20} className="relative z-10 drop-shadow-[0_0_8px_rgba(0,255,255,0.8)]" />
+                <Bell size={18} className="relative z-10 drop-shadow-[0_0_6px_rgba(212,175,55,0.6)]" />
                 {!notifSeen && (
-                  <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-cyan-400 rounded-full border-2 border-black animate-pulse shadow-[0_0_10px_rgba(0,255,255,1)] z-20"></span>
+                  <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-black animate-pulse z-20" style={{ background: "#22c55e", boxShadow: "0 0 8px rgba(34,197,94,0.9)" }}></span>
                 )}
               </button>
 
@@ -281,16 +381,22 @@ export default function Community() {
                   </motion.div>
                 )}
               </AnimatePresence>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* ── Orakzai Social Hub (Contains Profile Card) ────────── */}
+          {/* Slim glassmorphism status bar */}
+          <div className="mt-3">
+            <SovereignStatusBar />
+          </div>
+        </header>
+
+        {/* Orakzai Social Hub (feed only — profile card removed) */}
         <SocialHub />
 
         {/* ── Official Announcements ─────────────────────────────── */}
         {adminPosts.length > 0 && (
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="my-14">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mt-5 mb-8">
             <div className="flex items-center gap-2 mb-4">
               <Megaphone className="w-4 h-4 text-primary" />
               <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-primary/60">
