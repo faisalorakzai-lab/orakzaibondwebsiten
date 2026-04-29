@@ -326,7 +326,7 @@ export default function Hero({ onConnect, address }: HeroProps) {
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-8 leading-[1.02] imperial-tagline">
               Orakzai Bond:
               <br className="hidden sm:block" />
-              <span className="block mt-2">The Sovereign Gateway to Next-Generation Wealth.</span>
+              <span className="block mt-2">The Orakzai Bond Gateway to Next-Generation Wealth.</span>
             </h1>
           </RevealText>
 
@@ -430,8 +430,8 @@ export default function Hero({ onConnect, address }: HeroProps) {
             >
               <div className="flex items-center justify-between mb-4 gap-2">
                 <h3 className="text-primary font-black uppercase tracking-wider">{contract.name}</h3>
-                <span className="verified-osg" title="Verified by Orakzai Sovereign Governance">
-                  Verified by OSG
+                <span className="verified-osg" title="Verified by Orakzai Bond Governance">
+                  Verified by OBG
                 </span>
               </div>
               <p className="text-[10px] font-mono text-muted-foreground break-all mb-6 bg-black/40 p-3 rounded-xl border border-white/5">
