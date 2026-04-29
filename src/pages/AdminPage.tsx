@@ -7,7 +7,7 @@ import {
   XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
 import {
-  ShieldCheck, Loader2, CheckCircle2, ExternalLink, Bot,
+  ShieldCheck, Loader2, CheckCircle2, ExternalLink, Bot, Save, Bot,
   Play, Crown, Users, Coins, Clock, AlertTriangle,
   RefreshCw, Lock, Wallet, ArrowLeft, LayoutDashboard,
   TrendingUp, Database, CreditCard, Layers, Trophy, Check,
@@ -20,6 +20,8 @@ import LOTTERY_ABI from "@/lib/contractABI.json";
 import ParticleBackground from "@/components/ParticleBackground";
 import FoundersVault from "@/components/FoundersVault";
 import { Crosshair, Shield } from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import MarcusAutoReply from "@/components/MarcusAutoReply";
 import MarcusAutoReply from "@/components/MarcusAutoReply";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -119,6 +121,7 @@ const NAV: { id: AdminTab; label: string; icon: JSX.Element; soon?: boolean; ext
   { id: "defense",       label: "Marcus Defense",  icon: <Shield className="w-4 h-4" />,    external: "/marcus-defense" },
   { id: "community",     label: "Community Hub", icon: <ShieldCheck className="w-4 h-4" />, external: "/community-hub" },
   { id: "ai-settings",  label: "AI Settings",   icon: <Bot className="w-4 h-4" /> },
+  { id: "ai-settings",  label: "AI Settings",   icon: <Bot className="w-4 h-4" /> },
   { id: "staking",       label: "Staking",       icon: <Layers className="w-4 h-4" />, soon: true },
   { id: "lending",       label: "Lending",       icon: <CreditCard className="w-4 h-4" />, soon: true },
 ];
@@ -126,6 +129,12 @@ const NAV: { id: AdminTab; label: string; icon: JSX.Element; soon?: boolean; ext
 export default function AdminPage() {
   const { address, provider, isPolygon, connect, switchToPolygon } = useWallet();
   const [switching, setSwitching] = useState(false);
+  const [marcusEnabled, setMarcusEnabled] = useState(false);
+  const [stakingAPY, setStakingAPY] = useState<number>(18);
+  const [icoStage, setIcoStage] = useState<number>(1);
+  const [icoPrice, setIcoPrice] = useState<number>(0.60);
+  const [settingsLoading, setSettingsLoading] = useState(false);
+  const [settingsSaved, setSettingsSaved] = useState(false);
   const [marcusEnabled, setMarcusEnabled] = useState(false);
   const [stakingAPY, setStakingAPY] = useState<number>(18);
   const [, setLocation] = useLocation();
@@ -1168,6 +1177,125 @@ export default function AdminPage() {
                     <div className="p-3 rounded-xl bg-primary/5 border border-primary/15 text-xs text-muted-foreground">
                       <Info className="w-3.5 h-3.5 text-primary inline mr-1.5 mb-0.5" />
                       This APY is displayed in the $OKBOND Smart Calculator on the Investment page.
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+
+              {/* ── AI SETTINGS tab ──────────────────────────────── */}
+              {tab === "ai-settings" && (
+                <motion.div key="ai-settings" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h2 className="text-2xl font-extrabold text-foreground">AI <span className="text-primary">Settings</span></h2>
+                      <p className="text-muted-foreground text-sm mt-0.5">Control Marcus, staking APY, and ICO pricing. All changes update live for all visitors.</p>
+                    </div>
+                    <button onClick={saveSettings} disabled={settingsLoading}
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(234,179,8,0.3)] disabled:opacity-50">
+                      {settingsLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : settingsSaved ? <CheckCircle2 className="w-4 h-4" /> : <Save className="w-4 h-4" />}
+                      {settingsSaved ? "Saved!" : "Save All"}
+                    </button>
+                  </div>
+
+                  {/* Marcus Auto-Reply */}
+                  <MarcusAutoReply enabled={marcusEnabled} onToggle={setMarcusEnabled} />
+
+                  {/* ICO Controls */}
+                  <div className="glass-gold rounded-2xl border border-primary/20 p-6 space-y-5">
+                    <div className="flex items-center gap-3 mb-1">
+                      <div className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/25 flex items-center justify-center">
+                        <TrendingUp className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-foreground">ICO Stage & Price Control</h3>
+                        <p className="text-xs text-muted-foreground">Set the current sale stage and default price for the calculator</p>
+                      </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-5">
+                      {/* Stage Selector */}
+                      <div className="space-y-2">
+                        <label className="text-xs text-muted-foreground uppercase tracking-wider font-bold">Current ICO Stage</label>
+                        <div className="grid grid-cols-3 gap-2">
+                          {[1, 2, 3].map((s) => (
+                            <button key={s} onClick={() => setIcoStage(s)}
+                              className={`py-3 rounded-xl text-sm font-extrabold border transition-all ${
+                                icoStage === s
+                                  ? "bg-primary/20 border-primary/50 text-primary shadow-[0_0_10px_rgba(234,179,8,0.2)]"
+                                  : "bg-muted/10 border-border text-muted-foreground hover:border-primary/30"
+                              }`}>
+                              Phase {s}
+                              <p className="text-[9px] mt-0.5 font-normal">
+                                {s === 1 ? "$0.15" : s === 2 ? "$0.25" : "$0.50"}
+                              </p>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Price Input */}
+                      <div className="space-y-2">
+                        <label className="text-xs text-muted-foreground uppercase tracking-wider font-bold">Calculator Default Price (USDT)</label>
+                        <div className="relative">
+                          <input type="number" value={icoPrice} onChange={(e) => setIcoPrice(parseFloat(e.target.value) || 0)}
+                            step="0.01" min="0"
+                            className="w-full px-4 py-3 rounded-xl bg-black/40 border border-primary/20 text-foreground font-mono font-bold text-lg focus:border-primary/60 focus:outline-none transition-colors pl-8" />
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 font-bold">$</span>
+                        </div>
+                        <div className="flex gap-2">
+                          {[0.15, 0.25, 0.50, 0.60, 1.00].map((p) => (
+                            <button key={p} onClick={() => setIcoPrice(p)}
+                              className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all ${
+                                icoPrice === p ? "bg-primary/20 border-primary/40 text-primary" : "bg-muted/10 border-border text-muted-foreground hover:border-primary/30"
+                              }`}>
+                              ${p.toFixed(2)}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Staking APY */}
+                  <div className="glass-gold rounded-2xl border border-primary/20 p-6 space-y-4">
+                    <div className="flex items-center gap-3 mb-1">
+                      <div className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/25 flex items-center justify-center">
+                        <Layers className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-foreground">Staking APY Rate</h3>
+                        <p className="text-xs text-muted-foreground">Annual Percentage Yield from the 2.8M OKBOND rewards pool</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs text-muted-foreground uppercase tracking-wider font-bold">Interest Rate (APY %)</label>
+                      <div className="flex items-center gap-3">
+                        <input type="number" value={stakingAPY} onChange={(e) => setStakingAPY(Math.max(0, Math.min(500, Number(e.target.value))))}
+                          min="0" max="500" step="0.5"
+                          className="w-40 px-4 py-3 rounded-xl bg-black/40 border border-primary/20 text-foreground font-mono font-bold text-xl focus:border-primary/60 focus:outline-none transition-colors text-center" />
+                        <span className="text-primary font-extrabold text-2xl">%</span>
+                        <div className="text-xs text-muted-foreground">
+                          <p>28% pool = {(2800000 * (stakingAPY / 100)).toLocaleString()}</p>
+                          <p className="text-[10px]">OKBOND/year total rewards</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2 flex-wrap mt-1">
+                        {[12, 18, 24, 36, 48].map((v) => (
+                          <button key={v} onClick={() => setStakingAPY(v)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${
+                              stakingAPY === v ? "bg-primary/20 border-primary/40 text-primary" : "bg-muted/10 border-border text-muted-foreground hover:border-primary/30"
+                            }`}>
+                            {v}%
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-primary/5 border border-primary/15 text-xs text-muted-foreground">
+                      <Info className="w-3.5 h-3.5 text-primary inline mr-1.5 mb-0.5" />
+                      Changes are saved to Supabase and reflected instantly on the Investment page calculator and for all visitors.
                     </div>
                   </div>
                 </motion.div>
