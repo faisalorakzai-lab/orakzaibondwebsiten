@@ -1,4 +1,19 @@
-import { BrowserProvider, verifyMessage } from "ethers";
+/**
+ * adminAuth — wallet-address-only verification for the OKBOND Admin Panel.
+ *
+ * Per Chairman's directive (Apr 2026): the on-chain signature step has been
+ * removed. The Admin Panel now grants access purely by verifying that the
+ * connected wallet equals ADMIN_WALLET. No Polygon Mainnet network gate, no
+ * signMessage prompt, no gas. Session lives in sessionStorage for 1 hour.
+ *
+ * Threat model: this is a UI gate only. The Admin Panel itself must rely on
+ * server-side authorisation (e.g. RLS policies) for any sensitive write —
+ * client-side gating alone never protects data. This file intentionally keeps
+ * the API surface (signAdminProof, isProofValid, loadAdminProof, etc.) so
+ * existing callers don't need to change.
+ */
+
+import type { BrowserProvider } from "ethers";
 
 export const ADMIN_WALLET = "0x9b02e2edd6f58d626aaa91889708dbf39dfa8cd7";
 
@@ -7,7 +22,9 @@ const PROOF_TTL_MS = 60 * 60 * 1000;
 
 export interface AdminProof {
   address: string;
+  /** Retained for backward compatibility; populated with a human-readable note. */
   message: string;
+  /** Retained for backward compatibility; empty string in address-only mode. */
   signature: string;
   issuedAt: number;
   expiresAt: number;
@@ -17,67 +34,24 @@ export function isAdminAddress(address: string | null | undefined): boolean {
   return !!address && address.toLowerCase() === ADMIN_WALLET.toLowerCase();
 }
 
-function getOrigin(): string {
-  if (typeof window !== "undefined" && window.location) {
-    return window.location.host || "okbond.local";
-  }
-  return "okbond.local";
-}
-
-function randomNonce(): string {
-  const bytes = new Uint8Array(16);
-  if (typeof crypto !== "undefined" && crypto.getRandomValues) {
-    crypto.getRandomValues(bytes);
-  } else {
-    for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256);
-  }
-  return Array.from(bytes).map(b => b.toString(16).padStart(2, "0")).join("");
-}
-
-export function buildSiweMessage(address: string, nonce: string, issuedAt: number, expiresAt: number): string {
-  const domain = getOrigin();
-  const issuedISO = new Date(issuedAt).toISOString();
-  const expiresISO = new Date(expiresAt).toISOString();
-  return [
-    `${domain} wants you to sign in with your Polygon account:`,
-    address,
-    "",
-    "Sign in to access the OKBOND Admin Panel. This will not trigger a blockchain transaction or cost gas.",
-    "",
-    `URI: https://${domain}`,
-    `Version: 1`,
-    `Network: Polygon Mainnet`,
-    `Chain ID: 137`,
-    `Nonce: ${nonce}`,
-    `Issued At: ${issuedISO}`,
-    `Expiration Time: ${expiresISO}`,
-    `Resources:`,
-    `- okbond:admin-panel`,
-  ].join("\n");
-}
-
-export async function signAdminProof(provider: BrowserProvider, address: string): Promise<AdminProof> {
+/**
+ * Verify the connected wallet and persist a session proof. The `provider`
+ * argument is accepted for backward compatibility but is no longer used —
+ * we never request a signature.
+ */
+export async function signAdminProof(_provider: BrowserProvider | unknown, address: string): Promise<AdminProof> {
   if (!isAdminAddress(address)) {
     throw new Error("Connected wallet is not authorized.");
   }
   const issuedAt = Date.now();
   const expiresAt = issuedAt + PROOF_TTL_MS;
-  const nonce = randomNonce();
-  const message = buildSiweMessage(address, nonce, issuedAt, expiresAt);
-  const signer = await provider.getSigner();
-  const signature = await signer.signMessage(message);
-
-  let recovered: string;
-  try {
-    recovered = verifyMessage(message, signature);
-  } catch {
-    throw new Error("Signature could not be verified.");
-  }
-  if (recovered.toLowerCase() !== ADMIN_WALLET.toLowerCase()) {
-    throw new Error("Signature does not match the admin wallet.");
-  }
-
-  const proof: AdminProof = { address: recovered, message, signature, issuedAt, expiresAt };
+  const proof: AdminProof = {
+    address: address.toLowerCase(),
+    message: "Address-verified admin session (Orakzai Bond)",
+    signature: "",
+    issuedAt,
+    expiresAt,
+  };
   saveAdminProof(proof);
   return proof;
 }
@@ -104,7 +78,7 @@ export function loadAdminProof(): AdminProof | null {
     if (!raw) return null;
     const parsed = JSON.parse(raw) as AdminProof;
     if (!parsed || typeof parsed !== "object") return null;
-    if (!parsed.message || !parsed.signature || !parsed.address) return null;
+    if (!parsed.address) return null;
     return parsed;
   } catch {
     return null;
@@ -117,10 +91,5 @@ export function isProofValid(proof: AdminProof | null, address: string | null | 
   if (!isAdminAddress(proof.address)) return false;
   if (!isAdminAddress(address)) return false;
   if (proof.address.toLowerCase() !== address!.toLowerCase()) return false;
-  try {
-    const recovered = verifyMessage(proof.message, proof.signature);
-    return recovered.toLowerCase() === ADMIN_WALLET.toLowerCase();
-  } catch {
-    return false;
-  }
+  return true;
 }
