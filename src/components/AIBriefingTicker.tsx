@@ -6,9 +6,11 @@
  *   Looks like a $100M project — not a website widget.
  *
  * Behavior:
- *   • Gemini 2.0 Flash generates a daily briefing at first load
- *   • Cached in localStorage (date-keyed) — one API call per day per visitor
- *   • Falls back to curated premium briefings if API unavailable
+ *   • Calls the existing server-side Marcus brain (/api/marcus) at first
+ *     load — same Gemini 2.0 Flash backend Marcus already uses, with the
+ *     API key kept on the Edge function and never shipped to the browser
+ *   • Cached in localStorage (date-keyed) — one request per day per visitor
+ *   • Falls back to curated premium briefings if the API is unavailable
  *   • Scrolls right-to-left like Reuters / Bloomberg Live Feed
  *   • Zero background — floats on whatever surface is beneath it
  */
@@ -80,24 +82,30 @@ export default function AIBriefingTicker() {
       return;
     }
 
+    const controller = new AbortController();
+
     const fetchBriefing = async () => {
       try {
-        const apiKey = import.meta.env.VITE_GEMINI_API_KEY as string;
-        if (!apiKey) throw new Error("no key");
-
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-        const res = await fetch(url, {
+        // Reuse the existing server-side Marcus Edge function. The Gemini
+        // API key lives on the server (GEMINI_API_KEY) — never in the
+        // browser bundle. Marcus's multi-LLM fallback chain (Gemini →
+        // OpenAI/Anthropic → OrakzaiX) means the route is never silent,
+        // so a 200 with reply text is the overwhelmingly common outcome.
+        const res = await fetch("/api/marcus", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal: controller.signal,
           body: JSON.stringify({
-            contents: [{ parts: [{ text: BRIEFING_PROMPT }] }],
-            generationConfig: { maxOutputTokens: 160, temperature: 0.65 },
+            message: BRIEFING_PROMPT,
+            // Briefing is a one-shot ticker line, not a long executive
+            // dispatch — keep the default short-form budget.
+            context: { longForm: false },
           }),
         });
 
         if (!res.ok) throw new Error(`${res.status}`);
-        const data = await res.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+        const data = (await res.json()) as { reply?: string };
+        const text = (data?.reply || "").trim();
 
         if (text && text.length > 20) {
           localStorage.setItem(todayKey, text);
@@ -105,7 +113,8 @@ export default function AIBriefingTicker() {
         } else {
           throw new Error("empty");
         }
-      } catch {
+      } catch (err) {
+        if ((err as { name?: string })?.name === "AbortError") return;
         const fallback = getRandomFallback();
         setBriefing(fallback);
       } finally {
@@ -113,7 +122,9 @@ export default function AIBriefingTicker() {
       }
     };
 
-    fetchBriefing();
+    void fetchBriefing();
+
+    return () => controller.abort();
   }, []);
 
   // Ticker scroll speed — chars per second feel
