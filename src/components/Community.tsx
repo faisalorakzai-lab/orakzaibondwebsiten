@@ -68,7 +68,7 @@ function SovereignStatusBar() {
         </span>
         <Activity className="w-3 h-3 flex-shrink-0" style={{ color: "rgba(244,206,69,0.85)" }} />
         <span className="text-[10px] font-mono uppercase tracking-[0.18em] whitespace-nowrap" style={{ color: "rgba(212,175,55,0.7)" }}>
-          Active Sovereign Connections
+          OKBOND Holders Active
         </span>
         <span className="text-xs font-bold tabular-nums" style={{ color: "#F4CE45" }}>
           {conns.toLocaleString()}
@@ -230,24 +230,45 @@ export default function Community() {
         {/* SOVEREIGN COMMUNITY — Executive Header */}
         <header className="relative z-30 mb-3">
           <div className="flex items-end justify-between gap-3 px-1">
-            <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-mono uppercase tracking-[0.3em] mb-1.5" style={{ color: "rgba(212,175,55,0.7)" }}>
-                Orakzai Bond · Communications Channel
-              </p>
-              <h1
-                className="leading-none tracking-tight truncate"
+            <div className="min-w-0 flex-1 flex items-center gap-3">
+              {/* OKBOND brand mark */}
+              <div
+                className="flex-shrink-0 rounded-full overflow-hidden"
                 style={{
-                  color: "#F4CE45",
-                  fontFamily: "'Playfair Display', serif",
-                  fontWeight: 800,
-                  fontSize: "clamp(1.5rem, 4.4vw, 2.4rem)",
-                  textShadow: "0 0 24px rgba(212,175,55,0.35)",
-                  letterSpacing: "0.01em",
+                  width: 56,
+                  height: 56,
+                  border: "1.5px solid rgba(212,175,55,0.55)",
+                  boxShadow: "0 0 20px rgba(212,175,55,0.35), inset 0 0 12px rgba(0,0,0,0.6)",
+                  background: "rgba(0,0,0,0.4)",
                 }}
               >
-                Sovereign Community
-              </h1>
-              <div className="mt-2 h-px w-24" style={{ background: "linear-gradient(90deg, #D4AF37, transparent)" }} />
+                <img src="/okbond-logo.png" alt="OKBOND" className="w-full h-full object-cover" />
+              </div>
+              {/* Wordmark */}
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-mono uppercase tracking-[0.3em] mb-1" style={{ color: "rgba(212,175,55,0.75)" }}>
+                  OKBOND · Command Center
+                </p>
+                <h1
+                  className="leading-none tracking-tight truncate"
+                  style={{
+                    color: "#F4CE45",
+                    fontFamily: "'Playfair Display', serif",
+                    fontWeight: 800,
+                    fontSize: "clamp(1.4rem, 4.2vw, 2.3rem)",
+                    textShadow: "0 0 24px rgba(212,175,55,0.4)",
+                    letterSpacing: "0.005em",
+                  }}
+                >
+                  Orakzai Bond Community
+                </h1>
+                <div className="mt-1.5 flex items-center gap-2">
+                  <div className="h-px w-16" style={{ background: "linear-gradient(90deg, #D4AF37, transparent)" }} />
+                  <span className="text-[9px] font-mono uppercase tracking-[0.25em]" style={{ color: "rgba(212,175,55,0.5)" }}>
+                    Sovereign Network
+                  </span>
+                </div>
+              </div>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
               <div className="relative group" ref={searchRef}>

@@ -678,7 +678,7 @@ export default function MarcusOrb() {
       if (mutedRef.current) return; // respect mute
 
       const author = String(detail.author || "the Founder").trim() || "the Founder";
-      const intro = `New dispatch from ${author} just posted on the Grid.`;
+      const intro = `New dispatch regarding Orakzai Bond, just posted by ${author}.`;
 
       const preview = text.length > 96 ? text.slice(0, 96).trimEnd() + "…" : text;
       setContextPreview(preview);
