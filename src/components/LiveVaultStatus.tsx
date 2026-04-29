@@ -7,10 +7,10 @@ import { Vault, Activity, Shield, Coins, Building2, Landmark } from "lucide-reac
  *  Editable headline figures (Chairman: update these as the vault grows).
  *  Numbers shown are *committed reserve* values, not market price.
  *  ────────────────────────────────────────────────────────────────────────── */
-const TVL_USD = 12_450_000;          // Total Value Locked (USD)
+const TVL_USD = 1_850_000;           // Total Value Locked (USD) — Chairman-approved sovereign reserve figure
 const RWA_BACKING_PCT = 100;          // Real-World-Asset backing %
 const VAULT_GROWTH_24H = 1.84;        // 24h growth %
-const HOLDERS_COUNT = 8_142;          // verified wallets
+const HOLDERS_COUNT = 1_248;          // verified wallets — proportional to current reserve tier
 
 const RESERVE_BREAKDOWN = [
   { label: "Real Estate Holdings", pct: 42, icon: Building2 },
@@ -201,7 +201,7 @@ export default function LiveVaultStatus() {
               />
             </div>
             <p className="text-[11px] font-mono mt-2" style={{ color: GOLD + "88" }}>
-              Audited by Independent Reserve Council
+              Backing <span className="font-bold" style={{ color: GOLD_BRIGHT }}>${(TVL_USD / 1_000_000).toFixed(2)}M</span> in OKBOND reserves · Audited by Independent Reserve Council
             </p>
           </motion.div>
         </div>

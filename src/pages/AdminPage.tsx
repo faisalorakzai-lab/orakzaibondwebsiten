@@ -283,7 +283,25 @@ export default function AdminPage() {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col relative overflow-hidden">
+    <div
+      className="min-h-screen bg-background text-foreground flex flex-col relative overflow-hidden"
+      style={{
+        // Executive Terminal finish — hairline True-Gold border framing the
+        // entire Command Center, just enough to read as cinematic at any zoom.
+        boxShadow: "inset 0 0 0 0.5px rgba(212,175,55,0.55)",
+      }}
+    >
+      {/* 1% Film-Grain texture — fixed overlay, blends without affecting clicks */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-[60] mix-blend-overlay"
+        style={{
+          opacity: 0.01,
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
+          backgroundSize: "220px 220px",
+        }}
+      />
       <ParticleBackground />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(234,179,8,0.07),transparent_60%)] pointer-events-none" />
 
@@ -370,8 +388,7 @@ export default function AdminPage() {
                   fontWeight: 700,
                   letterSpacing: "0.01em",
                 }}>
-                OKBOND <span className="text-primary italic font-semibold">·</span>{" "}
-                <span className="italic" style={{ color: "#f4ce45" }}>Command Center</span>
+                OKBOND <span className="italic" style={{ color: "#f4ce45" }}>Command Center</span>
               </span>
               <span className="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-primary/10 text-primary border border-primary/20 tracking-widest">
                 OWNER ONLY
@@ -447,6 +464,31 @@ export default function AdminPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* ── Status Bar — sovereign telemetry, hairline gold ─────────────────── */}
+      <div
+        className="relative z-20 px-6 py-1.5 flex items-center justify-between text-[10px] font-mono uppercase tracking-[0.18em]"
+        style={{
+          background: "linear-gradient(180deg, rgba(212,175,55,0.05), rgba(0,0,0,0))",
+          borderBottom: "0.5px solid rgba(212,175,55,0.45)",
+          color: "rgba(212,175,55,0.85)",
+        }}
+      >
+        <div className="flex items-center gap-2">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+          </span>
+          <span className="font-bold" style={{ color: "#f4ce45" }}>1,248</span>
+          <span>OKBOND Holders Online</span>
+        </div>
+        <div className="hidden md:flex items-center gap-4">
+          <span>Reserve · <span className="font-bold" style={{ color: "#f4ce45" }}>$1.85M</span></span>
+          <span>Backing · <span className="font-bold" style={{ color: "#f4ce45" }}>100%</span></span>
+          <span>Grid Health · <span className="font-bold" style={{ color: "#f4ce45" }}>98%</span></span>
+          <span>Polygon Mainnet · <span style={{ color: "#22c55e" }}>OPERATIONAL</span></span>
+        </div>
+      </div>
 
       {/* ── Body ──────────────────────────────────────────────────────────────── */}
       <div className="relative z-10 flex flex-1">

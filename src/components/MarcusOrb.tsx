@@ -420,11 +420,15 @@ export default function MarcusOrb() {
         }
       }
 
-      const briefing = `Chairman Orakzai, your briefing. ${priceLine} ${tvlLine} ${walletLine}${feedLine}${strategyLine}${communityLine} The Orakzai Bond Grid stands online and the Founder is overseeing operations.`;
+      // Morning Briefing — leads with the Chairman's signature opener: a fixed
+      // headline (sovereign reserve + grid health) followed by live telemetry.
+      const headline =
+        "Chairman Orakzai, the OKBOND Reserve is stable at one point eight five million dollars. Grid health is at ninety-eight percent.";
+      const briefing = `${headline} ${priceLine} ${tvlLine} ${walletLine}${feedLine}${strategyLine}${communityLine} The Orakzai Bond Grid stands online and the Founder is overseeing operations.`;
       speak(briefing);
     } catch {
       speak(
-        "Chairman Orakzai, partial briefing only. The Orakzai Bond Grid is online and the Founder is currently overseeing operations."
+        "Chairman Orakzai, the OKBOND Reserve is stable at one point eight five million dollars. Grid health is at ninety-eight percent. Live telemetry is consolidating — partial briefing only."
       );
     }
   }, [speak]);
