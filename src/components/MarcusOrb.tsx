@@ -10,10 +10,10 @@ const FALLBACK_GREETING_INVESTOR =
   "Marcus here, Digital Chief of Staff for the Orakzai Group. Founded by Chairman Faisal Orakzai — building since the age of twelve, now nineteen, leading twelve mother companies toward Vision twenty-one-hundred. How may I be of service?";
 
 const FALLBACK_GREETING_CHAIRMAN =
-  "Welcome back, Chairman Orakzai. The Orakzai Bond Grid is online and the Group is steady. The Founder is currently overseeing operations.";
+  "Chairman Orakzai. The Orakzai Bond Grid is online; the Group is steady. The Founder is overseeing operations — standing by for instruction.";
 
 const INVESTOR_FALLBACK =
-  "Orakzai Bond is the sovereign financial layer of the Group — a liquidity-backed capital retention model on Polygon, anchored by the Trust Trifecta and the Sovereign Guarantee, all aligned to the Vision twenty-one-hundred horizon. For private onboarding with the team, I am routing you to our WhatsApp concierge.";
+  "Orakzai Bond is the institutional financial layer of the Group — a liquidity-backed capital retention model on Polygon, anchored by the Trust Trifecta and the Orakzai Bond Guarantee, all aligned to the Vision twenty-one-hundred horizon. For private onboarding with the team, I am routing you to our WhatsApp concierge.";
 
 const ELITE_FALLBACK =
   "Understood. This is an Elite Priority matter. I am opening a direct line to Mr. Orakzai through our WhatsApp concierge — please use the highlighted channel to your right.";
@@ -400,7 +400,7 @@ export default function MarcusOrb() {
             " Posture, sir: this is an accumulation window. I recommend we hold reserve dry-powder steady and let the Grid absorb supply quietly.";
         } else if (ch >= 2) {
           strategyLine =
-            " Posture, sir: distribution discipline is in order. Velocity is hot — I would protect realised value and let the Sovereign Guarantee narrate the strength.";
+            " Posture, sir: distribution discipline is in order. Velocity is hot — I would protect realised value and let the Orakzai Bond Guarantee narrate the strength.";
         } else {
           strategyLine =
             " Posture, sir: we are in a coiling phase. I recommend we tighten the community narrative and pre-position the next dispatch to bias the breakout upward.";
