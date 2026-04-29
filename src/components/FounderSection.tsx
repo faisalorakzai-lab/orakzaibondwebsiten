@@ -185,10 +185,8 @@ export default function FounderSection() {
             <div className="relative mx-auto lg:ml-0" style={{ maxWidth: "440px" }}>
               {/* Portrait */}
               <motion.div
-                style={{ scale: portraitScale }}
-                className="relative overflow-hidden"
-                // @ts-ignore — inline borderRadius needed for scale animation
-                css={{ borderRadius: "24px" }}
+                style={{ scale: portraitScale, borderRadius: "24px", overflow: "hidden" }}
+                className="relative"
               >
                 {/* Gold ring hairline */}
                 <div
