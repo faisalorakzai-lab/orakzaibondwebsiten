@@ -900,3 +900,30 @@
 .midnight-page .bg-sky-500\/10 {
   background-color: rgba(245, 197, 24, 0.08) !important;
 }
+
+
+/* ─── Neural Grid background — Orakzai Sovereign architectural pattern ─── */
+/* A very faint deep-charcoal grid (3% opacity) overlaid on the Midnight Black */
+/* base. Fixed-position so it does not scroll. pointer-events: none keeps it */
+/* fully passive. */
+body {
+  position: relative;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: -1px -1px;
+  mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+}
+#root {
+  position: relative;
+  z-index: 1;
+}

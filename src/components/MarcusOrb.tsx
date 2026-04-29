@@ -149,6 +149,7 @@ export default function MarcusOrb() {
   const [wakeFlash, setWakeFlash] = useState(false);
   const [adminPresent, setAdminPresent] = useState(false);
   const [eliteMode, setEliteMode] = useState(false);
+  const [contextPreview, setContextPreview] = useState<string | null>(null);
   const [, setLocation] = useLocation();
 
   const recognitionRef = useRef<any>(null);
@@ -161,6 +162,8 @@ export default function MarcusOrb() {
   const adminRef = useRef(false);
   const historyRef = useRef<Array<{ role: "user" | "assistant"; content: string }>>([]);
   const eliteTimerRef = useRef<number | null>(null);
+  const briefingOfferRef = useRef(false);
+  const prevAdminRef = useRef(false);
 
   useEffect(() => {
     mutedRef.current = muted;
@@ -181,6 +184,9 @@ export default function MarcusOrb() {
 
   // Mirror "open" → openRef so async callbacks (speak.onend, etc.) read the latest value.
   useEffect(() => { openRef.current = open; }, [open]);
+
+  // Clear the Discuss-with-Marcus context chip whenever the panel closes.
+  useEffect(() => { if (!open) setContextPreview(null); }, [open]);
 
   const cancelSpeech = useCallback(() => {
     try {
@@ -391,6 +397,23 @@ export default function MarcusOrb() {
       const text = raw.trim().toLowerCase();
       if (!text) return;
 
+      // Briefing offer interceptor — Chairman just said yes/no to the auto-offer.
+      if (briefingOfferRef.current) {
+        if (/\b(yes|yeah|yep|sure|please|deliver|go ahead|affirmative|do it|proceed)\b/.test(text)) {
+          briefingOfferRef.current = false;
+          triggerWakeFlash();
+          runBriefing();
+          return;
+        }
+        if (/\b(no|not now|later|skip|negative|stand by|hold)\b/.test(text)) {
+          briefingOfferRef.current = false;
+          speak("Acknowledged, Chairman. Standing by.");
+          return;
+        }
+        // Anything else — drop the flag and let the message fall through normally.
+        briefingOfferRef.current = false;
+      }
+
       // Mute / stop — must terminate speech IMMEDIATELY
       if (
         /\bmarcus[, ]+(mute|silence|quiet|stop talking|be quiet|stop)\b/.test(
@@ -546,6 +569,25 @@ export default function MarcusOrb() {
     speak(greeting);
   }, [startRecognition, speak]);
 
+  // Chairman's Briefing on login: when admin proof activates, Marcus offers
+  // today's market & community briefing. Say "yes" to deliver, "no" to stand by.
+  useEffect(() => {
+    if (
+      adminPresent &&
+      !prevAdminRef.current &&
+      permissionAsked &&
+      !mutedRef.current
+    ) {
+      briefingOfferRef.current = true;
+      setOpen(true);
+      setCaption("Chairman detected — briefing on standby.");
+      speak(
+        "Welcome back, Chairman Orakzai. Shall I deliver today's market and community briefing? Say yes to proceed."
+      );
+    }
+    prevAdminRef.current = adminPresent;
+  }, [adminPresent, permissionAsked, speak]);
+
   // Discuss-with-Marcus: any component (e.g. OrakzaiSocialFeed) can dispatch
   // window.dispatchEvent(new CustomEvent("marcus:discuss", { detail: { text, author, handle } }))
   // to hand a piece of content to Marcus and open the orb in conversation mode.
@@ -570,6 +612,8 @@ export default function MarcusOrb() {
         historyRef.current = historyRef.current.slice(-16);
       }
 
+      const preview = text.length > 64 ? text.slice(0, 64).trimEnd() + "…" : text;
+      setContextPreview(preview);
       setOpen(true);
       setPermissionAsked(true);
       setMuted(false);
@@ -732,10 +776,40 @@ export default function MarcusOrb() {
                   {muted ? "unmute" : "mute"}
                 </button>
               </div>
+              {contextPreview && (
+                <div
+                  className="px-4 pt-3 pb-0"
+                  style={{ borderTop: `1px solid ${GOLD}22` }}
+                >
+                  <div
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide"
+                    style={{
+                      color: "#fde68a",
+                      background: "rgba(234,179,8,0.10)",
+                      border: "1px solid rgba(234,179,8,0.35)",
+                      maxWidth: "100%",
+                    }}
+                    title={contextPreview}
+                  >
+                    <span style={{ opacity: 0.7 }}>Discussing:</span>
+                    <span
+                      style={{
+                        color: "#fef3c7",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        maxWidth: "20rem",
+                      }}
+                    >
+                      {contextPreview}
+                    </span>
+                  </div>
+                </div>
+              )}
               {caption && (
                 <div
                   className="px-4 pb-3 pt-0 text-[12.5px] leading-snug text-zinc-200"
-                  style={{ borderTop: `1px solid ${GOLD}22` }}
+                  style={{ borderTop: contextPreview ? "none" : `1px solid ${GOLD}22` }}
                 >
                   <div className="pt-3">{caption}</div>
                 </div>
