@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Cpu, Circle } from "lucide-react";
 import InstitutionalDataRain from "./InstitutionalDataRain";
+import GhostWorldMap from "./GhostWorldMap";
 
 const GOLD = "#D4AF37";
 const GOLD_BRIGHT = "#F4CE45";
@@ -32,7 +33,7 @@ const EVENTS: MarcusEvent[] = [
   { sev: "GUARD",    msg: "RWA collateral attestation refreshed · 100% backing verified" },
   { sev: "OPTIMIZE", msg: "Yield-curve model updated · projected APR band 9.4% – 11.2%" },
   { sev: "SCAN",     msg: "Sentiment crawl across 11 sources · investor-confidence score 92/100" },
-  { sev: "EXEC",     msg: "Treasury rotation queued · executing under sovereign guarantee" },
+  { sev: "EXEC",     msg: "Treasury rotation queued · executing under Orakzai Bond Guarantee" },
   { sev: "INFO",     msg: "Smart-contract heartbeat OK · governance multisig 4/5 quorum healthy" },
   { sev: "GUARD",    msg: "Anti-whale circuit-breaker armed · max single-tx threshold enforced" },
   { sev: "OPTIMIZE", msg: "Compounding loop tightened · holder rewards delta +0.06%" },
@@ -98,6 +99,7 @@ export default function MarcusAILiveLog() {
       }}
     >
       {/* Falling Gold Data Nodes — Swiss-bank terminal data-stream backdrop */}
+      <GhostWorldMap />
       <InstitutionalDataRain opacity={0.015} density={1.4} />
 
       <div className="relative max-w-5xl mx-auto">
