@@ -1037,3 +1037,85 @@ body::before {
   font-family: 'Playfair Display', Georgia, serif !important;
   letter-spacing: 0.005em;
 }
+
+
+  /* ─────────────────────────────────────────────────────────────────
+   * OKBOND CHAIRMAN BRAND TOKENS (v1.0)
+   * Strict Chairman spec: #0A0A0A / #D4AF37 / #FFFFFF
+   * Additive only — does NOT override existing classes used by
+   * CommunityPage, CommunityHubPage, or FounderPage.
+   * ───────────────────────────────────────────────────────────────── */
+  :root {
+    --okbond-bg:        #0A0A0A;
+    --okbond-gold:      #D4AF37;
+    --okbond-heading:   #FFFFFF;
+    --okbond-gold-soft: rgba(212, 175, 55, 0.18);
+    --okbond-gold-edge: rgba(212, 175, 55, 0.40);
+    --okbond-gold-glow: rgba(212, 175, 55, 0.35);
+  }
+
+  /* Unified CTA — apply this class to any primary action button site-wide
+   * to guarantee identical padding, radius, border, and hover-glow. */
+  .okbond-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--okbond-gold-edge);
+    background: linear-gradient(135deg,
+      rgba(212, 175, 55, 0.08),
+      rgba(212, 175, 55, 0.02));
+    color: var(--okbond-gold);
+    font-family: 'Inter', 'Lexend', sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    cursor: pointer;
+    transition: border-color 220ms ease,
+                box-shadow   220ms ease,
+                background   220ms ease,
+                color        220ms ease,
+                transform    220ms ease;
+  }
+  .okbond-btn:hover {
+    border-color: rgba(244, 206, 69, 0.85);
+    background: linear-gradient(135deg,
+      rgba(212, 175, 55, 0.16),
+      rgba(212, 175, 55, 0.06));
+    color: #f4ce45;
+    box-shadow: 0 0 24px var(--okbond-gold-glow);
+    transform: translateY(-1px);
+  }
+  .okbond-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 0 12px var(--okbond-gold-glow);
+  }
+  .okbond-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* Reinforced glass card — additive sibling to the existing .glass-card-gold
+   * so any new surface can opt in without touching the protected pages. */
+  .okbond-glass {
+    background: rgba(10, 10, 10, 0.62);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--okbond-gold-soft);
+    border-radius: 0.75rem;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 8px 24px rgba(0, 0, 0, 0.32);
+  }
+  .okbond-heading {
+    color: var(--okbond-heading);
+    font-family: 'Inter', 'Lexend', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  
