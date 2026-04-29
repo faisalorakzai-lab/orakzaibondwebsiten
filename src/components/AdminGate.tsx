@@ -17,9 +17,9 @@ interface AdminGateProps {
 }
 
 export default function AdminGate({ children }: AdminGateProps) {
-  const { address, provider, isPolygon, connect, switchToPolygon } = useWallet();
+  const { address, provider, connect } = useWallet();
   const [authed, setAuthed] = useState<boolean>(false);
-  const [signing, setSigning] = useState<boolean>(false);
+  const [verifying, setVerifying] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [hydrated, setHydrated] = useState<boolean>(false);
 
@@ -31,10 +31,7 @@ export default function AdminGate({ children }: AdminGateProps) {
     setHydrated(true);
   }, [address]);
 
-  /* ── HIDE FROM SEARCH ENGINES ─────────────────────────────────────────
-     Inject <meta name="robots" content="noindex,nofollow,noarchive">
-     and X-Robots-Tag header (via meta) for the entire admin route tree.
-     ──────────────────────────────────────────────────────────────────── */
+  /* ── HIDE FROM SEARCH ENGINES ───────────────────────────────────── */
   useEffect(() => {
     const meta = document.createElement("meta");
     meta.name = "robots";
@@ -56,8 +53,8 @@ export default function AdminGate({ children }: AdminGateProps) {
     };
   }, []);
 
-  const handleSignIn = useCallback(async () => {
-    if (!provider || !address) {
+  const handleVerify = useCallback(async () => {
+    if (!address) {
       setErrorMsg("Wallet not connected.");
       return;
     }
@@ -65,26 +62,19 @@ export default function AdminGate({ children }: AdminGateProps) {
       setErrorMsg("Connected wallet is not authorized.");
       return;
     }
-    if (!isPolygon) {
-      setErrorMsg("Please switch to Polygon Mainnet (chain ID 137) before signing in.");
-      return;
-    }
-    setSigning(true);
+    setVerifying(true);
     setErrorMsg(null);
     try {
       await signAdminProof(provider, address);
       setAuthed(true);
     } catch (err: unknown) {
-      const code = err && typeof err === "object" && "code" in err ? (err as { code: string | number }).code : null;
-      if (code === "ACTION_REJECTED" || code === 4001) {
-        setErrorMsg("You rejected the signature request.");
-      } else if (err instanceof Error) {
+      if (err instanceof Error) {
         setErrorMsg(err.message.slice(0, 200));
       } else {
-        setErrorMsg("Sign-in failed.");
+        setErrorMsg("Verification failed.");
       }
     } finally {
-      setSigning(false);
+      setVerifying(false);
     }
   }, [provider, address, walletIsAdmin]);
 
@@ -143,39 +133,24 @@ export default function AdminGate({ children }: AdminGateProps) {
             <ShieldCheck className="w-7 h-7 text-primary" />
           </div>
           <h1 className="text-xl font-extrabold text-foreground text-center mb-2">
-            Admin Sign-In Required
+            Admin Access Verification
           </h1>
           <p className="text-sm text-muted-foreground text-center mb-2">
-            Sign a message on Polygon Mainnet to prove wallet ownership.
+            Verify ownership of the authorized wallet to enter the OKBOND Admin Panel.
           </p>
           <p className="text-[11px] text-muted-foreground/70 font-mono text-center mb-6 break-all">
             {ADMIN_WALLET}
           </p>
 
-          {!isPolygon && (
-            <div className="mb-4 p-3 rounded-xl border border-amber-500/40 bg-amber-500/10 text-center">
-              <p className="text-xs text-amber-300 font-semibold mb-2">
-                Wrong network — Polygon Mainnet (chain ID 137) required.
-              </p>
-              <button
-                onClick={switchToPolygon}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-amber-500/20 text-amber-200 text-sm font-semibold hover:bg-amber-500/30 transition"
-              >
-                Switch to Polygon Mainnet
-              </button>
-            </div>
-          )}
-
           <button
-            onClick={handleSignIn}
-            disabled={signing || !isPolygon}
+            onClick={handleVerify}
+            disabled={verifying}
             className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed"
-            title={!isPolygon ? "Switch to Polygon Mainnet first" : undefined}
           >
-            {signing ? (
-              <><Loader2 className="w-4 h-4 animate-spin" /> Waiting for signature…</>
+            {verifying ? (
+              <><Loader2 className="w-4 h-4 animate-spin" /> Verifying…</>
             ) : (
-              <><ShieldCheck className="w-4 h-4" /> Sign In With Polygon</>
+              <><ShieldCheck className="w-4 h-4" /> Verify &amp; Enter</>
             )}
           </button>
 
@@ -183,7 +158,7 @@ export default function AdminGate({ children }: AdminGateProps) {
             <p className="mt-4 text-xs text-red-400 text-center">{errorMsg}</p>
           )}
           <p className="mt-5 text-[11px] text-muted-foreground/60 text-center">
-            Polygon Mainnet only. This signature does not trigger a transaction or cost gas. Session expires in 1 hour.
+            Address-only verification. No signature, no gas, no transaction. Session expires in 1 hour.
           </p>
         </motion.div>
       </div>
