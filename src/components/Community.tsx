@@ -119,6 +119,36 @@ export default function Community() {
     try { return JSON.parse(localStorage.getItem("okbond_admin_posts") || "[]"); } catch { return []; }
   });
 
+  // Founder Dispatch auto-read: when a new pinned dispatch is detected
+  // (newer than the last one Marcus has already read aloud), hand it to
+  // Marcus so he can announce + read the full text.
+  useEffect(() => {
+    if (!adminPosts || adminPosts.length === 0) return;
+    const pinned = [...adminPosts]
+      .filter((p) => p.pinned)
+      .sort((a, b) => b.ts - a.ts);
+    const latest = pinned[0];
+    if (!latest) return;
+
+    let lastTs = 0;
+    try { lastTs = Number(localStorage.getItem("okbond_last_dispatch_announced_ts") || "0") || 0; } catch { /* ignore */ }
+    if (latest.ts <= lastTs) return; // already announced
+
+    const fullText = (latest.title ? latest.title.trim() + ". " : "") + (latest.body || "").trim();
+    if (!fullText.trim()) return;
+
+    const t = window.setTimeout(() => {
+      try {
+        window.dispatchEvent(new CustomEvent("marcus:announce-dispatch", {
+          detail: { text: fullText, author: "the Founder", ts: latest.ts, id: latest.id },
+        }));
+        localStorage.setItem("okbond_last_dispatch_announced_ts", String(latest.ts));
+      } catch { /* ignore */ }
+    }, 1800); // give voices a moment to load + page to settle
+
+    return () => window.clearTimeout(t);
+  }, [adminPosts]);
+
   // Search state
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");

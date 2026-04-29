@@ -150,6 +150,7 @@ export default function MarcusOrb() {
   const [adminPresent, setAdminPresent] = useState(false);
   const [eliteMode, setEliteMode] = useState(false);
   const [contextPreview, setContextPreview] = useState<string | null>(null);
+  const [isAnnouncing, setIsAnnouncing] = useState(false);
   const [, setLocation] = useLocation();
 
   const recognitionRef = useRef<any>(null);
@@ -186,7 +187,7 @@ export default function MarcusOrb() {
   useEffect(() => { openRef.current = open; }, [open]);
 
   // Clear the Discuss-with-Marcus context chip whenever the panel closes.
-  useEffect(() => { if (!open) setContextPreview(null); }, [open]);
+  useEffect(() => { if (!open) { setContextPreview(null); setIsAnnouncing(false); } }, [open]);
 
   const cancelSpeech = useCallback(() => {
     try {
@@ -600,6 +601,106 @@ export default function MarcusOrb() {
     prevAdminRef.current = adminPresent;
   }, [adminPresent, permissionAsked, speak]);
 
+  // ────────────────────────────────────────────────────────────────
+  // Founder Dispatch full-read: when a new Pinned Dispatch is detected on
+  // the Community page, Community.tsx fires "marcus:announce-dispatch"
+  // with the full title + body. Marcus then:
+  //   1) intros: "New dispatch from the Founder just posted on the Grid…"
+  //   2) reads the entire dispatch aloud at executive (slower) pacing
+  //   3) keeps the gold context chip pulsing throughout the read
+  // ────────────────────────────────────────────────────────────────
+  useEffect(() => {
+    const speakDispatch = (intro: string, body: string) => {
+      if (mutedRef.current) {
+        setCaption(intro + " " + body);
+        setState("idle");
+        setIsAnnouncing(false);
+        return;
+      }
+      const synth = window.speechSynthesis;
+      synth.cancel();
+      const voice = pickMaleVoice();
+
+      const u1 = new SpeechSynthesisUtterance(intro);
+      if (voice) u1.voice = voice;
+      u1.pitch = 0.72;
+      u1.rate  = 0.86;
+      u1.volume = 1;
+
+      const u2 = new SpeechSynthesisUtterance(body);
+      if (voice) u2.voice = voice;
+      u2.pitch = 0.74;
+      u2.rate  = 0.80; // slower, executive
+      u2.volume = 1;
+
+      setIsAnnouncing(true);
+      setState("speaking");
+      setCaption(intro);
+
+      let lastBoundary = performance.now();
+      const onBoundary = () => {
+        const now = performance.now();
+        const delta = Math.min(220, now - lastBoundary);
+        lastBoundary = now;
+        setPulse(1 + ((220 - delta) / 220) * 0.4);
+      };
+      u1.onboundary = onBoundary;
+      u2.onboundary = onBoundary;
+
+      u1.onend = () => { setCaption(body); };
+      u1.onerror = () => { setCaption(body); };
+
+      const finish = () => {
+        setPulse(1);
+        setIsAnnouncing(false);
+        if (openRef.current) {
+          setState("listening");
+          setCaption("Listening… speak when ready.");
+          wakeArmedRef.current = false;
+          try { startRecognition(); } catch { /* ignore */ }
+        } else {
+          setState("idle");
+          wakeArmedRef.current = true;
+        }
+      };
+      u2.onend = finish;
+      u2.onerror = finish;
+
+      utteranceRef.current = u2;
+      synth.speak(u1);
+      synth.speak(u2);
+    };
+
+    const handler = (ev: Event) => {
+      const detail = (ev as CustomEvent).detail || {};
+      const text = String(detail.text || "").trim();
+      if (!text) return;
+      if (mutedRef.current) return; // respect mute
+
+      const author = String(detail.author || "the Founder").trim() || "the Founder";
+      const intro = `New dispatch from ${author} just posted on the Grid.`;
+
+      const preview = text.length > 96 ? text.slice(0, 96).trimEnd() + "…" : text;
+      setContextPreview(preview);
+      setOpen(true);
+      setPermissionAsked(true);
+
+      // Prime conversation history so follow-up questions land in context.
+      historyRef.current.push({
+        role: "assistant",
+        content: `I just read aloud a new dispatch from ${author}: "${text}"`,
+      });
+      if (historyRef.current.length > 16) {
+        historyRef.current = historyRef.current.slice(-16);
+      }
+
+      speakDispatch(intro, text);
+    };
+
+    window.addEventListener("marcus:announce-dispatch", handler as EventListener);
+    return () => window.removeEventListener("marcus:announce-dispatch", handler as EventListener);
+  }, [startRecognition]);
+
   // Discuss-with-Marcus: any component (e.g. OrakzaiSocialFeed) can dispatch
   // window.dispatchEvent(new CustomEvent("marcus:discuss", { detail: { text, author, handle } }))
   // to hand a piece of content to Marcus and open the orb in conversation mode.
@@ -793,17 +894,59 @@ export default function MarcusOrb() {
                   className="px-4 pt-3 pb-0"
                   style={{ borderTop: `1px solid ${GOLD}22` }}
                 >
-                  <div
+                  <motion.div
                     className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide"
                     style={{
                       color: "#fde68a",
-                      background: "rgba(234,179,8,0.10)",
-                      border: "1px solid rgba(234,179,8,0.35)",
                       maxWidth: "100%",
+                    }}
+                    animate={
+                      isAnnouncing
+                        ? {
+                            background: [
+                              "rgba(234,179,8,0.12)",
+                              "rgba(234,179,8,0.32)",
+                              "rgba(234,179,8,0.12)",
+                            ],
+                            borderColor: [
+                              "rgba(234,179,8,0.45)",
+                              "rgba(244,206,69,0.95)",
+                              "rgba(234,179,8,0.45)",
+                            ],
+                            boxShadow: [
+                              "0 0 0 rgba(212,175,55,0)",
+                              "0 0 18px rgba(212,175,55,0.7)",
+                              "0 0 0 rgba(212,175,55,0)",
+                            ],
+                          }
+                        : {
+                            background: "rgba(234,179,8,0.10)",
+                            borderColor: "rgba(234,179,8,0.35)",
+                            boxShadow: "0 0 0 rgba(212,175,55,0)",
+                          }
+                    }
+                    transition={
+                      isAnnouncing
+                        ? { duration: 1.4, repeat: Infinity, ease: "easeInOut" }
+                        : { duration: 0.3 }
+                    }
+                    style={{
+                      color: "#fde68a",
+                      maxWidth: "100%",
+                      borderWidth: 1,
+                      borderStyle: "solid",
                     }}
                     title={contextPreview}
                   >
-                    <span style={{ opacity: 0.7 }}>Discussing:</span>
+                    {isAnnouncing && (
+                      <span className="relative flex h-1.5 w-1.5 mr-0.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: "#F4CE45" }} />
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ background: "#F4CE45" }} />
+                      </span>
+                    )}
+                    <span style={{ opacity: 0.75 }}>
+                      {isAnnouncing ? "Reading dispatch:" : "Discussing:"}
+                    </span>
                     <span
                       style={{
                         color: "#fef3c7",
@@ -815,7 +958,7 @@ export default function MarcusOrb() {
                     >
                       {contextPreview}
                     </span>
-                  </div>
+                  </motion.div>
                 </div>
               )}
               {caption && (
