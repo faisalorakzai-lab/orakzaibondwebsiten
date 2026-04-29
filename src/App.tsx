@@ -36,6 +36,7 @@ import SovereignGuarantee from "./components/SovereignGuarantee";
 import MarcusOrb from "./components/MarcusOrb";
 import PresenceGlow from "./components/PresenceGlow";
 import FilmGrain from "./components/FilmGrain";
+import AIBriefingTicker from "./components/AIBriefingTicker";
 // FounderSection intentionally NOT imported on the homepage — the founder
 // block lives on its dedicated /founder page (FounderPage.tsx). Reverting
 // the unauthorized homepage embed per Chairman's directive.
@@ -72,6 +73,10 @@ function App() {
       </ErrorBoundary>
       <ErrorBoundary scope="Sidebar" silent>
         <SiteSidebar ref={sidebarRef} />
+      </ErrorBoundary>
+
+      <ErrorBoundary scope="AIBriefingTicker">
+        <AIBriefingTicker />
       </ErrorBoundary>
 
       <main className="flex-1 lg:pl-[60px]">
