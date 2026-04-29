@@ -49,10 +49,44 @@ function detectsHighValueAmount(text: string): boolean {
 }
 
 type OrbState = "idle" | "listening" | "thinking" | "speaking" | "muted";
+type SpeechLang = "en" | "ur" | "ps";
 
-function pickMaleVoice(): SpeechSynthesisVoice | null {
+// Detect script: Arabic/Urdu/Pashto block (U+0600–U+06FF). Pashto-specific
+// letters (ټ ډ ړ ږ ښ ګ ڼ ۀ) disambiguate from Urdu when present.
+function detectLang(text: string): SpeechLang {
+  if (!/[\u0600-\u06FF]/.test(text)) return "en";
+  if (/[\u067C\u0689\u0693\u0696\u069A\u06AB\u06BC\u06C0]/.test(text)) return "ps";
+  return "ur";
+}
+
+function pickVoiceFor(lang: SpeechLang): SpeechSynthesisVoice | null {
   const voices = window.speechSynthesis.getVoices();
   if (!voices.length) return null;
+
+  if (lang === "ur") {
+    // Urdu (ur-PK) is widely shipped on Android Chrome and modern Edge.
+    const urdu = voices.find((v) => /^ur(-|$)/i.test(v.lang));
+    if (urdu) return urdu;
+    // Hindi is mutually intelligible enough to be a passable fallback for
+    // Urdu speech output until a real Urdu voice is installed.
+    const hindi = voices.find((v) => /^hi(-|$)/i.test(v.lang));
+    if (hindi) return hindi;
+    // Final fallback: any Arabic-script voice, then the English picker.
+    const arabic = voices.find((v) => /^ar(-|$)/i.test(v.lang));
+    if (arabic) return arabic;
+  }
+
+  if (lang === "ps") {
+    // Pashto (ps-AF) — rare in browsers today. Fall through to Urdu/Arabic.
+    const pashto = voices.find((v) => /^ps(-|$)/i.test(v.lang));
+    if (pashto) return pashto;
+    const urdu = voices.find((v) => /^ur(-|$)/i.test(v.lang));
+    if (urdu) return urdu;
+    const arabic = voices.find((v) => /^ar(-|$)/i.test(v.lang));
+    if (arabic) return arabic;
+  }
+
+  // English — Marcus's default voice. Prefer named premium British/US males.
   const priorities = [
     /Google UK English Male/i,
     /Microsoft Guy/i,
@@ -74,6 +108,164 @@ function pickMaleVoice(): SpeechSynthesisVoice | null {
   );
   if (enMale) return enMale;
   return voices.find((v) => /^en/i.test(v.lang)) || voices[0] || null;
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// Chunked speech queue.
+//
+// Why this exists: Chrome's Web Speech API silently kills any single
+// SpeechSynthesisUtterance that exceeds ~15 seconds of audio. That is why
+// Marcus was reading only the first sentence of long Founder dispatches
+// before going quiet. The fix is to split long text into sentence-sized
+// utterances and queue them, plus run a periodic resume() ping that
+// works around Chrome's 250-character pause-on-pause bug.
+// ─────────────────────────────────────────────────────────────────────────
+
+interface ChunkSpeechOptions {
+  voice: SpeechSynthesisVoice | null;
+  pitch?: number;
+  rate?: number;
+  volume?: number;
+  lang?: SpeechLang;
+  onBoundary?: (ev: SpeechSynthesisEvent) => void;
+  onEachStart?: (chunkIndex: number, total: number) => void;
+  onAllDone?: () => void;
+  onError?: () => void;
+}
+
+// Split text into utterance-sized chunks at sentence boundaries. Each
+// chunk is kept under ~180 characters so Chrome cannot truncate it.
+function splitForSpeech(text: string, maxLen = 180): string[] {
+  const cleaned = text.replace(/\s+/g, " ").trim();
+  if (!cleaned) return [];
+  // First pass: split on sentence terminators (English + Urdu/Arabic ۔ ؟ !).
+  const sentenceRx = /[^\.!\?؟۔]+[\.!\?؟۔]*\s*/g;
+  const sentences = cleaned.match(sentenceRx) || [cleaned];
+  const chunks: string[] = [];
+  for (const raw of sentences) {
+    const s = raw.trim();
+    if (!s) continue;
+    if (s.length <= maxLen) {
+      chunks.push(s);
+      continue;
+    }
+    // Sentence is too long — split on commas, then on spaces as a last resort.
+    const parts = s.split(/,\s*/);
+    let buf = "";
+    const flush = () => {
+      const t = buf.trim();
+      if (t) chunks.push(t);
+      buf = "";
+    };
+    for (const p of parts) {
+      const candidate = buf ? `${buf}, ${p}` : p;
+      if (candidate.length <= maxLen) {
+        buf = candidate;
+      } else {
+        flush();
+        if (p.length <= maxLen) {
+          buf = p;
+        } else {
+          // Hard wrap on whitespace.
+          const words = p.split(/\s+/);
+          let line = "";
+          for (const w of words) {
+            const c = line ? `${line} ${w}` : w;
+            if (c.length <= maxLen) {
+              line = c;
+            } else {
+              if (line) chunks.push(line);
+              line = w;
+            }
+          }
+          if (line) buf = line;
+        }
+      }
+    }
+    flush();
+  }
+  return chunks;
+}
+
+let __marcusKeepAliveTimer: number | null = null;
+
+function startKeepAlive() {
+  if (__marcusKeepAliveTimer != null) return;
+  // Chrome stops firing utterance events if speechSynthesis is left running
+  // for more than ~14 seconds without a pause/resume cycle. A periodic
+  // resume() ping keeps the queue draining all the way to the end.
+  __marcusKeepAliveTimer = window.setInterval(() => {
+    try {
+      const s = window.speechSynthesis;
+      if (s.speaking && !s.paused) {
+        s.pause();
+        s.resume();
+      }
+    } catch {
+      /* ignore */
+    }
+  }, 8000);
+}
+
+function stopKeepAlive() {
+  if (__marcusKeepAliveTimer != null) {
+    window.clearInterval(__marcusKeepAliveTimer);
+    __marcusKeepAliveTimer = null;
+  }
+}
+
+// Speak the given text reliably in chunks. Returns the LAST utterance so
+// callers that previously held a ref to the active utterance can keep doing
+// so. Cancels any in-flight speech first.
+function speakChunked(
+  text: string,
+  opts: ChunkSpeechOptions,
+): SpeechSynthesisUtterance | null {
+  const synth = window.speechSynthesis;
+  try { synth.cancel(); } catch { /* ignore */ }
+  stopKeepAlive();
+
+  const chunks = splitForSpeech(text);
+  if (!chunks.length) {
+    opts.onAllDone?.();
+    return null;
+  }
+
+  const lang = opts.lang || "en";
+  const browserLang =
+    lang === "ur" ? "ur-PK" : lang === "ps" ? "ps-AF" : "en-GB";
+
+  let last: SpeechSynthesisUtterance | null = null;
+  chunks.forEach((piece, i) => {
+    const u = new SpeechSynthesisUtterance(piece);
+    if (opts.voice) u.voice = opts.voice;
+    u.lang = opts.voice?.lang || browserLang;
+    u.pitch = opts.pitch ?? 0.75;
+    u.rate = opts.rate ?? 0.9;
+    u.volume = opts.volume ?? 1;
+    if (opts.onBoundary) u.onboundary = opts.onBoundary;
+    u.onstart = () => opts.onEachStart?.(i, chunks.length);
+    if (i === chunks.length - 1) {
+      u.onend = () => {
+        stopKeepAlive();
+        opts.onAllDone?.();
+      };
+      u.onerror = () => {
+        stopKeepAlive();
+        opts.onError?.();
+      };
+    } else {
+      u.onerror = () => {
+        // Don't abort the whole queue on a single chunk error — Chrome
+        // sometimes fires "interrupted" between chunks. Just keep going.
+      };
+    }
+    last = u;
+    synth.speak(u);
+  });
+
+  startKeepAlive();
+  return last;
 }
 
 
@@ -204,26 +396,13 @@ export default function MarcusOrb() {
         setState("idle");
         return;
       }
-      const synth = window.speechSynthesis;
-      synth.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      const voice = pickMaleVoice();
-      if (voice) u.voice = voice;
-      u.pitch = 0.75;
-      u.rate = 0.9;
-      u.volume = 1;
-      utteranceRef.current = u;
+      const lang = detectLang(text);
+      const voice = pickVoiceFor(lang);
       setCaption(text);
       setState("speaking");
 
       let lastBoundary = performance.now();
-      u.onboundary = () => {
-        const now = performance.now();
-        const delta = Math.min(220, now - lastBoundary);
-        lastBoundary = now;
-        setPulse(1 + ((220 - delta) / 220) * 0.4);
-      };
-      u.onend = () => {
+      const onAfterSpeech = () => {
         setPulse(1);
         if (openRef.current) {
           // Conversation is live — return to active listening so the user's
@@ -236,18 +415,23 @@ export default function MarcusOrb() {
           wakeArmedRef.current = true;
         }
       };
-      u.onerror = () => {
-        setPulse(1);
-        if (openRef.current) {
-          setState("listening");
-          setCaption("Listening… speak when ready.");
-          wakeArmedRef.current = false;
-        } else {
-          setState("idle");
-          wakeArmedRef.current = true;
-        }
-      };
-      synth.speak(u);
+
+      const last = speakChunked(text, {
+        voice,
+        lang,
+        pitch: 0.75,
+        rate: 0.9,
+        volume: 1,
+        onBoundary: () => {
+          const now = performance.now();
+          const delta = Math.min(220, now - lastBoundary);
+          lastBoundary = now;
+          setPulse(1 + ((220 - delta) / 220) * 0.4);
+        },
+        onAllDone: onAfterSpeech,
+        onError: onAfterSpeech,
+      });
+      utteranceRef.current = last;
     },
     []
   );
@@ -287,12 +471,23 @@ export default function MarcusOrb() {
       const isInvestor = INVESTOR_RX.test(prompt);
       if (isElite) triggerEliteMode();
 
+      // Hard timeout on the network round-trip so the orb never hangs in
+      // "thinking" forever — if Vercel/OpenAI is slow, we fall back to a
+      // canned reply within the 5-second product SLA.
+      const ctrl = new AbortController();
+      const ttimer = window.setTimeout(() => ctrl.abort(), 4800);
+
       try {
         const res = await fetch("/api/marcus", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal: ctrl.signal,
           body: JSON.stringify({
             message: prompt,
+            // Detected user-input language so the brain replies in the same
+            // tongue (English / Urdu / Pashto). The server also re-detects
+            // for safety, but sending it here makes routing explicit.
+            lang: detectLang(prompt),
             history: historyRef.current.slice(-8),
             context: {
               admin: adminRef.current,
@@ -301,6 +496,7 @@ export default function MarcusOrb() {
             },
           }),
         });
+        window.clearTimeout(ttimer);
         if (!res.ok) throw new Error("brain offline");
         const data = await res.json();
         const reply: string =
@@ -322,6 +518,7 @@ export default function MarcusOrb() {
         }
         speak(reply);
       } catch {
+        window.clearTimeout(ttimer);
         const reply = isElite
           ? ELITE_FALLBACK
           : isInvestor
@@ -650,21 +847,11 @@ export default function MarcusOrb() {
         setIsAnnouncing(false);
         return;
       }
-      const synth = window.speechSynthesis;
-      synth.cancel();
-      const voice = pickMaleVoice();
 
-      const u1 = new SpeechSynthesisUtterance(intro);
-      if (voice) u1.voice = voice;
-      u1.pitch = 0.72;
-      u1.rate  = 0.86;
-      u1.volume = 1;
-
-      const u2 = new SpeechSynthesisUtterance(body);
-      if (voice) u2.voice = voice;
-      u2.pitch = 0.74;
-      u2.rate  = 0.80; // slower, executive
-      u2.volume = 1;
+      // Detect language across the WHOLE payload so a Founder dispatch
+      // posted in Urdu/Pashto picks the right voice for both intro and body.
+      const lang = detectLang(intro + " " + body);
+      const voice = pickVoiceFor(lang);
 
       setIsAnnouncing(true);
       setState("speaking");
@@ -677,11 +864,6 @@ export default function MarcusOrb() {
         lastBoundary = now;
         setPulse(1 + ((220 - delta) / 220) * 0.4);
       };
-      u1.onboundary = onBoundary;
-      u2.onboundary = onBoundary;
-
-      u1.onend = () => { setCaption(body); };
-      u1.onerror = () => { setCaption(body); };
 
       const finish = () => {
         setPulse(1);
@@ -696,12 +878,49 @@ export default function MarcusOrb() {
           wakeArmedRef.current = true;
         }
       };
-      u2.onend = finish;
-      u2.onerror = finish;
 
-      utteranceRef.current = u2;
-      synth.speak(u1);
-      synth.speak(u2);
+      // Speak the intro as a short, single chunk, then queue the entire body
+      // as a chain of sentence-sized chunks. This is the actual fix for the
+      // "Marcus only reads the beginning" bug — the body used to be one
+      // huge utterance and Chrome was silently killing it after ~15 seconds.
+      speakChunked(intro, {
+        voice,
+        lang,
+        pitch: 0.72,
+        rate: 0.86,
+        volume: 1,
+        onBoundary,
+        onAllDone: () => {
+          setCaption(body);
+          const last = speakChunked(body, {
+            voice,
+            lang,
+            pitch: 0.74,
+            rate: 0.80,
+            volume: 1,
+            onBoundary,
+            onAllDone: finish,
+            onError: finish,
+          });
+          utteranceRef.current = last;
+        },
+        onError: () => {
+          // Intro failed for some reason — still attempt the body so the
+          // dispatch is read aloud rather than silently dropped.
+          setCaption(body);
+          const last = speakChunked(body, {
+            voice,
+            lang,
+            pitch: 0.74,
+            rate: 0.80,
+            volume: 1,
+            onBoundary,
+            onAllDone: finish,
+            onError: finish,
+          });
+          utteranceRef.current = last;
+        },
+      });
     };
 
     const handler = (ev: Event) => {
