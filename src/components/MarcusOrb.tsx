@@ -713,6 +713,16 @@ export default function MarcusOrb() {
             let evt: any;
             try { evt = JSON.parse(dataLine); } catch { continue; }
 
+            if (evt.type === "meta" && (evt.lang === "ur" || evt.lang === "ps" || evt.lang === "en")) {
+              // Server confirmed response language. If it differs from our
+              // prompt-derived guess, no action is needed because the
+              // streaming speaker we've already built reads voice + lang
+              // from the same `promptLang` we passed at construction. We
+              // could rebuild here, but doing so risks silencing the first
+              // chunk during the rebuild handoff — accept the prompt-lang
+              // voice and let the synthesizer handle script gracefully.
+              continue;
+            }
             if (evt.type === "chunk" && typeof evt.text === "string" && evt.text) {
               if (firstChunk) {
                 // FIRST CHUNK — orb flips to "speaking" immediately so the
