@@ -24,6 +24,7 @@ import LotteryPage from "./pages/LotteryPage";
 import AdminPage from "./pages/AdminPage";
 import SecretAdminPage from "./pages/SecretAdminPage";
 import ThreatConsolePage from "./pages/ThreatConsolePage";
+import MarcusDefensePage from "./pages/MarcusDefensePage";
 import CommunityHubPage from "./pages/CommunityHubPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/not-found";
@@ -104,6 +105,11 @@ function App() {
           <Route path="/threat-console">
             <AdminGate>
               <ThreatConsolePage />
+            </AdminGate>
+          </Route>
+          <Route path="/marcus-defense">
+            <AdminGate>
+              <MarcusDefensePage />
             </AdminGate>
           </Route>
           <Route path="/community-hub" component={CommunityHubPage} />
