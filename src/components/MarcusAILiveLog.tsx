@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Cpu, Circle } from "lucide-react";
+import InstitutionalDataRain from "./InstitutionalDataRain";
 
 const GOLD = "#D4AF37";
 const GOLD_BRIGHT = "#F4CE45";
@@ -96,6 +97,9 @@ export default function MarcusAILiveLog() {
         borderBottom: `1px solid ${GOLD}22`,
       }}
     >
+      {/* Falling Gold Data Nodes — Swiss-bank terminal data-stream backdrop */}
+      <InstitutionalDataRain opacity={0.015} density={1.4} />
+
       <div className="relative max-w-5xl mx-auto">
         {/* Section header */}
         <div className="text-center mb-8">
