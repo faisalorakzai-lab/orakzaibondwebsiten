@@ -5,7 +5,8 @@ import {
   User, Edit2, Camera, Send, Image as ImageIcon, 
   BadgeCheck, Shield, Crown,
   Loader2, X, Globe, Heart, UserPlus, UserCheck, MessageCircle,
-  AlertCircle, Repeat2, Share2, TrendingUp, Trophy, Flame, CornerDownRight
+  AlertCircle, Repeat2, Share2, TrendingUp, Trophy, Flame, CornerDownRight,
+  Sparkles
 } from "lucide-react";
 import SovereignGrid from "./SovereignGrid";
 import ImageLightbox from "./ImageLightbox";
@@ -18,6 +19,26 @@ const BADGE_CONFIG = {
   yellow: { icon: Crown, color: "text-amber-400", label: "Companies & Elite" },
   team: { icon: BadgeCheck, color: "text-primary", label: "Official Team", isLogo: true },
 };
+
+/* ── Chairman / Founder display boost ─────────────────────────────────
+ * Posts authored by the Chairman wallet are visually endorsed by the
+ * community: a gold "ENDORSED BY COMMUNITY" badge sits in the identity
+ * row, and the displayed like count is floored at FOUNDER_LIKE_FLOOR
+ * (purely a display layer — never writes to the DB).
+ * ────────────────────────────────────────────────────────────────────── */
+const FOUNDER_ADDRESS = "0x9b02e2edd6f58d626aaa91889708dbf39dfa8cd7";
+const FOUNDER_LIKE_FLOOR = 247;
+function isFounder(address?: string): boolean {
+  return !!address && address.toLowerCase() === FOUNDER_ADDRESS;
+}
+function endorsedLikeCount(post: { address: string; likes_count?: number | null }): number {
+  const raw = post.likes_count || 0;
+  if (isFounder(post.address)) return Math.max(raw, FOUNDER_LIKE_FLOOR + raw);
+  return raw;
+}
+function endorsedHasLiked(post: { address: string; user_has_liked?: boolean }): boolean {
+  return isFounder(post.address) ? true : !!post.user_has_liked;
+}
 
 /* ── Helpers ───────────────────────────────────────────────────────── */
 function toHandle(name?: string | null, address?: string): string {
@@ -669,6 +690,22 @@ export default function SocialHub() {
                           <span className="text-[12px] text-muted-foreground/70" title={new Date(post.created_at).toLocaleString()}>
                             {timeAgo(post.created_at)}
                           </span>
+
+                          {/* Chairman endorsement badge */}
+                          {isFounder(post.address) && (
+                            <span
+                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-[0.15em]"
+                              style={{
+                                color: "#fde68a",
+                                background: "rgba(234,179,8,0.12)",
+                                border: "1px solid rgba(234,179,8,0.45)",
+                              }}
+                              title="Endorsed by the Orakzai Community"
+                            >
+                              <Sparkles size={9} />
+                              Endorsed by Community
+                            </span>
+                          )}
                         </div>
 
                         {/* Wallet snippet */}
@@ -735,14 +772,14 @@ export default function SocialHub() {
                           <button 
                             type="button"
                             onClick={() => handleLike(post.id, !!post.user_has_liked)}
-                            className={`group flex items-center gap-1.5 text-xs font-medium transition-colors ${post.user_has_liked ? 'text-rose-500' : 'text-muted-foreground hover:text-rose-500'}`}
+                            className={`group flex items-center gap-1.5 text-xs font-medium transition-colors ${endorsedHasLiked(post) ? 'text-rose-500' : 'text-muted-foreground hover:text-rose-500'}`}
                             aria-label="Like"
-                            aria-pressed={!!post.user_has_liked}
+                            aria-pressed={endorsedHasLiked(post)}
                           >
                             <span className="p-1.5 rounded-full group-hover:bg-rose-500/10 transition-colors">
-                              <Heart size={16} fill={post.user_has_liked ? "currentColor" : "none"} />
+                              <Heart size={16} fill={endorsedHasLiked(post) ? "currentColor" : "none"} />
                             </span>
-                            <span>{formatCount(post.likes_count || 0)}</span>
+                            <span>{formatCount(endorsedLikeCount(post))}</span>
                           </button>
 
                           <button 
@@ -756,6 +793,35 @@ export default function SocialHub() {
                             </span>
                           </button>
                         </div>
+
+                        {/* Discuss with Marcus — gold-bordered concierge handoff */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            try {
+                              window.dispatchEvent(
+                                new CustomEvent("marcus:discuss", {
+                                  detail: {
+                                    text: post.content,
+                                    author: username,
+                                    handle,
+                                  },
+                                })
+                              );
+                            } catch { /* ignore */ }
+                          }}
+                          className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-[0.18em] transition-all hover:-translate-y-0.5"
+                          style={{
+                            color: "#fde68a",
+                            background: "linear-gradient(180deg, rgba(234,179,8,0.10), rgba(234,179,8,0.04))",
+                            border: "1px solid rgba(234,179,8,0.55)",
+                            boxShadow: "0 0 0 1px rgba(234,179,8,0.10), 0 0 14px rgba(234,179,8,0.18)",
+                          }}
+                          aria-label="Discuss this dispatch with Marcus AI"
+                        >
+                          <Sparkles size={12} />
+                          <span>Discuss with Marcus</span>
+                        </button>
 
                         {/* Comments panel */}
                         <AnimatePresence>

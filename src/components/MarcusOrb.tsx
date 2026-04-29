@@ -334,7 +334,9 @@ export default function MarcusOrb() {
     [speak, triggerEliteMode]
   );
 
-  // Chairman briefing — admin-only. Fetches grid status + speaks summary.
+  // Chairman briefing — admin-only. Pulls /api/briefing for live OKBOND price,
+  // TVL, active wallets, AND the latest community dispatches from the X-feed,
+  // then speaks an executive summary aloud.
   const runBriefing = useCallback(async () => {
     if (!adminRef.current) {
       speak(
@@ -343,42 +345,52 @@ export default function MarcusOrb() {
       return;
     }
     setState("thinking");
-    setCaption("Compiling briefing…");
+    setCaption("Compiling live briefing…");
     try {
-      const [gridRes, marcusRes] = await Promise.all([
-        fetch("/api/grid-status").catch(() => null),
-        fetch("/api/marcus", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            message: "Deliver the Chairman briefing now.",
-            history: historyRef.current.slice(-4),
-            context: { admin: true, briefing: true },
-          }),
-        }).catch(() => null),
-      ]);
+      const res = await fetch("/api/briefing", { cache: "no-store" });
+      const b = res.ok ? await res.json() : null;
 
-      let connections = 0;
-      if (gridRes && gridRes.ok) {
-        const g = await gridRes.json();
-        connections = Number(g?.activeConnections || g?.connections || 0);
-      }
-      // Deterministic fallback if endpoint unavailable
-      if (!connections) {
-        const seed = Math.floor(Date.now() / (1000 * 60 * 5));
-        connections = 1280 + ((seed * 137) % 420);
+      const price = b?.price;
+      const priceLine =
+        price && Number.isFinite(price.usd)
+          ? `O.K.bond is trading at ${price.usd.toFixed(4)} dollars, ${
+              price.change24h >= 0 ? "up" : "down"
+            } ${Math.abs(price.change24h).toFixed(2)} percent in the last twenty-four hours.`
+          : "OKBOND price feed is initialising.";
+
+      const tvl = b?.tvl;
+      const tvlLine =
+        tvl && Number.isFinite(tvl.usd)
+          ? `Total value locked across the Sovereign Grid sits at ${Math.round(
+              tvl.usd
+            ).toLocaleString()} dollars.`
+          : "Treasury telemetry is consolidating.";
+
+      const wallets = Number(b?.activeWallets || 0);
+      const walletLine =
+        wallets > 0
+          ? `We have ${wallets.toLocaleString()} active wallets engaged on the network.`
+          : "Wallet telemetry is loading.";
+
+      const posts: Array<{ author: string; content: string }> = Array.isArray(
+        b?.latestPosts
+      )
+        ? b.latestPosts.slice(0, 3)
+        : [];
+      let feedLine = "";
+      if (posts.length) {
+        const trimmed = posts
+          .map((p, i) => {
+            const snippet =
+              (p.content || "").replace(/\s+/g, " ").trim().slice(0, 120) ||
+              "no content";
+            return `${i === 0 ? "Top dispatch" : i === 1 ? "Next" : "And"} from ${p.author || "an investor"}: ${snippet}.`;
+          })
+          .join(" ");
+        feedLine = ` Latest from the community feed. ${trimmed}`;
       }
 
-      let core = "";
-      if (marcusRes && marcusRes.ok) {
-        const m = await marcusRes.json();
-        core = m?.reply || "";
-      }
-      if (!core) {
-        core =
-          "All twelve mother companies report green. The Sovereign Grid is stable. Vision twenty-one-hundred remains the prime directive.";
-      }
-      const briefing = `Chairman briefing. ${core} Active connections on the Sovereign Grid right now: ${connections.toLocaleString()}. The Founder is currently overseeing operations.`;
+      const briefing = `Chairman briefing. ${priceLine} ${tvlLine} ${walletLine}${feedLine} The Sovereign Grid stands online and the Founder is overseeing operations.`;
       speak(briefing);
     } catch {
       speak(
