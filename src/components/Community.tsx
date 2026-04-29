@@ -31,7 +31,7 @@ function timeAgo(iso: string): string {
 }
 
 
-/* Sovereign Status Bar — slim glassmorphism strip with live metrics */
+/* OKBOND Status Bar — slim glassmorphism strip with live metrics */
 function SovereignStatusBar() {
   const [pulse, setPulse] = useState(74.2);
   const [conns, setConns] = useState(8142);
@@ -60,7 +60,7 @@ function SovereignStatusBar() {
         boxShadow: "0 4px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(212,175,55,0.18)",
       }}
     >
-      {/* Active Sovereign Connections */}
+      {/* Active OKBOND Connections */}
       <div className="flex items-center gap-2 min-w-0">
         <span className="relative flex h-2 w-2 flex-shrink-0">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: "#22c55e" }} />
@@ -227,7 +227,7 @@ export default function Community() {
     <section className="relative pt-2 pb-4 px-4 overflow-hidden">
       <div className="max-w-7xl mx-auto relative z-10">
 
-        {/* SOVEREIGN COMMUNITY — Executive Header */}
+        {/* OKBOND COMMUNITY — Executive Header */}
         <header className="relative z-30 mb-3">
           <div className="flex items-end justify-between gap-3 px-1">
             <div className="min-w-0 flex-1 flex items-center gap-3">
@@ -265,7 +265,7 @@ export default function Community() {
                 <div className="mt-1.5 flex items-center gap-2">
                   <div className="h-px w-16" style={{ background: "linear-gradient(90deg, #D4AF37, transparent)" }} />
                   <span className="text-[9px] font-mono uppercase tracking-[0.25em]" style={{ color: "rgba(212,175,55,0.5)" }}>
-                    Sovereign Network
+                    Orakzai Bond Network
                   </span>
                 </div>
               </div>
@@ -463,7 +463,31 @@ export default function Community() {
                     className="rounded-2xl px-5 py-4 relative overflow-hidden"
                     style={{ background: c.bg, border: `1px solid ${c.border}` }}>
                     <div className="absolute top-0 left-0 w-0.5 h-full" style={{ background: c.text }} />
-                    <div className="flex items-start gap-3 pl-2">
+
+                    {/* PHANTOM WATERMARK — Orakzai Group crest, only on pinned dispatches.
+                        So subtle that only a professional eye notices it; no animation. */}
+                    {post.pinned && (
+                      <img
+                        src="/orakzai-group-logo.jpg"
+                        alt=""
+                        aria-hidden
+                        className="pointer-events-none absolute select-none"
+                        style={{
+                          right: "-2.5rem",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          width: "11rem",
+                          height: "11rem",
+                          objectFit: "contain",
+                          opacity: 0.025,
+                          mixBlendMode: "screen",
+                          filter: "grayscale(0.2) contrast(1.1)",
+                          zIndex: 0,
+                        }}
+                      />
+                    )}
+
+                    <div className="relative z-10 flex items-start gap-3 pl-2">
                       <div className="flex items-center gap-2 flex-1 min-w-0">
                         {post.pinned && (
                           <Pin className="w-3.5 h-3.5 flex-shrink-0" style={{ color: c.text }} />
