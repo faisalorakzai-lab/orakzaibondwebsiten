@@ -32,6 +32,7 @@ import LiveVaultStatus from "./components/LiveVaultStatus";
 import MarcusAILiveLog from "./components/MarcusAILiveLog";
 import SovereignGuarantee from "./components/SovereignGuarantee";
 import MarcusOrb from "./components/MarcusOrb";
+import PresenceGlow from "./components/PresenceGlow";
 
 console.log("App.tsx module loaded");
 
@@ -107,6 +108,9 @@ function App() {
       <div className="lg:pl-[60px]">
         <Footer />
       </div>
+
+      {/* Founder's Aura — breathing gold ambient when Chairman is logged in */}
+      <PresenceGlow />
 
       {/* Floating WhatsApp widget — visible on every page */}
       <WhatsAppBot />
