@@ -10,6 +10,7 @@ import { useWallet } from "@/hooks/useWallet";
 import { useICO } from "@/hooks/useICO";
 import ReferralDashboard from "@/components/ReferralDashboard";
 import { Button } from "@/components/ui/button";
+import OKBONDCalculator from "@/components/OKBONDCalculator";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 const POLYGON_SCAN = "https://polygonscan.com/tx/";
@@ -369,7 +370,12 @@ export default function ICOPage() {
                 ))}
               </div>
 
-              {/* Token Specs */}
+              {/* $OKBOND Smart Calculator */}
+              <div className="col-span-full">
+                <OKBONDCalculator apy={18} />
+              </div>
+
+                            {/* Token Specs */}
               <div className="glass-card rounded-2xl border border-white/5 p-6 bg-white/5 space-y-4">
                 <h3 className="text-sm font-bold text-primary uppercase tracking-widest">Token Specifications</h3>
                 <div className="grid grid-cols-2 gap-4">
