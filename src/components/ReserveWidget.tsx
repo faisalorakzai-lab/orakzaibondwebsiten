@@ -10,25 +10,19 @@
  *  • full (sidebar expanded / mobile) — seal + asset breakdown + backed badge
  */
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ShieldCheck } from "lucide-react";
+import {
+  fetchAllocations,
+  subscribeAllocations,
+  DEFAULT_ALLOCATIONS,
+  type ReserveAllocation,
+} from "@/lib/reserveAllocations";
 
 const GOLD       = "#d4af37";
 const GOLD_BRIGHT = "#f4ce45";
 const GOLD_DEEP  = "#a07a14";
-
-interface BackingAsset {
-  label: string;
-  pct: number;
-  hint: string;
-}
-
-const ASSETS: BackingAsset[] = [
-  { label: "Real Estate",      pct: 38, hint: "Orakzai Group land bank" },
-  { label: "On-Chain Reserve", pct: 27, hint: "Multisig treasury wallet" },
-  { label: "Liquidity Pools",  pct: 18, hint: "QuickSwap V3 + Uniswap" },
-  { label: "Treasury POL",     pct: 17, hint: "Liquid POL reserves" },
-];
 
 export function HolographicSeal({ size = 96 }: { size?: number }) {
   const r = size / 2;
@@ -110,7 +104,32 @@ export function HolographicSeal({ size = 96 }: { size?: number }) {
   );
 }
 
+/**
+ * Subscribe to live Reserve allocations from Supabase.
+ * Returns the asset list and a "live" flag (true once first realtime tick lands).
+ */
+function useLiveAllocations() {
+  const [assets, setAssets] = useState<ReserveAllocation[]>(DEFAULT_ALLOCATIONS);
+  const [pulse, setPulse] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    fetchAllocations().then((next) => { if (mounted) setAssets(next); });
+    const unsub = subscribeAllocations((next) => {
+      if (!mounted) return;
+      setAssets(next);
+      setPulse(true);
+      setTimeout(() => mounted && setPulse(false), 1200);
+    });
+    return () => { mounted = false; unsub(); };
+  }, []);
+
+  return { assets, pulse };
+}
+
 export default function ReserveWidget({ compact = false }: { compact?: boolean }) {
+  const { assets, pulse } = useLiveAllocations();
+
   if (compact) {
     return (
       <div className="flex flex-col items-center gap-1.5 py-2"
@@ -147,17 +166,25 @@ export default function ReserveWidget({ compact = false }: { compact?: boolean }
 
       {/* Backing Assets */}
       <div className="space-y-1.5 mb-3 relative">
-        {ASSETS.map((a) => (
-          <div key={a.label} className="group" title={a.hint}>
+        {assets.map((a) => (
+          <div key={a.asset_key} className="group" title={a.hint ?? undefined}>
             <div className="flex items-center justify-between mb-0.5">
               <span className="text-[10px] font-semibold text-foreground/85 leading-none">{a.label}</span>
-              <span className="text-[10px] font-mono font-bold" style={{ color: GOLD_BRIGHT }}>{a.pct}%</span>
+              <motion.span
+                key={`${a.asset_key}-${a.pct}`}
+                initial={{ scale: 1.25, color: "#fff8d8" }}
+                animate={{ scale: 1, color: GOLD_BRIGHT }}
+                transition={{ duration: 0.6 }}
+                className="text-[10px] font-mono font-bold">
+                {a.pct}%
+              </motion.span>
             </div>
             <div className="h-[3px] rounded-full overflow-hidden" style={{ background: "rgba(212,175,55,0.10)" }}>
               <motion.div
+                key={`${a.asset_key}-${a.pct}-bar`}
                 initial={{ width: 0 }}
                 animate={{ width: `${a.pct}%` }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
+                transition={{ duration: 1.0, ease: "easeOut" }}
                 className="h-full rounded-full"
                 style={{ background: `linear-gradient(90deg, ${GOLD_DEEP}, ${GOLD_BRIGHT})`, boxShadow: `0 0 6px ${GOLD}55` }} />
             </div>
@@ -169,10 +196,12 @@ export default function ReserveWidget({ compact = false }: { compact?: boolean }
       <div className="flex items-center justify-between pt-2 relative" style={{ borderTop: `0.5px solid ${GOLD}33` }}>
         <div className="flex items-center gap-1.5">
           <motion.span className="w-1.5 h-1.5 rounded-full"
-            style={{ background: "#10b981", boxShadow: "0 0 6px #10b98199" }}
+            style={{ background: pulse ? "#f4ce45" : "#10b981", boxShadow: pulse ? "0 0 8px #f4ce45cc" : "0 0 6px #10b98199" }}
             animate={{ opacity: [1, 0.4, 1] }}
-            transition={{ duration: 1.6, repeat: Infinity }} />
-          <span className="text-[9px] font-extrabold tracking-wider uppercase text-emerald-400">Live</span>
+            transition={{ duration: pulse ? 0.6 : 1.6, repeat: Infinity }} />
+          <span className="text-[9px] font-extrabold tracking-wider uppercase" style={{ color: pulse ? GOLD_BRIGHT : "#34d399" }}>
+            {pulse ? "Recalibrated" : "Live"}
+          </span>
         </div>
         <span className="text-[9px] font-extrabold tracking-widest uppercase" style={{ color: GOLD }}>
           100% Backed

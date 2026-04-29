@@ -22,6 +22,7 @@ import { Contract, JsonRpcProvider, formatEther, formatUnits, EventLog, Log } fr
 import { useWallet } from "@/hooks/useWallet";
 import { broadcastDispatch, fetchRecentDispatches, unpinDispatch, type Dispatch } from "@/lib/dispatchBus";
 import { pushEscalation } from "@/lib/marcusBus";
+import ReserveControlPanel from "./ReserveControlPanel";
 
 const TOKEN_ADDRESS    = "0x6f539e4232c045ccac08e2009d97bdc72815472a";
 const ICO_ADDRESS      = "0x0134F0ADE4b5e48aCBFF97155691bBC54eBadD16";
@@ -311,6 +312,9 @@ export default function FoundersVault() {
           <VaultStat label="Chairman Holdings" value={loading ? "…" : fmtNum(adminTokenBal, 0)} sub="OKBOND" small icon={<Crown className="w-3.5 h-3.5" />} />
         </div>
       </section>
+
+      {/* Reserve Control Panel — Live Asset Control */}
+      <ReserveControlPanel />
 
       {/* Security Flags */}
       <section>
