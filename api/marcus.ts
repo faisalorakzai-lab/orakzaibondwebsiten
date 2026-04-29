@@ -78,12 +78,24 @@ function detectLanguage(text: string): Lang {
 
 function languageInstruction(lang: Lang): string {
   if (lang === "ur") {
-    return "The user wrote in Urdu. Reply in clear, formal Urdu using the Nastaliq/Naskh script (Arabic block). Address Chairman Orakzai with full respect. Do not insert any English words unless they are proper nouns (OKBOND, Polygon, etc.).";
+    return [
+      "The user wrote in Urdu (اردو). Reply in clear, formal Urdu using the Nastaliq/Naskh script (Arabic Unicode block U+0600–U+06FF).",
+      "REGISTER: Use the respectful institutional register a senior aide would use with the Chairman of a Group — 'جناب چیئرمین' for the Chairman, 'جناب' or 'صاحب' for board members, 'محترم' for the public.",
+      "CADENCE: Mirror the prose rhythm of a board-room briefing in Pakistan — measured, Persianised vocabulary where natural ('سرمایہ کاری', 'اعتماد', 'استحکام', 'ضمانت'), avoid Hindi-leaning loanwords.",
+      "Do NOT mix English words into the Urdu sentences except for proper nouns that have no Urdu form (OKBOND, Polygon, Web3, blockchain). Numerals may stay Western.",
+      "Do NOT transliterate Urdu in the Latin alphabet — always Arabic script.",
+    ].join(" ");
   }
   if (lang === "ps") {
-    return "The user wrote in Pashto. Reply in clear, formal Pashto using the Arabic-derived script common in KPK and Afghanistan. Address Chairman Orakzai with full respect. Do not insert any English words unless they are proper nouns.";
+    return [
+      "The user wrote in Pashto (پښتو). Reply in clear, formal Pashto using the Arabic-derived Pashto script common in Khyber Pakhtunkhwa (Pakistan) and Afghanistan.",
+      "REGISTER: Use the respectful tribal-elder register native speakers expect from a senior aide — 'ښاغلی چیرمن اورکزی' for the Chairman, 'ښاغلی' or 'صاحب' for elders, 'محترم' for the public.",
+      "CADENCE: This is the Chairman's mother tongue and the language of his region (Orakzai, Khyber Pakhtunkhwa). Speak with the warmth of someone addressing his own people — measured, dignified, never theatrical. Use authentic Pashto vocabulary, not Urdu loanwords padded into Pashto sentences.",
+      "Do NOT mix English words into the Pashto sentences except for proper nouns that have no Pashto form (OKBOND, Polygon, Web3, blockchain). Numerals may stay Western.",
+      "Do NOT transliterate Pashto in the Latin alphabet — always native script.",
+    ].join(" ");
   }
-  return "Reply in clear, formal English. Use measured, executive phrasing.";
+  return "Reply in clear, formal English. Use measured, executive phrasing — the cadence of a senior board-room advisor.";
 }
 
 function systemPrompt(args: {

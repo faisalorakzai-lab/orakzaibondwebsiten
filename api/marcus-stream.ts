@@ -56,12 +56,22 @@ function detectLanguage(text: string): Lang {
 
 function languageInstruction(lang: Lang): string {
   if (lang === "ur") {
-    return "The user wrote in Urdu. Reply in clear, formal Urdu using the Nastaliq/Naskh script (Arabic block). Address Chairman Orakzai with full respect. Do not insert any English words unless they are proper nouns (OKBOND, Polygon, etc.).";
+    return [
+      "The user wrote in Urdu (اردو). Reply in clear, formal Urdu using the Nastaliq/Naskh script.",
+      "REGISTER: Use the respectful institutional register a senior aide would use — 'جناب چیئرمین' for the Chairman, 'محترم' for the public.",
+      "CADENCE: Persianised, measured, board-room — 'سرمایہ کاری', 'اعتماد', 'ضمانت'. Avoid Hindi-leaning loanwords.",
+      "Do NOT mix English into Urdu sentences except for proper nouns (OKBOND, Polygon, Web3). Always Arabic script — never Latin transliteration.",
+    ].join(" ");
   }
   if (lang === "ps") {
-    return "The user wrote in Pashto. Reply in clear, formal Pashto using the Arabic-derived script common in KPK and Afghanistan. Address Chairman Orakzai with full respect. Do not insert any English words unless they are proper nouns.";
+    return [
+      "The user wrote in Pashto (پښتو). Reply in clear, formal Pashto using the Arabic-derived Pashto script common in Khyber Pakhtunkhwa and Afghanistan.",
+      "REGISTER: This is the Chairman's mother tongue. Use the respectful tribal-elder register — 'ښاغلی چیرمن اورکزی' for the Chairman, 'محترم' for the public. Speak with the warmth of someone addressing his own people.",
+      "CADENCE: Measured, dignified, never theatrical. Authentic Pashto vocabulary, not Urdu loanwords padded into Pashto.",
+      "Do NOT mix English into Pashto except for proper nouns (OKBOND, Polygon, Web3). Always native script — never Latin transliteration.",
+    ].join(" ");
   }
-  return "Reply in clear, formal English. Use measured, executive phrasing.";
+  return "Reply in clear, formal English. Use measured, executive phrasing — the cadence of a senior board-room advisor.";
 }
 
 function systemPrompt(args: {
@@ -201,6 +211,15 @@ export default async function handler(req: Request): Promise<Response> {
       const safeEnqueue = (obj: unknown) => {
         try { controller.enqueue(sseEvent(obj)); } catch { /* client disconnected */ }
       };
+
+      // EARLY meta — emitted BEFORE the first content chunk so the client
+      // can rebind its TTS voice/lang to match the response language. The
+      // detected language here comes from the user's prompt; the brain may
+      // still elect to reply in another tongue if the user asks (e.g. an
+      // English prompt asking "respond in Urdu") — in that case the orb's
+      // sentence-by-sentence speaker will gracefully cope because the voice
+      // for ur/ps/en all share the same TTS synthesis surface.
+      safeEnqueue({ type: "meta", lang, longForm });
 
       // ── Try Gemini streamGenerateContent ────────────────────────────
       const apiKey = env("GEMINI_API_KEY");
