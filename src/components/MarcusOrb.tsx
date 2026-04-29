@@ -214,6 +214,120 @@ function stopKeepAlive() {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────
+// Streaming TTS: enqueue ONE sentence at a time onto the live speech queue
+// without cancelling what's already in flight. Used by /api/marcus-stream
+// so the orb can begin speaking the first sentence within ~600ms while the
+// rest of the briefing is still being generated.
+// ─────────────────────────────────────────────────────────────────────────
+interface StreamSpeechController {
+  feed(text: string): void;          // call when new tokens arrive
+  finish(): void;                    // call when the stream ends cleanly
+  abort(): void;                     // cancel everything in flight
+  spokenChars(): number;             // how much has been queued for TTS
+}
+
+const SENTENCE_END_RX = /[\.!\?؟۔]/;
+
+function createStreamSpeech(opts: {
+  voice: SpeechSynthesisVoice | null;
+  lang?: SpeechLang;
+  pitch?: number;
+  rate?: number;
+  volume?: number;
+  onBoundary?: (ev: SpeechSynthesisEvent) => void;
+  onAllDone?: () => void;
+  onError?: () => void;
+}): StreamSpeechController {
+  const synth = window.speechSynthesis;
+  const lang = opts.lang || "en";
+  const browserLang =
+    lang === "ur" ? "ur-PK" : lang === "ps" ? "ps-AF" : "en-GB";
+
+  let pending = "";          // unspoken accumulated text awaiting a boundary
+  let inFlight = 0;          // sentence utterances currently queued/playing
+  let finished = false;      // upstream stream has ended
+  let aborted = false;
+  let spoken = 0;
+
+  const enqueue = (raw: string) => {
+    const piece = raw.trim();
+    if (!piece) return;
+    // Sentences can still exceed 180 chars (no punctuation); fall back to
+    // the proven sentence-splitter so Chrome cannot truncate.
+    const sub = splitForSpeech(piece);
+    sub.forEach((s) => {
+      const u = new SpeechSynthesisUtterance(s);
+      if (opts.voice) u.voice = opts.voice;
+      u.lang = opts.voice?.lang || browserLang;
+      u.pitch = opts.pitch ?? 0.75;
+      u.rate = opts.rate ?? 0.9;
+      u.volume = opts.volume ?? 1;
+      if (opts.onBoundary) u.onboundary = opts.onBoundary;
+      inFlight += 1;
+      const tearDown = () => {
+        inFlight -= 1;
+        if (finished && inFlight <= 0) {
+          stopKeepAlive();
+          if (aborted) opts.onError?.();
+          else opts.onAllDone?.();
+        }
+      };
+      u.onend = tearDown;
+      u.onerror = tearDown;
+      try { synth.speak(u); spoken += s.length; } catch { tearDown(); }
+    });
+    startKeepAlive();
+  };
+
+  const flushSentences = (force = false) => {
+    if (!pending) return;
+    if (force) { enqueue(pending); pending = ""; return; }
+    let lastCut = -1;
+    for (let i = 0; i < pending.length; i++) {
+      if (SENTENCE_END_RX.test(pending[i])) lastCut = i;
+    }
+    if (lastCut >= 0) {
+      const ready = pending.slice(0, lastCut + 1);
+      pending = pending.slice(lastCut + 1);
+      enqueue(ready);
+    } else if (pending.length > 220) {
+      // No punctuation in a long run — break on the last whitespace so we
+      // don't sit silent forever waiting for a period that never comes.
+      const ws = pending.lastIndexOf(" ", 220);
+      const cut = ws > 60 ? ws : 220;
+      enqueue(pending.slice(0, cut));
+      pending = pending.slice(cut);
+    }
+  };
+
+  return {
+    feed(text: string) {
+      if (aborted) return;
+      pending += text;
+      flushSentences(false);
+    },
+    finish() {
+      if (aborted || finished) return;
+      finished = true;
+      flushSentences(true);
+      if (inFlight <= 0) {
+        stopKeepAlive();
+        opts.onAllDone?.();
+      }
+    },
+    abort() {
+      aborted = true;
+      finished = true;
+      pending = "";
+      try { synth.cancel(); } catch {}
+      stopKeepAlive();
+      opts.onError?.();
+    },
+    spokenChars() { return spoken; },
+  };
+}
+
 // Speak the given text reliably in chunks. Returns the LAST utterance so
 // callers that previously held a ref to the active utterance can keep doing
 // so. Cancels any in-flight speech first.
@@ -375,6 +489,34 @@ export default function MarcusOrb() {
     return () => window.clearInterval(id);
   }, []);
 
+  // Pre-warm the Marcus Edge function + upstream Gemini connection on mount.
+  // Saves ~300ms on the very first user prompt by eliminating cold-start
+  // latency on both the Vercel Edge runtime and the Google API socket.
+  // Idempotent, no side effects, low-priority — never blocks the UI.
+  useEffect(() => {
+    let cancelled = false;
+    const fire = () => {
+      if (cancelled) return;
+      try {
+        fetch("/api/marcus-warmup", {
+          method: "POST",
+          keepalive: true,
+          headers: { "content-type": "application/json" },
+          body: "{}",
+        }).catch(() => { /* warmup failures are intentionally silent */ });
+      } catch { /* noop */ }
+    };
+    const ric = (window as any).requestIdleCallback as
+      | ((cb: () => void, opts?: { timeout: number }) => number)
+      | undefined;
+    if (typeof ric === "function") {
+      ric(fire, { timeout: 1500 });
+    } else {
+      window.setTimeout(fire, 250);
+    }
+    return () => { cancelled = true; };
+  }, []);
+
   // Mirror "open" → openRef so async callbacks (speak.onend, etc.) read the latest value.
   useEffect(() => { openRef.current = open; }, [open]);
 
@@ -471,30 +613,171 @@ export default function MarcusOrb() {
       const isInvestor = INVESTOR_RX.test(prompt);
       if (isElite) triggerEliteMode();
 
-      // Hard timeout on the network round-trip so the orb never hangs in
-      // "thinking" forever — if Vercel/OpenAI is slow, we fall back to a
-      // canned reply within the 5-second product SLA.
+      const promptLang = detectLang(prompt);
+      const requestBody = {
+        message: prompt,
+        // Detected user-input language so the brain replies in the same
+        // tongue (English / Urdu / Pashto). The server also re-detects
+        // for safety, but sending it here makes routing explicit.
+        lang: promptLang,
+        history: historyRef.current.slice(-8),
+        context: {
+          admin: adminRef.current,
+          elite: isElite,
+          localHour: new Date().getHours(),
+        },
+      };
+
+      const fallbackText = isElite
+        ? ELITE_FALLBACK
+        : isInvestor
+        ? INVESTOR_FALLBACK
+        : adminRef.current
+        ? FALLBACK_GREETING_CHAIRMAN
+        : FALLBACK_GREETING_INVESTOR;
+
+      // ── Path A: streaming SSE — orb starts speaking on first chunk. ──
+      // First-byte timeout guards against a stalled connection so we can
+      // fall back to the non-stream path inside the 5s product SLA. Once
+      // bytes are flowing, we let the long-form budget on the server side
+      // (~25s for Gemini) carry the briefing to completion.
+      const streamCtrl = new AbortController();
+      const firstByteTimer = window.setTimeout(() => streamCtrl.abort(), 4800);
+
+      try {
+        const res = await fetch("/api/marcus-stream", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "text/event-stream" },
+          signal: streamCtrl.signal,
+          body: JSON.stringify(requestBody),
+        });
+        if (!res.ok || !res.body) throw new Error(`stream offline ${res.status}`);
+
+        const voice = pickVoiceFor(promptLang);
+        let lastBoundary = performance.now();
+        const onAfterStream = () => {
+          setPulse(1);
+          if (openRef.current) {
+            setState("listening");
+            setCaption("Listening… speak when ready.");
+            wakeArmedRef.current = false;
+          } else {
+            setState("idle");
+            wakeArmedRef.current = true;
+          }
+        };
+        const speaker = mutedRef.current
+          ? null
+          : createStreamSpeech({
+              voice,
+              lang: promptLang,
+              pitch: 0.75,
+              rate: 0.9,
+              volume: 1,
+              onBoundary: () => {
+                const now = performance.now();
+                const delta = Math.min(220, now - lastBoundary);
+                lastBoundary = now;
+                setPulse(1 + ((220 - delta) / 220) * 0.4);
+              },
+              onAllDone: onAfterStream,
+              onError: onAfterStream,
+            });
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let sseBuf = "";
+        let accumulated = "";
+        let firstChunk = true;
+        let streamFailedSignal: string | null = null;
+
+        for (;;) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          if (firstChunk) {
+            // Stop the first-byte timeout the moment ANY bytes arrive — we
+            // are now committed to the stream.
+            window.clearTimeout(firstByteTimer);
+          }
+          sseBuf += decoder.decode(value, { stream: true });
+          let idx;
+          while ((idx = sseBuf.indexOf("\n\n")) !== -1) {
+            const frame = sseBuf.slice(0, idx);
+            sseBuf = sseBuf.slice(idx + 2);
+            const dataLine = frame
+              .split("\n")
+              .filter((l) => l.startsWith("data:"))
+              .map((l) => l.slice(5).trim())
+              .join("");
+            if (!dataLine) continue;
+            let evt: any;
+            try { evt = JSON.parse(dataLine); } catch { continue; }
+
+            if (evt.type === "meta" && (evt.lang === "ur" || evt.lang === "ps" || evt.lang === "en")) {
+              // Server confirmed response language. If it differs from our
+              // prompt-derived guess, no action is needed because the
+              // streaming speaker we've already built reads voice + lang
+              // from the same `promptLang` we passed at construction. We
+              // could rebuild here, but doing so risks silencing the first
+              // chunk during the rebuild handoff — accept the prompt-lang
+              // voice and let the synthesizer handle script gracefully.
+              continue;
+            }
+            if (evt.type === "chunk" && typeof evt.text === "string" && evt.text) {
+              if (firstChunk) {
+                // FIRST CHUNK — orb flips to "speaking" immediately so the
+                // visual handshake leads the audio handshake.
+                setState("speaking");
+                firstChunk = false;
+              }
+              accumulated += evt.text;
+              setCaption(accumulated);
+              if (mutedRef.current) {
+                // Muted: no TTS, just keep the caption updated.
+              } else {
+                speaker?.feed(evt.text);
+              }
+            } else if (evt.type === "done") {
+              // server has finished — flush remaining TTS and exit
+            } else if (evt.type === "error") {
+              streamFailedSignal = String(evt.message || "error");
+            }
+          }
+        }
+
+        window.clearTimeout(firstByteTimer);
+
+        if (streamFailedSignal || !accumulated) {
+          // Server reported a terminal error event OR closed without ever
+          // sending a chunk → fall through to the non-stream path.
+          speaker?.abort();
+          throw new Error(streamFailedSignal || "empty_stream");
+        }
+
+        speaker?.finish();
+        if (mutedRef.current) onAfterStream();
+
+        historyRef.current.push({ role: "user", content: prompt });
+        historyRef.current.push({ role: "assistant", content: accumulated });
+        if (historyRef.current.length > 16) {
+          historyRef.current = historyRef.current.slice(-16);
+        }
+        return;
+      } catch (streamErr) {
+        window.clearTimeout(firstByteTimer);
+        // Streaming path failed before any usable text arrived. Try the
+        // proven non-stream brain so the orb is never silent.
+      }
+
+      // ── Path B: non-stream fallback (existing /api/marcus contract). ─
       const ctrl = new AbortController();
       const ttimer = window.setTimeout(() => ctrl.abort(), 4800);
-
       try {
         const res = await fetch("/api/marcus", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           signal: ctrl.signal,
-          body: JSON.stringify({
-            message: prompt,
-            // Detected user-input language so the brain replies in the same
-            // tongue (English / Urdu / Pashto). The server also re-detects
-            // for safety, but sending it here makes routing explicit.
-            lang: detectLang(prompt),
-            history: historyRef.current.slice(-8),
-            context: {
-              admin: adminRef.current,
-              elite: isElite,
-              localHour: new Date().getHours(),
-            },
-          }),
+          body: JSON.stringify(requestBody),
         });
         window.clearTimeout(ttimer);
         if (!res.ok) throw new Error("brain offline");
@@ -503,13 +786,7 @@ export default function MarcusOrb() {
           data.reply ||
           data.answer ||
           data.text ||
-          (isElite
-            ? ELITE_FALLBACK
-            : isInvestor
-            ? INVESTOR_FALLBACK
-            : adminRef.current
-            ? FALLBACK_GREETING_CHAIRMAN
-            : FALLBACK_GREETING_INVESTOR);
+          fallbackText;
 
         historyRef.current.push({ role: "user", content: prompt });
         historyRef.current.push({ role: "assistant", content: reply });
@@ -519,14 +796,7 @@ export default function MarcusOrb() {
         speak(reply);
       } catch {
         window.clearTimeout(ttimer);
-        const reply = isElite
-          ? ELITE_FALLBACK
-          : isInvestor
-          ? INVESTOR_FALLBACK
-          : adminRef.current
-          ? FALLBACK_GREETING_CHAIRMAN
-          : FALLBACK_GREETING_INVESTOR;
-        speak(reply);
+        speak(fallbackText);
       }
     },
     [speak, triggerEliteMode]

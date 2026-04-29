@@ -3,19 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Globe, ChevronDown, Check, Menu } from "lucide-react";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 interface NavbarProps {
   address: string | null;
   onConnect: () => void;
   onMenuToggle?: () => void;
 }
-
-const LANGUAGES = [
-  { code: "en", label: "English",  native: "English"  },
-  { code: "ur", label: "Urdu",     native: "اردو"      },
-  { code: "ar", label: "Arabic",   native: "العربية"   },
-  { code: "zh", label: "Chinese",  native: "中文"       },
-];
 
 
 // ── Marcus Status Pill ──────────────────────────────────────────────────────
@@ -83,7 +77,9 @@ export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps
     : null;
 
   const [langOpen, setLangOpen] = useState(false);
-  const [activeLang, setActiveLang] = useState(LANGUAGES[0]);
+  const { lang: activeCode, setLang, available: LANGUAGES, t } = useLanguage();
+  const activeLang =
+    LANGUAGES.find((l) => l.code === activeCode) || LANGUAGES[0];
 
   return (
     <motion.nav
@@ -221,7 +217,7 @@ export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps
                   {LANGUAGES.map((lang) => (
                     <button
                       key={lang.code}
-                      onClick={() => { setActiveLang(lang); setLangOpen(false); }}
+                      onClick={() => { setLang(lang.code); setLangOpen(false); }}
                       className="w-full flex items-center justify-between px-4 py-2.5 text-sm hover:bg-primary/10 hover:text-primary transition-colors"
                     >
                       <span className="flex items-center gap-2">
@@ -233,7 +229,7 @@ export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps
                     </button>
                   ))}
                   <div className="px-4 py-2 border-t border-border text-[10px] text-muted-foreground/60 text-center font-mono">
-                    Global Reach — 4 Languages
+                    {t("nav.language")} · {LANGUAGES.length}
                   </div>
                 </motion.div>
               )}
