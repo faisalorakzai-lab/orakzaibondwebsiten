@@ -18,6 +18,8 @@ import {
 import { useWallet } from "@/hooks/useWallet";
 import LOTTERY_ABI from "@/lib/contractABI.json";
 import ParticleBackground from "@/components/ParticleBackground";
+import FoundersVault from "@/components/FoundersVault";
+import { Crosshair } from "lucide-react";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const ADMIN_WALLET    = "0x9b02e2Edd6F58D626aAa91889708dbF39dfa8Cd7";
@@ -35,7 +37,7 @@ const ERC20_ABI = [
 ];
 
 type TxPhase = "idle" | "pending" | "success" | "failed";
-type AdminTab = "dashboard" | "analytics" | "notifications" | "Lottery" | "players" | "treasury" | "staking" | "lending" | "community";
+type AdminTab = "dashboard" | "analytics" | "notifications" | "Lottery" | "players" | "treasury" | "vault" | "staking" | "lending" | "community" | "threat";
 
 interface PlayerRow {
   address: string;
@@ -111,6 +113,8 @@ const NAV: { id: AdminTab; label: string; icon: JSX.Element; soon?: boolean; ext
   { id: "Lottery",       label: "Lottery",       icon: <Trophy className="w-4 h-4" /> },
   { id: "players",       label: "Players",       icon: <Users className="w-4 h-4" /> },
   { id: "treasury",      label: "Treasury",      icon: <Database className="w-4 h-4" /> },
+  { id: "vault",         label: "Founder's Vault", icon: <Crown className="w-4 h-4" /> },
+  { id: "threat",        label: "Threat Console",  icon: <Crosshair className="w-4 h-4" />, external: "/threat-console" },
   { id: "community",     label: "Community Hub", icon: <ShieldCheck className="w-4 h-4" />, external: "/community-hub" },
   { id: "staking",       label: "Staking",       icon: <Layers className="w-4 h-4" />, soon: true },
   { id: "lending",       label: "Lending",       icon: <CreditCard className="w-4 h-4" />, soon: true },
@@ -980,6 +984,10 @@ export default function AdminPage() {
               )}
 
               {/* ── TREASURY tab ─────────────────────────────────────────── */}
+              {tab === "vault" && (
+                <FoundersVault />
+              )}
+
               {tab === "treasury" && (
                 <motion.div key="treasury" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-6">
                   <h2 className="text-2xl font-extrabold text-foreground">Treasury <span className="text-primary">View</span></h2>

@@ -3,19 +3,25 @@ import { motion } from "framer-motion";
 import { Cpu, Circle } from "lucide-react";
 import InstitutionalDataRain from "./InstitutionalDataRain";
 import GhostWorldMap from "./GhostWorldMap";
+import { ESCALATION_EVENT, loadEscalations, type MarcusEscalation } from "@/lib/marcusBus";
 
 const GOLD = "#D4AF37";
 const GOLD_BRIGHT = "#F4CE45";
 const NEON_GREEN = "#00ff9c";
 const AMBER = "#ffb547";
+const RED_ALERT = "#ff4d4f";
+const RED_CRIT  = "#ff1f3a";
 
-type Severity = "INFO" | "OPTIMIZE" | "GUARD" | "SCAN" | "EXEC";
+type Severity = "INFO" | "OPTIMIZE" | "GUARD" | "SCAN" | "EXEC" | "ALERT" | "CRITICAL" | "BROADCAST";
 const SEV_COLOR: Record<Severity, string> = {
-  INFO:     "#9bd1ff",
-  OPTIMIZE: GOLD_BRIGHT,
-  GUARD:    NEON_GREEN,
-  SCAN:     "#c084fc",
-  EXEC:     AMBER,
+  INFO:      "#9bd1ff",
+  OPTIMIZE:  GOLD_BRIGHT,
+  GUARD:     NEON_GREEN,
+  SCAN:      "#c084fc",
+  EXEC:      AMBER,
+  ALERT:     RED_ALERT,
+  CRITICAL:  RED_CRIT,
+  BROADCAST: GOLD_BRIGHT,
 };
 
 interface MarcusEvent {
@@ -81,6 +87,30 @@ export default function MarcusAILiveLog() {
       });
     }, 2400);
     return () => clearInterval(id);
+  }, []);
+
+  // ── Chairman escalations: hydrate from storage + listen for live ones ──
+  useEffect(() => {
+    const hydrate = (e: MarcusEscalation) => {
+      const sev: Severity = (e.level === "ALERT" || e.level === "CRITICAL" || e.level === "EXEC" || e.level === "BROADCAST")
+        ? e.level
+        : "ALERT";
+      setLines((prev) => {
+        const line = { id: Date.now() + Math.random(), time: fmtTime(new Date(e.ts)), sev, msg: e.msg };
+        const next = [...prev, line];
+        return next.length > 14 ? next.slice(next.length - 14) : next;
+      });
+    };
+    // Hydrate the most recent escalation (if any) so reload still shows it
+    const stored = loadEscalations();
+    if (stored.length > 0) hydrate(stored[0]);
+
+    const onEscalation = (ev: Event) => {
+      const detail = (ev as CustomEvent<MarcusEscalation>).detail;
+      if (detail) hydrate(detail);
+    };
+    window.addEventListener(ESCALATION_EVENT, onEscalation);
+    return () => window.removeEventListener(ESCALATION_EVENT, onEscalation);
   }, []);
 
   // Auto-scroll terminal to bottom on new line

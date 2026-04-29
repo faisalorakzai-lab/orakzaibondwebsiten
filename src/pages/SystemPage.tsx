@@ -13,6 +13,7 @@ import { Contract, formatEther, formatUnits, JsonRpcProvider, EventLog, Log } fr
 import { useWallet } from "@/hooks/useWallet";
 import { useICO } from "@/hooks/useICO";
 import LOTTERY_ABI from "@/lib/contractABI.json";
+import { fetchRecentDispatches, type Dispatch } from "@/lib/dispatchBus";
 
 /* ── Live Contract Addresses (Polygon Mainnet) ───────────────────────── */
 const TOKEN_ADDRESS    = "0x6f539e4232c045ccac08e2009d97bdc72815472a";
@@ -198,6 +199,19 @@ export default function SystemPage() {
   const [refCopied, setRefCopied] = useState(false);
   const [selectedRange, setSelectedRange] = useState<"7D" | "14D" | "30D">("30D");
   const tickerRef = useRef<HTMLDivElement>(null);
+
+  /* Pinned Dispatches from Chairman → prepended to ticker */
+  const [dispatches, setDispatches] = useState<Dispatch[]>([]);
+  useEffect(() => {
+    let mounted = true;
+    const load = async () => {
+      const list = await fetchRecentDispatches(8);
+      if (mounted) setDispatches(list);
+    };
+    load();
+    const id = setInterval(load, 60_000);
+    return () => { mounted = false; clearInterval(id); };
+  }, []);
 
   // Live wallet state
   const [okbondBalance, setOkbondBalance] = useState<string | null>(null);
@@ -414,13 +428,24 @@ export default function SystemPage() {
               animate={{ x: ["0%", "-50%"] }}
               transition={{ duration: 38, ease: "linear", repeat: Infinity }}
               className="flex whitespace-nowrap gap-0">
-              {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
-                <span key={i} className="text-xs font-semibold px-8 py-2 inline-block"
-                  style={{ color: i % 3 === 0 ? "#eab308" : i % 3 === 1 ? "#22d3ee" : "#94a3b8" }}>
-                  {item}
-                  <span className="text-muted-foreground/20 ml-8">|</span>
-                </span>
-              ))}
+              {(() => {
+                const dispatchItems = dispatches.map(d => `📢 CHAIRMAN: ${d.message}`);
+                const combined = [...dispatchItems, ...TICKER_ITEMS];
+                return [...combined, ...combined].map((item, i) => {
+                  const isDispatch = item.startsWith("📢 CHAIRMAN:");
+                  return (
+                    <span key={i} className="text-xs font-semibold px-8 py-2 inline-block"
+                      style={{
+                        color: isDispatch ? "#eab308" : (i % 3 === 0 ? "#eab308" : i % 3 === 1 ? "#22d3ee" : "#94a3b8"),
+                        textShadow: isDispatch ? "0 0 12px rgba(234,179,8,0.55)" : "none",
+                        fontWeight: isDispatch ? 800 : 600,
+                      }}>
+                      {item}
+                      <span className="text-muted-foreground/20 ml-8">|</span>
+                    </span>
+                  );
+                });
+              })()}
             </motion.div>
           </div>
           <div className="flex-shrink-0 px-3">
