@@ -38,6 +38,7 @@ import PresenceGlow from "./components/PresenceGlow";
 import FilmGrain from "./components/FilmGrain";
 import AIBriefingTicker from "./components/AIBriefingTicker";
 import OKBONDHeatmap from "./components/OKBONDHeatmap";
+import FounderSection from "./components/FounderSection";
 
 console.log("App.tsx module loaded");
 
@@ -74,6 +75,7 @@ function App() {
               <LiveVaultStatus />
               <MarcusAILiveLog />
               <SovereignGuarantee />
+              <FounderSection />
               <OKBONDHeatmap />
             </>
           </Route>
