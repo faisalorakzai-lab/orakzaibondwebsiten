@@ -108,9 +108,12 @@ function Hero() {
     offset: ["start start", "end start"],
   });
 
-  const portraitY = useTransform(scrollYProgress, [0, 1], [0, 90]);
-  const portraitScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
-  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.55, 0.85]);
+  // Chairman's directive: parallax must be extremely slow — frosted glass
+  // should never distract from OKBOND content. Travel reduced ~3.2×, scale
+  // change reduced ~3.2×, overlay drift halved.
+  const portraitY = useTransform(scrollYProgress, [0, 1], [0, 28]);
+  const portraitScale = useTransform(scrollYProgress, [0, 1], [1, 1.025]);
+  const overlayOpacity = useTransform(scrollYProgress, [0, 1], [0.55, 0.7]);
 
   return (
     <header
@@ -188,7 +191,7 @@ function Hero() {
             style={{ lineHeight: 1.85, color: "rgba(201,194,169,0.92)" }}
           >
             Faisal Orakzai is a global industrialist and the visionary behind
-            the <span style={{ color: "#FCF6BA" }}>Orakzai Sovereign Grid (OSG)</span>.
+            the <span style={{ color: "#FCF6BA" }}>Orakzai Bond Grid (OKBOND)</span>.
             Integrating Institutional Finance with Autonomous Infrastructure,
             Faisal has engineered a borderless economic ecosystem built on the
             principles of digital sovereignty.
