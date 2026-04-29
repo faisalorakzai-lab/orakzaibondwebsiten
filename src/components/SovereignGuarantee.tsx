@@ -48,7 +48,7 @@ export default function SovereignGuarantee() {
           >
             <ScrollText className="w-3 h-3" style={{ color: GOLD_BRIGHT }} />
             <span className="text-[10.5px] font-mono tracking-[0.22em] uppercase" style={{ color: GOLD_BRIGHT }}>
-              The Sovereign Guarantee
+              The Orakzai Bond Guarantee
             </span>
           </div>
         </div>
@@ -208,7 +208,7 @@ export default function SovereignGuarantee() {
                 {[
                   { k: "EST.",        v: "Legacy" },
                   { k: "JURISDICTION", v: "Pakistan" },
-                  { k: "PLEDGE",      v: "Sovereign" },
+                  { k: "PLEDGE",      v: "OKBOND" },
                 ].map((m) => (
                   <div key={m.k}>
                     <p className="text-[9.5px] font-mono uppercase tracking-[0.18em]" style={{ color: GOLD + "88" }}>
