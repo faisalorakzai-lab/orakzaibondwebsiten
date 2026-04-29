@@ -976,3 +976,23 @@ body::before {
   0%, 100% { opacity: 0.85; }
   50%      { opacity: 0.55; }
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+   PRESENCE GLOW — "Founder's Aura" (activates when Chairman is logged in)
+   ─────────────────────────────────────────────────────────────────────────── */
+@keyframes presenceGlowBreath {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 1.00; transform: scale(1.018); }
+}
+@keyframes presenceGlowEdge {
+  0%, 100% { opacity: 0.65; }
+  50%      { opacity: 1.00; }
+}
+@keyframes presenceGlowTag {
+  0%, 100% { box-shadow: 0 0 18px rgba(191,149,63,0.40), inset 0 0 8px rgba(252,246,186,0.15); }
+  50%      { box-shadow: 0 0 28px rgba(252,246,186,0.55), inset 0 0 12px rgba(252,246,186,0.25); }
+}
+@keyframes presenceGlowDot {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50%      { opacity: 1.00; transform: scale(1.18); }
+}
