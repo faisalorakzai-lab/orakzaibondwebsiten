@@ -135,6 +135,22 @@ function PostCard({ post, index }: { post: Post; index: number }) {
   const [liked, setLiked] = useState(false);
   const [reposted, setReposted] = useState(false);
 
+  const handleDiscuss = () => {
+    try {
+      window.dispatchEvent(
+        new CustomEvent("marcus:discuss", {
+          detail: {
+            text: post.content,
+            author: post.author.name,
+            handle: post.author.handle,
+          },
+        })
+      );
+    } catch {
+      /* ignore */
+    }
+  };
+
   const accent = post.author.accent || "#eab308";
   const badge = post.badge ? toneColors(post.badge.tone as any) : null;
 
@@ -238,6 +254,30 @@ function PostCard({ post, index }: { post: Post; index: number }) {
               <span className="font-mono hidden sm:inline">{post.metrics.views}</span>
             </button>
           </div>
+
+          {/* Discuss with Marcus — premium gold-bordered CTA */}
+          <button
+            onClick={handleDiscuss}
+            className="mt-3 w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full border text-[11px] font-bold uppercase tracking-[0.2em] transition-all hover:-translate-y-0.5"
+            style={{
+              borderColor: "rgba(234,179,8,0.55)",
+              background: "linear-gradient(180deg, rgba(234,179,8,0.10), rgba(234,179,8,0.04))",
+              color: "#fde68a",
+              boxShadow: "0 0 0 1px rgba(234,179,8,0.10), 0 0 14px rgba(234,179,8,0.18)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow =
+                "0 0 0 1px rgba(234,179,8,0.45), 0 0 22px rgba(234,179,8,0.45)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow =
+                "0 0 0 1px rgba(234,179,8,0.10), 0 0 14px rgba(234,179,8,0.18)";
+            }}
+            aria-label="Discuss this dispatch with Marcus AI"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Discuss with Marcus</span>
+          </button>
         </div>
       </header>
     </motion.article>

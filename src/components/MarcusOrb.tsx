@@ -528,6 +528,43 @@ export default function MarcusOrb() {
     speak(greeting);
   }, [startRecognition, speak]);
 
+  // Discuss-with-Marcus: any component (e.g. OrakzaiSocialFeed) can dispatch
+  // window.dispatchEvent(new CustomEvent("marcus:discuss", { detail: { text, author, handle } }))
+  // to hand a piece of content to Marcus and open the orb in conversation mode.
+  useEffect(() => {
+    const handler = (ev: Event) => {
+      const detail = (ev as CustomEvent).detail || {};
+      const text = String(detail.text || "").trim();
+      if (!text) return;
+
+      const ctxLine =
+        "Context dispatch the user is asking about" +
+        (detail.author ? ` (from ${detail.author}${detail.handle ? " " + detail.handle : ""})` : "") +
+        `: "${text}"`;
+
+      // Prime the conversation history so the OpenAI brain sees the post on the next turn.
+      historyRef.current.push({ role: "user", content: ctxLine });
+      historyRef.current.push({
+        role: "assistant",
+        content: "I have reviewed this dispatch. What specific details can I clarify for you?",
+      });
+      if (historyRef.current.length > 16) {
+        historyRef.current = historyRef.current.slice(-16);
+      }
+
+      setOpen(true);
+      setPermissionAsked(true);
+      setMuted(false);
+      mutedRef.current = false;
+      wakeArmedRef.current = false;
+      setCaption("Reviewing the dispatch…");
+      try { startRecognition(); } catch { /* ignore */ }
+      speak("I have reviewed this dispatch. What specific details can I clarify for you?");
+    };
+    window.addEventListener("marcus:discuss", handler as EventListener);
+    return () => window.removeEventListener("marcus:discuss", handler as EventListener);
+  }, [speak, startRecognition]);
+
   useEffect(() => {
     return () => {
       try {
