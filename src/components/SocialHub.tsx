@@ -6,7 +6,7 @@ import {
   BadgeCheck, Shield, Crown,
   Loader2, X, Globe, Heart, UserPlus, UserCheck, MessageCircle,
   AlertCircle, Repeat2, Share2, TrendingUp, Trophy, Flame, CornerDownRight,
-  Sparkles
+  Sparkles, Pin
 } from "lucide-react";
 import SovereignGrid from "./SovereignGrid";
 import ImageLightbox from "./ImageLightbox";
@@ -466,6 +466,24 @@ export default function SocialHub() {
       .slice(0, 5);
   }, [posts]);
 
+  // ─── Chairman's Pinned Dispatch ─────────────────────────────────────
+  // The Founder's single newest post is always pinned to the top of the
+  // Sovereign Grid with a gold "PINNED DISPATCH" ribbon. Identified by
+  // post.id so it is removed from the chronological list to avoid a
+  // visible duplicate.
+  const pinnedFounderPost = useMemo(() => {
+    const founderPosts = posts.filter((p) => isFounder(p.address));
+    if (!founderPosts.length) return null;
+    return founderPosts.reduce((latest, p) =>
+      new Date(p.created_at).getTime() > new Date(latest.created_at).getTime() ? p : latest
+    );
+  }, [posts]);
+
+  const displayPosts = useMemo(() => {
+    if (!pinnedFounderPost) return posts;
+    return [pinnedFounderPost, ...posts.filter((p) => p.id !== pinnedFounderPost.id)];
+  }, [posts, pinnedFounderPost]);
+
   const topHolders = useMemo(() => {
     const seen = new Set<string>();
     const list: Profile[] = [];
@@ -646,11 +664,12 @@ export default function SocialHub() {
             </div>
           ) : (
             <div className="space-y-4">
-              {posts.map((post) => {
+              {displayPosts.map((post) => {
                 const username = post.profiles?.username || 'Investor';
                 const handle = toHandle(post.profiles?.username, post.address);
                 const isReposted = repostedIds.has(post.id);
                 const repostCount = repostCounts[post.id] || 0;
+                const isPinned = pinnedFounderPost?.id === post.id;
                 return (
                   <motion.article 
                     key={post.id}
@@ -658,8 +677,32 @@ export default function SocialHub() {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="rounded-xl p-5 bg-black/60 border border-primary/40 hover:border-primary/70 hover:shadow-[0_0_24px_rgba(234,179,8,0.15)] transition-all duration-300"
+                    className={`rounded-xl p-5 bg-black/60 border transition-all duration-300 ${
+                      isPinned
+                        ? "border-primary/70 shadow-[0_0_28px_rgba(234,179,8,0.22)] hover:shadow-[0_0_36px_rgba(234,179,8,0.32)]"
+                        : "border-primary/40 hover:border-primary/70 hover:shadow-[0_0_24px_rgba(234,179,8,0.15)]"
+                    }`}
                   >
+                    {/* ─── Chairman's Pinned Dispatch ribbon ─── */}
+                    {isPinned && (
+                      <div
+                        className="flex items-center justify-between -mx-5 -mt-5 mb-4 px-4 py-2 rounded-t-xl"
+                        style={{
+                          background:
+                            "linear-gradient(90deg, rgba(234,179,8,0.18) 0%, rgba(234,179,8,0.08) 50%, rgba(234,179,8,0.18) 100%)",
+                          borderBottom: "1px solid rgba(234,179,8,0.45)",
+                        }}
+                      >
+                        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: "#fde68a" }}>
+                          <Pin size={11} className="-rotate-45" />
+                          Pinned Dispatch
+                        </span>
+                        <span className="text-[9px] font-mono uppercase tracking-[0.18em]" style={{ color: "rgba(253,230,138,0.7)" }}>
+                          From the Founder
+                        </span>
+                      </div>
+                    )}
+
                     <div className="flex gap-3">
                       {/* Avatar */}
                       <Link href={`/profile/${post.profiles?.username || 'investor'}`}>
