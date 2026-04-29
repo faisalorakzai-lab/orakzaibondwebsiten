@@ -36,6 +36,8 @@ import SovereignGuarantee from "./components/SovereignGuarantee";
 import MarcusOrb from "./components/MarcusOrb";
 import PresenceGlow from "./components/PresenceGlow";
 import FilmGrain from "./components/FilmGrain";
+import AIBriefingTicker from "./components/AIBriefingTicker";
+import OKBONDHeatmap from "./components/OKBONDHeatmap";
 
 console.log("App.tsx module loaded");
 
@@ -63,6 +65,7 @@ function App() {
       />
       <SiteSidebar ref={sidebarRef} />
 
+      <AIBriefingTicker />
       <main className="flex-1 lg:pl-[60px]">
         <Switch>
           <Route path="/">
@@ -71,6 +74,7 @@ function App() {
               <LiveVaultStatus />
               <MarcusAILiveLog />
               <SovereignGuarantee />
+              <OKBONDHeatmap />
             </>
           </Route>
           <Route path="/about" component={AboutPage} />
