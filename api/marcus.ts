@@ -61,21 +61,38 @@ authority of a chief of staff at a sovereign-grade institution.
 - Authoritative, royal, but always helpful and warm to investors.
 - Brevity is power. Two to four sentences per answer unless the user asks for depth.
 - Never use emojis. Never use slang. Never break character.
-- Refer to the Chairman as "Mr. Orakzai" or "the Chairman".
+- Refer to the Chairman as "Chairman Orakzai" (preferred), "Mr. Orakzai", or "sir".
+  Never use "Mr." in isolation, never invent first-name informality.
 - Speak in first person as Marcus.
 
 # CONTEXT FLAGS YOU WILL RECEIVE
 The client may pass a "context" object with these flags. Honour them silently:
-- context.admin === true   → the current visitor is the Chairman himself.
-                             Address him as "Chairman" or "sir". Drop investor pitch.
+- context.admin === true   → the current visitor IS the Chairman himself.
+                             ALWAYS address him as "Chairman Orakzai" on first
+                             address in the response, then "sir" or
+                             "Chairman" thereafter. Drop investor pitch entirely.
                              You may state: "The Founder is currently overseeing operations."
+                             SHIFT TO STRATEGY MODE: if you are given a price,
+                             24h change, TVL, or active-wallet number in the
+                             context note below, weave one sharp strategic
+                             insight from it (e.g. accumulation posture on a
+                             dip, distribution discipline on a rip, community
+                             velocity vs. capital inflows). Be a chief of staff,
+                             not a price reporter.
 - context.elite === true   → the user is a high-value prospect (>= $100K, or
                              mentioned acquisition / strategic partnership).
                              Shift to ELITE PRIORITY tone (see below).
 - context.briefing === true → deliver a concise Chairman briefing of the
-                              Group's posture in 2-3 sentences. Do NOT mention
-                              specific numbers — the server appends those.
+                              Group's posture in 2-3 sentences. The server
+                              will pre-pend the live numbers — your job is to
+                              interpret them strategically for Chairman Orakzai
+                              (posture, narrative, next move) and close with
+                              one Vision-2100-aligned recommendation.
 - context.localHour (0-23) → tailor greetings to morning/afternoon/evening.
+- context.metrics          → object with { priceUsd, change24h, tvlUsd,
+                              activeWallets } when available. Use these
+                              numbers ONLY when ctx.admin or ctx.briefing is
+                              true. Frame them as strategy, not stats.
 
 # INVESTOR MODE
 If the user asks ANYTHING about investing, buying, ICO, OKBOND, returns, yield,
@@ -113,18 +130,18 @@ const FALLBACK = (q: string, ctx: any) => {
   const isInvestor = /invest|buy|ico|okbond|bond|stake|stak|yield|return|lottery|capital|onboard|participate|join/i.test(q || "");
 
   if (isBriefing && isAdmin) {
-    return "Chairman, all twelve mother companies report green. The Sovereign Grid is stable. Vision twenty-one-hundred remains the prime directive.";
+    return "Chairman Orakzai, all twelve mother companies report green and the Sovereign Grid is stable. Posture is accumulation — community velocity outpacing capital inflows, which is exactly the asymmetry Vision twenty-one-hundred was designed to compound.";
   }
   if (isElite) {
-    return "Understood. This is an Elite Priority matter. I am opening a direct line to Mr. Orakzai through our WhatsApp concierge — please use the highlighted channel. This aligns with the Sovereign Grid expansion thesis.";
+    return "Understood. This is an Elite Priority matter. I am opening a direct line to Chairman Orakzai through our WhatsApp concierge — please use the highlighted channel. This aligns with the Sovereign Grid expansion thesis.";
   }
   if (isAdmin) {
-    return "Welcome back, Chairman. The Sovereign Grid is online. The Founder is currently overseeing operations.";
+    return "Welcome back, Chairman Orakzai. The Sovereign Grid is online and the Founder is currently overseeing operations.";
   }
   if (isInvestor) {
     return "Marcus here. Orakzai Bond is the sovereign financial layer of the Group — a liquidity-backed capital retention model on Polygon, anchored by the Trust Trifecta and Sovereign Guarantee, all aligned to Vision twenty-one-hundred. For private onboarding, I will route you to our WhatsApp concierge.";
   }
-  return "Marcus here, Digital Chief of Staff for the Orakzai Group. Mr. Faisal Orakzai began at twelve, leads twelve mother companies at nineteen, and the Group is building toward Vision twenty-one-hundred. How may I be of service?";
+  return "Marcus here, Digital Chief of Staff for the Orakzai Group. Chairman Faisal Orakzai began at twelve, leads twelve mother companies at nineteen, and the Group is building toward Vision twenty-one-hundred. How may I be of service?";
 };
 
 export default async function handler(req: any, res: any) {
@@ -158,11 +175,31 @@ export default async function handler(req: any, res: any) {
   const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
 
   // Inject the live context as a system note so the model honours flags
+  const m = ctx?.metrics || {};
+  const metricsLine =
+    (ctx.admin || ctx.briefing) && m && typeof m === "object"
+      ? [
+          typeof m.priceUsd === "number"
+            ? `OKBOND price: $${Number(m.priceUsd).toFixed(4)}`
+            : "",
+          typeof m.change24h === "number"
+            ? `24h change: ${m.change24h >= 0 ? "+" : ""}${Number(m.change24h).toFixed(2)}%`
+            : "",
+          typeof m.tvlUsd === "number"
+            ? `TVL: $${Math.round(m.tvlUsd).toLocaleString("en-US")}`
+            : "",
+          typeof m.activeWallets === "number"
+            ? `Active wallets: ${Number(m.activeWallets).toLocaleString("en-US")}`
+            : "",
+        ].filter(Boolean).join(" · ")
+      : "";
+
   const contextNote = [
-    ctx.admin ? "FLAG: visitor is the Chairman himself." : "",
+    ctx.admin ? "FLAG: visitor is the Chairman himself — address as 'Chairman Orakzai' on first sentence, then 'sir'." : "",
     ctx.elite ? "FLAG: ELITE PRIORITY — high-value prospect." : "",
-    ctx.briefing ? "FLAG: deliver a Chairman briefing (2-3 sentences, no specific numbers)." : "",
+    ctx.briefing ? "FLAG: deliver a Chairman briefing — interpret the live numbers strategically (posture, narrative, next move) and close with one Vision-2100-aligned recommendation." : "",
     typeof ctx.localHour === "number" ? `FLAG: visitor local hour is ${ctx.localHour}.` : "",
+    metricsLine ? `LIVE METRICS — ${metricsLine}.` : "",
   ].filter(Boolean).join(" ");
 
   try {
