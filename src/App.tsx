@@ -31,7 +31,6 @@ import WhatsAppBot from "./components/WhatsAppBot";
 import LiveVaultStatus from "./components/LiveVaultStatus";
 import MarcusAILiveLog from "./components/MarcusAILiveLog";
 import SovereignGuarantee from "./components/SovereignGuarantee";
-import OrakzaiSocialFeed from "./components/OrakzaiSocialFeed";
 import MarcusOrb from "./components/MarcusOrb";
 
 console.log("App.tsx module loaded");
@@ -68,7 +67,6 @@ function App() {
               <LiveVaultStatus />
               <MarcusAILiveLog />
               <SovereignGuarantee />
-              <OrakzaiSocialFeed />
             </>
           </Route>
           <Route path="/about" component={AboutPage} />
