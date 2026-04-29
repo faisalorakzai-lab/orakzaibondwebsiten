@@ -38,7 +38,9 @@ import PresenceGlow from "./components/PresenceGlow";
 import FilmGrain from "./components/FilmGrain";
 import AIBriefingTicker from "./components/AIBriefingTicker";
 import OKBONDHeatmap from "./components/OKBONDHeatmap";
-import FounderSection from "./components/FounderSection";
+// FounderSection intentionally NOT imported on the homepage — the founder
+// block lives on its dedicated /founder page (FounderPage.tsx). Reverting
+// the unauthorized homepage embed per Chairman's directive.
 
 console.log("App.tsx module loaded");
 
@@ -75,7 +77,6 @@ function App() {
               <LiveVaultStatus />
               <MarcusAILiveLog />
               <SovereignGuarantee />
-              <FounderSection />
               <OKBONDHeatmap />
             </>
           </Route>

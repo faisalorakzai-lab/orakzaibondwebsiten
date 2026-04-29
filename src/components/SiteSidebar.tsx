@@ -72,24 +72,29 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
     toggleMobile: () => setMobileOpen(p => !p),
   }));
 
+  // Active-section indicator. Only NAV_ITEMS whose href is a same-page hash
+  // (e.g. "/#hero") need scroll-based activation; route hrefs are activated
+  // by `location === item.href` in the render below. Currently NAV_ITEMS has
+  // no hash-prefixed entries, so this effect is a defensive no-op — kept
+  // here so future hash-anchor nav items light up automatically.
   useEffect(() => {
     if (location !== "/") return;
-    
-    const sections = NAV_ITEMS.filter(n => n.href.startsWith("/#") || n.href === "/").map(n => n.id);
-    const observers: IntersectionObserver[] = [];
+    const sections = NAV_ITEMS
+      .filter(n => n.href.startsWith("/#"))
+      .map(n => ({ id: n.id, anchor: n.href.substring(2) }));
+    if (sections.length === 0) return;
 
-    sections.forEach(id => {
-      const el = id === "hero" ? document.getElementById("root") || document.body : document.getElementById(id);
+    const observers: IntersectionObserver[] = [];
+    sections.forEach(({ id, anchor }) => {
+      const el = document.getElementById(anchor);
       if (!el) return;
       const obs = new IntersectionObserver(
         ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
         { threshold: 0.25, rootMargin: "-60px 0px -30% 0px" }
       );
-      const target = id === "hero" ? document.querySelector("section, [data-section='hero']") || el : el;
-      obs.observe(target);
+      obs.observe(el);
       observers.push(obs);
     });
-
     return () => observers.forEach(o => o.disconnect());
   }, [location]);
 
@@ -122,7 +127,14 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
   const W_COLLAPSED = 60;
   const W_EXPANDED  = 220;
 
-  const SidebarContent = ({ mobile = false }: { mobile?: boolean }) => (
+  // IMPORTANT: keep this as a plain function (not a React component) and
+  // INVOKE it via `{renderSidebarContent({mobile: false})}` below. If we
+  // render it as `<SidebarContent />` instead, every parent re-render
+  // (location change, expand toggle, address update, etc.) creates a NEW
+  // function reference, which forces React to unmount and remount the
+  // entire sidebar subtree — that's what was producing the visible blink
+  // and the click-induced crash.
+  const renderSidebarContent = ({ mobile = false }: { mobile?: boolean }) => (
     <div className="flex flex-col h-full">
       <div className={`flex items-center ${expanded || mobile ? "justify-between px-4" : "justify-center px-2"} py-4 border-b border-border/40`}>
         {(expanded || mobile) && (
@@ -288,7 +300,7 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
         className="hidden lg:flex flex-col fixed left-0 top-20 bottom-0 z-40 glass-dark border-r border-border/40 overflow-hidden"
         style={{ width: expanded ? W_EXPANDED : W_COLLAPSED }}
       >
-        <SidebarContent />
+        {renderSidebarContent({ mobile: false })}
       </motion.aside>
 
       <AnimatePresence>
@@ -304,7 +316,7 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
               className="lg:hidden fixed left-0 top-0 bottom-0 z-50 w-[260px] glass-dark border-r border-border/40 shadow-[4px_0_40px_rgba(0,0,0,0.5)]"
             >
-              <SidebarContent mobile />
+              {renderSidebarContent({ mobile: true })}
             </motion.aside>
           </>
         )}

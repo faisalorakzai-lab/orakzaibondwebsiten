@@ -44,20 +44,28 @@ const env = (k: string): string | undefined =>
 
 const OPENAI_MODEL = env("OPENAI_MODEL") || "gpt-4o-mini";
 const ANTHROPIC_MODEL = env("ANTHROPIC_MODEL") || "claude-3-5-haiku-latest";
-const GEMINI_MODEL = env("GEMINI_MODEL") || "gemini-1.5-flash-latest";
+// Chairman directive: Marcus runs on Gemini 2.0 Flash.
+const GEMINI_MODEL = env("GEMINI_MODEL") || "gemini-2.0-flash";
 
-// Latency budget per Chairman directive: total reply must stay <5s.
-// Gemini gets the primary slot. If Gemini fails fast, the optional
-// fallbacks share the remaining budget so worst-case is ~4.7s.
-const GEMINI_TIMEOUT_MS = 3500;
-const FALLBACK_TIMEOUT_MS = 1200;
+// Latency budgets. Short replies (1–3 sentences) MUST stay snappy so the
+// orb feels alive. Long-form executive briefings (~700 words ≈ 90s of TTS)
+// are allowed up to 25s of generation time — well under the Vercel
+// function timeout (300s, see vercel.json defaultResourceConfig). Without
+// this split, briefings were being aborted mid-sentence on the old 3.5s
+// cap and the orb stopped speaking abruptly.
+const GEMINI_TIMEOUT_SHORT_MS = 3500;
+const GEMINI_TIMEOUT_LONG_MS  = 25000;
+const FALLBACK_TIMEOUT_SHORT_MS = 1200;
+const FALLBACK_TIMEOUT_LONG_MS  = 12000;
 
 // Reply length budgets. The MarcusOrb chunked TTS queue can read 1+ minute
 // of speech reliably (sentence chunks + 8s resume() keepalive), so we lift
 // the default short cap to ~400 tokens (~300 words ≈ 90s of speech) and
-// let dispatch-style longForm replies use ~900 tokens (~700 words).
+// let dispatch-style longForm replies use ~1600 tokens (~1200 words) so a
+// full morning briefing actually completes instead of being clipped at the
+// previous 900-token ceiling.
 const MAX_TOKENS_SHORT = 400;
-const MAX_TOKENS_LONG = 900;
+const MAX_TOKENS_LONG  = 1600;
 
 // ─── Language detection ────────────────────────────────────────────────
 // Arabic block U+0600–U+06FF covers Urdu and Pashto. Pashto-specific
@@ -120,11 +128,11 @@ function systemPrompt(args: {
 }
 
 // ─── Provider 1: OpenAI ────────────────────────────────────────────────
-async function callOpenAI(messages: Msg[], maxTokens: number): Promise<string> {
+async function callOpenAI(messages: Msg[], maxTokens: number, timeoutMs: number): Promise<string> {
   const apiKey = env("OPENAI_API_KEY");
   if (!apiKey) throw new Error("openai_no_key");
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), FALLBACK_TIMEOUT_MS);
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
     const r = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -154,11 +162,11 @@ async function callOpenAI(messages: Msg[], maxTokens: number): Promise<string> {
 }
 
 // ─── Provider 2: Anthropic Claude ──────────────────────────────────────
-async function callAnthropic(messages: Msg[], maxTokens: number): Promise<string> {
+async function callAnthropic(messages: Msg[], maxTokens: number, timeoutMs: number): Promise<string> {
   const apiKey = env("ANTHROPIC_API_KEY");
   if (!apiKey) throw new Error("anthropic_no_key");
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), FALLBACK_TIMEOUT_MS);
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
     // Anthropic wants `system` separate from messages.
     const sys = messages.find((m) => m.role === "system")?.content || "";
@@ -200,11 +208,11 @@ async function callAnthropic(messages: Msg[], maxTokens: number): Promise<string
 }
 
 // ─── Provider 3: Google Gemini ─────────────────────────────────────────
-async function callGemini(messages: Msg[], maxTokens: number): Promise<string> {
+async function callGemini(messages: Msg[], maxTokens: number, timeoutMs: number): Promise<string> {
   const apiKey = env("GEMINI_API_KEY");
   if (!apiKey) throw new Error("gemini_no_key");
   const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), GEMINI_TIMEOUT_MS);
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
     const sys = messages.find((m) => m.role === "system")?.content || "";
     const turns = messages
@@ -232,11 +240,22 @@ async function callGemini(messages: Msg[], maxTokens: number): Promise<string> {
       throw new Error(`gemini ${r.status}: ${t.slice(0, 160)}`);
     }
     const data: any = await r.json();
-    const reply = (data?.candidates?.[0]?.content?.parts || [])
+    const cand = data?.candidates?.[0];
+    const reply = (cand?.content?.parts || [])
       .map((p: any) => p?.text || "")
       .join("")
       .trim();
-    if (!reply) throw new Error("gemini empty");
+    if (!reply) {
+      // Surface the real reason — e.g. SAFETY block or RECITATION — instead
+      // of a generic "empty" so retries / fallbacks have a better chance.
+      const finish = cand?.finishReason || "no_candidate";
+      throw new Error(`gemini empty (finishReason=${finish})`);
+    }
+    // If Gemini hit MAX_TOKENS we still return what we got (better a long
+    // partial than nothing) but log it so we can size the cap up later.
+    if (cand?.finishReason === "MAX_TOKENS") {
+      console.warn("[marcus] gemini hit MAX_TOKENS at", maxTokens, "tokens");
+    }
     return reply;
   } finally {
     clearTimeout(timer);
@@ -306,21 +325,30 @@ function orakzaiXReply(message: string, lang: Lang, admin: boolean): string {
 async function brain(
   messages: Msg[],
   maxTokens: number,
+  longForm: boolean,
 ): Promise<{ reply: string; via: string }> {
+  const geminiTimeout   = longForm ? GEMINI_TIMEOUT_LONG_MS   : GEMINI_TIMEOUT_SHORT_MS;
+  const fallbackTimeout = longForm ? FALLBACK_TIMEOUT_LONG_MS : FALLBACK_TIMEOUT_SHORT_MS;
+
   // Primary: Gemini.
   if (env("GEMINI_API_KEY")) {
     try {
-      const reply = await callGemini(messages, maxTokens);
+      const reply = await callGemini(messages, maxTokens, geminiTimeout);
       return { reply, via: "gemini" };
-    } catch {
+    } catch (err) {
+      console.warn("[marcus] gemini failed, trying fallbacks:", (err as Error)?.message);
       // fall through to optional fallbacks
     }
   }
 
   // Optional fallbacks — only invoked if their key is set.
   const fallbacks: Array<{ name: string; run: () => Promise<string> }> = [];
-  if (env("OPENAI_API_KEY")) fallbacks.push({ name: "openai", run: () => callOpenAI(messages, maxTokens) });
-  if (env("ANTHROPIC_API_KEY")) fallbacks.push({ name: "anthropic", run: () => callAnthropic(messages, maxTokens) });
+  if (env("OPENAI_API_KEY")) {
+    fallbacks.push({ name: "openai", run: () => callOpenAI(messages, maxTokens, fallbackTimeout) });
+  }
+  if (env("ANTHROPIC_API_KEY")) {
+    fallbacks.push({ name: "anthropic", run: () => callAnthropic(messages, maxTokens, fallbackTimeout) });
+  }
 
   if (fallbacks.length > 0) {
     const tagged = fallbacks.map(({ name, run }) =>
@@ -399,7 +427,7 @@ export default async function handler(req: Request): Promise<Response> {
 
   // 1) Try the commercial brains (Gemini → optional fallbacks).
   try {
-    const { reply, via } = await brain(messages, maxTokens);
+    const { reply, via } = await brain(messages, maxTokens, longForm);
     return jsonResponse({ reply, lang, via });
   } catch {
     // 2) Fall through to OrakzaiX. Marcus never says "I cannot process this".
