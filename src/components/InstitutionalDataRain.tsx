@@ -23,7 +23,7 @@ const GLYPHS = [
   "USD/CHF", "EUR/JPY", "GBP/USD", "XAU/USD", "BTC/USD", "OKBOND/USD",
   "POL", "ETH", "USDC", "ISO 9362", "SWIFT", "ISIN",
   // OKBOND specific
-  "OKBOND", "VAULT", "TVL Δ", "ORAKZAI", "VISION 2100", "SOVEREIGN",
+  "OKBOND", "VAULT", "TVL Δ", "ORAKZAI", "VISION 2100", "OBG",
   // institutional
   "T+1", "L1", "L2", "ZK", "TRADE-EX", "BIS", "SETTLE",
 ];
