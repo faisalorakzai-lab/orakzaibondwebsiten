@@ -10,7 +10,7 @@ const FALLBACK_GREETING_INVESTOR =
   "Marcus here, Digital Chief of Staff for the Orakzai Group. Founded by Mr. Faisal Orakzai — building since the age of twelve, now nineteen, leading twelve mother companies toward Vision twenty-one-hundred. How may I be of service?";
 
 const FALLBACK_GREETING_CHAIRMAN =
-  "Welcome back, Chairman. The Sovereign Grid is online and the Group is steady. The Founder is currently overseeing operations.";
+  "Welcome back, Chairman. The OKBOND Grid is online and the Orakzai Group is steady. The Founder is currently overseeing operations.";
 
 const INVESTOR_FALLBACK =
   "Orakzai Bond is the sovereign financial layer of the Group — a liquidity-backed capital retention model on Polygon, anchored by the Trust Trifecta and the Sovereign Guarantee, all aligned to the Vision twenty-one-hundred horizon. For private onboarding with the team, I am routing you to our WhatsApp concierge.";
@@ -362,7 +362,7 @@ export default function MarcusOrb() {
       const tvl = b?.tvl;
       const tvlLine =
         tvl && Number.isFinite(tvl.usd)
-          ? `Total value locked across the Sovereign Grid sits at ${Math.round(
+          ? `Total value locked across the OKBOND Grid sits at ${Math.round(
               tvl.usd
             ).toLocaleString()} dollars.`
           : "Treasury telemetry is consolidating.";
@@ -391,11 +391,11 @@ export default function MarcusOrb() {
         feedLine = ` Latest from the community feed. ${trimmed}`;
       }
 
-      const briefing = `Chairman briefing. ${priceLine} ${tvlLine} ${walletLine}${feedLine} The Sovereign Grid stands online and the Founder is overseeing operations.`;
+      const briefing = `Chairman briefing. ${priceLine} ${tvlLine} ${walletLine}${feedLine} The OKBOND Grid stands online and the Founder is overseeing operations.`;
       speak(briefing);
     } catch {
       speak(
-        "Chairman briefing partial. The Sovereign Grid is online. The Founder is currently overseeing operations."
+        "Chairman briefing partial. The OKBOND Grid is online. The Founder is currently overseeing operations."
       );
     }
   }, [speak]);
@@ -576,7 +576,7 @@ export default function MarcusOrb() {
     }
     const greeting = `${timeAwareSalutation(adminRef.current)} ${
       adminRef.current
-        ? "The Sovereign Grid is online. Say, Marcus briefing, for the operational update."
+        ? "The OKBOND Grid is online. Say, Marcus briefing, for the operational update."
         : "I am Marcus, Digital Chief of Staff to Mr. Faisal Orakzai. The Group spans twelve mother companies, on a hundred-year horizon to Vision twenty-one-hundred. How may I be of service?"
     }`;
     speak(greeting);

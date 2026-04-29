@@ -103,7 +103,7 @@ export default function MarcusAILiveLog() {
                style={{ background: GOLD + "10", border: `1px solid ${GOLD}55` }}>
             <Cpu className="w-3 h-3" style={{ color: GOLD_BRIGHT }} />
             <span className="text-[10.5px] font-mono tracking-[0.2em] uppercase" style={{ color: GOLD_BRIGHT }}>
-              Marcus AI · Sovereign Intelligence Layer
+              Marcus AI · OKBOND Intelligence Layer
             </span>
           </div>
           <h2

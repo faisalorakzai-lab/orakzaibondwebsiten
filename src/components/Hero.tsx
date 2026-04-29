@@ -16,7 +16,7 @@ interface HeroProps {
 
 const SLOGANS = [
   "Beyond Borders. Beyond Limits.",
-  "The Sovereign Currency of Power.",
+  "OKBOND — The Currency of Power.",
   "One Ecosystem. Infinite Potential.",
 ];
 

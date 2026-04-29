@@ -30,7 +30,7 @@ export default function LotteryPage() {
             >
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest">
                 <Trophy className="w-3.5 h-3.5" />
-                Sovereign Smart Lottery
+                OKBOND Smart Lottery
               </div>
               <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
                 Win Big with <span className="text-primary">Zero Risk</span>

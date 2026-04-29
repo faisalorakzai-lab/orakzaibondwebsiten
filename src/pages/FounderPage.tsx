@@ -161,7 +161,7 @@ function Hero() {
               The Architect of
             </span>
             <span style={goldTextStyle()} className="mt-1 block italic">
-              Sovereign Futures
+              Orakzai Bond Futures
             </span>
           </h1>
 
@@ -196,7 +196,7 @@ function Hero() {
 
           <div className="mt-10 flex flex-wrap items-center gap-5">
             <GoldButton href="/roadmap" testId="button-roadmap-hero">
-              View the Sovereign Roadmap
+              View the OKBOND Roadmap
               <ArrowRight className="ml-2 h-4 w-4" />
             </GoldButton>
             <a
@@ -672,7 +672,7 @@ function PillarsSection() {
           className="mx-auto mt-5 max-w-2xl text-sm md:text-base"
           style={{ lineHeight: 1.7, color: "rgba(201,194,169,0.7)" }}
         >
-          Three sovereign systems engineered to operate as one borderless
+          Three Orakzai Bond systems engineered to operate as one borderless
           economic engine.
         </p>
       </header>
@@ -832,7 +832,7 @@ function ClosingSection() {
 
         <div className="mt-14">
           <GoldButton href="/roadmap" testId="button-roadmap-cta" large>
-            View the Sovereign Roadmap
+            View the OKBOND Roadmap
             <ArrowRight className="ml-2.5 h-5 w-5" />
           </GoldButton>
         </div>
@@ -870,7 +870,7 @@ function PageFooter() {
           <span className="mx-2" style={{ color: "#8a6a1c" }}>
             ·
           </span>{" "}
-          Sovereign by Design
+          Powered by OKBOND
         </p>
         <p
           className="text-[10px] uppercase"

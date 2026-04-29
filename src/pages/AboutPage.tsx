@@ -509,7 +509,7 @@ export default function AboutPage() {
         <section className="px-4 pb-16">
           <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { value: "Global Sovereign",   label: "Infrastructure" },
+              { value: "Powered by OKBOND",  label: "Infrastructure" },
               { value: "10M",    label: "Total Supply" },
               { value: "$0.15",  label: "ICO Phase 1 Price" },
               { value: "567%",   label: "Target ROI" },
