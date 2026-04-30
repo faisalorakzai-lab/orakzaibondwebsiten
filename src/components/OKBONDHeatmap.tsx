@@ -15,6 +15,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const GOLD = "#D4AF37";
 
@@ -52,6 +53,7 @@ const STAT_ROWS = [
 export default function OKBONDHeatmap() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const { t } = useLanguage();
 
   return (
     <section
@@ -105,14 +107,13 @@ export default function OKBONDHeatmap() {
               letterSpacing: "0.01em",
             }}
           >
-            Orakzai Bond{" "}
-            <span style={{ color: GOLD }}>World Presence</span>
+            {t("map.title")}
           </h2>
           <p
             className="text-xs mt-2 max-w-sm mx-auto"
             style={{ color: "#555", letterSpacing: "0.04em" }}
           >
-            $OKBOND holders across 18 active regions · Polygon Mainnet
+            {t("map.subtitle")}
           </p>
         </motion.div>
       </div>

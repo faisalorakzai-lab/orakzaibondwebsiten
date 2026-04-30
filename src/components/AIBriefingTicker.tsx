@@ -52,6 +52,9 @@ function getRandomFallback() {
 }
 
 // ── Live clock — UTC ──────────────────────────────────────────────────────
+// Hidden below the `md` breakpoint so the briefing has room to breathe on
+// phones. The chairman's directive: briefing text is the priority, not the
+// chrome around it.
 function UtcClock() {
   const [t, setT] = useState(() => new Date());
   useEffect(() => {
@@ -59,7 +62,7 @@ function UtcClock() {
     return () => clearInterval(id);
   }, []);
   return (
-    <span className="font-mono tabular-nums" style={{ color: GOLD_DIM, fontSize: "10px" }}>
+    <span className="font-mono tabular-nums hidden md:inline" style={{ color: GOLD_DIM, fontSize: "10px" }}>
       {t.toUTCString().replace("GMT", "UTC").slice(0, 25)}
     </span>
   );
@@ -129,14 +132,16 @@ export default function AIBriefingTicker() {
         backdropFilter: "blur(0px)",
       }}
     >
-      {/* ── Left badge — "MARCUS BRIEFING" ──────────────────────── */}
+      {/* ── Left badge — "MARCUS BRIEFING" ────────────────────────
+          On mobile we collapse to a tiny pulsing gold dot + "M" so the
+          briefing line gets the full screen width. On md+ we restore the
+          full label and the comfortable 160px gutter. */}
       <div className="absolute left-0 top-0 bottom-0 z-20 flex items-center pointer-events-none">
         <div
-          className="flex items-center gap-2 px-4 h-full"
+          className="flex items-center gap-1.5 md:gap-2 px-2 md:px-4 h-full briefing-badge-left"
           style={{
             background: `linear-gradient(to right, #050505 70%, transparent)`,
             borderRight: `1px solid ${GOLD}20`,
-            minWidth: "160px",
           }}
         >
           {/* Pulsing indicator */}
@@ -151,19 +156,20 @@ export default function AIBriefingTicker() {
             />
           </span>
           <span
-            className="text-[9px] font-bold uppercase tracking-[0.22em] whitespace-nowrap"
+            className="text-[7px] md:text-[9px] font-bold uppercase tracking-[0.18em] md:tracking-[0.22em] whitespace-nowrap"
             style={{
               color: GOLD,
               fontFamily: "'Space Grotesk', sans-serif",
             }}
           >
-            Marcus · Briefing
+            <span className="md:hidden">Marcus</span>
+            <span className="hidden md:inline">Marcus · Briefing</span>
           </span>
         </div>
       </div>
 
-      {/* ── Right badge — UTC clock ───────────────────────────────── */}
-      <div className="absolute right-0 top-0 bottom-0 z-20 flex items-center pointer-events-none">
+      {/* ── Right badge — UTC clock (desktop only) ────────────────── */}
+      <div className="absolute right-0 top-0 bottom-0 z-20 hidden md:flex items-center pointer-events-none">
         <div
           className="flex items-center gap-2 px-4 h-full"
           style={{
@@ -180,10 +186,10 @@ export default function AIBriefingTicker() {
       {/* ── Scrolling content ─────────────────────────────────────── */}
       <div
         ref={containerRef}
-        className="overflow-hidden"
-        style={{ marginLeft: "160px", marginRight: "190px" }}
+        className="overflow-hidden ticker-content-wrap"
+        style={{ overflow: "hidden" }}
       >
-        <div className="py-2.5" style={{ whiteSpace: "nowrap", overflow: "hidden" }}>
+        <div className="py-2 md:py-2.5" style={{ whiteSpace: "nowrap", overflow: "hidden" }}>
           {loading ? (
             <span
               className="text-[10px] font-mono uppercase tracking-[0.15em] animate-pulse"
@@ -193,7 +199,7 @@ export default function AIBriefingTicker() {
             </span>
           ) : (
             <motion.div
-              className="inline-flex items-center gap-16"
+              className="inline-flex items-center gap-10 md:gap-16"
               animate={{ x: ["100%", "-100%"] }}
               transition={{
                 duration: tickerDuration,
@@ -207,7 +213,7 @@ export default function AIBriefingTicker() {
               {[0, 1, 2].map((rep) => (
                 <span
                   key={rep}
-                  className="text-[11px] tracking-[0.06em] whitespace-nowrap"
+                  className="text-[12px] md:text-[11px] tracking-[0.04em] md:tracking-[0.06em] whitespace-nowrap"
                   style={{
                     color: GOLD_BRIGHT,
                     fontFamily: "'Space Grotesk', 'Inter', sans-serif",
@@ -216,7 +222,7 @@ export default function AIBriefingTicker() {
                 >
                   {briefing}
                   <span
-                    className="mx-10 inline-block"
+                    className="mx-6 md:mx-10 inline-block"
                     style={{ color: `${GOLD}40`, fontSize: "8px" }}
                   >
                     ◆
@@ -227,6 +233,15 @@ export default function AIBriefingTicker() {
           )}
         </div>
       </div>
+      {/* Reserve space for the badges so the scrolling text never slides
+          underneath them. We do this in CSS rather than inline style so the
+          gutter can vary across breakpoints. */}
+      <style>{`
+        .ticker-content-wrap { margin-left: 70px; margin-right: 14px; }
+        @media (min-width: 768px) {
+          .ticker-content-wrap { margin-left: 160px; margin-right: 200px; }
+        }
+      `}</style>
     </div>
   );
 }
