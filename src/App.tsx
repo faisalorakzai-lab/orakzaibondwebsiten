@@ -33,6 +33,7 @@ import WhatsAppBot from "./components/WhatsAppBot";
 import LiveVaultStatus from "./components/LiveVaultStatus";
 import MarcusAILiveLog from "./components/MarcusAILiveLog";
 import SovereignGuarantee from "./components/SovereignGuarantee";
+import OKBONDHeatmap from "./components/OKBONDHeatmap";
 import MarcusOrb from "./components/MarcusOrb";
 import PresenceGlow from "./components/PresenceGlow";
 import FilmGrain from "./components/FilmGrain";
@@ -87,6 +88,7 @@ function App() {
                 <LiveVaultStatus />
                 <MarcusAILiveLog />
                 <SovereignGuarantee />
+                <OKBONDHeatmap />
               </>
             </Route>
             <Route path="/about" component={AboutPage} />
