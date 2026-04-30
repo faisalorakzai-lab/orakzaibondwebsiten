@@ -39,6 +39,7 @@ import PresenceGlow from "./components/PresenceGlow";
 import FilmGrain from "./components/FilmGrain";
 import AIBriefingTicker from "./components/AIBriefingTicker";
 import OKBONDHeatmap from "./components/OKBONDHeatmap";
+import OKBONDCalculator from "./components/OKBONDCalculator";
 // FounderSection intentionally NOT imported on the homepage — the founder
 // block lives on its dedicated /founder page (FounderPage.tsx). Reverting
 // the unauthorized homepage embed per Chairman's directive.
@@ -89,12 +90,24 @@ function App() {
         <ErrorBoundary scope={`route:${location}`} resetKey={location}>
           <Switch>
             <Route path="/">
+              {/* Chairman directive (b74beb8 / b74b2b8): the SmartCalculator
+                  AND the Global Investor Map both belong on the homepage
+                  vertically stacked — Calculator first (so visitors can
+                  model returns immediately), Map second (so they can see
+                  the global footprint behind those numbers). On mobile both
+                  components stack at full width via their own
+                  responsive grids; no horizontal scroll. */}
               <>
                 <Hero onConnect={connect} address={address} />
                 <LiveVaultStatus />
                 <MarcusAILiveLog />
                 <SovereignGuarantee />
-                <OKBONDHeatmap />
+                <ErrorBoundary scope="OKBONDCalculator" silent>
+                  <OKBONDCalculator />
+                </ErrorBoundary>
+                <ErrorBoundary scope="OKBONDHeatmap" silent>
+                  <OKBONDHeatmap />
+                </ErrorBoundary>
               </>
             </Route>
             <Route path="/about" component={AboutPage} />

@@ -8,25 +8,30 @@ import {
   Crown, ExternalLink, Twitter, Send, Mail, Download, BookOpen, Rocket,
 } from "lucide-react";
 import ReserveWidget from "./ReserveWidget";
+import { useLanguage } from "@/i18n/LanguageContext";
 
+// labelKey points at a string in src/i18n/translations.ts. We keep `label`
+// as the English fallback so anything that reads from these constants
+// outside of React (e.g. the IntersectionObserver section detector) still
+// gets a readable identifier.
 const NAV_ITEMS = [
-  { id: "hero",       label: "Home",        icon: <Home       className="w-4 h-4" />, href: "/"           },
-  { id: "about",      label: "About",       icon: <Info       className="w-4 h-4" />, href: "/about"      },
-  { id: "token",      label: "Token",       icon: <Coins      className="w-4 h-4" />, href: "/token"      },
-  { id: "Lottery",    label: "Lottery",     icon: <Ticket     className="w-4 h-4" />, href: "/lottery"     },
-  { id: "tokenomics", label: "Tokenomics",  icon: <PieChart   className="w-4 h-4" />, href: "/tokenomics" },
-  { id: "roadmap",    label: "Roadmap",     icon: <Map        className="w-4 h-4" />, href: "/roadmap"    },
-  { id: "ico",        label: "ICO / Buy",   icon: <Rocket     className="w-4 h-4" />, href: "/ico"        },
-  { id: "community",  label: "Community",   icon: <Users      className="w-4 h-4" />, href: "/community"  },
+  { id: "hero",       label: "Home",        labelKey: "nav.home",       icon: <Home       className="w-4 h-4" />, href: "/"           },
+  { id: "about",      label: "About",       labelKey: "nav.about",      icon: <Info       className="w-4 h-4" />, href: "/about"      },
+  { id: "token",      label: "Token",       labelKey: "nav.token",      icon: <Coins      className="w-4 h-4" />, href: "/token"      },
+  { id: "Lottery",    label: "Lottery",     labelKey: "nav.lottery",    icon: <Ticket     className="w-4 h-4" />, href: "/lottery"     },
+  { id: "tokenomics", label: "Tokenomics",  labelKey: "nav.tokenomics", icon: <PieChart   className="w-4 h-4" />, href: "/tokenomics" },
+  { id: "roadmap",    label: "Roadmap",     labelKey: "nav.roadmap",    icon: <Map        className="w-4 h-4" />, href: "/roadmap"    },
+  { id: "ico",        label: "ICO / Buy",   labelKey: "nav.icoBuy",     icon: <Rocket     className="w-4 h-4" />, href: "/ico"        },
+  { id: "community",  label: "Community",   labelKey: "nav.community",  icon: <Users      className="w-4 h-4" />, href: "/community"  },
 ];
 
 const PAGE_LINKS = [
-  { label: "Profile", icon: <Users    className="w-4 h-4" />, href: "/community" },
-  { label: "System",  icon: <Cpu      className="w-4 h-4" />, href: "/system"  },
-  { label: "Winners", icon: <Trophy   className="w-4 h-4" />, href: "/winners" },
-  { label: "Rules",   icon: <FileText className="w-4 h-4" />, href: "/rules"   },
-  { label: "Founder", icon: <Crown    className="w-4 h-4" />, href: "/founder" },
-  { label: "Admin",   icon: <Shield   className="w-4 h-4" />, href: "/admin"   },
+  { label: "Profile", labelKey: "nav.profile",  icon: <Users    className="w-4 h-4" />, href: "/community" },
+  { label: "System",  labelKey: "nav.system",   icon: <Cpu      className="w-4 h-4" />, href: "/system"  },
+  { label: "Winners", labelKey: "nav.winners",  icon: <Trophy   className="w-4 h-4" />, href: "/winners" },
+  { label: "Rules",   labelKey: "nav.rules",    icon: <FileText className="w-4 h-4" />, href: "/rules"   },
+  { label: "Founder", labelKey: "nav.founder",  icon: <Crown    className="w-4 h-4" />, href: "/founder" },
+  { label: "Admin",   labelKey: "nav.admin",    icon: <Shield   className="w-4 h-4" />, href: "/admin"   },
 ];
 
 const DOC_LINKS = [
@@ -66,6 +71,7 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [location, setLocation] = useLocation();
   const { address } = useWallet();
+  const { t } = useLanguage();
   const OWNER_WALLET = "0x9b02e2edd6f58d626aaa91889708dbf39dfa8cd7";
 
   useImperativeHandle(ref, () => ({
@@ -154,7 +160,7 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
             <button
               key={item.id}
               onClick={() => navigateTo(item.href)}
-              title={!expanded && !mobile ? item.label : undefined}
+              title={!expanded && !mobile ? t(item.labelKey) : undefined}
               className={`w-full flex items-center gap-3 rounded-xl transition-all text-left
                 ${expanded || mobile ? "px-3 py-2.5" : "px-0 py-2.5 justify-center"}
                 ${active
@@ -169,7 +175,7 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
                   animate={{ opacity: 1, x: 0 }}
                   className="text-sm font-medium flex-1 leading-none"
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </motion.span>
               )}
               {(expanded || mobile) && active && (
@@ -193,7 +199,7 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
           <button
             key={link.label}
             onClick={() => navigateTo(link.href)}
-            title={!expanded && !mobile ? link.label : undefined}
+            title={!expanded && !mobile ? t(link.labelKey) : undefined}
             className={`w-full flex items-center gap-3 rounded-xl transition-all text-left
               ${expanded || mobile ? "px-3 py-2.5" : "px-0 py-2.5 justify-center"}
               ${location === link.href 
@@ -208,7 +214,7 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
                 animate={{ opacity: 1, x: 0 }}
                 className="text-sm font-medium flex-1"
               >
-                {link.label}
+                {t(link.labelKey)}
               </motion.span>
             )}
             {(expanded || mobile) && <ExternalLink className="w-3 h-3 opacity-30 flex-shrink-0" />}

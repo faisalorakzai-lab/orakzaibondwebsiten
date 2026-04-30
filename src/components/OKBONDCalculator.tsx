@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calculator, TrendingUp, Coins, Info, Users, ChevronDown, ChevronUp } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 // Fixed tokenomics constants
 const TOTAL_SUPPLY = 10_000_000;
@@ -23,6 +24,7 @@ interface OKBONDCalculatorProps {
 }
 
 export default function OKBONDCalculator({ adminAPY, adminPrice, adminStage }: OKBONDCalculatorProps) {
+  const { t } = useLanguage();
   const [amount, setAmount] = useState<string>("1000");
   const [duration, setDuration] = useState<number>(12);
   const [entryPrice, setEntryPrice] = useState<string>("0.60");
@@ -99,12 +101,10 @@ export default function OKBONDCalculator({ adminAPY, adminPrice, adminStage }: O
           </div>
           <h2 className="text-3xl md:text-4xl font-extrabold text-foreground mb-3"
               style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
-            $OKBOND Smart{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-200">Calculator</span>
+            {t("calc.title")}
           </h2>
           <p className="text-muted-foreground text-sm max-w-lg mx-auto">
-            Estimate your staking rewards from the {STAKING_POOL.toLocaleString()} OKBOND rewards pool (28% of total supply).
-            APY set by the Chairman — updated live.
+            {t("calc.subtitle")}
           </p>
 
           {/* Live stats strip */}

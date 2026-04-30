@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useLanguage } from "@/i18n/LanguageContext";
 const coinImage = "/okbond-logo.png";
 
 const socials = [
@@ -42,23 +43,24 @@ const socials = [
 ];
 
 const links = [
-  { label: "About",           href: "/about"     },
-  { label: "Token",           href: "/token"     },
-  { label: "ICO / Buy",       href: "/ico"       },
-  { label: "Lottery",         href: "/lottery"   },
-  { label: "Tokenomics",      href: "/tokenomics"},
-  { label: "Roadmap",         href: "/roadmap"   },
+  { labelKey: "nav.about",      label: "About",           href: "/about"     },
+  { labelKey: "nav.token",      label: "Token",           href: "/token"     },
+  { labelKey: "nav.icoBuy",     label: "ICO / Buy",       href: "/ico"       },
+  { labelKey: "nav.lottery",    label: "Lottery",         href: "/lottery"   },
+  { labelKey: "nav.tokenomics", label: "Tokenomics",      href: "/tokenomics"},
+  { labelKey: "nav.roadmap",    label: "Roadmap",         href: "/roadmap"   },
 ];
 
 const legalLinks = [
-  { label: "How to Buy",         href: "/guide"   },
-  { label: "Rules & Disclaimer", href: "/rules"   },
-  { label: "How It Works",       href: "/system"  },
-  { label: "Winners Hall",       href: "/winners" },
-  { label: "The Group",          href: "/founder" },
+  { labelKey: "nav.rules",   label: "How to Buy",         href: "/guide"   },
+  { labelKey: "nav.rules",   label: "Rules & Disclaimer", href: "/rules"   },
+  { labelKey: "nav.system",  label: "How It Works",       href: "/system"  },
+  { labelKey: "nav.winners", label: "Winners Hall",       href: "/winners" },
+  { labelKey: "nav.founder", label: "The Group",          href: "/founder" },
 ];
 
 export default function Footer() {
+  const { t } = useLanguage();
   return (
     <footer className="border-t border-border bg-card/50 pt-16 pb-8">
       <div className="container mx-auto px-4">
@@ -97,7 +99,7 @@ export default function Footer() {
                     href={link.href}
                     className="text-muted-foreground hover:text-primary transition-colors text-sm"
                   >
-                    {link.label}
+                    {t(link.labelKey)}
                   </a>
                 </li>
               ))}
@@ -119,7 +121,7 @@ export default function Footer() {
                     href={link.href}
                     className="text-muted-foreground hover:text-primary transition-colors text-sm"
                   >
-                    {link.label}
+                    {t(link.labelKey)}
                   </a>
                 </li>
               ))}
