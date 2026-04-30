@@ -6,17 +6,34 @@ import { useLocation } from "wouter";
 const GOLD = "#EAB308";
 const GOLD_DEEP = "#A16207";
 
+// Fallback greetings — em-dashes and other long-pause punctuation removed.
+// Chrome's SpeechSynthesis engine treats `—` (U+2014) as a hard break and
+// frequently fails to start the next utterance, which manifested as
+// "Marcus stops after 'Faisal Orakzai'". Commas keep the cadence audible
+// without triggering Chrome's queue-stall bug.
 const FALLBACK_GREETING_INVESTOR =
-  "Marcus here, Digital Chief of Staff for the Orakzai Group. Founded by Chairman Faisal Orakzai — building since the age of twelve, now nineteen, leading twelve mother companies toward Vision twenty-one-hundred. How may I be of service?";
+  "Marcus here, Digital Chief of Staff for the Orakzai Group, founded by Chairman Faisal Orakzai. Building since the age of twelve, now nineteen, he leads twelve mother companies toward Vision twenty-one-hundred. How may I be of service?";
 
 const FALLBACK_GREETING_CHAIRMAN =
-  "Chairman Orakzai. The Orakzai Bond Grid is online; the Group is steady. The Founder is overseeing operations — standing by for instruction.";
+  "Chairman Orakzai. The Orakzai Bond Grid is online, the Group is steady, and the Founder is overseeing operations. Standing by for instruction.";
 
 const INVESTOR_FALLBACK =
-  "Orakzai Bond is the institutional financial layer of the Group — a liquidity-backed capital retention model on Polygon, anchored by the Trust Trifecta and the Orakzai Bond Guarantee, all aligned to the Vision twenty-one-hundred horizon. For private onboarding with the team, I am routing you to our WhatsApp concierge.";
+  "Orakzai Bond is the institutional financial layer of the Group, a liquidity-backed capital retention model on Polygon, anchored by the Trust Trifecta and the Orakzai Bond Guarantee, all aligned to the Vision twenty-one-hundred horizon. For private onboarding with the team, I am routing you to our WhatsApp concierge.";
 
 const ELITE_FALLBACK =
-  "Understood. This is an Elite Priority matter. I am opening a direct line to Mr. Orakzai through our WhatsApp concierge — please use the highlighted channel to your right.";
+  "Understood. This is an Elite Priority matter. I am opening a direct line to Mr. Orakzai through our WhatsApp concierge. Please use the highlighted channel to your right.";
+
+// Sanitise text just before it goes to the TTS engine: em-dashes / en-dashes
+// become commas, ellipses become a single comma, double-spaces collapse.
+// The visible caption in the panel is unaffected — only the spoken stream.
+function speechSafe(text: string): string {
+  return text
+    .replace(/\u2014/g, ",")  // em-dash
+    .replace(/\u2013/g, ",")  // en-dash
+    .replace(/\u2026/g, ",")  // …
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
 
 const INVESTOR_RX =
   /\b(invest|buy|ico|okbond|bond|stake|stak|yield|return|lottery|capital|onboard|participate|join|price|tokenomic)\w*\b/i;
@@ -251,7 +268,7 @@ function createStreamSpeech(opts: {
   let spoken = 0;
 
   const enqueue = (raw: string) => {
-    const piece = raw.trim();
+    const piece = speechSafe(raw);
     if (!piece) return;
     // Sentences can still exceed 180 chars (no punctuation); fall back to
     // the proven sentence-splitter so Chrome cannot truncate.
@@ -339,7 +356,7 @@ function speakChunked(
   try { synth.cancel(); } catch { /* ignore */ }
   stopKeepAlive();
 
-  const chunks = splitForSpeech(text);
+  const chunks = splitForSpeech(speechSafe(text));
   if (!chunks.length) {
     opts.onAllDone?.();
     return null;
@@ -690,6 +707,20 @@ export default function MarcusOrb() {
         let accumulated = "";
         let firstChunk = true;
         let streamFailedSignal: string | null = null;
+        let sawDoneEvent = false;
+        // Inter-chunk watchdog. The first-byte timer above only protects
+        // against a stalled HANDSHAKE; once bytes are flowing, Chrome will
+        // happily wait forever if the upstream Edge function dies mid-
+        // stream. This second timer aborts the connection if more than 12s
+        // elapse between chunks so we can fall through to the proven non-
+        // stream brain instead of leaving Marcus mute mid-sentence.
+        let interChunkTimer: number | null = null;
+        const armInterChunkTimer = () => {
+          if (interChunkTimer != null) window.clearTimeout(interChunkTimer);
+          interChunkTimer = window.setTimeout(() => {
+            try { streamCtrl.abort(); } catch { /* noop */ }
+          }, 12000);
+        };
 
         for (;;) {
           const { value, done } = await reader.read();
@@ -698,6 +729,9 @@ export default function MarcusOrb() {
             // Stop the first-byte timeout the moment ANY bytes arrive — we
             // are now committed to the stream.
             window.clearTimeout(firstByteTimer);
+            armInterChunkTimer();
+          } else {
+            armInterChunkTimer();
           }
           sseBuf += decoder.decode(value, { stream: true });
           let idx;
@@ -739,6 +773,7 @@ export default function MarcusOrb() {
               }
             } else if (evt.type === "done") {
               // server has finished — flush remaining TTS and exit
+              sawDoneEvent = true;
             } else if (evt.type === "error") {
               streamFailedSignal = String(evt.message || "error");
             }
@@ -746,12 +781,21 @@ export default function MarcusOrb() {
         }
 
         window.clearTimeout(firstByteTimer);
+        if (interChunkTimer != null) window.clearTimeout(interChunkTimer);
 
-        if (streamFailedSignal || !accumulated) {
+        // Truncation guard: if the stream closed WITHOUT a `done` event AND
+        // delivered less than ~120 chars, treat that as a mid-flight cutoff
+        // (Vercel Edge cold-start, Gemini RPC reset, etc.) and fall through
+        // to the non-stream brain. Without this guard, a partial reply like
+        // "Marcus here, Digital Chief of Staff … Faisal Orakzai" would be
+        // accepted as a complete answer and Marcus would go silent for the
+        // rest of the briefing.
+        if (streamFailedSignal || !accumulated || (!sawDoneEvent && accumulated.length < 120)) {
           // Server reported a terminal error event OR closed without ever
-          // sending a chunk → fall through to the non-stream path.
+          // sending a chunk OR cut out mid-sentence → fall through to the
+          // non-stream path.
           speaker?.abort();
-          throw new Error(streamFailedSignal || "empty_stream");
+          throw new Error(streamFailedSignal || (!accumulated ? "empty_stream" : "truncated_stream"));
         }
 
         speaker?.finish();
@@ -1418,10 +1462,6 @@ export default function MarcusOrb() {
                 >
                   <motion.div
                     className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium tracking-wide"
-                    style={{
-                      color: "#fde68a",
-                      maxWidth: "100%",
-                    }}
                     animate={
                       isAnnouncing
                         ? {

@@ -146,45 +146,45 @@ export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps
         <div className="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
           {/* 1. Home */}
           <Link href="/">
-            <span className="hover:text-primary transition-colors cursor-pointer">Home</span>
+            <span className="hover:text-primary transition-colors cursor-pointer">{t("nav.home")}</span>
           </Link>
 
           {/* 2. Lottery */}
           <Link href="/lottery">
-            <span className="hover:text-primary transition-colors cursor-pointer font-semibold text-primary/80">Lottery</span>
+            <span className="hover:text-primary transition-colors cursor-pointer font-semibold text-primary/80">{t("nav.lottery")}</span>
           </Link>
 
           {/* 3. Token */}
           <Link href="/token">
-            <span className="hover:text-primary transition-colors cursor-pointer">Token</span>
+            <span className="hover:text-primary transition-colors cursor-pointer">{t("nav.token")}</span>
           </Link>
 
           {/* 3b. ICO */}
           <Link href="/ico">
             <span className="relative flex items-center gap-1.5 hover:text-primary transition-colors font-semibold text-primary cursor-pointer">
-              ICO
+              {t("nav.ico")}
               <span className="px-1.5 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[8px] font-bold uppercase tracking-widest leading-none animate-pulse">
-                Live
+                {t("nav.icoLive")}
               </span>
             </span>
           </Link>
 
           {/* 4. Stake — coming soon */}
           <span className="relative flex items-center gap-1.5 cursor-default select-none opacity-60">
-            Stake
+            {t("nav.stake")}
             <span className="px-1.5 py-0.5 rounded-md bg-primary/15 border border-primary/25 text-primary text-[8px] font-bold uppercase tracking-widest leading-none">
-              Soon
+              {t("nav.stakeSoon")}
             </span>
           </span>
 
           {/* 5. Tokenomics */}
           <Link href="/tokenomics">
-            <span className="hover:text-primary transition-colors cursor-pointer">Tokenomics</span>
+            <span className="hover:text-primary transition-colors cursor-pointer">{t("nav.tokenomics")}</span>
           </Link>
 
           {/* 6. About Us */}
           <Link href="/about">
-            <span className="hover:text-primary transition-colors cursor-pointer">About Us</span>
+            <span className="hover:text-primary transition-colors cursor-pointer">{t("nav.aboutUs")}</span>
           </Link>
         </div>
 
@@ -256,7 +256,7 @@ export default function Navbar({ address, onConnect, onMenuToggle }: NavbarProps
               onClick={onConnect}
               className="metallic-gold animate-shine-sweep text-primary-foreground font-bold rounded-full px-6 py-5 shadow-[0_0_20px_rgba(234,179,8,0.4)] transition-all hover:shadow-[0_0_35px_rgba(234,179,8,0.7)] hover:-translate-y-0.5"
             >
-              Connect Wallet
+              {t("nav.connect")}
             </Button>
           )}
         </div>
