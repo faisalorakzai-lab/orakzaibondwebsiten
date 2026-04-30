@@ -306,15 +306,47 @@ const SiteSidebar = forwardRef<SidebarHandle>((_, ref) => {
       <AnimatePresence>
         {mobileOpen && (
           <>
+            {/* Backdrop. Forced to a HIGHER z-index than the FilmGrain
+                overlay AND given its own stacking/isolation context so a
+                parent backdrop-blur or filter cannot eat the click target
+                or hide it visually. */}
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setMobileOpen(false)}
-              className="lg:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+              className="lg:hidden fixed inset-0 bg-black/65"
+              style={{
+                zIndex: 9998,
+                opacity: 1,
+                visibility: "visible",
+                isolation: "isolate",
+                transform: "translate3d(0,0,0)",
+                WebkitBackfaceVisibility: "hidden",
+              }}
             />
+            {/* DRAWER — forced visible per Chairman's directive 2026-04-30.
+                Earlier the drawer was rendering inside a React tree whose
+                ancestor had `filter: ...` (FilmGrain wrapper) and / or a
+                `backdrop-filter` chain that established a new stacking
+                context, sometimes hiding the drawer behind the grain on
+                lower-end Android devices. We now:
+                  - escape the parent stacking context with isolation
+                  - force opacity & visibility (immune to inherited fades)
+                  - promote to a GPU layer with translate3d for buttery
+                    slide-in on phones and to neutralise the "dead" feel
+                    the Chairman observed on his Samsung. */}
             <motion.aside
               initial={{ x: -280 }} animate={{ x: 0 }} exit={{ x: -280 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="lg:hidden fixed left-0 top-0 bottom-0 z-50 w-[260px] glass-dark border-r border-border/40 shadow-[4px_0_40px_rgba(0,0,0,0.5)]"
+              className="lg:hidden fixed left-0 top-0 bottom-0 w-[260px] glass-dark border-r border-border/40 shadow-[4px_0_40px_rgba(0,0,0,0.5)]"
+              style={{
+                zIndex: 9999,
+                opacity: 1,
+                visibility: "visible",
+                isolation: "isolate",
+                transform: "translate3d(0,0,0)",
+                WebkitBackfaceVisibility: "hidden",
+                willChange: "transform",
+              }}
             >
               {renderSidebarContent({ mobile: true })}
             </motion.aside>

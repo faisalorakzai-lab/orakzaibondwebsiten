@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Navbar from "./components/Navbar";
+import MobileNavbar from "./components/MobileNavbar";
+import { useIsDesktop } from "./hooks/useIsDesktop";
 import Hero from "./components/Hero";
 import SiteSidebar, { SidebarHandle } from "./components/SiteSidebar";
 import Footer from "./components/Footer";
@@ -52,6 +54,14 @@ function App() {
   // navigating away from a broken page automatically clears the error
   // state — no full page reload required.
   const [location] = useLocation();
+  // Per Chairman's directive 2026-04-30: the desktop Navbar must be
+  // UNMOUNTED — not just CSS-hidden — below 1024px CSS px. Tailwind's
+  // `hidden lg:flex` was failing inside Trust Wallet's in-app browser
+  // (and other Android webviews) which mis-report viewport width and
+  // therefore render BOTH the desktop nav links AND the mobile hamburger
+  // simultaneously, producing the "double-bar" bug. JS-measured branch
+  // below ensures exactly one of the two chromes is in the React tree.
+  const isDesktop = useIsDesktop();
 
   useEffect(() => {
     console.log("App component mounted");
@@ -67,11 +77,19 @@ function App() {
   return (
     <div className="min-h-screen w-full bg-background text-foreground flex flex-col overflow-x-hidden">
       <ErrorBoundary scope="Navbar" silent>
-        <Navbar
-          address={address}
-          onConnect={connect}
-          onMenuToggle={handleMenuToggle}
-        />
+        {isDesktop ? (
+          <Navbar
+            address={address}
+            onConnect={connect}
+            onMenuToggle={handleMenuToggle}
+          />
+        ) : (
+          <MobileNavbar
+            address={address}
+            onConnect={connect}
+            onMenuToggle={handleMenuToggle}
+          />
+        )}
       </ErrorBoundary>
       <ErrorBoundary scope="Sidebar" silent>
         <SiteSidebar ref={sidebarRef} />

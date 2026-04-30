@@ -642,7 +642,10 @@ export default function MarcusOrb() {
       // bytes are flowing, we let the long-form budget on the server side
       // (~25s for Gemini) carry the briefing to completion.
       const streamCtrl = new AbortController();
-      const firstByteTimer = window.setTimeout(() => streamCtrl.abort(), 4800);
+      // First-byte budget extended per Chairman's directive 2026-04-30 from
+      // 4.8s → 12s. The server now sends keep-alive comment frames every
+      // 10s so even a slow Gemini cold-start no longer trips this watchdog.
+      const firstByteTimer = window.setTimeout(() => streamCtrl.abort(), 12_000);
 
       try {
         const res = await fetch("/api/marcus-stream", {
@@ -771,7 +774,10 @@ export default function MarcusOrb() {
 
       // ── Path B: non-stream fallback (existing /api/marcus contract). ─
       const ctrl = new AbortController();
-      const ttimer = window.setTimeout(() => ctrl.abort(), 4800);
+      // Non-stream fallback — bumped 4.8s → 25s to align with server-side
+      // STREAM_TIMEOUT_SHORT_MS so a long Gemini answer can finish even if
+      // the streaming path bailed and we're now on the second attempt.
+      const ttimer = window.setTimeout(() => ctrl.abort(), 25_000);
       try {
         const res = await fetch("/api/marcus", {
           method: "POST",

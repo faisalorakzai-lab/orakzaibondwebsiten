@@ -42,8 +42,14 @@ const GEMINI_MODEL = env("GEMINI_MODEL") || "gemini-2.0-flash";
 
 // Long-form briefings get the same generous budgets as the non-stream
 // endpoint — see api/marcus.ts for the rationale.
-const STREAM_TIMEOUT_SHORT_MS = 8000;
-const STREAM_TIMEOUT_LONG_MS  = 35000;
+// Per Chairman's directive 2026-04-30: bumped from (8s / 35s) → (25s / 60s)
+// because the prior cutoff was killing legitimately long Marcus answers
+// on slower regional networks. A keep-alive comment frame is emitted every
+// 10s so intermediate proxies (Vercel edge, Cloudflare, in-app webview
+// idle-killers) never see the SSE socket as idle.
+const STREAM_TIMEOUT_SHORT_MS = 25_000;
+const STREAM_TIMEOUT_LONG_MS  = 60_000;
+const KEEPALIVE_INTERVAL_MS   = 10_000;
 const MAX_TOKENS_SHORT = 400;
 const MAX_TOKENS_LONG  = 1600;
 
@@ -211,6 +217,18 @@ export default async function handler(req: Request): Promise<Response> {
       const safeEnqueue = (obj: unknown) => {
         try { controller.enqueue(sseEvent(obj)); } catch { /* client disconnected */ }
       };
+      // SSE comment frames begin with ":" and are explicitly ignored by
+      // the EventSource spec / our own parser — perfect heartbeat shape.
+      const KEEPALIVE_BYTES = new TextEncoder().encode(": keepalive\n\n");
+      const safeKeepalive = () => {
+        try { controller.enqueue(KEEPALIVE_BYTES); } catch { /* disconnected */ }
+      };
+      const keepaliveTimer = setInterval(safeKeepalive, KEEPALIVE_INTERVAL_MS);
+      // Make sure we always clear the heartbeat when the stream closes.
+      const finishStream = (closer: () => void) => {
+        clearInterval(keepaliveTimer);
+        try { closer(); } catch { /* noop */ }
+      };
 
       // EARLY meta — emitted BEFORE the first content chunk so the client
       // can rebind its TTS voice/lang to match the response language. The
@@ -220,6 +238,10 @@ export default async function handler(req: Request): Promise<Response> {
       // sentence-by-sentence speaker will gracefully cope because the voice
       // for ur/ps/en all share the same TTS synthesis surface.
       safeEnqueue({ type: "meta", lang, longForm });
+      // Send one keep-alive immediately so middleboxes confirm the socket
+      // is hot before the first real token (which can take 200–600 ms on
+      // a Gemini cold isolate).
+      safeKeepalive();
 
       // ── Try Gemini streamGenerateContent ────────────────────────────
       const apiKey = env("GEMINI_API_KEY");
@@ -290,7 +312,7 @@ export default async function handler(req: Request): Promise<Response> {
             throw new Error(`gemini empty (finishReason=${finishReason || "none"})`);
           }
           safeEnqueue({ type: "done", lang, via: "gemini", finishReason });
-          controller.close();
+          finishStream(() => controller.close());
           return;
         } catch (err) {
           clearTimeout(timer);
@@ -312,7 +334,7 @@ export default async function handler(req: Request): Promise<Response> {
       } catch (err) {
         safeEnqueue({ type: "error", message: (err as Error)?.message || "fallback_failed" });
       }
-      controller.close();
+      finishStream(() => controller.close());
     },
   });
 
