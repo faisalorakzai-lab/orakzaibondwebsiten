@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+.env.local
+.env*.local
+.vercel
+*.local
+.DS_Store
+attached_assets/
+

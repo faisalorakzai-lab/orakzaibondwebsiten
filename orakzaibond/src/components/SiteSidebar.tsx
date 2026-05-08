@@ -1,0 +1,338 @@
+import { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useLocation } from "wouter";
+import { useWallet } from "@/hooks/useWallet";
+import {
+  ChevronRight, ChevronLeft, Home, Info, Coins, Ticket,
+  PieChart, Map, Cpu, Trophy, Users, Shield, FileText,
+  Crown, ExternalLink, Twitter, Send, Mail, Download, BookOpen, Rocket, Star, Lock,
+  BarChart3, Landmark, BookMarked,
+} from "lucide-react";
+import ReserveWidget from "./ReserveWidget";
+import { useLanguage } from "@/i18n/LanguageContext";
+
+const NAV_ITEMS = [
+  { id: "hero",       label: "Home",        labelKey: "nav.home",       icon: <Home       className="w-4 h-4" />, href: "/"           },
+  { id: "dashboard",  label: "Dashboard",   labelKey: "nav.dashboard",  icon: <BarChart3  className="w-4 h-4" />, href: "/dashboard"  },
+  { id: "about",      label: "About",       labelKey: "nav.about",      icon: <Info       className="w-4 h-4" />, href: "/about"      },
+  { id: "token",      label: "Token",       labelKey: "nav.token",      icon: <Coins      className="w-4 h-4" />, href: "/token"      },
+  { id: "staking",    label: "Staking",     labelKey: "nav.staking",    icon: <Lock       className="w-4 h-4" />, href: "/staking"    },
+  { id: "Lottery",    label: "Lottery",     labelKey: "nav.lottery",    icon: <Ticket     className="w-4 h-4" />, href: "/lottery"    },
+  { id: "tokenomics", label: "Tokenomics",  labelKey: "nav.tokenomics", icon: <PieChart   className="w-4 h-4" />, href: "/tokenomics" },
+  { id: "roadmap",    label: "Roadmap",     labelKey: "nav.roadmap",    icon: <Map        className="w-4 h-4" />, href: "/roadmap"    },
+  { id: "ico",        label: "ICO / Buy",   labelKey: "nav.icoBuy",     icon: <Rocket     className="w-4 h-4" />, href: "/ico"        },
+  { id: "community",  label: "Community",   labelKey: "nav.community",  icon: <Users      className="w-4 h-4" />, href: "/community"  },
+];
+
+const PAGE_LINKS = [
+  { label: "Vault",      labelKey: "nav.vault",      icon: <Landmark   className="w-4 h-4" />, href: "/vault"      },
+  { label: "Security",   labelKey: "nav.security",   icon: <Shield     className="w-4 h-4" />, href: "/security"   },
+  { label: "Registry",   labelKey: "nav.registry",   icon: <BookMarked className="w-4 h-4" />, href: "/registry"   },
+  { label: "Ambassador", labelKey: "nav.ambassador", icon: <Star       className="w-4 h-4" />, href: "/ambassador" },
+  { label: "Legal Vault", labelKey: "nav.legal",     icon: <Lock       className="w-4 h-4" />, href: "/legal"      },
+  { label: "System",     labelKey: "nav.system",     icon: <Cpu        className="w-4 h-4" />, href: "/system"     },
+  { label: "Winners",    labelKey: "nav.winners",    icon: <Trophy     className="w-4 h-4" />, href: "/winners"    },
+  { label: "Rules",      labelKey: "nav.rules",      icon: <FileText   className="w-4 h-4" />, href: "/rules"      },
+  { label: "Founder",    labelKey: "nav.founder",    icon: <Crown      className="w-4 h-4" />, href: "/founder"    },
+  { label: "Admin",      labelKey: "nav.admin",      icon: <Shield     className="w-4 h-4" />, href: "/admin"      },
+];
+
+const DOC_LINKS = [
+  {
+    label: "OKBOND PDF",
+    icon: <FileText className="w-4 h-4" />,
+    href: "https://drive.google.com/file/d/1ciuxocfbRbwENLaclrpey50EJMxF_pdr/view?usp=drivesdk",
+  },
+  {
+    label: "Whitepaper",
+    icon: <BookOpen className="w-4 h-4" />,
+    href: "https://drive.google.com/file/d/1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh/view?usp=drivesdk",
+  },
+  {
+    label: "Audit Report",
+    icon: <Shield className="w-4 h-4" />,
+    href: "https://drive.google.com/file/d/1uvONnEDac-Z06mrth6TT94N9bRGecyhN/view?usp=drivesdk",
+  },
+];
+
+const SOCIALS = [
+  { label: "Twitter",  icon: <Twitter className="w-3.5 h-3.5" />, href: "https://x.com/orakzaibond1" },
+  { label: "Telegram", icon: <Send    className="w-3.5 h-3.5" />, href: "https://t.me/orakzaibond"  },
+  { label: "Email",    icon: <Mail    className="w-3.5 h-3.5" />, href: "mailto:orakzaibond@gmail.com" },
+];
+
+export interface SidebarHandle {
+  toggleMobile: () => void;
+}
+
+interface SiteSidebarProps {
+  mobileOpen?: boolean;
+  onMobileOpenChange?: (open: boolean) => void;
+}
+
+const SiteSidebar = forwardRef<SidebarHandle, SiteSidebarProps>((props, ref) => {
+  const { mobileOpen: externalMobileOpen, onMobileOpenChange } = props;
+  const [expanded, setExpanded] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
+  const [internalMobileOpen, setInternalMobileOpen] = useState(false);
+  const [location, setLocation] = useLocation();
+  const { address } = useWallet();
+  const { t } = useLanguage();
+  const OWNER_WALLET = "0x9b02e2edd6f58d626aaa91889708dbf39dfa8cd7";
+
+  const mobileOpen = externalMobileOpen !== undefined ? externalMobileOpen : internalMobileOpen;
+  const setMobileOpen = useCallback((val: boolean | ((prev: boolean) => boolean)) => {
+    const next = typeof val === "function" ? val(mobileOpen) : val;
+    if (onMobileOpenChange) {
+      onMobileOpenChange(next);
+    } else {
+      setInternalMobileOpen(next);
+    }
+  }, [mobileOpen, onMobileOpenChange]);
+
+  useImperativeHandle(ref, () => ({
+    toggleMobile: () => setMobileOpen(p => !p),
+  }));
+
+  useEffect(() => {
+    if (location !== "/") return;
+    
+    const sections = NAV_ITEMS.filter(n => n.href.startsWith("/#") || n.href === "/").map(n => n.id);
+    const observers: IntersectionObserver[] = [];
+
+    sections.forEach(id => {
+      const el = id === "hero" ? document.getElementById("root") || document.body : document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
+        { threshold: 0.25, rootMargin: "-60px 0px -30% 0px" }
+      );
+      const target = id === "hero" ? document.querySelector("section, [data-section='hero']") || el : el;
+      obs.observe(target);
+      observers.push(obs);
+    });
+
+    return () => observers.forEach(o => o.disconnect());
+  }, [location]);
+
+  const navigateTo = useCallback((href: string) => {
+    setMobileOpen(false);
+    if (href.startsWith("http") || href.startsWith("mailto")) {
+      window.open(href, "_blank");
+      return;
+    }
+    
+    if (href.startsWith("/#")) {
+      const hash = href.substring(1);
+      if (location === "/") {
+        const el = document.querySelector(hash);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        setLocation("/");
+        setTimeout(() => {
+          const el = document.querySelector(hash);
+          if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+      }
+      return;
+    }
+
+    setLocation(href);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location, setLocation, setMobileOpen]);
+
+  const W_COLLAPSED = 60;
+  const W_EXPANDED  = 220;
+
+  const SidebarContent = ({ mobile = false }: { mobile?: boolean }) => (
+    <div className="flex flex-col h-full">
+      <div className={`flex items-center ${expanded || mobile ? "justify-between px-4" : "justify-center px-2"} py-4 border-b border-border/40`}>
+        {(expanded || mobile) && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2.5">
+            <img src="/okbond-logo.png" alt="OKBOND" className="w-8 h-8 rounded-full object-cover border border-primary/40" />
+            <div>
+              <p className="text-xs font-extrabold text-foreground leading-none">OKBOND</p>
+              <p className="text-[9px] text-primary font-mono tracking-wider leading-none mt-0.5">Navigation</p>
+            </div>
+          </motion.div>
+        )}
+        {!mobile && (
+          <button
+            onClick={() => setExpanded(p => !p)}
+            className={`w-7 h-7 rounded-lg border border-border bg-muted/30 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 transition-all ${!expanded ? "mx-auto" : ""}`}
+          >
+            {expanded ? <ChevronLeft className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
+          </button>
+        )}
+      </div>
+
+      <div className="flex-1 overflow-y-auto py-3 space-y-0.5 px-2">
+        {(expanded || mobile) && (
+          <p className="text-[9px] text-muted-foreground/50 uppercase tracking-widest font-bold px-2 mb-2">Sections</p>
+        )}
+        {NAV_ITEMS.map((item) => {
+          const active = location === item.href || (location === "/" && activeSection === item.id);
+          return (
+            <button
+              key={item.id}
+              onClick={() => navigateTo(item.href)}
+              title={!expanded && !mobile ? t(item.labelKey) : undefined}
+              className={`w-full flex items-center gap-3 rounded-xl transition-all text-left
+                ${expanded || mobile ? "px-3 py-2.5" : "px-0 py-2.5 justify-center"}
+                ${active
+                  ? "bg-primary/15 text-primary border border-primary/25 shadow-[0_0_8px_rgba(234,179,8,0.12)]"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/25 border border-transparent"
+                }`}
+            >
+              <span className="flex-shrink-0">{item.icon}</span>
+              {(expanded || mobile) && (
+                <motion.span
+                  initial={{ opacity: 0, x: -6 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-sm font-medium flex-1 leading-none"
+                >
+                  {t(item.labelKey)}
+                </motion.span>
+              )}
+              {(expanded || mobile) && active && (
+                <span className="w-1.5 h-1.5 rounded-full bg-primary flex-shrink-0 animate-pulse" />
+              )}
+            </button>
+          );
+        })}
+
+        <div className={`my-3 border-t border-border/30 ${!expanded && !mobile ? "mx-2" : "mx-1"}`} />
+
+        {(expanded || mobile) && (
+          <p className="text-[9px] text-muted-foreground/50 uppercase tracking-widest font-bold px-2 mb-2">Pages</p>
+        )}
+        {PAGE_LINKS.filter(link => {
+          if (link.label === "Admin") {
+            return address?.toLowerCase() === OWNER_WALLET.toLowerCase();
+          }
+          return true;
+        }).map((link) => (
+          <button
+            key={link.label}
+            onClick={() => navigateTo(link.href)}
+            title={!expanded && !mobile ? t(link.labelKey) : undefined}
+            className={`w-full flex items-center gap-3 rounded-xl transition-all text-left
+              ${expanded || mobile ? "px-3 py-2.5" : "px-0 py-2.5 justify-center"}
+              ${location === link.href 
+                ? "bg-primary/15 text-primary border border-primary/25 shadow-[0_0_8px_rgba(234,179,8,0.12)]"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/25 border border-transparent"
+              }`}
+          >
+            <span className="flex-shrink-0">{link.icon}</span>
+            {(expanded || mobile) && (
+              <motion.span
+                initial={{ opacity: 0, x: -6 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="text-sm font-medium flex-1"
+              >
+                {t(link.labelKey)}
+              </motion.span>
+            )}
+            {(expanded || mobile) && <ExternalLink className="w-3 h-3 opacity-30 flex-shrink-0" />}
+          </button>
+        ))}
+
+        <div className={`my-3 border-t border-border/30 ${!expanded && !mobile ? "mx-2" : "mx-1"}`} />
+
+        {(expanded || mobile) && (
+          <p className="text-[9px] text-muted-foreground/50 uppercase tracking-widest font-bold px-2 mb-2">Documents</p>
+        )}
+        {DOC_LINKS.map((doc) => (
+          <a
+            key={doc.label}
+            href={doc.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            title={!expanded && !mobile ? `Download ${doc.label}` : undefined}
+            className={`w-full flex items-center gap-3 rounded-xl transition-all
+              ${expanded || mobile ? "px-3 py-2.5" : "px-0 py-2.5 justify-center"}
+              text-primary/70 hover:text-primary hover:bg-primary/8 border border-transparent hover:border-primary/15`}
+          >
+            <span className="flex-shrink-0">{doc.icon}</span>
+            {(expanded || mobile) && (
+              <motion.span
+                initial={{ opacity: 0, x: -6 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="text-sm font-medium flex-1"
+              >
+                {doc.label}
+              </motion.span>
+            )}
+            {(expanded || mobile) && <Download className="w-3 h-3 opacity-50 flex-shrink-0" />}
+          </a>
+        ))}
+
+        <div className={`my-3 border-t border-border/30 ${!expanded && !mobile ? "mx-2" : "mx-1"}`} />
+        {(expanded || mobile) ? (
+          <div className="px-1">
+            <ReserveWidget />
+          </div>
+        ) : (
+          <ReserveWidget compact />
+        )}
+      </div>
+
+      <div className={`border-t border-border/30 py-3 px-2 space-y-1`}>
+        {(expanded || mobile) && (
+          <p className="text-[9px] text-muted-foreground/50 uppercase tracking-widest font-bold px-2 mb-2">Connect</p>
+        )}
+        <div className={`flex ${expanded || mobile ? "flex-col gap-1" : "flex-col items-center gap-1.5"}`}>
+          {SOCIALS.map((s) => (
+            <a
+              key={s.label}
+              href={s.href}
+              target={s.href.startsWith("mailto") ? undefined : "_blank"}
+              rel={s.href.startsWith("mailto") ? undefined : "noopener noreferrer"}
+              title={!expanded && !mobile ? s.label : undefined}
+              className={`flex items-center gap-2.5 rounded-xl transition-all text-muted-foreground hover:text-primary
+                ${expanded || mobile ? "px-3 py-2 hover:bg-primary/8" : "p-2 hover:bg-primary/8 justify-center"}`}
+            >
+              {s.icon}
+              {(expanded || mobile) && <span className="text-xs">{s.label}</span>}
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      <motion.aside
+        animate={{ width: expanded ? W_EXPANDED : W_COLLAPSED }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="hidden lg:flex flex-col fixed left-0 top-20 bottom-0 z-40 glass-dark border-r border-border/40 overflow-hidden"
+        style={{ width: expanded ? W_EXPANDED : W_COLLAPSED }}
+      >
+        <SidebarContent />
+      </motion.aside>
+
+      <AnimatePresence>
+        {mobileOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setMobileOpen(false)}
+              className="lg:hidden fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.aside
+              initial={{ x: -280 }} animate={{ x: 0 }} exit={{ x: -280 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="lg:hidden fixed left-0 top-0 bottom-0 z-50 w-[260px] glass-dark border-r border-border/40 shadow-[4px_0_40px_rgba(0,0,0,0.5)]"
+            >
+              <SidebarContent mobile />
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+    </>
+  );
+});
+
+SiteSidebar.displayName = "SiteSidebar";
+export default SiteSidebar;

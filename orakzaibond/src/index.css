@@ -1,0 +1,1440 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Lexend:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-border: var(--primary-border);
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary-border: var(--secondary-border);
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted-border: var(--muted-border);
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-border: var(--accent-border);
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-border: var(--destructive-border);
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-primary-border: var(--sidebar-primary-border);
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-accent-border: var(--sidebar-accent-border);
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  --font-sans: 'Inter', 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-mono: Menlo, monospace;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* Dark-only theme — Midnight Gold (deep matte black + 24K gold) */
+:root {
+  --button-outline: rgba(245, 197, 24, .15);
+  --badge-outline: rgba(245, 197, 24, .08);
+  --opaque-button-border-intensity: 9;
+  --elevate-1: rgba(245, 197, 24, .05);
+  --elevate-2: rgba(245, 197, 24, .10);
+
+  /* Deep matte black — Midnight #050505 */
+  --background: 0 0% 2%;
+  --foreground: 45 20% 95%;
+
+  --card: 0 0% 4%;
+  --card-foreground: 45 20% 95%;
+  --card-border: 45 70% 45%;
+
+  --popover: 0 0% 4%;
+  --popover-foreground: 45 20% 95%;
+  --popover-border: 45 70% 45%;
+
+  /* Gold primary */
+  --primary: 49 91% 53%;
+  --primary-foreground: 0 0% 5%;
+
+  --secondary: 0 0% 6%;
+  --secondary-foreground: 45 20% 95%;
+
+  --muted: 0 0% 6%;
+  --muted-foreground: 45 10% 60%;
+
+  /* Gold accent */
+  --accent: 49 91% 53%;
+  --accent-foreground: 0 0% 5%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 45 20% 95%;
+
+  --border: 45 50% 30%;
+  --input: 45 50% 30%;
+  --ring: 49 91% 53%;
+
+  /* Chart colors — full gold family (no blue) */
+  --chart-1: 49 91% 53%;
+  --chart-2: 43 89% 50%;
+  --chart-3: 38 90% 48%;
+  --chart-4: 32 85% 42%;
+  --chart-5: 28 80% 36%;
+
+  /* Sidebar */
+  --sidebar: 0 0% 3%;
+  --sidebar-foreground: 45 20% 95%;
+  --sidebar-border: 45 50% 30%;
+  --sidebar-primary: 49 91% 53%;
+  --sidebar-primary-foreground: 0 0% 5%;
+  --sidebar-accent: 0 0% 6%;
+  --sidebar-accent-foreground: 45 20% 95%;
+  --sidebar-ring: 49 91% 53%;
+
+  --radius: 0.625rem;
+
+  --shadow-2xs: 0px 1px 2px 0px rgba(0,0,0,0.4);
+  --shadow-xs: 0px 2px 4px 0px rgba(0,0,0,0.4);
+  --shadow-sm: 0px 2px 4px 0px rgba(0,0,0,0.4), 0px 1px 2px -1px rgba(0,0,0,0.3);
+  --shadow: 0px 4px 8px 0px rgba(0,0,0,0.4), 0px 2px 4px -1px rgba(0,0,0,0.3);
+  --shadow-md: 0px 6px 12px 0px rgba(0,0,0,0.4), 0px 2px 4px -1px rgba(0,0,0,0.3);
+  --shadow-lg: 0px 8px 16px 0px rgba(0,0,0,0.4), 0px 4px 8px -1px rgba(0,0,0,0.3);
+  --shadow-xl: 0px 12px 24px 0px rgba(0,0,0,0.4), 0px 6px 12px -1px rgba(0,0,0,0.3);
+  --shadow-2xl: 0px 24px 48px 0px rgba(0,0,0,0.5);
+
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+
+  --sidebar-primary-border: hsl(from hsl(var(--sidebar-primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --sidebar-accent-border: hsl(from hsl(var(--sidebar-accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --primary-border: hsl(from hsl(var(--primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --secondary-border: hsl(from hsl(var(--secondary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --muted-border: hsl(from hsl(var(--muted)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --accent-border: hsl(from hsl(var(--accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+}
+
+/* Force dark — Midnight Gold dark-only site */
+.dark {
+  --button-outline: rgba(245, 197, 24, .15);
+  --badge-outline: rgba(245, 197, 24, .08);
+  --opaque-button-border-intensity: 9;
+  --elevate-1: rgba(245, 197, 24, .05);
+  --elevate-2: rgba(245, 197, 24, .10);
+
+  --background: 0 0% 2%;
+  --foreground: 45 20% 95%;
+  --card: 0 0% 4%;
+  --card-foreground: 45 20% 95%;
+  --card-border: 45 70% 45%;
+  --popover: 0 0% 4%;
+  --popover-foreground: 45 20% 95%;
+  --popover-border: 45 70% 45%;
+  --primary: 49 91% 53%;
+  --primary-foreground: 0 0% 5%;
+  --secondary: 0 0% 6%;
+  --secondary-foreground: 45 20% 95%;
+  --muted: 0 0% 6%;
+  --muted-foreground: 45 10% 60%;
+  --accent: 49 91% 53%;
+  --accent-foreground: 0 0% 5%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 45 20% 95%;
+  --border: 45 50% 30%;
+  --input: 45 50% 30%;
+  --ring: 49 91% 53%;
+  --chart-1: 49 91% 53%;
+  --chart-2: 43 89% 50%;
+  --chart-3: 38 90% 48%;
+  --chart-4: 32 85% 42%;
+  --chart-5: 28 80% 36%;
+  --sidebar: 0 0% 3%;
+  --sidebar-foreground: 45 20% 95%;
+  --sidebar-border: 45 50% 30%;
+  --sidebar-primary: 49 91% 53%;
+  --sidebar-primary-foreground: 0 0% 5%;
+  --sidebar-accent: 0 0% 6%;
+  --sidebar-accent-foreground: 45 20% 95%;
+  --sidebar-ring: 49 91% 53%;
+  --shadow-2xs: 0px 1px 2px 0px rgba(0,0,0,0.5);
+  --shadow-xs: 0px 2px 4px 0px rgba(0,0,0,0.5);
+  --shadow-sm: 0px 2px 4px 0px rgba(0,0,0,0.5), 0px 1px 2px -1px rgba(0,0,0,0.4);
+  --shadow: 0px 4px 8px 0px rgba(0,0,0,0.5), 0px 2px 4px -1px rgba(0,0,0,0.4);
+  --shadow-md: 0px 6px 12px 0px rgba(0,0,0,0.5), 0px 2px 4px -1px rgba(0,0,0,0.4);
+  --shadow-lg: 0px 8px 16px 0px rgba(0,0,0,0.5), 0px 4px 8px -1px rgba(0,0,0,0.4);
+  --shadow-xl: 0px 12px 24px 0px rgba(0,0,0,0.5), 0px 6px 12px -1px rgba(0,0,0,0.4);
+  --shadow-2xl: 0px 24px 48px 0px rgba(0,0,0,0.6);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html, body {
+    background: #050505 !important;
+  }
+
+  body {
+    @apply font-sans antialiased text-foreground;
+    background-color: #050505;
+    font-family: 'Inter', 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Midnight Gold global headings — Playfair Display */
+  h1, h2, h3, h4, h5, h6,
+  .font-heading, .font-display {
+    font-family: 'Playfair Display', Georgia, serif;
+    letter-spacing: -0.015em;
+  }
+}
+
+@layer utilities {
+  input[type="search"]::-webkit-search-cancel-button {
+    @apply hidden;
+  }
+
+  [contenteditable][data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: hsl(var(--muted-foreground));
+    pointer-events: none;
+  }
+
+  .no-default-hover-elevate {}
+  .no-default-active-elevate {}
+
+  .toggle-elevate::before,
+  .toggle-elevate-2::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    z-index: -1;
+  }
+
+  .toggle-elevate.toggle-elevated::before {
+    background-color: var(--elevate-2);
+  }
+
+  .border.toggle-elevate::before {
+    inset: -1px;
+  }
+
+  .hover-elevate:not(.no-default-hover-elevate),
+  .active-elevate:not(.no-default-active-elevate),
+  .hover-elevate-2:not(.no-default-hover-elevate),
+  .active-elevate-2:not(.no-default-active-elevate) {
+    position: relative;
+    z-index: 0;
+  }
+
+  .hover-elevate:not(.no-default-hover-elevate)::after,
+  .active-elevate:not(.no-default-active-elevate)::after,
+  .hover-elevate-2:not(.no-default-hover-elevate)::after,
+  .active-elevate-2:not(.no-default-active-elevate)::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    z-index: 999;
+  }
+
+  .hover-elevate:hover:not(.no-default-hover-elevate)::after,
+  .active-elevate:active:not(.no-default-active-elevate)::after {
+    background-color: var(--elevate-1);
+  }
+
+  .hover-elevate-2:hover:not(.no-default-hover-elevate)::after,
+  .active-elevate-2:active:not(.no-default-active-elevate)::after {
+    background-color: var(--elevate-2);
+  }
+
+  .border.hover-elevate:not(.no-hover-interaction-elevate)::after,
+  .border.active-elevate:not(.no-active-interaction-elevate)::after,
+  .border.hover-elevate-2:not(.no-hover-interaction-elevate)::after,
+  .border.active-elevate-2:not(.no-active-interaction-elevate)::after {
+    inset: -1px;
+  }
+}
+
+/* ── Glassmorphism utilities ──────────────────────────────────────── */
+/* Imperial Gold glass: semi-transparent, blurred, 1px gold border with subtle glow */
+.glass-card {
+  background: rgba(20, 22, 30, 0.55);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid rgba(245, 197, 24, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(245, 197, 24, 0.08) inset,
+    0 8px 32px 0 rgba(0, 0, 0, 0.55),
+    0 0 24px -4px rgba(245, 197, 24, 0.18);
+  transition: border-color .35s ease, box-shadow .35s ease, transform .35s ease;
+}
+.glass-card:hover {
+  border-color: rgba(245, 197, 24, 0.6);
+  box-shadow:
+    0 0 0 1px rgba(245, 197, 24, 0.18) inset,
+    0 12px 40px 0 rgba(0, 0, 0, 0.6),
+    0 0 38px -2px rgba(245, 197, 24, 0.35);
+}
+
+.glass-gold {
+  background: linear-gradient(
+    135deg,
+    rgba(234, 179, 8, 0.06) 0%,
+    rgba(255, 255, 255, 0.02) 50%,
+    rgba(234, 179, 8, 0.04) 100%
+  );
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(234, 179, 8, 0.15);
+}
+
+.glass-dark {
+  background: rgba(10, 12, 20, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ── Deep Space Glassmorphic Card ──────────────────────────────────── */
+.glass-card-deep-space {
+  background: rgba(10, 12, 20, 0.6);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(234, 179, 8, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+}
+
+/* ── Gold glow keyframes ──────────────────────────────────────────── */
+@keyframes gold-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(234, 179, 8, 0.3), 0 0 60px rgba(234, 179, 8, 0.1); }
+  50% { box-shadow: 0 0 40px rgba(234, 179, 8, 0.6), 0 0 100px rgba(234, 179, 8, 0.2); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.gold-glow {
+  animation: gold-pulse 3s ease-in-out infinite;
+}
+
+.neon-heading {
+  font-family: var(--font-heading);
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+@keyframes branded-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+    border-color: rgba(255, 215, 0, 0.6);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+    border-color: rgba(255, 215, 0, 1);
+    transform: scale(1.05);
+  }
+}
+
+.branded-tag-pulse {
+  animation: branded-pulse 3s ease-in-out infinite;
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(234, 179, 8, 0.15), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* ── Scrolling ticker ─────────────────────────────────────────────── */
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 28s linear infinite;
+  will-change: transform;
+}
+
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+
+/* ── Deep Space Starfield Animation ────────────────────────────────── */
+@keyframes starfield-drift {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-2px) translateX(1px);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+}
+
+@keyframes nebula-glow {
+  0%, 100% {
+    opacity: 0.15;
+    filter: blur(80px);
+  }
+  50% {
+    opacity: 0.25;
+    filter: blur(100px);
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.starfield-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #05070a;
+  pointer-events: none;
+  z-index: -2;
+  overflow: hidden;
+}
+
+.starfield-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, #eee, rgba(255, 255, 255, 0.2)),
+    radial-gradient(2px 2px at 60px 70px, #fff, rgba(255, 255, 255, 0.3)),
+    radial-gradient(1px 1px at 50px 50px, #fff, rgba(255, 255, 255, 0.2)),
+    radial-gradient(1px 1px at 130px 80px, #fff, rgba(255, 255, 255, 0.1)),
+    radial-gradient(2px 2px at 90px 10px, #fff, rgba(255, 255, 255, 0.2));
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: starfield-drift 20s linear infinite;
+}
+
+.starfield-bg::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at 20% 50%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 80%, rgba(255, 215, 0, 0.08) 0%, transparent 50%);
+  animation: nebula-glow 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ── Deep Space Community Page ────────────────────────────────────── */
+.community-page-deep-space {
+  position: relative;
+  background: transparent;
+  z-index: 1;
+}
+
+.community-page-deep-space::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, #0a0c14 0%, #05070a 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* ── New Professional UI Enhancements ──────────────────────────────── */
+
+@keyframes slow-pulse {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  50% { opacity: 0.8; filter: brightness(1.2); }
+}
+
+@keyframes shine-sweep {
+  0% { left: -100%; }
+  20% { left: 100%; }
+  100% { left: 100%; }
+}
+
+.animate-slow-pulse {
+  animation: slow-pulse 3s ease-in-out infinite;
+}
+
+.animate-shine-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.animate-shine-sweep::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transform: skewX(-25deg);
+  animation: shine-sweep 5s infinite;
+}
+
+.glass-gold-premium {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+
+.glass-gold-premium::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px; /* border width */
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.5), rgba(234, 179, 8, 0.1), rgba(234, 179, 8, 0.5));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.metallic-gold {
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 50%, #b45309 100%);
+  border: 1px solid #fcd34d;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.hero-glow-text {
+  text-shadow: 0 0 20px rgba(245, 197, 24, 0.8), 0 0 40px rgba(245, 197, 24, 0.4);
+}
+
+.hero-glow-button {
+  box-shadow: 0 0 20px rgba(245, 197, 24, 0.6), 0 0 40px rgba(245, 197, 24, 0.3);
+}
+
+/* ── Imperial cinematic tagline: gold → white gradient with soft glow ───── */
+.imperial-tagline {
+  background: linear-gradient(
+    100deg,
+    #F5C518 0%,
+    #FFE17A 28%,
+    #FFFFFF 58%,
+    #FFF8D4 82%,
+    #F5C518 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 36px rgba(245, 197, 24, 0.25);
+  letter-spacing: -0.02em;
+}
+
+/* ── VERIFIED BY OSG badge ──────────────────────────────────────────────── */
+.verified-osg {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6EE7B7;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  box-shadow: 0 0 14px -2px rgba(16, 185, 129, 0.35);
+}
+.verified-osg::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 9999px;
+  background: #10B981;
+  box-shadow: 0 0 10px #10B981;
+  animation: live-pulse 1.6s ease-in-out infinite;
+}
+
+/* ── Live green pulse (used for ICO Phase 1 indicator dot) ──────────────── */
+@keyframes live-pulse {
+  0%, 100% { transform: scale(1);   opacity: 1;   }
+  50%      { transform: scale(1.5); opacity: 0.6; }
+}
+.live-pulse-dot {
+  position: relative;
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 9999px;
+  background: #10B981;
+  box-shadow: 0 0 10px #10B981, 0 0 22px rgba(16,185,129,0.6);
+}
+.live-pulse-dot::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 2px solid #10B981;
+  animation: live-pulse 1.4s ease-out infinite;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   MIDNIGHT GOLD GLOBAL THEME — Founder Page parity
+   Deep matte black (#050505) + 24K gold linear gradient
+   ════════════════════════════════════════════════════════════════════ */
+
+/* 24K Gold linear gradient — the canonical Founder Page palette */
+:root {
+  --mg-midnight: #050505;
+  --mg-midnight-soft: #0a0a0a;
+  --mg-gold-1: #BF953F;
+  --mg-gold-2: #FCF6BA;
+  --mg-gold-3: #B38728;
+  --mg-gold-4: #FBF5B7;
+  --mg-gold-5: #AA771C;
+  --mg-gold-line: rgba(245, 197, 24, 0.35);
+  --mg-gold-line-strong: rgba(245, 197, 24, 0.65);
+  --mg-gold-glow: rgba(245, 197, 24, 0.45);
+  --mg-gold-gradient: linear-gradient(135deg, #BF953F 0%, #FCF6BA 30%, #B38728 50%, #FBF5B7 70%, #AA771C 100%);
+}
+
+/* ── Glassmorphic Gold Card — matches $OKBOND Mission card ─────────── */
+.glass-card-gold {
+  position: relative;
+  background: linear-gradient(155deg, rgba(20, 18, 12, 0.72) 0%, rgba(10, 9, 6, 0.85) 100%);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(252, 246, 186, 0.18);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow:
+    0 30px 60px -30px rgba(191, 149, 63, 0.25),
+    0 0 0 1px rgba(252, 246, 186, 0.04) inset,
+    0 0 24px -6px rgba(245, 197, 24, 0.18);
+  transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 400ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.glass-card-gold:hover {
+  border-color: rgba(252, 246, 186, 0.45);
+  box-shadow:
+    0 40px 70px -30px rgba(191, 149, 63, 0.45),
+    0 0 0 1px rgba(252, 246, 186, 0.12) inset,
+    0 0 38px -4px rgba(245, 197, 24, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Subtle gold ring — overlays inside .glass-card-gold for hairline gold edge */
+.gold-ring-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--mg-gold-gradient);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ── 24K Gold gradient text ───────────────────────────────────────── */
+.gold-text-gradient {
+  background: var(--mg-gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ── 24K Gold gradient button (replaces blue/cyan CTAs) ───────────── */
+.gold-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  font-family: 'Inter', 'Lexend', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #050505;
+  background: var(--mg-gold-gradient);
+  border: 1px solid rgba(252, 246, 186, 0.55);
+  box-shadow:
+    0 0 0 1px rgba(252, 246, 186, 0.15) inset,
+    0 8px 24px -6px rgba(245, 197, 24, 0.5),
+    0 0 28px -4px rgba(245, 197, 24, 0.35);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.gold-button:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow:
+    0 0 0 1px rgba(252, 246, 186, 0.3) inset,
+    0 12px 32px -6px rgba(245, 197, 24, 0.7),
+    0 0 48px -4px rgba(245, 197, 24, 0.55);
+}
+
+.gold-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+
+.gold-button:hover::after {
+  transform: translateX(100%);
+}
+
+/* Outline gold button variant */
+.gold-button-outline {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  font-family: 'Inter', 'Lexend', sans-serif;
+  font-weight: 700;
+  color: #FCF6BA;
+  background: rgba(10, 9, 6, 0.6);
+  border: 1px solid rgba(245, 197, 24, 0.45);
+  box-shadow: 0 0 0 1px rgba(252, 246, 186, 0.04) inset;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+}
+
+.gold-button-outline:hover {
+  border-color: rgba(252, 246, 186, 0.85);
+  color: #FCF6BA;
+  box-shadow:
+    0 0 0 1px rgba(252, 246, 186, 0.18) inset,
+    0 0 28px -4px rgba(245, 197, 24, 0.55);
+  transform: translateY(-1px);
+}
+
+/* ── Synchronized gold hover glow — for buttons, social icons, etc. ─ */
+.gold-hover-glow {
+  transition: filter 0.35s ease,
+              color 0.35s ease,
+              box-shadow 0.35s ease,
+              transform 0.35s ease;
+}
+
+.gold-hover-glow:hover {
+  color: #FCF6BA !important;
+  filter: drop-shadow(0 0 8px rgba(245, 197, 24, 0.8))
+          drop-shadow(0 0 18px rgba(245, 197, 24, 0.45));
+  transform: translateY(-2px);
+}
+
+/* Thin hairline gold border — for inputs, tables, chips */
+.gold-border-thin {
+  border: 1px solid rgba(245, 197, 24, 0.28);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gold-border-thin:hover,
+.gold-border-thin:focus-within {
+  border-color: rgba(252, 246, 186, 0.6);
+  box-shadow: 0 0 0 1px rgba(252, 246, 186, 0.1) inset,
+              0 0 22px -4px rgba(245, 197, 24, 0.4);
+}
+
+/* ── Gold scroll glow — subtle gold radiance triggered on scroll ────── */
+@keyframes gold-scroll-radiance {
+  0% {
+    box-shadow:
+      0 0 0 1px rgba(245, 197, 24, 0.12) inset,
+      0 0 18px -6px rgba(245, 197, 24, 0.25);
+    border-color: rgba(245, 197, 24, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(252, 246, 186, 0.25) inset,
+      0 0 32px -2px rgba(245, 197, 24, 0.5);
+    border-color: rgba(252, 246, 186, 0.55);
+  }
+  100% {
+    box-shadow:
+      0 0 0 1px rgba(245, 197, 24, 0.12) inset,
+      0 0 18px -6px rgba(245, 197, 24, 0.25);
+    border-color: rgba(245, 197, 24, 0.2);
+  }
+}
+
+.gold-scroll-glow {
+  animation: gold-scroll-radiance 5s ease-in-out infinite;
+}
+
+/* Heading variant — Founder Page tagline-style gradient */
+.heading-midnight-gold {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  background: var(--mg-gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ── Page wrapper — applies the deep matte black + gold dust feel ──── */
+.midnight-page {
+  position: relative;
+  background: #050505;
+  min-height: 100vh;
+  color: #f3ecd1;
+}
+
+.midnight-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 0%, rgba(245, 197, 24, 0.06), transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 100%, rgba(245, 197, 24, 0.04), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Override any blue/cyan utility leakage on dashboard */
+.midnight-page .text-blue-400,
+.midnight-page .text-blue-500,
+.midnight-page .text-cyan-400,
+.midnight-page .text-cyan-500,
+.midnight-page .text-sky-400,
+.midnight-page .text-sky-500 {
+  color: #FCF6BA !important;
+}
+
+.midnight-page .border-blue-400\/20,
+.midnight-page .border-blue-500\/20,
+.midnight-page .border-cyan-400\/20,
+.midnight-page .border-cyan-500\/20 {
+  border-color: rgba(245, 197, 24, 0.3) !important;
+}
+
+.midnight-page .bg-blue-500\/10,
+.midnight-page .bg-cyan-500\/10,
+.midnight-page .bg-sky-500\/10 {
+  background-color: rgba(245, 197, 24, 0.08) !important;
+}
+
+
+/* ─── Neural Grid background — Orakzai Sovereign architectural pattern ─── */
+/* A very faint deep-charcoal grid (3% opacity) overlaid on the Midnight Black */
+/* base. Fixed-position so it does not scroll. pointer-events: none keeps it */
+/* fully passive. */
+body {
+  position: relative;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: -1px -1px;
+  mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+}
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* ── Sovereign Neural Grid (Community page) ────────────────────────── */
+.neural-grid-strong {
+  position: relative;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(212,175,55,0.06) 0%, transparent 60%),
+    #04050a;
+}
+.neural-grid-strong::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(212,175,55,0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,175,55,0.18) 1px, transparent 1px),
+    linear-gradient(rgba(212,175,55,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,175,55,0.06) 1px, transparent 1px);
+  background-size: 96px 96px, 96px 96px, 24px 24px, 24px 24px;
+  background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
+  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.55) 55%, transparent 90%);
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.55) 55%, transparent 90%);
+  animation: neural-grid-drift 28s linear infinite;
+}
+.neural-grid-strong::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 28%, rgba(212,175,55,0.18), transparent 18%),
+    radial-gradient(circle at 78% 22%, rgba(212,175,55,0.14), transparent 16%),
+    radial-gradient(circle at 32% 78%, rgba(212,175,55,0.10), transparent 18%),
+    radial-gradient(circle at 86% 84%, rgba(212,175,55,0.16), transparent 18%);
+  filter: blur(0.5px);
+  animation: neural-nodes-pulse 6s ease-in-out infinite;
+}
+@keyframes neural-grid-drift {
+  0%   { background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px; }
+  100% { background-position: 96px 96px, 96px 96px, 24px 24px, 24px 24px; }
+}
+@keyframes neural-nodes-pulse {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 0.55; }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   PRESENCE GLOW — "Founder's Aura" (activates when Chairman is logged in)
+   ─────────────────────────────────────────────────────────────────────────── */
+@keyframes presenceGlowBreath {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 1.00; transform: scale(1.018); }
+}
+@keyframes presenceGlowEdge {
+  0%, 100% { opacity: 0.65; }
+  50%      { opacity: 1.00; }
+}
+@keyframes presenceGlowTag {
+  0%, 100% { box-shadow: 0 0 18px rgba(191,149,63,0.40), inset 0 0 8px rgba(252,246,186,0.15); }
+  50%      { box-shadow: 0 0 28px rgba(252,246,186,0.55), inset 0 0 12px rgba(252,246,186,0.25); }
+}
+@keyframes presenceGlowDot {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50%      { opacity: 1.00; transform: scale(1.18); }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   PRESTIGE FRAMEWORK — True Gold Hairline System (Executive Terminal Finish)
+   ─────────────────────────────────────────────────────────────────────────── */
+:root {
+  --gold-true:      #d4af37;
+  --gold-bright:    #f4ce45;
+  --gold-deep:      #a07a14;
+  --gold-hairline:  rgba(212, 175, 55, 0.45);
+  --gold-hairline-soft: rgba(212, 175, 55, 0.25);
+}
+
+/* Universal 0.5px True Gold hairline — opt-in via class, won't break legacy */
+.prestige-border {
+  border: 0.5px solid var(--gold-hairline) !important;
+  box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.08);
+}
+.prestige-border-top    { border-top:    0.5px solid var(--gold-hairline) !important; }
+.prestige-border-bottom { border-bottom: 0.5px solid var(--gold-hairline) !important; }
+
+/* Slight global tightening of hairline rendering on high-DPR displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .glass-dark {
+    border-color: var(--gold-hairline) !important;
+  }
+}
+
+/* BRIEFING line emphasis inside Marcus terminal — gold gradient backplate */
+[data-marcus-line="BRIEFING"] {
+  background: linear-gradient(90deg, rgba(212,175,55,0.10), transparent 70%);
+  border-left: 1.5px solid var(--gold-bright);
+  padding-left: 8px;
+  margin-left: -8px;
+  border-radius: 2px;
+}
+
+/* Make every Playfair display header sit a touch tighter and richer */
+.font-display, .font-serif, .font-heading {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  letter-spacing: 0.005em;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   $100M BRAND UNIFICATION — Global Luxury Design System
+   Chairman's Directive: Deep Black (#050505) + Brushed Gold (#D4AF37) ONLY.
+   No white. No grey. No cyan. Every pixel must feel like a $100M brand.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Kill all incorrect neon / cyan headings globally ─────────────────── */
+.neon-heading {
+  font-family: var(--font-heading) !important;
+  text-shadow: 0 0 10px rgba(191,149,63,0.45), 0 0 20px rgba(191,149,63,0.25) !important;
+  color: #FCF6BA !important;
+}
+
+/* ── 2. Universal card — replace bg-white/5 + border-white/10 pattern ───── */
+.okbond-card {
+  background: linear-gradient(135deg, rgba(15,13,8,0.72) 0%, rgba(8,7,4,0.90) 100%);
+  border: 1px solid rgba(191,149,63,0.18);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(191,149,63,0.06) inset;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-radius: 1rem;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.okbond-card:hover {
+  border-color: rgba(191,149,63,0.35);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 24px rgba(191,149,63,0.12);
+}
+
+/* ── 3. Universal section header utilities ───────────────────────────────── */
+.okbond-eyebrow {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(191,149,63,0.75);
+}
+
+.okbond-h1 {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: #f3ecd1;
+}
+
+.okbond-h2 {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.012em;
+  color: #f3ecd1;
+}
+
+/* Gold gradient text — apply to inline spans */
+.okbond-gold-text {
+  background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 30%, #B38728 50%, #FBF5B7 70%, #AA771C 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── 4. Gold hairline divider ────────────────────────────────────────────── */
+.okbond-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(191,149,63,0.45), rgba(252,246,186,0.6), rgba(191,149,63,0.45), transparent);
+  border: none;
+}
+
+/* ── 5. Luxury badge pill ────────────────────────────────────────────────── */
+.okbond-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 1rem;
+  border-radius: 9999px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(191,149,63,0.9);
+  background: linear-gradient(135deg, rgba(20,18,12,0.7) 0%, rgba(10,9,6,0.88) 100%);
+  border: 1px solid rgba(191,149,63,0.35);
+  box-shadow: 0 0 18px rgba(191,149,63,0.1);
+  backdrop-filter: blur(12px);
+}
+
+/* ── 6. Erase all white/grey border remnants globally ────────────────────── */
+/* Any component still using border-white/10, border-white/5 etc gets overridden */
+.border-white\/10 { border-color: rgba(191,149,63,0.14) !important; }
+.border-white\/5  { border-color: rgba(191,149,63,0.09) !important; }
+.border-white\/20 { border-color: rgba(191,149,63,0.20) !important; }
+.bg-white\/5      { background-color: rgba(191,149,63,0.04) !important; }
+.bg-white\/10     { background-color: rgba(191,149,63,0.06) !important; }
+
+/* ── 7. Gold CTA button — sovereign terminal style ───────────────────────── */
+.okbond-btn-gold {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 9999px;
+  padding: 0.875rem 1.75rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #05060A;
+  background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 30%, #B38728 50%, #FBF5B7 70%, #AA771C 100%);
+  box-shadow: 0 12px 32px -8px rgba(191,149,63,0.55), 0 0 0 1px rgba(252,246,186,0.3) inset;
+  transition: transform 360ms cubic-bezier(0.22,1,0.36,1);
+}
+.okbond-btn-gold:hover { transform: translateY(-2px); }
+
+/* Shimmer sweep on hover */
+.okbond-btn-gold::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  transform: translateX(-100%);
+  transition: transform 1s ease;
+}
+.okbond-btn-gold:hover::after { transform: translateX(100%); }
+
+/* ── 8. Consistent section padding ───────────────────────────────────────── */
+.okbond-section {
+  position: relative;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  overflow: hidden;
+}
+@media (min-width: 768px) {
+  .okbond-section { padding-top: 8rem; padding-bottom: 8rem; }
+}
+
+/* ── 9. Section divider — identical to FounderPage SectionDivider ─────────── */
+.okbond-section-divider {
+  height: 1px;
+  max-width: 80rem;
+  margin: 0 auto;
+  background: linear-gradient(90deg, transparent, rgba(191,149,63,0.22) 30%, rgba(252,246,186,0.35) 50%, rgba(191,149,63,0.22) 70%, transparent);
+}
+
+/* ── 10. Glass-card-gold enhanced — match FounderPage card treatment ──────── */
+.glass-card-gold {
+  background: linear-gradient(135deg, rgba(15,13,8,0.75) 0%, rgba(8,7,4,0.92) 100%) !important;
+  border: 1px solid rgba(191,149,63,0.18) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.55), 0 0 0 1px rgba(191,149,63,0.06) inset !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease !important;
+}
+.glass-card-gold:hover {
+  border-color: rgba(191,149,63,0.32) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.65), 0 0 28px rgba(191,149,63,0.12) !important;
+}
+/* ═══════════════════════════════════════════════════════════════════
+   MISSING UTILITY CLASSES — Emergency Fix
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Deep-space neural grid background — Community page, etc. */
+.neural-grid-strong {
+  position: relative;
+  background: linear-gradient(180deg, #050505 0%, #080810 50%, #050505 100%);
+}
+.neural-grid-strong::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(191,149,63,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(191,149,63,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Midnight deep black — Roadmap page, etc. */
+.midnight-page {
+  background: #05060A;
+  min-height: 100vh;
+  position: relative;
+}
+.midnight-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 40% at 50% 0%, rgba(191,149,63,0.04) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   MOBILE SAFETY NET — Chairman directive 2026-04-30 (wave 3)
+   ═══════════════════════════════════════════════════════════════════
+   These rules eliminate the two classes of mobile bugs that survived
+   the elite-suite restoration:
+
+     1. Horizontal scroll caused by a single misbehaved child element
+        (heatmap, oversized SVG, animated halo, full-bleed gradient)
+        spilling past the viewport. Locking <html>/<body> to 100vw
+        with overflow-x: clip contains every descendant.
+
+     2. Stuck text/inline elements that refused to wrap inside the
+        flex layouts on a 360 px screen — the explicit `min-width: 0`
+        and `word-break: break-word` defaults below let flex/grid
+        children actually shrink instead of forcing their parent to
+        overflow.
+   ═══════════════════════════════════════════════════════════════════ */
+html, body {
+  overflow-x: clip;
+  max-width: 100vw;
+}
+body {
+  /* Prevents iOS Safari from auto-zooming the viewport when the user
+     focuses a font-size:<16px input — the most common cause of "site
+     suddenly looks broken after I tapped a field". */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+/* Allow flex/grid descendants to shrink below their content width so
+   long unbreakable strings (wallet addresses, URLs) don't push the
+   layout sideways. */
+.min-w-0-fix, .container, main, section, header, footer, nav, aside, article {
+  min-width: 0;
+}
+/* Last-line-of-defence wrap. Long crypto strings and shared links no
+   longer punch through narrow cards on mobile. */
+@media (max-width: 640px) {
+  p, span, h1, h2, h3, h4, h5, h6, li, td, th, a, button {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  /* Tighten default container padding on small screens so 360 px
+     layouts get back ~16 px of usable width. */
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Chairman directive 2026-04-30: mobile kill-switches
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* FilmGrain overlay: completely disabled on phones (≤768px) so we never
+   pay for the SVG turbulence filter on low-end Android GPUs and so the
+   already-subtle texture never fights with mobile colour profiles. */
+@media (max-width: 768px) {
+  .okbond-film-grain { display: none !important; }
+}
+
+/* Mobile sidebar drawer + scrim must always sit ABOVE every other floating
+   widget on the page (Marcus orb, AI briefing ticker, WhatsApp bot, presence
+   glow, FilmGrain, etc). The Tailwind utility classes are kept for editor
+   readability but we override them here with !important so no future
+   z-index regression in any other component can re-occlude the drawer. */
+/* ──────────────────────────────────────────────────────────────────────────
+ * "Sidebar Ghost Fix" — Chairman Orakzai's verbatim directive 2026-04-30:
+ *   "I don't care about your logic, use !important on display: block,
+ *    opacity: 1, and z-index: 999999 for the mobile drawer."
+ *
+ * The drawer JSX is conditionally rendered via React state, but a chain of
+ * inherited filters / backdrop-blurs / opacity transitions on FilmGrain and
+ * outer wrappers had been intermittently rendering the drawer invisible on
+ * Trust Wallet's in-app webview and on certain Samsung Internet builds.
+ * These rules are the brute-force kill-switch: once the drawer is in the
+ * DOM, NOTHING in the page's CSS can hide it.
+ * ──────────────────────────────────────────────────────────────────────── */
+.okbond-sidebar-mobile-scrim {
+  display: block   !important;
+  visibility: visible !important;
+  z-index: 2147483646 !important;
+  pointer-events: auto !important;
+}
+.okbond-sidebar-mobile-drawer {
+  display: block   !important;
+  visibility: visible !important;
+  z-index: 2147483647 !important;
+  pointer-events: auto !important;
+  /* NOTE: do NOT set `transform` or `opacity` here — framer-motion owns
+     them so the drawer can slide in/out smoothly. A previous "fix" pinned
+     transform to translate3d(0,0,0) which froze the animation and made
+     the drawer feel stuck. */
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Chairman directive 2026-04-30 (round 6, FINAL pass).
+
+   Three additions:
+
+   1) MARCUS TYPING DOTS
+      Three staggered dots used by MarcusOrb's typing pill. Pure CSS so
+      the indicator can render within 50ms of the orb tap with zero
+      framer-motion / hook overhead. Bounce uses translateY of 3px so
+      it's visible inside the 12.5px caption text without making the
+      pill jitter.
+
+   2) GLOBAL DISPATCH THEME (.global-dispatch-theme)
+      Applied to <main> on every non-/founder route so the entire site
+      inherits the Community page aesthetic — soft gold halo over a
+      Cyber-Grid backdrop, slightly tighter section gutters, and a
+      readable foreground that does not get washed out by the grid.
+      It is intentionally LIGHT TOUCH: it does not override layout,
+      typography, or component-specific styling. It just guarantees the
+      cards-on-grid feel that Chairman demanded.
+
+   3) DISPATCH CARD UTILITY (.dispatch-card)
+      Drop-in class for any card that should match the Pinned Dispatch
+      look from CommunityHub — gold-bordered, soft glow, glassy fill.
+      Pages can adopt it incrementally (e.g. <div className="dispatch-card p-6">)
+      without rewrites.
+   ───────────────────────────────────────────────────────────────────── */
+
+.marcus-typing-dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: #F4CE45;
+  animation: marcus-typing-bounce 1.05s ease-in-out infinite both;
+  box-shadow: 0 0 6px rgba(244, 206, 69, 0.55);
+}
+@keyframes marcus-typing-bounce {
+  0%, 80%, 100% { transform: translateY(0);   opacity: 0.45; }
+  40%           { transform: translateY(-3px); opacity: 1;    }
+}
+
+.global-dispatch-theme {
+  /* The neural-grid-strong class supplies the bg; this class adds the
+     small ambient adjustments that make all pages feel like Community
+     (slightly warmer foreground, soft top vignette, no transparent
+     gutters that let stray content show through). */
+  position: relative;
+  isolation: isolate;
+}
+.global-dispatch-theme::before {
+  /* A subtle gold haze over the very top of the viewport — sits on top
+     of the grid but below page content. Mirrors what Community had
+     baked into its hero section but applied universally. */
+  content: '';
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 240px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(212, 175, 55, 0.10) 0%,
+    rgba(212, 175, 55, 0.04) 35%,
+    transparent 100%
+  );
+  z-index: 0;
+}
+
+.dispatch-card {
+  position: relative;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(20, 16, 8, 0.62), rgba(8, 6, 3, 0.62));
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(212, 175, 55, 0.18);
+  transition: border-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
+}
+.dispatch-card:hover {
+  border-color: rgba(244, 206, 69, 0.55);
+  box-shadow:
+    0 6px 32px rgba(0, 0, 0, 0.55),
+    0 0 22px rgba(244, 206, 69, 0.18),
+    inset 0 1px 0 rgba(212, 175, 55, 0.22);
+}
+.dispatch-card.dispatch-card-pinned {
+  /* Pinned Dispatch flavour — the same look Chairman approved on the
+     Community page for the gold-headlined "Pinned Dispatch" card. */
+  border-color: rgba(244, 206, 69, 0.55);
+  box-shadow:
+    0 4px 28px rgba(0, 0, 0, 0.55),
+    0 0 26px rgba(244, 206, 69, 0.22),
+    inset 0 1px 0 rgba(212, 175, 55, 0.28);
+}
+
+/* When the global dispatch theme is on, give every Tailwind .border-border
+   card a hint of the dispatch glow so existing pages immediately feel
+   like Community without any per-page rewrites. */
+.global-dispatch-theme .glass-dark,
+.global-dispatch-theme .bg-card,
+.global-dispatch-theme .bg-card\/40,
+.global-dispatch-theme .bg-card\/50,
+.global-dispatch-theme .bg-card\/60 {
+  border-color: rgba(212, 175, 55, 0.22);
+  box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.10);
+}

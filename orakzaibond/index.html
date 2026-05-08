@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Orakzai Bond — OKBOND | Real-Asset Backed Token on Polygon</title>
+
+    <!--
+      CACHE KILL-SWITCH (okb-v6) — runs synchronously before any JS framework.
+      Uses localStorage (NOT Cache Storage / Service Worker) so it works in
+      every browser including Android WebView, Trust Wallet in-app browser,
+      Samsung Internet, and any browser where SW is blocked or stale.
+
+      On the FIRST load after this deploy the version key won't match:
+        1. Unregister all service workers.
+        2. Delete every Cache Storage entry.
+        3. Hard-reload once (bypasses all browser caches).
+      Second load: key matches → no-op, app starts normally.
+
+      To force another full flush in a future deploy, bump 'okb-v6' to 'okb-v7'.
+    -->
+    <script>
+      (function () {
+        var V = "okb-v6";
+        try {
+          if (localStorage.getItem("_okbuild") !== V) {
+            localStorage.setItem("_okbuild", V);
+            var pending = 0, done = false;
+            function go() { if (done) return; done = true; location.reload(true); }
+            if ("serviceWorker" in navigator) {
+              pending++;
+              navigator.serviceWorker.getRegistrations()
+                .then(function (r) { r.forEach(function (s) { try { s.unregister(); } catch (e) {} }); if (--pending === 0) go(); })
+                .catch(function () { if (--pending === 0) go(); });
+            }
+            if ("caches" in window) {
+              pending++;
+              caches.keys()
+                .then(function (k) { return Promise.all(k.map(function (c) { return caches.delete(c); })); })
+                .then(function () { if (--pending === 0) go(); })
+                .catch(function () { if (--pending === 0) go(); });
+            }
+            if (pending === 0) go();
+          }
+        } catch (e) { /* localStorage blocked in private mode — carry on */ }
+      })();
+    </script>
+
+    <!-- PWA -->
+    <meta name="theme-color" content="#EAB308" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="OKBOND" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/okbond-logo.png" />
+
+    <!-- SEO -->
+    <meta name="description" content="Orakzai Bond (OKBOND) — Real-asset backed digital token on Polygon PoS. Liquidity-Backed Capital Retention Model backed by real estate, on-chain reserves, liquidity pools and treasury." />
+    <meta name="keywords" content="OKBOND, Orakzai Bond, Polygon, DeFi, lottery, ICO, staking, capital retention, real estate backed token, Faisal Orakzai, blockchain bond" />
+    <meta name="author" content="Orakzai Group" />
+    <link rel="canonical" href="https://orakzaibond.com/" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Orakzai Bond — OKBOND | Real-Asset Backed Token on Polygon" />
+    <meta property="og:description" content="Beyond Borders. Beyond Limits. Liquidity-Backed Capital Retention Model on Polygon PoS. Backed by real-world assets." />
+    <meta property="og:image" content="/opengraph.jpg" />
+    <meta property="og:url" content="https://orakzaibond.com" />
+    <meta property="og:site_name" content="Orakzai Bond" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Orakzai Bond — OKBOND" />
+    <meta name="twitter:description" content="Beyond Borders. Beyond Limits. Real-asset backed token on Polygon with capital retention and on-chain lottery." />
+    <meta name="twitter:image" content="/opengraph.jpg" />
+    <meta name="twitter:site" content="@orakzaibond1" />
+
+    <!-- JSON-LD structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Orakzai Bond",
+        "alternateName": ["OKBOND", "Orakzai Group"],
+        "url": "https://orakzaibond.com",
+        "logo": "https://orakzaibond.com/okbond-logo.png",
+        "description": "Real-asset backed digital token of the Orakzai Group — Liquidity-Backed Capital Retention Model on Polygon PoS.",
+        "sameAs": [
+          "https://x.com/orakzaibond1",
+          "https://t.me/orakzaibond"
+        ],
+        "founder": {
+          "@type": "Person",
+          "name": "Faisal Orakzai"
+        }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Orakzai Bond — OKBOND",
+        "url": "https://orakzaibond.com",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://orakzaibond.com/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
+
+    <!-- Favicon & Fonts -->
+    <link rel="icon" type="image/png" href="/okbond-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://generativelanguage.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Mr+Dafoe&family=Allura&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

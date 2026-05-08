@@ -1,0 +1,17 @@
+[
+  { "inputs": [{"internalType": "uint256","name": "amount","type": "uint256"},{"internalType": "uint256","name": "lockPeriod","type": "uint256"}],"name": "stake","outputs": [],"stateMutability": "nonpayable","type": "function" },
+  { "inputs": [{"internalType": "uint256","name": "stakeId","type": "uint256"}],"name": "unstake","outputs": [],"stateMutability": "nonpayable","type": "function" },
+  { "inputs": [{"internalType": "uint256","name": "stakeId","type": "uint256"}],"name": "claimRewards","outputs": [],"stateMutability": "nonpayable","type": "function" },
+  { "inputs": [],"name": "totalStaked","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function" },
+  { "inputs": [],"name": "totalStakers","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function" },
+  { "inputs": [],"name": "totalRewardsDistributed","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function" },
+  { "inputs": [{"internalType": "uint256","name": "lockPeriod","type": "uint256"}],"name": "getAPY","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function" },
+  { "inputs": [{"internalType": "address","name": "user","type": "address"}],"name": "getStakeCount","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function" },
+  { "inputs": [{"internalType": "address","name": "user","type": "address"},{"internalType": "uint256","name": "stakeId","type": "uint256"}],"name": "getStakeInfo","outputs": [{"internalType": "uint256","name": "amount","type": "uint256"},{"internalType": "uint256","name": "startTime","type": "uint256"},{"internalType": "uint256","name": "lockPeriod","type": "uint256"},{"internalType": "uint256","name": "apy","type": "uint256"},{"internalType": "bool","name": "active","type": "bool"}],"stateMutability": "view","type": "function" },
+  { "inputs": [{"internalType": "address","name": "user","type": "address"},{"internalType": "uint256","name": "stakeId","type": "uint256"}],"name": "pendingRewards","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function" },
+  { "inputs": [{"internalType": "address","name": "user","type": "address"}],"name": "totalUserStaked","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function" },
+  { "inputs": [{"internalType": "address","name": "user","type": "address"}],"name": "totalUserRewards","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"stateMutability": "view","type": "function" },
+  { "anonymous": false,"inputs": [{"indexed": true,"internalType": "address","name": "user","type": "address"},{"indexed": false,"internalType": "uint256","name": "amount","type": "uint256"},{"indexed": false,"internalType": "uint256","name": "lockPeriod","type": "uint256"}],"name": "Staked","type": "event" },
+  { "anonymous": false,"inputs": [{"indexed": true,"internalType": "address","name": "user","type": "address"},{"indexed": false,"internalType": "uint256","name": "amount","type": "uint256"}],"name": "Unstaked","type": "event" },
+  { "anonymous": false,"inputs": [{"indexed": true,"internalType": "address","name": "user","type": "address"},{"indexed": false,"internalType": "uint256","name": "reward","type": "uint256"}],"name": "RewardClaimed","type": "event" }
+]
