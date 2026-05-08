@@ -1659,10 +1659,10 @@ export default function MarcusOrb() {
       )}
 
       <div
-        className="fixed z-[9998] pointer-events-none"
+        className="fixed z-[9998] pointer-events-none flex flex-col items-end"
         style={{
           bottom: "max(20px, env(safe-area-inset-bottom))",
-          right: "max(88px, calc(env(safe-area-inset-right) + 88px))",
+          right: "max(20px, env(safe-area-inset-right))",
         }}
         aria-live="polite"
       >

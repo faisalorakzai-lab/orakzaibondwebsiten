@@ -3,7 +3,7 @@ import { BrowserProvider } from "ethers";
 
 const POLYGON_CHAIN_ID = 137;
 const POLYGON_HEX      = "0x89";
-const OKBOND_CONTRACT  = "0x6f539e4232c045ccac08e2009d97bdc72815472a";
+const OKBOND_CONTRACT  = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
 const POLYGON_RPC      = "https://polygon-bor-rpc.publicnode.com";
 
 // ERC-20 balanceOf(address) selector + 32-byte padded address

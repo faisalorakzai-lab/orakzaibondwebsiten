@@ -26,9 +26,9 @@ import { useWallet } from "@/hooks/useWallet";
 import { pushEscalation } from "@/lib/marcusBus";
 
 /* ── Constants ──────────────────────────────────────────────────────────── */
-const TOKEN_ADDRESS    = "0x6f539e4232c045ccac08e2009d97bdc72815472a";
-const ICO_ADDRESS      = "0x0134F0ADE4b5e48aCBFF97155691bBC54eBadD16";
-const REFERRAL_ADDRESS = "0x66471251A19D7A862e931340998cADFa9a411E9B";
+const TOKEN_ADDRESS    = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
+const ICO_ADDRESS      = "0x7BB2458740c4F491277973212309d831385Ab9D7";
+const REFERRAL_ADDRESS = "0x7BB2458740c4F491277973212309d831385Ab9D7";
 const LOTTERY_ADDRESS  = "0x5bc55d4b347e39b986864e28604ddca5de6357b7";
 const ADMIN_WALLET     = "0x9b02e2edd6f58d626aaa91889708dbf39dfa8cd7";
 const FALLBACK_RPC     = "https://polygon-rpc.com";

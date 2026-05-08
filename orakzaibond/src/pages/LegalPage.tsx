@@ -6,7 +6,7 @@ import {
   MapPin, Landmark, BarChart2, Users, Activity,
 } from "lucide-react";
 
-const OKBOND_CONTRACT = "0x6f539e4232c045ccac08e2009d97bdc72815472a";
+const OKBOND_CONTRACT = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
 const POLYGONSCAN_URL = `https://polygonscan.com/token/${OKBOND_CONTRACT}`;
 
 // CORS-friendly public Polygon RPC endpoints (tried in order)

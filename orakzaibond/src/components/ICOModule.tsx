@@ -18,7 +18,7 @@ import ReferralDashboard from "@/components/ReferralDashboard";
 
 const SITE_URL = "https://orakzaibond.com";
 const POLYGON_SCAN = "https://polygonscan.com/tx/";
-const ICO_CONTRACT_ADDRESS = "0x0134F0ADE4b5e48aCBFF97155691bBC54eBadD16";
+const ICO_CONTRACT_ADDRESS = "0x7BB2458740c4F491277973212309d831385Ab9D7";
 const TOKEN_PRICE_USD = 0.15;
 const TOKENS_PER_POL  = 0.6;
 

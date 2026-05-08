@@ -250,9 +250,11 @@ export default function Hero({ onConnect, address }: HeroProps) {
   }, []);
 
   const contracts = [
-    { name: "Token Contract", address: "0x6F539e4232c045cCAc08e2009d97BdC72815472a" },
-    { name: "ICO Contract", address: "0x0134F0ADE4b5e48aCBFF97155691bBC54eBadD16" },
-    { name: "Lottery Contract", address: "0x5BC55d4b347e39B986864E28604Ddca5dE6357B7" }
+    { name: "OKBOND Token", address: "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F" },
+    { name: "ICO Contract", address: "0x7BB2458740c4F491277973212309d831385Ab9D7" },
+    { name: "Staking Contract", address: "0x5067e9E4Ef827cE0Cc06a44B786668522732fB4e" },
+    { name: "Vault Contract", address: "0x3Cb45d2022e2E15AFa8C4822647B89935a2ceD08" },
+    { name: "Notebook Registry", address: "0xa6a1C3D97e629326ad812e97e927622A8dA711a3" },
   ];
 
   return (
@@ -417,7 +419,7 @@ export default function Hero({ onConnect, address }: HeroProps) {
           </p>
         </RevealText>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
           {contracts.map((contract, idx) => (
             <motion.div 
               key={contract.address}

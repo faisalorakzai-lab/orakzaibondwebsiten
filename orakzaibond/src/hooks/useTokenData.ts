@@ -1,7 +1,7 @@
 import React from "react";
 import { Contract, BrowserProvider, formatUnits } from "ethers";
 
-const CONTRACT_ADDRESS = "0x6F539e4232c045cCAc08e2009d97BdC72815472a";
+const CONTRACT_ADDRESS = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
 const ABI = [
   "function name() view returns (string)",
   "function symbol() view returns (string)",

@@ -3,8 +3,8 @@ import { BrowserProvider, Contract, EventLog, parseEther, formatEther, JsonRpcPr
 import ICO_ABI from "@/abi/ICOContract.json";
 
 // Live Contract Addresses
-const ICO_CONTRACT_ADDRESS = "0x0134F0ADE4b5e48aCBFF97155691bBC54eBadD16";
-const REFERRAL_CONTRACT_ADDRESS = "0x66471251A19D7A862e931340998cADFa9a411E9B";
+const ICO_CONTRACT_ADDRESS = "0x7BB2458740c4F491277973212309d831385Ab9D7";
+const REFERRAL_CONTRACT_ADDRESS = "0x7BB2458740c4F491277973212309d831385Ab9D7";
 
 const FALLBACK_RPCS = [
   "https://rpc.ankr.com/polygon",

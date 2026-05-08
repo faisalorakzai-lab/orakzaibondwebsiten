@@ -128,7 +128,7 @@ export default function SecuritySection() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  const AUDIT_LINK = "https://solidityscan.com/quickscan/0x6F539e4232c045cCAc08e2009d97BdC72815472a/polygonscan/mainnet?ref=etherscan";
+  const AUDIT_LINK = "https://solidityscan.com/quickscan/0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F/polygonscan/mainnet?ref=etherscan";
 
   return (
     <section id="security" className="py-28 relative overflow-hidden"
@@ -293,7 +293,7 @@ export default function SecuritySection() {
             {/* Contract address */}
             <div className="px-4 py-3 rounded-xl font-mono text-[10px] text-foreground/40 truncate"
               style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-              Contract: 0x6F539e4232c045cCAc08e2009d97BdC72815472a
+              Contract: 0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F
             </div>
 
             {/* CTA button */}

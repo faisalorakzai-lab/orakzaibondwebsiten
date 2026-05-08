@@ -8,9 +8,9 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-const TOKEN_ADDRESS = "0x6f539e4232c045ccac08e2009d97bdc72815472a";
+const TOKEN_ADDRESS = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
 const QUICKSWAP_URL =
-  "https://dapp.quickswap.exchange/swap?type=v3&from=0x6F539e4232c045cCAc08e2009d97BdC72815472a&to=ETH";
+  "https://dapp.quickswap.exchange/swap?type=v3&from=0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F&to=ETH";
 const POLYGONSCAN_URL = `https://polygonscan.com/token/${TOKEN_ADDRESS}`;
 
 interface TokenDetailsProps {

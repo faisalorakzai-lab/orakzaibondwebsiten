@@ -23,7 +23,7 @@ const BADGES = [
     label: "Polygon Mainnet · Live",
     color: "#8247E5",
     dot: "#22c55e",
-    href: "https://polygonscan.com/token/0x6f539e4232c045ccac08e2009d97bdc72815472a",
+    href: "https://polygonscan.com/token/0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F",
   },
   {
     icon: Building2,

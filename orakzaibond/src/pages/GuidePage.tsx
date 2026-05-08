@@ -64,7 +64,7 @@ const STEPS = [
       "Tokens appear in your wallet immediately after the transaction confirms on-chain",
     ],
     links: [
-      { label: "View on PolygonScan", href: "https://polygonscan.com/token/0x6f539e4232c045ccac08e2009d97bdc72815472a" },
+      { label: "View on PolygonScan", href: "https://polygonscan.com/token/0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F" },
     ],
   },
 ];
