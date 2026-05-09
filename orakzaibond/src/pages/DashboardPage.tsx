@@ -156,7 +156,7 @@ function PortfolioTab({ metrics, icoStats, stakingStats, address }: any) {
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-white/50">Phase Supply</span>
-              <span className="text-white font-mono">1,000,000 OKBOND</span>
+              <span className="text-white font-mono">10,000,000 OKBOND total</span>
             </div>
             <div className="h-2 bg-white/5 rounded-full overflow-hidden">
               <motion.div
@@ -242,7 +242,7 @@ function ICOTab({ metrics, icoStats }: any) {
         <div className="flex items-center gap-2 mb-5">
           <BarChart3 className="w-4 h-4" style={{ color: GOLD }} />
           <span className="font-bold text-white text-sm">Market Cap Simulator</span>
-          <span className="text-[10px] text-white/30 font-mono">1M OKBOND total supply</span>
+          <span className="text-[10px] text-white/30 font-mono">10M OKBOND fixed supply</span>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           {mcScenarios.map((s, i) => (
