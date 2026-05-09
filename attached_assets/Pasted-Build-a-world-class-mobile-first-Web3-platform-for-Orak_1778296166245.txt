@@ -1,0 +1,170 @@
+Build a world-class mobile-first Web3 platform for “Orakzai Bond (OKBOND)” inspired by Apple, BlackRock, Stripe, Binance, and Sovereign Wealth Fund aesthetics.
+This is NOT a meme coin website.
+This is a premium institutional-grade decentralized financial ecosystem.
+The current backend smart contracts already exist and are live:
+OKBOND Token: 0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F
+ICO: 0x7BB2458740c4F491277973212309d831385Ab9D7
+Vault: 0x3Cb45d2022e2E15AFa8C4822647B89935a2ceD08
+Staking: 0x5067e9E4Ef827cE0Cc06a44B786668522732fB4e
+Notebook Registry: 0xa6a1C3D97e629326ad812e97e927622A8dA711a3
+================================================== PRIMARY GOAL
+Transform the platform into a globally elite Web3 financial product.
+The design must feel:
+Premium
+Clean
+Fast
+Institutional
+Trustworthy
+Mobile-first
+Luxury but minimal
+NO childish crypto UI. NO meme aesthetics. NO clutter. NO glowing random effects.
+================================================== DESIGN SYSTEM
+COLORS:
+Deep Navy: #06121C
+Sovereign Gold: #D4AF37
+Matte Black: #0B0F14
+Slate Gray: #1B2430
+Soft White: #F5F7FA
+TYPOGRAPHY:
+Headings: Space Grotesk
+Body: Inter
+Premium spacing and breathing room
+STYLE:
+Apple-style spacing
+Stripe-quality layouts
+BlackRock-level trust presentation
+Smooth motion animations
+Glassmorphism only lightly
+Strong mobile responsiveness
+================================================== CRITICAL MOBILE FIXES
+The website MUST become fully mobile optimized.
+Fix:
+Overflow issues
+Button spacing
+Card responsiveness
+Navbar collapsing
+Dashboard scaling
+Hero section sizing
+Wallet connection modals
+Tokenomics charts on mobile
+Tables becoming swipe cards
+Sticky CTA buttons
+Everything must feel native on:
+Samsung S22 Ultra
+iPhone 15 Pro Max
+Standard Android devices
+================================================== NEW GLOBAL FEATURES
+LIVE ECOSYSTEM STATUS PAGE Show:
+Vault reserves
+Total staked
+ICO raised
+Token holders
+Lottery pool
+Total payouts
+Treasury assets
+Fetch directly from blockchain.
+==================================================
+REAL-TIME CONTRACT REGISTRY Create “OKBOND Sovereign Registry”
+Display:
+All live contracts
+Verified status
+Version
+Contract purpose
+Deployment date
+PolygonScan verification links
+==================================================
+GLOBAL INVESTOR DASHBOARD Institutional style dashboard:
+Show:
+Portfolio value
+OKBOND holdings
+Staking rewards
+Cashback eligibility
+Lottery status
+Referral earnings
+Treasury health
+Vault reserve ratio
+==================================================
+ADVANCED TOKENOMICS VISUALIZATION Create animated charts:
+Circulating supply
+Locked supply
+Treasury allocation
+Staking allocation
+Liquidity reserves
+Use smooth animated SVG charts.
+==================================================
+LOTTERY EXPERIENCE REDESIGN Make lottery page cinematic and premium.
+Features:
+Countdown timer
+Live participant count
+Live prize pool
+Winner probability estimate
+VRF transparency section
+Historical winners
+Cashback explanation
+Must feel like: “Luxury financial gaming”
+==================================================
+SECURITY & TRUST CENTER Add:
+Smart contract audit section
+Treasury transparency
+Real-world reserve backing
+Security architecture
+Polygon verification
+Timelock explanation
+Wallet safety education
+==================================================
+PERFORMANCE OPTIMIZATION Required:
+Lighthouse score above 95
+Lazy loading
+Image optimization
+Skeleton loaders
+Fast wallet connections
+RPC fallback system
+==================================================
+GLOBAL HOMEPAGE HERO The homepage must feel massive.
+Hero headline example style: “Real Estate. DeFi. Sovereign Infrastructure.”
+Subheadline: “Built on Polygon. Powered by Transparency. Designed for the Future.”
+Include:
+Live stats
+Vault reserve value
+TVL
+Active holders
+Staking APY
+ICO progress
+==================================================
+ECOSYSTEM MAP Build animated ecosystem architecture showing:
+Token
+Vault
+Staking
+ICO
+Lottery
+Notebook
+Treasury
+Connected visually with animated lines.
+==================================================
+FOUNDER AUTHORITY SECTION Make founder page premium.
+Style:
+Forbes-style executive profile
+Global vision timeline
+Mission statement
+Press-ready appearance
+Corporate authority feel
+================================================== TECH STACK
+Use:
+Next.js
+TailwindCSS
+Framer Motion
+Wagmi
+Viem
+RainbowKit
+Recharts
+Ethers.js
+================================================== FINAL RULES
+The platform must feel:
+Bigger than a startup
+More premium than typical crypto projects
+Capable of attracting global investors
+This is NOT a token website.
+This is a sovereign-grade financial ecosystem.
+Build everything production-ready.
+No placeholders. No fake statistics. No unfinished components. No low-quality mobile layouts.
+Use real blockchain reads wherever possible.

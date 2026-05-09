@@ -3,6 +3,7 @@ import { Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Navbar from "./components/Navbar";
 import MobileNavbar from "./components/MobileNavbar";
+import MobileBottomNav from "./components/MobileBottomNav";
 import { useIsDesktop } from "./hooks/useIsDesktop";
 import Hero from "./components/Hero";
 import SiteSidebar, { SidebarHandle } from "./components/SiteSidebar";
@@ -339,6 +340,13 @@ function App() {
       <ErrorBoundary scope="FilmGrain" silent>
         <FilmGrain />
       </ErrorBoundary>
+
+      {/* Mobile sticky bottom nav — only on mobile, outside all other boundaries */}
+      {!isDesktop && (
+        <ErrorBoundary scope="MobileBottomNav" silent>
+          <MobileBottomNav onMenuOpen={handleMenuToggle} />
+        </ErrorBoundary>
+      )}
     </div>
   );
 }

@@ -1,154 +1,217 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, ShieldCheck, Trophy, Sparkles } from "lucide-react";
-import { Link } from "wouter";
+import { ShieldCheck, Trophy, Sparkles, Zap, Clock, ExternalLink, Users, ArrowRight, CheckCircle } from "lucide-react";
 import Lottery from "@/components/Lottery";
 import { useWallet } from "@/hooks/useWallet";
+
+const GOLD = "#D4AF37";
 
 export default function LotteryPage() {
   const { address, connect, provider, isPolygon, switchToPolygon } = useWallet();
 
   return (
-    <div className="w-full bg-background text-foreground flex flex-col overflow-x-hidden">
-      <main className="flex-1 container mx-auto px-4 py-24 max-w-6xl">
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-          <div>
-            <Link href="/">
-              <motion.button
-                whileHover={{ x: -4 }}
-                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-6 group cursor-pointer"
-              >
-                <ArrowLeft className="w-4 h-4 group-hover:animate-pulse" />
-                Back to Home
-              </motion.button>
-            </Link>
-            
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-4"
-            >
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest">
-                <Trophy className="w-3.5 h-3.5" />
-                OKBOND Smart Lottery
-              </div>
-              <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
-                Win Big with <span className="text-primary">Zero Risk</span>
-              </h1>
-              <p className="text-muted-foreground text-lg max-w-2xl">
-                Participate in our unique smart Lottery where capital is protected by smart contract. 
-                Winners take the prize, non-winners get their full deposit back.
-              </p>
-            </motion.div>
-          </div>
+    <div className="min-h-screen pb-24 lg:pb-10" style={{ background: "#050505" }}>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="hidden lg:flex flex-col items-center p-6 rounded-3xl border border-primary/20 bg-primary/5 backdrop-blur-sm"
-          >
-            <ShieldCheck className="w-12 h-12 text-primary mb-3" />
-            <span className="text-xs font-bold uppercase tracking-widest text-primary">Capital Protected</span>
-            <span className="text-2xl font-black text-foreground">Full Cashback</span>
-          </motion.div>
-        </div>
-
-        {/* Features Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-          {[
-            { 
-              icon: <Sparkles className="w-5 h-5" />, 
-              title: "Transparent Draws", 
-              desc: "Fully on-chain logic ensures fairness and transparency." 
-            },
-            { 
-              icon: <ShieldCheck className="w-5 h-5" />, 
-              title: "Capital Protection", 
-              desc: "Non-winners can claim their full deposit back instantly." 
-            },
-            { 
-              icon: <Trophy className="w-5 h-5" />, 
-              title: "Massive Rewards", 
-              desc: "Winners share the pool rewards directly to their wallets." 
-            }
-          ].map((f, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 * i }}
-              className="p-5 rounded-2xl border border-white/5 bg-white/5 backdrop-blur-sm"
-            >
-              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary mb-4">
-                {f.icon}
-              </div>
-              <h3 className="font-bold text-foreground mb-1">{f.title}</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">{f.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Main Component */}
-        <div className="relative">
-          <div className="absolute -inset-4 bg-primary/5 blur-3xl rounded-full pointer-events-none" />
-          <Lottery 
-            provider={provider} 
-            address={address} 
-            onConnect={connect} 
-            isPolygon={isPolygon} 
-            switchToPolygon={switchToPolygon} 
+      {/* ── Cinematic Header ── */}
+      <div className="relative overflow-hidden border-b border-white/5"
+        style={{
+          background: "linear-gradient(135deg, #050505 0%, #07111F 50%, #050505 100%)",
+          paddingTop: "80px",
+          paddingBottom: "60px",
+        }}>
+        {/* Background glow */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0"
+            style={{
+              backgroundImage: `linear-gradient(rgba(212,175,55,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.03) 1px, transparent 1px)`,
+              backgroundSize: "60px 60px",
+            }}
+          />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full"
+            style={{
+              background: `radial-gradient(ellipse, ${GOLD}0a 0%, transparent 70%)`,
+              filter: "blur(60px)",
+            }}
           />
         </div>
 
-        {/* Claim Action Buttons */}
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/8 mb-6"
+          >
+            <Trophy className="w-4 h-4" style={{ color: GOLD }} />
+            <span className="text-[11px] font-bold uppercase tracking-widest" style={{ color: GOLD }}>OKBOND Smart Lottery</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[11px] text-emerald-400 font-mono">LIVE</span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-4"
+            style={{ fontFamily: "'Sora','Inter',sans-serif", letterSpacing: "-0.02em" }}
+          >
+            Win Big.<br />
+            <span style={{
+              background: `linear-gradient(135deg, ${GOLD} 0%, #F5E27D 40%, #B8942A 100%)`,
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}>
+              Risk Nothing.
+            </span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-white/50 text-base sm:text-lg max-w-2xl mx-auto mb-10"
+          >
+            The world's only capital-protected lottery. Winners claim the prize.
+            Non-winners receive 100% of their deposit back. Powered by Chainlink VRF.
+          </motion.p>
+
+          {/* ── Trust strip ── */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="flex flex-wrap justify-center gap-3"
+          >
+            {[
+              { icon: <ShieldCheck className="w-3.5 h-3.5" />, label: "100% Capital Return" },
+              { icon: <Zap         className="w-3.5 h-3.5" />, label: "Chainlink VRF" },
+              { icon: <CheckCircle className="w-3.5 h-3.5" />, label: "Audited Contract" },
+              { icon: <Users       className="w-3.5 h-3.5" />, label: "On-Chain Transparent" },
+            ].map((b) => (
+              <span key={b.label} className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/8 bg-white/3 text-white/45 text-xs font-medium">
+                <span style={{ color: GOLD + "99" }}>{b.icon}</span>
+                {b.label}
+              </span>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ── How It Works ── */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto"
+          className="text-center mb-10"
         >
-          {/* Button 1: Claim Reward (Winners Only) - Gold Theme */}
-          <motion.button
-            whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(234,179,8,0.6)" }}
-            whileTap={{ scale: 0.98 }}
-            className="relative h-16 rounded-2xl font-extrabold text-base bg-gradient-to-r from-primary via-yellow-400 to-primary text-primary-foreground transition-all duration-300 flex items-center justify-center gap-3 group overflow-hidden"
-            style={{
-              boxShadow: "0 0 30px rgba(234,179,8,0.4), inset 0 1px 0 rgba(255,255,255,0.2)",
-            }}
-          >
-            {/* Animated background glow */}
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            
-            {/* Icon and Text */}
-            <motion.div
-              animate={{ y: [0, -2, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="relative z-10 flex items-center gap-2"
-            >
-              <Trophy className="w-5 h-5" />
-              <span>Claim Reward (Winners Only)</span>
-            </motion.div>
-          </motion.button>
-
-          {/* Button 2: Claim Capital (Non-Winners) - Silver/Outlined Gold Theme */}
-          <motion.button
-            whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(234,179,8,0.4)" }}
-            whileTap={{ scale: 0.98 }}
-            className="relative h-16 rounded-2xl font-extrabold text-base bg-transparent border-2 border-primary/60 text-primary hover:border-primary hover:bg-primary/5 transition-all duration-300 flex items-center justify-center gap-3 group"
-          >
-            {/* Icon and Text */}
-            <motion.div
-              animate={{ y: [0, -2, 0] }}
-              transition={{ duration: 2, repeat: Infinity, delay: 0.1 }}
-              className="flex items-center gap-2"
-            >
-              <ShieldCheck className="w-5 h-5" />
-              <span>Claim Capital (Non-Winners)</span>
-            </motion.div>
-          </motion.button>
+          <h2 className="text-2xl sm:text-3xl font-black text-white mb-2"
+            style={{ fontFamily: "'Sora','Inter',sans-serif" }}>
+            How It Works
+          </h2>
+          <p className="text-white/40 text-sm">Three steps to participate in the sovereign lottery</p>
         </motion.div>
-      </main>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-16">
+          {[
+            {
+              step: "01",
+              icon: <Sparkles className="w-6 h-6" />,
+              title: "Enter the Draw",
+              desc: "Purchase lottery tickets with OKBOND tokens. Each ticket gives you an equal chance to win.",
+              color: "#3B82F6",
+            },
+            {
+              step: "02",
+              icon: <Clock className="w-6 h-6" />,
+              title: "Wait for Draw",
+              desc: "The smart contract draws a winner using Chainlink VRF — provably fair, tamper-proof randomness.",
+              color: GOLD,
+            },
+            {
+              step: "03",
+              icon: <Trophy className="w-6 h-6" />,
+              title: "Win or Get Refunded",
+              desc: "Winner takes the prize. Non-winners receive 100% of their ticket deposit back. No one loses capital.",
+              color: "#10B981",
+            },
+          ].map((step, i) => (
+            <motion.div
+              key={step.step}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="relative rounded-2xl p-6 border border-white/6"
+              style={{ background: "rgba(7,17,31,0.7)" }}
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+                  style={{ background: `${step.color}18`, color: step.color }}>
+                  {step.icon}
+                </div>
+                <div className="absolute top-5 right-5 text-5xl font-black leading-none select-none"
+                  style={{ color: step.color + "12", fontFamily: "'JetBrains Mono', monospace" }}>
+                  {step.step}
+                </div>
+              </div>
+              <h3 className="text-white font-bold text-base mt-4 mb-2"
+                style={{ fontFamily: "'Sora','Inter',sans-serif" }}>
+                {step.title}
+              </h3>
+              <p className="text-white/40 text-sm leading-relaxed">{step.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* ── Main Lottery Component ── */}
+        <div className="rounded-3xl border overflow-hidden" style={{ borderColor: `${GOLD}25` }}>
+          <div className="px-6 py-5 border-b flex items-center justify-between"
+            style={{ borderColor: `${GOLD}15`, background: `${GOLD}08` }}>
+            <div className="flex items-center gap-3">
+              <Trophy className="w-5 h-5" style={{ color: GOLD }} />
+              <span className="font-bold text-white" style={{ fontFamily: "'Sora','Inter',sans-serif" }}>
+                Live Lottery Terminal
+              </span>
+            </div>
+            <a
+              href={`https://polygonscan.com/address/0x7BB2458740c4F491277973212309d831385Ab9D7`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-xs text-white/35 hover:text-[#D4AF37] transition-colors"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              Verify Contract
+            </a>
+          </div>
+          <div style={{ background: "#050505" }}>
+            <Lottery
+              provider={provider}
+              address={address}
+              onConnect={connect}
+              isPolygon={isPolygon}
+              switchToPolygon={switchToPolygon}
+            />
+          </div>
+        </div>
+
+        {/* ── VRF Transparency Note ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-8 rounded-2xl p-5 border border-white/6 flex items-start gap-4"
+          style={{ background: "rgba(7,17,31,0.5)" }}
+        >
+          <Zap className="w-5 h-5 shrink-0 mt-0.5" style={{ color: GOLD }} />
+          <div>
+            <p className="text-white text-sm font-semibold mb-1">Chainlink VRF Verified Randomness</p>
+            <p className="text-white/40 text-xs leading-relaxed">
+              Winners are selected using Chainlink's Verifiable Random Function (VRF). This cryptographic proof
+              ensures the lottery outcome is truly random and cannot be manipulated by any party — including
+              the contract owner. Every draw is fully verifiable on-chain.
+            </p>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 }

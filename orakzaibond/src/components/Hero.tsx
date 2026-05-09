@@ -1,12 +1,10 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { Rocket, ShieldCheck, Zap, TrendingUp, Lock, ExternalLink, ArrowDown, Users, Globe, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Rocket, Zap, ShieldCheck, TrendingUp, ExternalLink } from "lucide-react";
-import ParticleBackground from "@/components/ParticleBackground";
-import { useICO } from "@/hooks/useICO";
 import { useWallet } from "@/hooks/useWallet";
+import { useICO } from "@/hooks/useICO";
 
-const coinImage = "/okbond-logo.png";
 const ICO_URL = "/ico";
 
 interface HeroProps {
@@ -14,487 +12,442 @@ interface HeroProps {
   address: string | null;
 }
 
-const SLOGANS = [
-  "Beyond Borders. Beyond Limits.",
-  "OKBOND — The Currency of Power.",
-  "One Ecosystem. Infinite Potential.",
+// Floating orb background
+function CinematicBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
+      {/* Deep grid */}
+      <div className="absolute inset-0"
+        style={{
+          backgroundImage: `linear-gradient(rgba(212,175,55,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.03) 1px, transparent 1px)`,
+          backgroundSize: "60px 60px",
+        }}
+      />
+      {/* Ambient orbs */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          width: 700, height: 700,
+          top: "-20%", left: "-15%",
+          background: "radial-gradient(circle, rgba(7,17,31,0.95) 0%, rgba(212,175,55,0.07) 60%, transparent 80%)",
+          filter: "blur(80px)",
+        }}
+        animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
+        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          width: 600, height: 600,
+          bottom: "-10%", right: "-10%",
+          background: "radial-gradient(circle, rgba(212,175,55,0.08) 0%, transparent 70%)",
+          filter: "blur(100px)",
+        }}
+        animate={{ x: [0, -30, 0], y: [0, -40, 0] }}
+        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          width: 400, height: 400,
+          top: "30%", right: "10%",
+          background: "radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%)",
+          filter: "blur(60px)",
+        }}
+        animate={{ x: [0, 20, -20, 0], y: [0, -20, 10, 0] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Scan line */}
+      <motion.div
+        className="absolute left-0 right-0 h-px"
+        style={{ background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.15), transparent)" }}
+        animate={{ y: ["0vh", "100vh"] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+      />
+      {/* Vignette */}
+      <div className="absolute inset-0" style={{
+        background: "radial-gradient(ellipse 80% 70% at 50% 50%, transparent 40%, rgba(5,5,5,0.7) 100%)"
+      }} />
+    </div>
+  );
+}
+
+// Live metric pill
+function LivePill({ label, value, sub }: { label: string; value: string; sub?: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center px-5 py-3 rounded-2xl border border-[#D4AF37]/20 bg-[#07111F]/60 backdrop-blur-md min-w-[120px]">
+      <span className="text-[10px] text-[#D4AF37]/60 uppercase tracking-widest font-mono mb-1">{label}</span>
+      <span className="text-lg font-bold text-white font-mono leading-none">{value}</span>
+      {sub && <span className="text-[10px] text-white/40 mt-0.5">{sub}</span>}
+    </div>
+  );
+}
+
+const CONTRACTS = [
+  { name: "OKBOND Token",     addr: "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F" },
+  { name: "ICO",              addr: "0x7BB2458740c4F491277973212309d831385Ab9D7" },
+  { name: "Staking",          addr: "0x5067e9E4Ef827cE0Cc06a44B786668522732fB4e" },
+  { name: "Vault",            addr: "0x3Cb45d2022e2E15AFa8C4822647B89935a2ceD08" },
+  { name: "Notebook Registry",addr: "0xa6a1C3D97e629326ad812e97e927622A8dA711a3" },
 ];
 
-// Counter component for dynamic sold text
-const DynamicCounter = ({ value }: { value: number }) => {
-  const [displayValue, setDisplayValue] = useState(0);
-  
-  useEffect(() => {
-    let start = displayValue;
-    const end = value;
-    if (start === end) return;
-    
-    const duration = 2000;
-    const startTime = performance.now();
-    
-    const updateCounter = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      
-      // Ease out expo
-      const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      const current = Math.floor(easeProgress * (end - start) + start);
-      
-      setDisplayValue(current);
-      
-      if (progress < 1) {
-        requestAnimationFrame(updateCounter);
-      }
-    };
-    
-    requestAnimationFrame(updateCounter);
-  }, [value]);
-  
-  return <span>{displayValue.toLocaleString()}</span>;
-};
-
-// Reveal animation variant
-const revealVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: { duration: 0.8, ease: "easeOut" }
-  }
-};
-
-const RevealText = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  
-  return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      variants={revealVariants}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-};
-
-// Premium 3D Metallic Style Icons
-const PillarIcon = ({ type }: { type: "cashback" | "protection" | "verified" | "vesting" }) => {
-  const iconMap = {
-    cashback: (
-      <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
-        <defs>
-          <linearGradient id="cashback-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#3b82f6" />
-            <stop offset="50%" stopColor="#2563eb" />
-            <stop offset="100%" stopColor="#1e40af" />
-          </linearGradient>
-          <linearGradient id="cashback-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#fbbf24" />
-            <stop offset="100%" stopColor="#d97706" />
-          </linearGradient>
-          <filter id="cashback-shadow">
-            <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.6" floodColor="#1e40af" />
-            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" />
-          </filter>
-          <filter id="cashback-glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <circle cx="32" cy="32" r="28" fill="url(#cashback-grad)" opacity="0.2" filter="url(#cashback-glow)" />
-        <circle cx="32" cy="28" r="26" fill="url(#cashback-grad)" opacity="0.1" />
-        <rect x="16" y="20" width="32" height="24" rx="4" fill="url(#cashback-grad)" stroke="url(#cashback-gold)" strokeWidth="2" filter="url(#cashback-shadow)" />
-        <rect x="16" y="20" width="32" height="6" rx="4" fill="url(#cashback-gold)" opacity="0.3" />
-        <circle cx="24" cy="32" r="3" fill="#fbbf24" filter="url(#cashback-shadow)" />
-        <circle cx="40" cy="32" r="3" fill="#fbbf24" filter="url(#cashback-shadow)" />
-        <path d="M 20 28 Q 32 35 44 28" stroke="url(#cashback-gold)" strokeWidth="2" fill="none" strokeLinecap="round" filter="url(#cashback-glow)" />
-      </svg>
-    ),
-    protection: (
-      <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
-        <defs>
-          <linearGradient id="protection-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#3b82f6" />
-            <stop offset="50%" stopColor="#2563eb" />
-            <stop offset="100%" stopColor="#1e40af" />
-          </linearGradient>
-          <linearGradient id="protection-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#fbbf24" />
-            <stop offset="100%" stopColor="#d97706" />
-          </linearGradient>
-          <filter id="protection-shadow">
-            <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.6" floodColor="#1e40af" />
-            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" />
-          </filter>
-          <filter id="protection-glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <path d="M 32 14 L 20 20 L 20 32 Q 20 45 32 50 Q 44 45 44 32 L 44 20 Z" fill="url(#protection-grad)" opacity="0.2" stroke="url(#protection-gold)" strokeWidth="2" filter="url(#protection-glow)" />
-        <path d="M 32 14 L 20 20 L 20 28 Q 20 35 32 38 Q 40 35 40 28 L 40 20 Z" fill="url(#protection-gold)" opacity="0.25" />
-        <path d="M 28 32 L 32 36 L 40 26" stroke="url(#protection-gold)" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" filter="url(#protection-glow)" />
-      </svg>
-    ),
-    verified: (
-      <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
-        <defs>
-          <linearGradient id="verified-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#3b82f6" />
-            <stop offset="50%" stopColor="#2563eb" />
-            <stop offset="100%" stopColor="#1e40af" />
-          </linearGradient>
-          <linearGradient id="verified-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#fbbf24" />
-            <stop offset="100%" stopColor="#d97706" />
-          </linearGradient>
-          <filter id="verified-shadow">
-            <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.6" floodColor="#1e40af" />
-            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" />
-          </filter>
-          <filter id="verified-glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <circle cx="32" cy="32" r="18" fill="url(#verified-grad)" opacity="0.2" stroke="url(#verified-gold)" strokeWidth="2" filter="url(#verified-glow)" />
-        <circle cx="32" cy="26" r="16" fill="url(#verified-gold)" opacity="0.2" />
-        <path d="M 26 32 L 30 36 L 38 28" stroke="url(#verified-gold)" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" filter="url(#verified-glow)" />
-      </svg>
-    ),
-    vesting: (
-      <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
-        <defs>
-          <linearGradient id="vesting-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#3b82f6" />
-            <stop offset="50%" stopColor="#2563eb" />
-            <stop offset="100%" stopColor="#1e40af" />
-          </linearGradient>
-          <linearGradient id="vesting-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#fbbf24" />
-            <stop offset="100%" stopColor="#d97706" />
-          </linearGradient>
-          <filter id="vesting-shadow">
-            <feDropShadow dx="0" dy="4" stdDeviation="6" floodOpacity="0.6" floodColor="#1e40af" />
-            <feGaussianBlur in="SourceGraphic" stdDeviation="0.5" />
-          </filter>
-          <filter id="vesting-glow">
-            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-        <circle cx="32" cy="32" r="16" fill="none" stroke="url(#vesting-grad)" strokeWidth="2" opacity="0.4" filter="url(#vesting-glow)" />
-        <circle cx="32" cy="32" r="12" fill="url(#vesting-grad)" opacity="0.15" stroke="url(#vesting-gold)" strokeWidth="1.5" filter="url(#vesting-shadow)" />
-        <circle cx="32" cy="26" r="10" fill="url(#vesting-gold)" opacity="0.2" />
-        <path d="M 32 24 L 32 32 L 38 38" stroke="url(#vesting-gold)" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" filter="url(#vesting-glow)" />
-      </svg>
-    ),
-  };
-  return iconMap[type];
-};
-
-const PILLARS = [
-  {
-    type: "cashback" as const,
-    title: "Lottery Non-Winner Cashback",
-    color: "from-blue-500 to-blue-600",
-  },
-  {
-    type: "protection" as const,
-    title: "Liquidity-Backed Capital Retention Model",
-    color: "from-blue-500 to-blue-600",
-  },
-  {
-    type: "verified" as const,
-    title: "Verified Smart Contract",
-    color: "from-blue-500 to-blue-600",
-  },
-  {
-    type: "vesting" as const,
-    title: "60-Day Secure Vesting",
-    color: "from-blue-500 to-blue-600",
-  },
+const TRUST_BADGES = [
+  { icon: <ShieldCheck className="w-4 h-4" />, label: "Audited Smart Contracts" },
+  { icon: <Globe className="w-4 h-4" />,       label: "Polygon Mainnet" },
+  { icon: <Lock className="w-4 h-4" />,         label: "Chainlink VRF" },
+  { icon: <Users className="w-4 h-4" />,        label: "Capital Protected" },
 ];
 
 export default function Hero({ onConnect, address }: HeroProps) {
-  const [sloganIdx, setSloganIdx] = useState(0);
-  
   const { provider } = useWallet();
   const { stats } = useICO(provider, address);
 
-  // Phase 1 constants
-  const PHASE1_SUPPLY = 75000;
   const tokensSold = stats ? parseFloat(stats.totalTokensSold) : 0;
-  const progress = Math.min((tokensSold / PHASE1_SUPPLY) * 100, 100);
-
-  useEffect(() => {
-    const cycle = setInterval(() => {
-      setSloganIdx((i) => (i + 1) % SLOGANS.length);
-    }, 3200);
-    return () => clearInterval(cycle);
-  }, []);
-
-  const contracts = [
-    { name: "OKBOND Token", address: "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F" },
-    { name: "ICO Contract", address: "0x7BB2458740c4F491277973212309d831385Ab9D7" },
-    { name: "Staking Contract", address: "0x5067e9E4Ef827cE0Cc06a44B786668522732fB4e" },
-    { name: "Vault Contract", address: "0x3Cb45d2022e2E15AFa8C4822647B89935a2ceD08" },
-    { name: "Notebook Registry", address: "0xa6a1C3D97e629326ad812e97e927622A8dA711a3" },
-  ];
+  const totalRaised = stats ? parseFloat(stats.totalRaisedPOL) : 0;
+  const progress = Math.min((tokensSold / 75000) * 100, 100);
 
   return (
     <>
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-20">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_60%,rgba(234,179,8,0.13),transparent_70%)] pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_100%_100%_at_50%_50%,transparent_40%,rgba(0,0,0,0.55)_100%)] pointer-events-none" />
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.12] pointer-events-none mix-blend-overlay" />
-      <ParticleBackground />
+      {/* ═══ HERO ═══════════════════════════════════════════════════ */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#050505]"
+        style={{ paddingTop: "80px", paddingBottom: "60px" }}>
+        <CinematicBackground />
 
-      <div className="container mx-auto px-4 relative z-10 flex flex-col items-center text-center">
-        
-        {/* Phase 1 Live Progress Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-2xl mb-12"
-        >
-          <div className="bg-background/95 backdrop-blur-2xl rounded-[28px] p-6 md:p-8 border border-white/10 shadow-[0_0_50px_rgba(234,179,8,0.15)] relative overflow-hidden group">
-            {/* Animated background glow */}
-            <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 blur-[80px] rounded-full group-hover:bg-primary/20 transition-all duration-700" />
-            
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-              <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="flex h-2 w-2 relative">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                  </div>
-                  <span className="text-emerald-500 font-black text-xs uppercase tracking-[0.3em]">ICO Phase 1 is LIVE</span>
-                </div>
-                <h2 className="text-3xl md:text-4xl font-black text-foreground flex items-baseline gap-2">
-                  $0.15 <span className="text-xs text-muted-foreground font-bold uppercase tracking-widest">per OKBOND</span>
-                </h2>
-              </div>
+        <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
 
-              <div className="flex flex-col items-center md:items-end w-full md:w-auto gap-2">
-                <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest text-muted-foreground mb-1">
-                  <div className="flex items-center gap-1.5">
-                    <Zap className="w-3 h-3 text-primary" />
-                    <span>Polygon Network</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <ShieldCheck className="w-3 h-3 text-emerald-500" />
-                    <span>Audited</span>
-                  </div>
-                </div>
-                
-                <div className="w-full md:w-64 h-3 bg-white/5 rounded-full overflow-hidden border border-white/5 relative">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: `${progress}%` }}
-                    transition={{ duration: 1.5, ease: "easeOut" }}
-                    className="h-full bg-gradient-to-r from-primary via-yellow-400 to-primary shadow-[0_0_15px_rgba(234,179,8,0.5)] animate-slow-pulse relative z-10"
-                  />
-                </div>
-                <div className="flex justify-between w-full md:w-64 text-[10px] font-black uppercase tracking-tighter mt-1">
-                  <span className="text-primary inline-flex items-center gap-1.5">
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" aria-hidden />
-                    <DynamicCounter value={tokensSold} /> SOLD · LIVE ON-CHAIN
-                  </span>
-                  <span className="text-muted-foreground">{PHASE1_SUPPLY.toLocaleString()} TOTAL</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+          {/* ── Live ICO banner ── */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="mb-8 flex items-center gap-2 px-4 py-2 rounded-full border border-emerald-500/30 bg-emerald-500/8 backdrop-blur-sm"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+            </span>
+            <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest">ICO Phase 1 Live · $0.50 per OKBOND</span>
+            <ChevronRight className="w-3.5 h-3.5 text-emerald-400/60" />
+          </motion.div>
 
-        <div className="max-w-5xl">
-          <RevealText>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-8 leading-[1.02] imperial-tagline">
-              Orakzai Bond:
-              <br className="hidden sm:block" />
-              <span className="block mt-2">The Orakzai Bond Gateway to Next-Generation Wealth.</span>
+          {/* ── Main headline ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="mb-6 max-w-4xl"
+          >
+            <h1
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.02] text-white"
+              style={{ fontFamily: "'Sora', 'Inter', sans-serif", letterSpacing: "-0.02em" }}
+            >
+              Capital Protection<br />
+              <span style={{
+                background: "linear-gradient(135deg, #D4AF37 0%, #F5E27D 40%, #B8942A 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}>
+                Meets Blockchain Sovereignty.
+              </span>
             </h1>
-          </RevealText>
+          </motion.div>
 
-          <RevealText>
-            <div className="h-12 mb-10">
-              <motion.p
-                key={sloganIdx}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                className="text-2xl md:text-3xl font-bold text-primary/85 italic"
+          {/* ── Sub headline ── */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.25 }}
+            className="text-base sm:text-lg md:text-xl text-white/55 max-w-2xl mb-10 leading-relaxed font-light"
+            style={{ fontFamily: "'Inter', sans-serif" }}
+          >
+            The world's first cashback-protected decentralized bond ecosystem.
+            Built on Polygon. Audited. Sovereign-grade.
+          </motion.p>
+
+          {/* ── CTA Buttons ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="flex flex-col sm:flex-row items-center gap-4 mb-14 w-full max-w-sm sm:max-w-none sm:justify-center"
+          >
+            <motion.a
+              href={ICO_URL}
+              whileHover={{ scale: 1.03, boxShadow: "0 0 60px rgba(212,175,55,0.5)" }}
+              whileTap={{ scale: 0.97 }}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-3 h-14 px-10 rounded-2xl font-bold text-base relative overflow-hidden"
+              style={{
+                background: "linear-gradient(135deg, #D4AF37 0%, #F5E27D 40%, #B8942A 100%)",
+                color: "#050505",
+                boxShadow: "0 0 40px rgba(212,175,55,0.3), inset 0 1px 0 rgba(255,255,255,0.25)",
+                fontFamily: "'Sora', 'Inter', sans-serif",
+              }}
+            >
+              <Rocket className="w-5 h-5" />
+              Buy OKBOND Now
+            </motion.a>
+            {!address ? (
+              <Button
+                onClick={onConnect}
+                variant="outline"
+                className="w-full sm:w-auto h-14 px-10 rounded-2xl font-bold text-base border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37]/10 hover:border-[#D4AF37]/60 transition-all"
+                style={{ fontFamily: "'Sora', 'Inter', sans-serif" }}
               >
-                "{SLOGANS[sloganIdx]}"
-              </motion.p>
-            </div>
-          </RevealText>
+                Connect Wallet
+              </Button>
+            ) : (
+              <a
+                href="/dashboard"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-14 px-10 rounded-2xl font-bold text-base border border-[#D4AF37]/30 text-[#D4AF37] hover:bg-[#D4AF37]/10 transition-all"
+                style={{ fontFamily: "'Sora', 'Inter', sans-serif" }}
+              >
+                Open Dashboard
+                <ChevronRight className="w-4 h-4" />
+              </a>
+            )}
+          </motion.div>
 
-          <RevealText>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mb-14">
-              {!address && (
-                <Button
-                  onClick={onConnect}
-                  size="lg"
-                  className="w-full sm:w-auto text-lg h-16 px-12 rounded-full metallic-gold animate-shine-sweep text-primary-foreground font-black shadow-[0_0_40px_rgba(234,179,8,0.5)] hover:shadow-[0_0_60px_rgba(234,179,8,0.8)] transition-all duration-300"
-                >
-                  Connect Wallet
-                </Button>
-              )}
-              
+          {/* ── Live metrics strip ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.45 }}
+            className="flex items-center gap-3 flex-wrap justify-center mb-14 w-full max-w-2xl"
+          >
+            <LivePill label="ICO Price"  value="$0.50"        sub="Phase 1 Live" />
+            <LivePill label="Base APY"   value="12-24%"       sub="Staking yield" />
+            <LivePill label="Network"    value="Polygon"      sub="137 Mainnet" />
+            <LivePill
+              label="Tokens Sold"
+              value={`${tokensSold.toLocaleString()}`}
+              sub="of 1M total"
+            />
+          </motion.div>
+
+          {/* ── ICO Progress Bar ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.55 }}
+            className="w-full max-w-2xl mb-12"
+          >
+            <div className="rounded-2xl border border-[#D4AF37]/20 bg-[#07111F]/50 backdrop-blur-md p-5">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs text-white/60 font-mono uppercase tracking-widest">Phase 1 ICO Progress</span>
+                <span className="text-xs font-mono text-[#D4AF37]">{progress.toFixed(1)}%</span>
+              </div>
+              <div className="relative h-2.5 rounded-full bg-white/5 overflow-hidden mb-3">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progress}%` }}
+                  transition={{ duration: 2, ease: "easeOut", delay: 0.7 }}
+                  className="absolute inset-y-0 left-0 rounded-full"
+                  style={{
+                    background: "linear-gradient(90deg, #B8942A, #D4AF37, #F5E27D)",
+                    boxShadow: "0 0 12px rgba(212,175,55,0.6)",
+                  }}
+                />
+              </div>
+              <div className="flex justify-between text-xs">
+                <span className="text-white/40 font-mono">{totalRaised.toFixed(2)} POL raised</span>
+                <span className="text-white/40 font-mono">Hard Cap: 75,000 POL</span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* ── Trust badges ── */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.65 }}
+            className="flex flex-wrap items-center justify-center gap-3 mb-4"
+          >
+            {TRUST_BADGES.map((b) => (
+              <div
+                key={b.label}
+                className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/8 bg-white/3 text-white/50 text-xs font-medium"
+              >
+                <span className="text-[#D4AF37]/60">{b.icon}</span>
+                {b.label}
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* ── Scroll indicator ── */}
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        >
+          <span className="text-[10px] text-white/25 uppercase tracking-widest font-mono">Scroll</span>
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity }}
+          >
+            <ArrowDown className="w-4 h-4 text-white/25" />
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ═══ VERIFIED SMART CONTRACTS ═══════════════════════════════ */}
+      <section className="relative bg-[#07111F] border-t border-[#D4AF37]/10 py-20 px-4 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse 60% 60% at 50% 100%, rgba(212,175,55,0.05) 0%, transparent 70%)"
+          }}
+        />
+        <div className="max-w-6xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/8 mb-4">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <span className="text-[#D4AF37] text-xs font-bold uppercase tracking-widest">On-Chain Transparency</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-3"
+              style={{ fontFamily: "'Sora', 'Inter', sans-serif" }}>
+              Verified Smart Contracts
+            </h2>
+            <p className="text-white/45 text-sm max-w-xl mx-auto">
+              Every contract is publicly verified on Polygon Mainnet. Full transparency. No back doors.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {CONTRACTS.map((c, idx) => (
               <motion.a
-                href={ICO_URL}
-                whileHover={{ scale: 1.05, boxShadow: "0 0 60px rgba(234,179,8,0.8), 0 0 100px rgba(234,179,8,0.4)" }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-3 text-lg h-16 px-12 rounded-full font-black bg-gradient-to-r from-primary via-yellow-400 to-primary text-primary-foreground transition-all duration-300 relative overflow-hidden group hero-glow-button"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                <Rocket className="w-6 h-6 relative z-10" />
-                
-                <span className="relative z-10">BUY ICO NOW</span>
-              </motion.a>
-            </div>
-          </RevealText>
-
-          {/* 4 Pillars Section with Glass-Morphism & Neon Borders */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
-            {PILLARS.map((pillar, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
+                key={c.addr}
+                href={`https://polygonscan.com/address/${c.addr}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.2 + idx * 0.1 }}
-                whileHover={{ y: -6, boxShadow: `0 0 40px rgba(234,179,8,0.3)` }}
-                className="glass-gold-premium p-6 rounded-2xl transition-all duration-300 overflow-hidden group"
+                transition={{ delay: idx * 0.07 }}
+                whileHover={{ y: -4, borderColor: "rgba(212,175,55,0.5)" }}
+                className="group flex flex-col gap-3 p-5 rounded-2xl border border-[#D4AF37]/15 bg-[#050505]/60 backdrop-blur-sm transition-all duration-300"
+                style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.4)" }}
               >
-                <div className={`relative w-14 h-14 rounded-xl bg-gradient-to-br ${pillar.color} mb-4 p-3 group-hover:scale-110 transition-transform duration-300 shadow-[0_8px_16px_rgba(59,130,246,0.3),_inset_0_1px_0_rgba(255,255,255,0.2)]`}>
-                  <PillarIcon type={pillar.type} />
+                <div className="flex items-center justify-between">
+                  <span className="text-[#D4AF37] text-xs font-bold uppercase tracking-wider">{c.name}</span>
+                  <span className="text-[10px] text-emerald-400 font-mono bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-full">✓ Verified</span>
                 </div>
+                <p className="text-white/40 text-[11px] font-mono break-all leading-relaxed">{c.addr}</p>
+                <div className="flex items-center gap-1.5 text-[11px] text-[#D4AF37]/60 group-hover:text-[#D4AF37] transition-colors">
+                  <ExternalLink className="w-3 h-3" />
+                  <span>View on PolygonScan</span>
+                </div>
+              </motion.a>
+            ))}
+          </div>
 
-                <p className="text-base font-black text-foreground leading-snug relative z-10 tracking-tight">{pillar.title}</p>
+          {/* Document Downloads */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="mt-16 flex flex-col items-center gap-4"
+          >
+            <p className="text-white/35 text-xs font-mono uppercase tracking-widest mb-2">Official Documents</p>
+            <div className="flex flex-wrap justify-center gap-3">
+              {[
+                { label: "Whitepaper",    href: "https://drive.google.com/uc?export=download&id=1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh" },
+                { label: "Marketing PDF", href: "https://drive.google.com/uc?export=download&id=1ciuxocfbRbwENLaclrpey50EJMxF_pdr" },
+                { label: "Audit Report",  href: "https://drive.google.com/uc?export=download&id=1uvONnEDac-Z06mrth6TT94N9bRGecyhN" },
+              ].map((doc) => (
+                <a
+                  key={doc.label}
+                  href={doc.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-6 py-3 rounded-xl border border-[#D4AF37]/25 text-[#D4AF37] text-sm font-semibold hover:bg-[#D4AF37]/10 hover:border-[#D4AF37]/50 transition-all"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  {doc.label}
+                </a>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══ VALUE PILLARS ════════════════════════════════════════════ */}
+      <section className="bg-[#050505] border-t border-white/5 py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white mb-3"
+              style={{ fontFamily: "'Sora', 'Inter', sans-serif" }}>
+              Why Orakzai Bond?
+            </h2>
+            <p className="text-white/40 text-sm max-w-lg mx-auto">
+              Four sovereign pillars of protection that no other DeFi ecosystem offers.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              {
+                icon: <ShieldCheck className="w-6 h-6" />,
+                title: "Lottery Cashback",
+                desc: "Non-winners receive 100% capital return. Your participation is never at a loss.",
+                color: "#3B82F6",
+              },
+              {
+                icon: <Lock className="w-6 h-6" />,
+                title: "Liquidity Protection",
+                desc: "Liquidity-backed capital retention model ensures reserve backing at all times.",
+                color: "#D4AF37",
+              },
+              {
+                icon: <Zap className="w-6 h-6" />,
+                title: "Verified Contracts",
+                desc: "All smart contracts are publicly verified on Polygon. No hidden logic.",
+                color: "#10B981",
+              },
+              {
+                icon: <TrendingUp className="w-6 h-6" />,
+                title: "60-Day Vesting",
+                desc: "Secure token vesting schedule protects holders and stabilises ecosystem value.",
+                color: "#8B5CF6",
+              },
+            ].map((p, i) => (
+              <motion.div
+                key={p.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                whileHover={{ y: -6 }}
+                className="group relative p-6 rounded-2xl border border-white/6 bg-[#07111F]/50 overflow-hidden transition-all duration-300"
+                style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.3)" }}
+              >
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
+                  style={{ background: `radial-gradient(ellipse at 0 0, ${p.color}0d 0%, transparent 60%)` }}
+                />
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
+                  style={{ background: `${p.color}15`, color: p.color }}
+                >
+                  {p.icon}
+                </div>
+                <h3 className="text-white font-bold text-base mb-2" style={{ fontFamily: "'Sora', 'Inter', sans-serif" }}>
+                  {p.title}
+                </h3>
+                <p className="text-white/45 text-sm leading-relaxed">{p.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
-      </div>
-
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5 }}
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
-        <span className="text-xs text-muted-foreground/50 uppercase tracking-widest font-mono">Explore</span>
-        <motion.div className="w-px h-14 bg-gradient-to-b from-primary/60 to-transparent"
-          animate={{ scaleY: [1, 0.4, 1], opacity: [1, 0.3, 1] }}
-          transition={{ duration: 2.2, repeat: Infinity }} />
-      </motion.div>
-    </section>
-
-    {/* Smart Contract Governance Section */}
-    <section className="bg-black text-white py-16 px-4 border-t border-yellow-600/30 relative z-10">
-      <div className="max-w-6xl mx-auto text-center">
-        <RevealText>
-          <h2 className="text-3xl font-black text-primary mb-4 uppercase tracking-[0.2em]">
-            Verified Smart Contracts
-          </h2>
-        </RevealText>
-        <RevealText>
-          <p className="text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Transparency is our core value. Verify our ecosystem on the Polygon Network.
-          </p>
-        </RevealText>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
-          {contracts.map((contract, idx) => (
-            <motion.div 
-              key={contract.address}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              whileHover={{ y: -5 }}
-              className="glass-card p-8 rounded-3xl group"
-            >
-              <div className="flex items-center justify-between mb-4 gap-2">
-                <h3 className="text-primary font-black uppercase tracking-wider">{contract.name}</h3>
-                <span className="verified-osg" title="Verified by Orakzai Bond Governance">
-                  Verified by OBG
-                </span>
-              </div>
-              <p className="text-[10px] font-mono text-muted-foreground break-all mb-6 bg-black/40 p-3 rounded-xl border border-white/5">
-                {contract.address}
-              </p>
-              <a 
-                href={`https://polygonscan.com/address/${contract.address}`} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-xs bg-primary text-primary-foreground px-6 py-3 rounded-full font-black hover:bg-primary/90 transition-all shadow-[0_0_15px_rgba(234,179,8,0.3)]"
-              >
-                View on PolygonScan
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Document Direct-Download Buttons — Midnight Gold */}
-        <div className="mt-20 flex flex-col items-center gap-5">
-          <p className="text-xs font-mono uppercase tracking-[0.25em] text-primary/70">
-            Official Documents · Instant Download
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <a
-              href="https://drive.google.com/uc?export=download&id=1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh"
-              download="OKBOND-Whitepaper.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="gold-button gold-hover-glow"
-              data-testid="download-whitepaper"
-            >
-              <ShieldCheck className="w-4 h-4" />
-              Whitepaper
-            </a>
-            <a
-              href="https://drive.google.com/uc?export=download&id=1ciuxocfbRbwENLaclrpey50EJMxF_pdr"
-              download="OKBOND-Marketing.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="gold-button-outline gold-hover-glow"
-              data-testid="download-marketing"
-            >
-              <ShieldCheck className="w-4 h-4" />
-              Marketing PDF
-            </a>
-            <a
-              href="https://drive.google.com/uc?export=download&id=1uvONnEDac-Z06mrth6TT94N9bRGecyhN"
-              download="OKBOND-Audit-Report.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="gold-button-outline gold-hover-glow"
-              data-testid="download-audit"
-            >
-              <ShieldCheck className="w-4 h-4" />
-              Audit Report
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
     </>
   );
 }

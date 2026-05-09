@@ -2,7 +2,12 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useStaking } from "@/hooks/useStaking";
 import { useWallet } from "@/hooks/useWallet";
-import { Lock, Unlock, TrendingUp, Zap, Users, RefreshCw, CheckCircle, AlertCircle, Loader2, ExternalLink } from "lucide-react";
+import {
+  Lock, Unlock, TrendingUp, Zap, Users, RefreshCw, CheckCircle,
+  AlertCircle, Loader2, ExternalLink, Calculator, ArrowRight,
+} from "lucide-react";
+
+const GOLD = "#D4AF37";
 
 function fmt(val: string, d = 2): string {
   const n = parseFloat(val);
@@ -13,10 +18,10 @@ function fmt(val: string, d = 2): string {
 }
 
 const POOLS = [
-  { days: 30,  apy: 12, label: "Starter",    badge: "12% APY",  color: "border-slate-400/30 hover:border-slate-400/60" },
-  { days: 90,  apy: 15, label: "Growth",     badge: "15% APY",  color: "border-blue-400/30 hover:border-blue-500/60" },
-  { days: 180, apy: 18, label: "Premium",    badge: "18% APY",  color: "border-primary/30 hover:border-primary/60", popular: true },
-  { days: 365, apy: 24, label: "Sovereign",  badge: "24% APY",  color: "border-amber-400/30 hover:border-amber-400/60" },
+  { days: 30,  apy: 12, label: "Starter",   badge: "12% APY",  accent: "#64748B", popular: false },
+  { days: 90,  apy: 15, label: "Growth",    badge: "15% APY",  accent: "#3B82F6", popular: false },
+  { days: 180, apy: 18, label: "Premium",   badge: "18% APY",  accent: GOLD,      popular: true  },
+  { days: 365, apy: 24, label: "Sovereign", badge: "24% APY",  accent: "#F59E0B", popular: false },
 ];
 
 export default function StakingPage() {
@@ -27,264 +32,301 @@ export default function StakingPage() {
   const [amount, setAmount]             = useState("");
   const [compoundYears, setCompoundYears] = useState(1);
 
-  const parsedAmount   = parseFloat(amount) || 0;
+  const parsedAmount    = parseFloat(amount) || 0;
   const estimatedReward = parsedAmount * (selectedPool.apy / 100) * (selectedPool.days / 365);
-  const compoundFinal  = parsedAmount * Math.pow(1 + selectedPool.apy / 100, compoundYears);
-
-  const isPending = ["approving", "staking", "unstaking", "claiming"].includes(txStatus);
+  const compoundFinal   = parsedAmount * Math.pow(1 + selectedPool.apy / 100, compoundYears);
+  const isPending       = ["approving", "staking", "unstaking", "claiming"].includes(txStatus);
 
   return (
-    <div className="min-h-screen px-4 md:px-8 py-10 max-w-7xl mx-auto">
-      {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-            <Lock className="w-4 h-4 text-primary" />
+    <div className="min-h-screen pb-24 lg:pb-10" style={{ background: "#050505" }}>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+
+        {/* ── Header ── */}
+        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${GOLD}20` }}>
+              <Lock className="w-4.5 h-4.5" style={{ color: GOLD }} />
+            </div>
+            <span className="text-xs font-mono uppercase tracking-widest" style={{ color: GOLD }}>Staking Terminal</span>
           </div>
-          <span className="text-xs text-primary font-mono tracking-widest uppercase">Advanced Staking</span>
-        </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-foreground">Stake OKBOND</h1>
-        <p className="text-muted-foreground text-sm mt-1">Lock OKBOND tokens and earn institutional-grade yields · Polygon Mainnet</p>
-      </motion.div>
-
-      {/* Protocol Stats Strip */}
-      {!loading && stats && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-3 gap-3 mb-8">
-          {[
-            { label: "Total Value Staked", value: `${fmt(stats.totalStaked)} OKBOND`, icon: <Lock className="w-4 h-4" /> },
-            { label: "Total Stakers",      value: stats.totalStakers,                 icon: <Users className="w-4 h-4" /> },
-            { label: "Rewards Given",      value: `${fmt(stats.rewardsDistributed)} OKBOND`, icon: <Zap className="w-4 h-4" /> },
-          ].map(({ label, value, icon }) => (
-            <div key={label} className="rounded-xl border border-border/40 bg-card/60 px-4 py-3 flex items-center gap-3">
-              <div className="text-primary">{icon}</div>
-              <div>
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{label}</p>
-                <p className="text-sm font-bold text-foreground">{value}</p>
-              </div>
-            </div>
-          ))}
+          <h1 className="text-3xl sm:text-4xl font-black text-white mb-2"
+            style={{ fontFamily: "'Sora','Inter',sans-serif" }}>
+            Stake OKBOND
+          </h1>
+          <p className="text-white/40 text-sm">Institutional-grade yields · Polygon Mainnet · Up to 24% APY</p>
         </motion.div>
-      )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        {/* Left: Pool selector + form */}
-        <div className="lg:col-span-3 space-y-5">
-          {/* Pool Cards */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <p className="text-xs text-muted-foreground uppercase tracking-widest mb-3">Select Lock Period</p>
-            <div className="grid grid-cols-2 gap-3">
-              {POOLS.map((pool) => (
-                <button
-                  key={pool.days}
-                  onClick={() => setSelectedPool(pool)}
-                  className={`relative rounded-xl border p-4 text-left transition-all duration-200
-                    ${selectedPool.days === pool.days
-                      ? "bg-primary/10 border-primary/50 shadow-[0_0_20px_rgba(234,179,8,0.1)]"
-                      : `bg-card/40 ${pool.color}`
-                    }`}
-                >
-                  {pool.popular && (
-                    <span className="absolute top-2 right-2 text-[9px] bg-primary text-black px-1.5 py-0.5 rounded-full font-bold">POPULAR</span>
-                  )}
-                  <p className="text-xs text-muted-foreground mb-1">{pool.label}</p>
-                  <p className="text-2xl font-bold text-primary">{pool.apy}%</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">APY · {pool.days} day lock</p>
-                  {selectedPool.days === pool.days && (
-                    <div className="absolute bottom-2 right-2">
-                      <CheckCircle className="w-4 h-4 text-primary" />
+        {/* ── Protocol Stats ── */}
+        {!loading && stats && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            className="grid grid-cols-3 gap-3 mb-8">
+            {[
+              { label: "Total Staked",   value: `${fmt(stats.totalStaked)} OKBOND`, icon: <Lock    className="w-4 h-4" /> },
+              { label: "Total Stakers",  value: stats.totalStakers,                  icon: <Users   className="w-4 h-4" /> },
+              { label: "Rewards Given",  value: `${fmt(stats.rewardsDistributed)}`,  icon: <Zap     className="w-4 h-4" /> },
+            ].map(({ label, value, icon }) => (
+              <div key={label}
+                className="rounded-2xl border border-white/6 p-4 flex items-center gap-3"
+                style={{ background: "rgba(7,17,31,0.7)" }}>
+                <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${GOLD}18`, color: GOLD }}>
+                  {icon}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] text-white/35 uppercase font-mono tracking-widest truncate">{label}</p>
+                  <p className="text-sm font-black text-white" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{value}</p>
+                </div>
+              </div>
+            ))}
+          </motion.div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+          {/* ── Pool Selection ── */}
+          <div className="lg:col-span-2 space-y-4">
+            <h2 className="text-white font-bold text-base mb-1" style={{ fontFamily: "'Sora','Inter',sans-serif" }}>
+              Choose Staking Pool
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {POOLS.map((pool) => {
+                const active = selectedPool.days === pool.days;
+                return (
+                  <motion.button
+                    key={pool.days}
+                    onClick={() => setSelectedPool(pool)}
+                    whileHover={{ y: -3 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="relative w-full rounded-2xl p-5 text-left transition-all duration-200"
+                    style={{
+                      border: `1px solid ${active ? pool.accent + "70" : pool.accent + "20"}`,
+                      background: active ? `${pool.accent}12` : "rgba(7,17,31,0.6)",
+                      boxShadow: active ? `0 0 24px ${pool.accent}20` : "none",
+                    }}
+                  >
+                    {pool.popular && (
+                      <span className="absolute -top-2.5 left-4 text-[10px] font-bold uppercase tracking-widest px-3 py-0.5 rounded-full"
+                        style={{ background: GOLD, color: "#050505" }}>
+                        Most Popular
+                      </span>
+                    )}
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-white font-bold text-sm" style={{ fontFamily: "'Sora','Inter',sans-serif" }}>{pool.label}</span>
+                      <span className="text-[11px] font-bold px-2.5 py-1 rounded-full border"
+                        style={{ color: pool.accent, borderColor: `${pool.accent}40`, background: `${pool.accent}15` }}>
+                        {pool.badge}
+                      </span>
+                    </div>
+                    <p className="text-3xl font-black mb-1" style={{ color: pool.accent, fontFamily: "'JetBrains Mono', monospace" }}>
+                      {pool.apy}%
+                    </p>
+                    <p className="text-white/40 text-xs">{pool.days} day lock · Annual Percentage Yield</p>
+                    {active && (
+                      <div className="absolute top-4 right-4 w-5 h-5 rounded-full flex items-center justify-center"
+                        style={{ background: pool.accent }}>
+                        <CheckCircle className="w-3 h-3 text-black" />
+                      </div>
+                    )}
+                  </motion.button>
+                );
+              })}
+            </div>
+
+            {/* ── Stake Form ── */}
+            <div className="rounded-2xl border border-white/6 p-6" style={{ background: "rgba(7,17,31,0.7)" }}>
+              <h3 className="text-white font-bold text-sm mb-4" style={{ fontFamily: "'Sora','Inter',sans-serif" }}>
+                Stake Amount
+              </h3>
+
+              {!address ? (
+                <div className="text-center py-6">
+                  <p className="text-white/40 text-sm mb-4">Connect wallet to stake OKBOND</p>
+                  <button onClick={connect}
+                    className="px-6 py-3 rounded-xl font-bold text-sm"
+                    style={{ background: `linear-gradient(135deg, ${GOLD}, #B8942A)`, color: "#050505" }}>
+                    Connect Wallet
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="relative mb-4">
+                    <input
+                      type="number"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      placeholder="0.00"
+                      className="w-full rounded-xl px-4 py-3.5 text-right text-lg font-mono font-bold pr-24 focus:outline-none transition-all"
+                      style={{
+                        background: "rgba(255,255,255,0.04)",
+                        border: `1px solid ${amount ? GOLD + "40" : "rgba(255,255,255,0.08)"}`,
+                        color: "#F5F5F5",
+                        fontFamily: "'JetBrains Mono', monospace",
+                      }}
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold" style={{ color: GOLD }}>
+                      OKBOND
+                    </span>
+                  </div>
+
+                  {parsedAmount > 0 && (
+                    <div className="rounded-xl p-4 mb-4 border border-white/5" style={{ background: "rgba(255,255,255,0.02)" }}>
+                      <div className="flex justify-between text-sm mb-2">
+                        <span className="text-white/40">Estimated reward ({selectedPool.days}d)</span>
+                        <span className="font-bold" style={{ color: GOLD, fontFamily: "'JetBrains Mono', monospace" }}>
+                          +{estimatedReward.toFixed(2)} OKBOND
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-sm">
+                        <span className="text-white/40">Lock expires</span>
+                        <span className="text-white/60 font-mono text-xs">
+                          {new Date(Date.now() + selectedPool.days * 86400000).toLocaleDateString()}
+                        </span>
+                      </div>
                     </div>
                   )}
-                </button>
-              ))}
-            </div>
-          </motion.div>
 
-          {/* Stake form */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-            className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-sm p-6"
-          >
-            <p className="text-sm font-semibold text-foreground mb-4">Stake OKBOND Tokens</p>
+                  {/* Tx Status */}
+                  <AnimatePresence>
+                    {txStatus !== "idle" && (
+                      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                        className="mb-4 p-4 rounded-xl flex items-start gap-3"
+                        style={{
+                          background: txStatus === "success" ? "rgba(16,185,129,0.1)" : txStatus === "error" ? "rgba(239,68,68,0.1)" : "rgba(212,175,55,0.08)",
+                          border: `1px solid ${txStatus === "success" ? "#10B98130" : txStatus === "error" ? "#EF444430" : GOLD + "30"}`,
+                        }}>
+                        {isPending && <Loader2 className="w-4 h-4 animate-spin shrink-0 mt-0.5" style={{ color: GOLD }} />}
+                        {txStatus === "success" && <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />}
+                        {txStatus === "error"   && <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5"    />}
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-white">
+                            {txStatus === "approving" ? "Approving OKBOND…"
+                              : txStatus === "staking"    ? "Staking in progress…"
+                              : txStatus === "unstaking"  ? "Unstaking…"
+                              : txStatus === "claiming"   ? "Claiming rewards…"
+                              : txStatus === "success"    ? "Transaction successful!"
+                              : "Transaction failed"}
+                          </p>
+                          {txHash && (
+                            <a href={`https://polygonscan.com/tx/${txHash}`} target="_blank" rel="noopener noreferrer"
+                              className="text-xs flex items-center gap-1 mt-1" style={{ color: GOLD }}>
+                              View on PolygonScan <ExternalLink className="w-3 h-3" />
+                            </a>
+                          )}
+                          {txError && <p className="text-xs text-red-400 mt-1 break-words">{txError}</p>}
+                        </div>
+                        {(txStatus === "success" || txStatus === "error") && (
+                          <button onClick={resetTx} className="text-xs text-white/30 hover:text-white/60 shrink-0">✕</button>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
-            <div className="mb-4">
-              <label className="text-xs text-muted-foreground mb-2 block">Amount (OKBOND)</label>
-              <div className="relative">
-                <input
-                  type="number"
-                  value={amount}
-                  onChange={e => setAmount(e.target.value)}
-                  placeholder="Enter amount…"
-                  min="0"
-                  className="w-full bg-muted/30 border border-border/60 rounded-xl px-4 py-3 text-foreground placeholder-muted-foreground/50 text-sm focus:outline-none focus:border-primary/50 focus:ring-1 focus:ring-primary/20 transition-all"
-                />
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex gap-2">
-                  <button onClick={() => setAmount((parseFloat(amount || "0") / 2).toString())} className="text-[10px] text-muted-foreground hover:text-primary px-1.5 py-0.5 rounded bg-muted/50">½</button>
-                  <button className="text-[10px] text-muted-foreground hover:text-primary px-1.5 py-0.5 rounded bg-muted/50">MAX</button>
-                </div>
-              </div>
-            </div>
-
-            {parsedAmount > 0 && (
-              <div className="bg-muted/20 rounded-xl border border-border/30 p-4 mb-4 space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Lock Period</span>
-                  <span className="text-foreground font-medium">{selectedPool.days} days</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">APY</span>
-                  <span className="text-primary font-bold">{selectedPool.apy}%</span>
-                </div>
-                <div className="flex justify-between text-sm border-t border-border/30 pt-2">
-                  <span className="text-muted-foreground">Est. Reward</span>
-                  <span className="text-emerald-400 font-bold">{estimatedReward.toFixed(2)} OKBOND</span>
-                </div>
-              </div>
-            )}
-
-            {/* TX Status feedback */}
-            <AnimatePresence>
-              {txStatus === "success" && (
-                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
-                  className="mb-4 rounded-xl bg-emerald-400/10 border border-emerald-400/20 p-3 flex items-center gap-2">
-                  <CheckCircle className="w-4 h-4 text-emerald-400" />
-                  <span className="text-xs text-emerald-400 font-medium">Transaction successful!</span>
-                  {txHash && (
-                    <a href={`https://polygonscan.com/tx/${txHash}`} target="_blank" rel="noopener noreferrer" className="ml-auto">
-                      <ExternalLink className="w-3.5 h-3.5 text-emerald-400" />
-                    </a>
-                  )}
-                </motion.div>
+                  <div className="grid grid-cols-3 gap-3">
+                    <button
+                      onClick={() => approveAndStake(amount, selectedPool.days)}
+                      disabled={isPending || !amount || parsedAmount <= 0}
+                      className="col-span-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                      style={{ background: `linear-gradient(135deg, ${GOLD}, #B8942A)`, color: "#050505" }}>
+                      {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
+                      Stake
+                    </button>
+                    <button
+                      onClick={() => unstake(0)}
+                      disabled={isPending || !stats?.userStaked || parseFloat(stats.userStaked) <= 0}
+                      className="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm border transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                      style={{ borderColor: "rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.6)" }}>
+                      <Unlock className="w-4 h-4" />
+                      Unstake
+                    </button>
+                    <button
+                      onClick={() => claimRewards(0)}
+                      disabled={isPending || !stats?.userRewards || parseFloat(stats.userRewards) <= 0}
+                      className="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm border transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                      style={{ borderColor: GOLD + "30", color: GOLD }}>
+                      <Zap className="w-4 h-4" />
+                      Claim
+                    </button>
+                  </div>
+                </>
               )}
-              {txStatus === "error" && txError && (
-                <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
-                  className="mb-4 rounded-xl bg-red-400/10 border border-red-400/20 p-3 flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-xs text-red-400">{txError}</span>
-                  <button onClick={resetTx} className="ml-auto text-[10px] text-red-400 hover:underline">Dismiss</button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {address ? (
-              <button
-                onClick={() => approveAndStake(amount, selectedPool.days)}
-                disabled={isPending || !amount || parsedAmount <= 0}
-                className="w-full py-3.5 rounded-xl bg-primary text-black font-bold text-sm hover:bg-primary/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
-              >
-                {isPending && <Loader2 className="w-4 h-4 animate-spin" />}
-                {txStatus === "approving" ? "Approving…"
-                  : txStatus === "staking"   ? "Staking…"
-                  : isPending               ? "Processing…"
-                  : `Stake OKBOND · ${selectedPool.days}d Lock`}
-              </button>
-            ) : (
-              <button
-                onClick={connect}
-                className="w-full py-3.5 rounded-xl bg-primary text-black font-bold text-sm hover:bg-primary/90 transition-all"
-              >
-                Connect Wallet to Stake
-              </button>
-            )}
-          </motion.div>
-        </div>
-
-        {/* Right: Compound calculator + active stakes */}
-        <div className="lg:col-span-2 space-y-5">
-          {/* Compound Calculator */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-            className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-sm p-5"
-          >
-            <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="w-4 h-4 text-primary" />
-              <p className="text-sm font-semibold text-foreground">Compound Estimator</p>
             </div>
-            <div className="mb-3">
-              <label className="text-xs text-muted-foreground mb-1 block">Years to compound</label>
-              <input
-                type="range" min="1" max="10" value={compoundYears}
-                onChange={e => setCompoundYears(Number(e.target.value))}
-                className="w-full accent-yellow-400"
-              />
-              <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                <span>1 year</span><span>{compoundYears} yr</span><span>10 years</span>
-              </div>
-            </div>
-            {parsedAmount > 0 ? (
-              <div className="bg-primary/5 rounded-xl border border-primary/20 p-4">
-                <p className="text-xs text-muted-foreground mb-1">After {compoundYears} year{compoundYears > 1 ? "s" : ""} at {selectedPool.apy}% APY</p>
-                <p className="text-2xl font-bold text-primary">{fmt(compoundFinal.toFixed(2))} OKBOND</p>
-                <p className="text-xs text-emerald-400 mt-1">+{fmt((compoundFinal - parsedAmount).toFixed(2))} profit</p>
-              </div>
-            ) : (
-              <p className="text-xs text-muted-foreground text-center py-4">Enter an amount to see compound projections</p>
-            )}
-          </motion.div>
+          </div>
 
-          {/* Active Stakes */}
-          {address && stats && stats.userStakes.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
-              className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-sm p-5"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <Unlock className="w-4 h-4 text-primary" />
-                  <p className="text-sm font-semibold text-foreground">Active Stakes</p>
+          {/* ── Sidebar: Compound Calculator + Your Position ── */}
+          <div className="space-y-4">
+
+            {/* Your Position */}
+            {address && stats && (
+              <div className="rounded-2xl border border-white/6 p-5" style={{ background: "rgba(7,17,31,0.7)" }}>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-white font-bold text-sm" style={{ fontFamily: "'Sora','Inter',sans-serif" }}>Your Position</span>
+                  <button onClick={refresh} className="text-white/30 hover:text-white/60 transition-colors">
+                    <RefreshCw className="w-3.5 h-3.5" />
+                  </button>
                 </div>
-                <button onClick={refresh} className="text-muted-foreground hover:text-primary transition-colors">
-                  <RefreshCw className="w-3.5 h-3.5" />
-                </button>
+                {[
+                  { label: "Staked",          value: `${fmt(stats.userStaked || "0")} OKBOND` },
+                  { label: "Claimable Rewards", value: `${fmt(stats.userRewards || "0")} OKBOND` },
+                  { label: "Active Stakes",    value: stats.userStakes?.filter(s => s.active).length.toString() || "0" },
+                  { label: "Allowance",        value: `${fmt(stats.allowance || "0")} OKBOND` },
+                ].map(({ label, value }) => (
+                  <div key={label} className="flex justify-between py-2.5 border-b border-white/5 last:border-0 text-sm">
+                    <span className="text-white/40">{label}</span>
+                    <span className="text-white font-mono font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{value}</span>
+                  </div>
+                ))}
               </div>
-              <div className="space-y-3">
-                {stats.userStakes.map(stake => {
-                  const unlockDate = new Date((stake.startTime + stake.lockPeriod * 86400) * 1000);
-                  const isUnlocked = Date.now() > unlockDate.getTime();
-                  return (
-                    <div key={stake.id} className="rounded-xl border border-border/30 bg-muted/20 p-3">
-                      <div className="flex justify-between mb-2">
-                        <span className="text-sm font-medium text-foreground">{fmt(stake.amount)} OKBOND</span>
-                        <span className="text-xs text-primary font-bold">{stake.apy}% APY</span>
-                      </div>
-                      <div className="flex justify-between text-xs text-muted-foreground mb-3">
-                        <span>Pending: {parseFloat(stake.pendingReward).toFixed(4)} OKBOND</span>
-                        <span>{isUnlocked ? "Unlocked" : `Unlocks ${unlockDate.toLocaleDateString()}`}</span>
-                      </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => claimRewards(stake.id)}
-                          disabled={isPending || parseFloat(stake.pendingReward) === 0}
-                          className="flex-1 py-1.5 text-xs rounded-lg bg-primary/15 text-primary border border-primary/25 hover:bg-primary/25 disabled:opacity-40 transition-all"
-                        >
-                          Claim
-                        </button>
-                        <button
-                          onClick={() => unstake(stake.id)}
-                          disabled={isPending || !isUnlocked}
-                          className="flex-1 py-1.5 text-xs rounded-lg bg-muted/40 text-foreground border border-border/40 hover:border-primary/30 disabled:opacity-40 transition-all"
-                        >
-                          Unstake
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </motion.div>
-          )}
+            )}
 
-          {/* User summary when connected */}
-          {address && stats && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className="rounded-2xl border border-primary/20 bg-primary/5 p-5">
-              <p className="text-xs font-mono text-primary uppercase tracking-widest mb-3">Your Position</p>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm"><span className="text-muted-foreground">Total Staked</span><span className="font-bold text-foreground">{fmt(stats.userStaked)} OKBOND</span></div>
-                <div className="flex justify-between text-sm"><span className="text-muted-foreground">Total Rewards</span><span className="font-bold text-emerald-400">{fmt(stats.userRewards)} OKBOND</span></div>
-                <div className="flex justify-between text-sm"><span className="text-muted-foreground">Active Locks</span><span className="font-bold text-foreground">{stats.userStakes.length}</span></div>
+            {/* Compound Calculator */}
+            <div className="rounded-2xl border border-white/6 p-5" style={{ background: "rgba(7,17,31,0.7)" }}>
+              <div className="flex items-center gap-2 mb-4">
+                <Calculator className="w-4 h-4" style={{ color: GOLD }} />
+                <span className="text-white font-bold text-sm" style={{ fontFamily: "'Sora','Inter',sans-serif" }}>Compound Calculator</span>
               </div>
-            </motion.div>
-          )}
+              <div className="space-y-3 mb-4">
+                <div>
+                  <label className="text-white/40 text-xs block mb-1.5">Years to compound</label>
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 5].map((y) => (
+                      <button key={y}
+                        onClick={() => setCompoundYears(y)}
+                        className="flex-1 py-2 rounded-lg text-xs font-bold transition-all"
+                        style={{
+                          background: compoundYears === y ? `${GOLD}20` : "rgba(255,255,255,0.04)",
+                          color: compoundYears === y ? GOLD : "rgba(255,255,255,0.35)",
+                          border: `1px solid ${compoundYears === y ? GOLD + "40" : "transparent"}`,
+                        }}>
+                        {y}Y
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="rounded-xl p-4 border border-white/5" style={{ background: "rgba(255,255,255,0.02)" }}>
+                  <div className="flex justify-between mb-2 text-sm">
+                    <span className="text-white/40">Input</span>
+                    <span className="text-white font-mono">{parsedAmount > 0 ? parsedAmount.toLocaleString() : "1,000"} OKBOND</span>
+                  </div>
+                  <div className="flex justify-between mb-1 text-sm">
+                    <span className="text-white/40">APY</span>
+                    <span style={{ color: selectedPool.accent }} className="font-bold">{selectedPool.apy}%</span>
+                  </div>
+                  <div className="h-px bg-white/8 my-3" />
+                  <div className="flex justify-between text-base">
+                    <span className="text-white/60 font-semibold">After {compoundYears}Y</span>
+                    <span className="font-black" style={{ color: GOLD, fontFamily: "'JetBrains Mono', monospace" }}>
+                      {((parsedAmount > 0 ? parsedAmount : 1000) * Math.pow(1 + selectedPool.apy / 100, compoundYears)).toFixed(0)} OKBOND
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <a href="https://polygonscan.com/address/0x5067e9E4Ef827cE0Cc06a44B786668522732fB4e"
+                target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-xs text-white/30 hover:text-[#D4AF37] transition-colors">
+                <ExternalLink className="w-3 h-3" />
+                Verify contract on PolygonScan
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

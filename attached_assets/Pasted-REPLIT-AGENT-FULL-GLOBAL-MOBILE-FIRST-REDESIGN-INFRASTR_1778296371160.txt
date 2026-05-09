@@ -1,0 +1,331 @@
+REPLIT AGENT — FULL GLOBAL MOBILE-FIRST REDESIGN + INFRASTRUCTURE UPGRADE
+
+MISSION:
+Transform Orakzai Bond into a sovereign-grade, institutional, Apple-level Web3 financial ecosystem.
+
+Current website is functional but NOT yet world-class.
+Current problems:
+
+- weak mobile responsiveness
+- inconsistent spacing
+- average UI hierarchy
+- weak conversion psychology
+- insufficient institutional trust signals
+- dashboard architecture not unified
+- contracts not visually integrated
+- ecosystem lacks “super app” feeling
+
+The new system must feel:
+BLACKROCK × APPLE × BINANCE × TESLA × DUBAI SOVEREIGN FUND
+
+=========================================================
+CORE DESIGN SYSTEM
+
+Theme:
+
+- Deep Black (#050505)
+- Navy Sovereign Blue (#07111F)
+- Premium Gold (#D4AF37)
+- Soft White (#F5F5F5)
+
+Fonts:
+
+- Headings: Sora / Clash Display
+- Body: Inter
+- Numbers: JetBrains Mono
+
+Style:
+
+- Glassmorphism
+- Liquid animations
+- Soft blur backgrounds
+- Ultra-clean cards
+- 3D depth
+- Smooth transitions
+- Motion-based UX
+
+NO cheap crypto UI.
+NO meme coin feeling.
+NO clutter.
+
+Everything must feel:
+Institutional.
+Minimal.
+Powerful.
+
+=========================================================
+MOBILE FIRST PRIORITY
+
+Build MOBILE FIRST.
+
+Target device:
+Samsung S22 Ultra.
+
+Every section must perfectly fit:
+
+- 360px
+- 390px
+- 430px widths
+
+Rules:
+
+- no horizontal overflow
+- sticky bottom navigation
+- wallet button always visible
+- thumb-friendly controls
+- responsive charts
+- responsive tables
+- adaptive typography
+- touch optimized spacing
+
+Performance target:
+
+- Lighthouse 95+
+- instant loading
+- lazy loaded components
+- skeleton loaders
+- GPU animations only
+
+=========================================================
+NEW GLOBAL LANDING PAGE
+
+HERO SECTION:
+
+- cinematic animated background
+- live token price
+- live staking TVL
+- live vault reserves
+- live lottery pool
+- wallet connect
+- Buy OKBOND button
+- animated sovereign logo
+
+Headline:
+“Capital Protection Meets Blockchain Sovereignty.”
+
+Subheadline:
+“The world’s first cashback-protected decentralized bond ecosystem.”
+
+=========================================================
+LIVE CONTRACT INTEGRATION
+
+Integrate ALL contracts into ONE ecosystem dashboard.
+
+Contracts:
+
+OKBOND Token
+0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F
+
+ICO
+0x7BB2458740c4F491277973212309d831385Ab9D7
+
+Vault
+0x3Cb45d2022e2E15AFa8C4822647B89935a2ceD08
+
+Staking
+0x5067e9E4Ef827cE0Cc06a44B786668522732fB4e
+
+Notebook
+0xa6a1C3D97e629326ad812e97e927622A8dA711a3
+
+=========================================================
+GLOBAL DASHBOARD
+
+Create SUPER APP dashboard.
+
+Dashboard tabs:
+
+1. Portfolio
+2. ICO
+3. Staking
+4. Lottery
+5. Vault
+6. Governance
+7. Notebook Registry
+8. Rewards
+9. Ambassador
+10. Analytics
+
+=========================================================
+REAL-TIME DATA
+
+Live On-Chain Data:
+
+- token balance
+- staking rewards
+- vault reserves
+- APY
+- ICO progress
+- round supply
+- participant count
+- lottery countdown
+- winners history
+- treasury stats
+- cashback claims
+- referral earnings
+
+=========================================================
+TOKEN PRICE SYSTEM
+
+Display:
+
+- ICO Round Price
+- Estimated Market Price
+- Future valuation simulator
+- ROI calculator
+
+Current ICO pricing:
+Round 1 = $0.50
+Round 2 = $0.70
+Round 3 = $1.00
+
+Total ICO Supply:
+1,000,000 OKBOND
+
+Display market cap simulator:
+
+- $1
+- $5
+- $10
+- $50
+- $100 scenarios
+
+=========================================================
+ADVANCED UI SECTIONS
+
+ADD:
+
+1. Sovereign Metrics Panel
+
+- TVL
+- Treasury
+- Holders
+- Stakers
+- Lottery Participants
+
+2. Global Transparency Vault
+
+- audit PDFs
+- legal docs
+- smart contract verification
+- PolygonScan links
+
+3. Live Blockchain Activity Feed
+
+- latest buys
+- staking activity
+- winners
+- vault transfers
+
+4. AI Layer
+
+- Marcus AI assistant
+- ecosystem guidance
+- tokenomics explainer
+
+5. Future Expansion Panel
+
+- AI Super App
+- RWA Tokenization
+- Global Real Estate
+- Digital Banking
+- Sovereign Grid
+
+=========================================================
+LOTTERY EXPERIENCE
+
+Lottery page must become:
+Vegas Casino × Bloomberg Terminal.
+
+Features:
+
+- animated jackpot pool
+- countdown timer
+- previous winners
+- POL rewards visualization
+- cashback explanation
+- VRF transparency proof
+- wallet participation tracker
+
+=========================================================
+STAKING PAGE
+
+Professional staking UI:
+
+- lock duration cards
+- APY visualizer
+- rewards graph
+- projected earnings calculator
+- compounding simulator
+
+=========================================================
+SECURITY + TRUST
+
+Add:
+
+- contract verification badges
+- Polygon secured badge
+- Chainlink VRF secured badge
+- liquidity protection badge
+- vault reserve proof
+- anti-rug architecture section
+
+=========================================================
+ANIMATIONS
+
+Use:
+
+- Framer Motion
+- smooth page transitions
+- animated counters
+- scroll reveals
+- floating gradients
+- dynamic lighting
+
+Avoid:
+
+- lag
+- heavy particles
+- cheap effects
+
+=========================================================
+TECH STACK
+
+Use:
+
+- Next.js
+- TailwindCSS
+- TypeScript
+- Wagmi
+- RainbowKit
+- Viem
+- Framer Motion
+- Recharts
+
+Deploy:
+
+- Vercel
+
+=========================================================
+FINAL OBJECTIVE
+
+When users open OrakzaiBond.com they should feel:
+
+“This is not another crypto project.”
+
+“This feels like a future sovereign financial operating system.”
+
+The website must psychologically compete with:
+
+- Binance
+- BlackRock
+- Apple
+- Stripe
+- Tesla
+- Dubai Future Foundation
+
+Build EVERYTHING production-grade.
+No placeholders.
+No weak mobile UI.
+No amateur layouts.
+Institutional quality only.
