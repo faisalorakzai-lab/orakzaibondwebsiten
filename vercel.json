@@ -1,7 +1,7 @@
 {
-  "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm run build",
-  "outputDirectory": "dist",
+  "installCommand": "cd orakzaibond && pnpm install --frozen-lockfile",
+  "buildCommand": "cd orakzaibond && pnpm run build",
+  "outputDirectory": "orakzaibond/dist",
   "framework": "vite",
   "redirects": [
     {
@@ -68,12 +68,6 @@
     {
       "source": "/(.*)",
       "destination": "/index.html"
-    }
-  ],
-  "crons": [
-    {
-      "path": "/api/marcus-watch",
-      "schedule": "0 0 * * *"
     }
   ]
 }
