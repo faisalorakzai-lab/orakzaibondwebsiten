@@ -1,5 +1,5 @@
 {
-  "installCommand": "cd orakzaibond && pnpm install --frozen-lockfile",
+  "installCommand": "cd orakzaibond && pnpm install --frozen-lockfile --ignore-workspace",
   "buildCommand": "cd orakzaibond && pnpm run build",
   "outputDirectory": "orakzaibond/dist",
   "framework": "vite",
