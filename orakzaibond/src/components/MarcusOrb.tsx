@@ -1633,7 +1633,7 @@ export default function MarcusOrb() {
         <div
           className="fixed pointer-events-none z-[9998]"
           style={{
-            bottom: "max(8px, env(safe-area-inset-bottom))",
+            bottom: "calc(max(8px, env(safe-area-inset-bottom)) + 128px)",
             right: "max(6px, env(safe-area-inset-right))",
             width: 96,
             height: 96,
@@ -1661,8 +1661,8 @@ export default function MarcusOrb() {
       <div
         className="fixed z-[9998] pointer-events-none flex flex-col items-end"
         style={{
-          bottom: "max(20px, env(safe-area-inset-bottom))",
-          right: "max(20px, env(safe-area-inset-right))",
+          bottom: "calc(max(16px, env(safe-area-inset-bottom)) + 124px)",
+          right: "max(16px, env(safe-area-inset-right))",
         }}
         aria-live="polite"
       >
@@ -1915,9 +1915,9 @@ export default function MarcusOrb() {
           )}
         </AnimatePresence>
 
-        {/* ── Always-visible compact text input strip ──────────── */}
+        {/* ── Always-visible compact text input strip — hidden on mobile ── */}
         <div
-          className="pointer-events-auto mb-2 flex items-center gap-1.5 rounded-xl overflow-hidden"
+          className="pointer-events-auto mb-2 hidden lg:flex items-center gap-1.5 rounded-xl overflow-hidden"
           style={{
             width: "min(320px, calc(100vw - 120px))",
             background: "rgba(10,10,10,0.82)",
