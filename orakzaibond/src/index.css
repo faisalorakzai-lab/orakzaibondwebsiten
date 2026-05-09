@@ -409,6 +409,35 @@
   animation: shimmer 2s infinite;
 }
 
+/* ── Mobile performance: reduce expensive blur/shadow on small screens ─── */
+@media (max-width: 768px) {
+  .glass-card {
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: 0 0 0 1px rgba(245,197,24,0.07) inset, 0 6px 20px 0 rgba(0,0,0,0.5);
+  }
+  .glass-card-gold {
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .glass-card-deep-space {
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+  /* Prevent over-aggressive text-shadow on mobile */
+  .heading-midnight-gold {
+    text-shadow: 0 0 30px rgba(245,197,24,0.35) !important;
+  }
+  /* Keep tap areas comfortably large */
+  button, a[role="button"] {
+    min-height: 44px;
+  }
+  /* Bottom nav safe spacing for main content */
+  main, #root > .flex.flex-col {
+    padding-bottom: calc(58px + max(env(safe-area-inset-bottom), 6px));
+  }
+}
+
 /* ── Scrolling ticker ─────────────────────────────────────────────── */
 @keyframes ticker-scroll {
   0%   { transform: translateX(0); }
