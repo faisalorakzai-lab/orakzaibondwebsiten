@@ -169,18 +169,18 @@ export default function Tokenomics() {
         </motion.div>
 
         {/* Chart and Breakdown */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
-          {/* Premium Donut Chart */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+          {/* Premium Donut Chart — compact on mobile */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.93 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative p-8 rounded-3xl glass-card-gold flex items-center justify-center overflow-hidden group"
+            className="relative p-5 sm:p-8 rounded-3xl glass-card-gold flex items-center justify-center overflow-hidden group"
           >
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,rgba(234,179,8,0.1),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,rgba(234,179,8,0.08),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-            <div className="relative z-10 w-full h-full flex items-center justify-center">
-              <ResponsiveContainer width="100%" height={450}>
+            <div className="relative z-10 w-full flex items-center justify-center">
+              <ResponsiveContainer width="100%" height={280}>
                 <PieChart>
                   <Pie
                     data={TOKENOMICS_DATA.map((item, index) => ({
@@ -189,12 +189,12 @@ export default function Tokenomics() {
                     }))}
                     cx="50%"
                     cy="50%"
-                    innerRadius={90}
-                    outerRadius={150}
+                    innerRadius={70}
+                    outerRadius={110}
                     paddingAngle={3}
                     dataKey="value"
                     animationBegin={0}
-                    animationDuration={1000}
+                    animationDuration={900}
                     animationEasing="ease-out"
                     onMouseEnter={(_, index) => handleMouseEnter(index)}
                     onMouseLeave={handleMouseLeave}
@@ -207,42 +207,30 @@ export default function Tokenomics() {
                         style={{
                           filter:
                             activeIndex === index
-                              ? `drop-shadow(0 0 20px ${entry.color})`
+                              ? `drop-shadow(0 0 14px ${entry.color})`
                               : "none",
-                          transition: "all 0.3s ease",
+                          transition: "all 0.25s ease",
                           cursor: "pointer",
                         }}
                       />
                     ))}
                   </Pie>
                   <Tooltip content={<CustomTooltip />} />
-                  <Legend
-                    verticalAlign="bottom"
-                    height={36}
-                    wrapperStyle={{
-                      paddingTop: "20px",
-                    }}
-                    formatter={(value, entry) => (
-                      <span className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                        {entry.payload.name}
-                      </span>
-                    )}
-                  />
                 </PieChart>
               </ResponsiveContainer>
             </div>
 
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="text-center">
-                <p className="text-sm text-muted-foreground font-mono">Total Supply</p>
-                <p className="text-3xl font-black text-primary">10M</p>
-                <p className="text-xs text-muted-foreground mt-1">OKBOND</p>
+              <div className="text-center" style={{ marginTop: "-20px" }}>
+                <p className="text-xs text-muted-foreground font-mono">Total Supply</p>
+                <p className="text-2xl font-black text-primary">10M</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">OKBOND</p>
               </div>
             </div>
           </motion.div>
 
-          {/* Breakdown List */}
-          <div className="space-y-3">
+          {/* Breakdown List — stacked allocation cards */}
+          <div className="space-y-2.5">
             {TOKENOMICS_DATA.map((item, idx) => (
               <motion.div
                 key={idx}
