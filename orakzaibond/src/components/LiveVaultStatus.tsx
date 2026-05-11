@@ -1,55 +1,9 @@
-import { useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { Vault, Activity, Shield, Coins, Building2, Landmark } from "lucide-react";
-
-/** ──────────────────────────────────────────────────────────────────────────
- *  Editable headline figures (Chairman: update these as the vault grows).
- *  Numbers shown are *committed reserve* values, not market price.
- *  ────────────────────────────────────────────────────────────────────────── */
-const TVL_USD = 1_850_000;           // Total Value Locked (USD) — Chairman-approved reserve figure
-const RWA_BACKING_PCT = 100;          // Real-World-Asset backing %
-const VAULT_GROWTH_24H = 1.84;        // 24h growth %
-const HOLDERS_COUNT = 1_248;          // verified wallets — proportional to current reserve tier
-
-const RESERVE_BREAKDOWN = [
-  { label: "Real Estate Holdings", pct: 42, icon: Building2 },
-  { label: "Gold Reserve", pct: 28, icon: Coins },
-  { label: "Operating Cash & T-Bills", pct: 18, icon: Landmark },
-  { label: "Liquidity Pools (Polygon)", pct: 12, icon: Activity },
-];
+import { useRef, useState, useEffect } from "react";
+import { Vault, Activity, Shield, Coins, Building2, Landmark, Zap } from "lucide-react";
 
 const GOLD = "#D4AF37";
 const GOLD_BRIGHT = "#F4CE45";
-
-/* Animated count-up for the TVL number */
-function AnimatedNumber({ value, prefix = "", suffix = "", decimals = 0 }: {
-  value: number; prefix?: string; suffix?: string; decimals?: number;
-}) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    if (!inView) return;
-    const duration = 1800;
-    const start = performance.now();
-    let raf = 0;
-    const tick = (t: number) => {
-      const p = Math.min((t - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setDisplay(value * eased);
-      if (p < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [inView, value]);
-
-  const formatted = decimals === 0
-    ? Math.floor(display).toLocaleString()
-    : display.toFixed(decimals);
-  return <span ref={ref}>{prefix}{formatted}{suffix}</span>;
-}
 
 /* Live "last sync" clock — proves the widget is alive */
 function LiveClock() {
@@ -69,9 +23,9 @@ export default function LiveVaultStatus() {
   return (
     <section
       id="live-vault"
-      className="relative py-20 px-4 overflow-hidden"
+      className="relative py-24 md:py-32 px-4 md:px-6 overflow-hidden"
       style={{
-        background: "radial-gradient(ellipse at top, rgba(212,175,55,0.06), transparent 60%), #050505",
+        background: "radial-gradient(ellipse at top, rgba(212,175,55,0.04), transparent 60%), #050505",
         borderTop: `1px solid ${GOLD}22`,
         borderBottom: `1px solid ${GOLD}22`,
       }}
@@ -79,196 +33,208 @@ export default function LiveVaultStatus() {
       {/* Subtle grid backdrop */}
       <div
         aria-hidden
-        className="absolute inset-0 opacity-[0.07] pointer-events-none"
+        className="absolute inset-0 opacity-[0.05] pointer-events-none"
         style={{
           backgroundImage:
             "linear-gradient(to right, #D4AF37 1px, transparent 1px), linear-gradient(to bottom, #D4AF37 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
+          backgroundSize: "60px 60px",
         }}
       />
 
-      <div className="relative max-w-6xl mx-auto">
+      <div className="relative max-w-5xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4"
-               style={{ background: GOLD + "10", border: `1px solid ${GOLD}55` }}>
+        <div className="text-center mb-16 md:mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6"
+            style={{ background: GOLD + "08", border: `1px solid ${GOLD}33` }}
+          >
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+              <span className="animate-pulse absolute inline-flex h-full w-full rounded-full opacity-75"
                     style={{ background: "#22c55e" }} />
               <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "#22c55e" }} />
             </span>
-            <span className="text-[10.5px] font-mono tracking-[0.2em] uppercase" style={{ color: GOLD_BRIGHT }}>
-              Live · Polygon Mainnet
+            <span className="text-xs md:text-sm font-mono tracking-[0.15em] uppercase" style={{ color: GOLD_BRIGHT }}>
+              Smart Contract Integration Coming
             </span>
-          </div>
-          <h2
-            className="text-3xl md:text-4xl font-black uppercase tracking-[0.18em] mb-3"
-            style={{ color: GOLD_BRIGHT, fontFamily: "'Playfair Display', serif" }}
+          </motion.div>
+
+          <motion.h2
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight mb-4 md:mb-6"
+            style={{ color: "#ffffff", letterSpacing: "-0.02em" }}
           >
             Live Vault Status
-          </h2>
-          <p className="text-sm md:text-base max-w-2xl mx-auto" style={{ color: "#c9b87b" }}>
-            Real-time view of the Orakzai reserve backing every $OKBOND in circulation.
-          </p>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="text-sm md:text-base max-w-2xl mx-auto leading-relaxed"
+            style={{ color: "#a3a3a3" }}
+          >
+            Real-time Polygon Mainnet data integration launching soon. The Orakzai reserve backing every $OKBOND token will be transparently displayed on-chain.
+          </motion.p>
         </div>
 
-        {/* Top stat cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-          {/* TVL */}
+        {/* Coming Soon Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-10">
+          {/* TVL Card */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55 }}
-            className="relative rounded-2xl p-6 md:p-7 overflow-hidden"
+            className="relative rounded-2xl p-6 md:p-8 overflow-hidden group"
             style={{
-              background: "linear-gradient(160deg, rgba(20,16,8,0.92), rgba(8,6,3,0.92))",
-              backdropFilter: "blur(14px)",
-              border: `1px solid ${GOLD}55`,
-              boxShadow: `0 12px 40px rgba(0,0,0,0.55), inset 0 1px 0 ${GOLD}22, 0 0 24px ${GOLD}1a`,
+              background: "linear-gradient(160deg, rgba(20,16,8,0.6), rgba(8,6,3,0.6))",
+              backdropFilter: "blur(12px)",
+              border: `1px solid ${GOLD}33`,
+              boxShadow: `0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 ${GOLD}11`,
             }}
           >
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <Vault className="w-4 h-4" style={{ color: GOLD }} />
-                <p className="text-[10.5px] uppercase tracking-[0.22em] font-mono" style={{ color: GOLD + "bb" }}>
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg" style={{ background: GOLD + "11" }}>
+                  <Vault className="w-5 h-5" style={{ color: GOLD }} />
+                </div>
+                <p className="text-xs md:text-sm uppercase tracking-wider font-semibold" style={{ color: GOLD + "cc" }}>
                   Total Value Locked
                 </p>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded"
-                    style={{ background: "#22c55e22", color: "#22c55e", border: "1px solid #22c55e44" }}>
-                +{VAULT_GROWTH_24H.toFixed(2)}% 24H
-              </span>
             </div>
             <p
-              className="text-4xl md:text-5xl font-black tracking-tight"
-              style={{ color: GOLD_BRIGHT, fontFamily: "'Playfair Display', serif",
-                       textShadow: `0 0 24px ${GOLD}55` }}
+              className="text-3xl md:text-4xl font-black tracking-tight mb-3"
+              style={{ color: "#ffffff" }}
             >
-              <AnimatedNumber value={TVL_USD} prefix="$" />
+              Live On-Chain Soon
             </p>
-            <p className="text-[11px] font-mono mt-2" style={{ color: GOLD + "88" }}>
-              {HOLDERS_COUNT.toLocaleString()} verified holders
+            <p className="text-xs md:text-sm" style={{ color: "#727272" }}>
+              Fetching real-time data from Polygon smart contracts
             </p>
           </motion.div>
 
-          {/* RWA backing */}
+          {/* RWA Backing Card */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, delay: 0.08 }}
-            className="relative rounded-2xl p-6 md:p-7 overflow-hidden"
+            className="relative rounded-2xl p-6 md:p-8 overflow-hidden group"
             style={{
-              background: "linear-gradient(160deg, rgba(20,16,8,0.92), rgba(8,6,3,0.92))",
-              backdropFilter: "blur(14px)",
-              border: `1px solid ${GOLD}55`,
-              boxShadow: `0 12px 40px rgba(0,0,0,0.55), inset 0 1px 0 ${GOLD}22, 0 0 24px ${GOLD}1a`,
+              background: "linear-gradient(160deg, rgba(20,16,8,0.6), rgba(8,6,3,0.6))",
+              backdropFilter: "blur(12px)",
+              border: `1px solid ${GOLD}33`,
+              boxShadow: `0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 ${GOLD}11`,
             }}
           >
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <Shield className="w-4 h-4" style={{ color: GOLD }} />
-                <p className="text-[10.5px] uppercase tracking-[0.22em] font-mono" style={{ color: GOLD + "bb" }}>
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg" style={{ background: GOLD + "11" }}>
+                  <Shield className="w-5 h-5" style={{ color: GOLD }} />
+                </div>
+                <p className="text-xs md:text-sm uppercase tracking-wider font-semibold" style={{ color: GOLD + "cc" }}>
                   Real-World Asset Backing
                 </p>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded"
-                    style={{ background: GOLD + "1a", color: GOLD_BRIGHT, border: `1px solid ${GOLD}55` }}>
-                FULLY COLLATERALIZED
-              </span>
             </div>
             <p
-              className="text-4xl md:text-5xl font-black tracking-tight"
-              style={{ color: GOLD_BRIGHT, fontFamily: "'Playfair Display', serif",
-                       textShadow: `0 0 24px ${GOLD}55` }}
+              className="text-3xl md:text-4xl font-black tracking-tight mb-3"
+              style={{ color: "#ffffff" }}
             >
-              <AnimatedNumber value={RWA_BACKING_PCT} suffix="%" />
+              Live On-Chain Soon
             </p>
-
-            {/* Animated bar */}
-            <div className="mt-3 h-2 rounded-full overflow-hidden" style={{ background: "#1a140a" }}>
-              <motion.div
-                initial={{ width: 0 }}
-                whileInView={{ width: `${RWA_BACKING_PCT}%` }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.6, ease: "easeOut" }}
-                className="h-full rounded-full"
-                style={{
-                  background: `linear-gradient(90deg, ${GOLD_BRIGHT}, ${GOLD}, #A07A1F)`,
-                  boxShadow: `0 0 14px ${GOLD}aa`,
-                }}
-              />
-            </div>
-            <p className="text-[11px] font-mono mt-2" style={{ color: GOLD + "88" }}>
-              Backing <span className="font-bold" style={{ color: GOLD_BRIGHT }}>${(TVL_USD / 1_000_000).toFixed(2)}M</span> in OKBOND reserves · Audited by Independent Reserve Council
+            <p className="text-xs md:text-sm" style={{ color: "#727272" }}>
+              100% collateralized by sovereign assets
             </p>
           </motion.div>
         </div>
 
-        {/* Reserve breakdown */}
+        {/* Reserve Breakdown Placeholder */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.55, delay: 0.16 }}
-          className="rounded-2xl p-5 md:p-6"
+          className="rounded-2xl p-6 md:p-8"
           style={{
-            background: "linear-gradient(160deg, rgba(15,12,6,0.85), rgba(5,4,2,0.85))",
+            background: "linear-gradient(160deg, rgba(15,12,6,0.5), rgba(5,4,2,0.5))",
             backdropFilter: "blur(12px)",
-            border: `1px solid ${GOLD}33`,
-            boxShadow: `0 10px 30px rgba(0,0,0,0.5), inset 0 1px 0 ${GOLD}11`,
+            border: `1px solid ${GOLD}22`,
+            boxShadow: `0 8px 24px rgba(0,0,0,0.3), inset 0 1px 0 ${GOLD}11`,
           }}
         >
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-[11px] uppercase tracking-[0.22em] font-mono" style={{ color: GOLD + "bb" }}>
+          <div className="flex items-center justify-between mb-6 md:mb-8">
+            <p className="text-xs md:text-sm uppercase tracking-wider font-semibold" style={{ color: GOLD + "cc" }}>
               Reserve Composition
             </p>
-            <p className="text-[10.5px] font-mono" style={{ color: GOLD + "88" }}>
+            <p className="text-xs md:text-sm font-mono" style={{ color: GOLD + "88" }}>
               Last sync: <LiveClock />
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {RESERVE_BREAKDOWN.map((row, i) => {
-              const Icon = row.icon;
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+            {[
+              { label: "Real Estate Holdings", icon: Building2 },
+              { label: "Gold Reserve", icon: Coins },
+              { label: "Operating Cash & T-Bills", icon: Landmark },
+              { label: "Liquidity Pools (Polygon)", icon: Activity },
+            ].map((item, i) => {
+              const Icon = item.icon;
               return (
                 <motion.div
-                  key={row.label}
+                  key={item.label}
                   initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.2 + i * 0.08 }}
-                  className="rounded-xl p-3.5"
+                  transition={{ delay: 0.2 + i * 0.06 }}
+                  className="rounded-xl p-4 md:p-5"
                   style={{
-                    background: "rgba(212,175,55,0.04)",
+                    background: "rgba(212,175,55,0.03)",
                     border: `1px solid ${GOLD}22`,
                   }}
                 >
-                  <div className="flex items-center gap-2 mb-2">
-                    <Icon className="w-3.5 h-3.5" style={{ color: GOLD }} />
-                    <p className="text-[10.5px] uppercase tracking-wider font-mono truncate"
-                       style={{ color: GOLD + "cc" }}>
-                      {row.label}
+                  <div className="flex items-center gap-2 mb-3">
+                    <Icon className="w-4 h-4" style={{ color: GOLD }} />
+                    <p className="text-xs md:text-sm uppercase tracking-wider font-semibold truncate" style={{ color: GOLD + "cc" }}>
+                      {item.label}
                     </p>
                   </div>
-                  <p className="text-2xl font-black mb-2"
-                     style={{ color: GOLD_BRIGHT, fontFamily: "'Playfair Display', serif" }}>
-                    {row.pct}%
+                  <p className="text-lg md:text-xl font-black" style={{ color: "#ffffff" }}>
+                    —
                   </p>
-                  <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "#1a140a" }}>
-                    <motion.div
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${row.pct}%` }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1.2, delay: 0.3 + i * 0.08, ease: "easeOut" }}
-                      className="h-full"
-                      style={{ background: `linear-gradient(90deg, ${GOLD_BRIGHT}, ${GOLD})` }}
-                    />
-                  </div>
+                  <p className="text-xs mt-2" style={{ color: "#727272" }}>
+                    Coming soon
+                  </p>
                 </motion.div>
               );
             })}
           </div>
+        </motion.div>
+
+        {/* Bottom CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55, delay: 0.24 }}
+          className="mt-10 md:mt-14 text-center"
+        >
+          <p className="text-xs md:text-sm uppercase tracking-wider font-semibold" style={{ color: GOLD + "cc" }}>
+            <Zap className="w-4 h-4 inline mr-2" style={{ color: GOLD }} />
+            Smart Contract: 0xCF82D9ED107bE2217Ead6ccd4ffc851f71aa38F8
+          </p>
+          <p className="text-xs mt-2" style={{ color: "#727272" }}>
+            Lottery contract integration in progress
+          </p>
         </motion.div>
       </div>
     </section>

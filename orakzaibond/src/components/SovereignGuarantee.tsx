@@ -8,46 +8,46 @@ const GOLD_DEEP = "#A07A1F";
 export default function SovereignGuarantee() {
   return (
     <section
-      className="relative py-24 px-4 overflow-hidden"
+      className="relative py-28 md:py-36 px-4 md:px-6 overflow-hidden"
       style={{
         background:
-          "radial-gradient(ellipse at center, rgba(212,175,55,0.08), transparent 65%), linear-gradient(180deg, #050505 0%, #0a0805 100%)",
-        borderTop: `1px solid ${GOLD}33`,
-        borderBottom: `1px solid ${GOLD}33`,
+          "radial-gradient(ellipse at center, rgba(212,175,55,0.06), transparent 65%), linear-gradient(180deg, #050505 0%, #0a0805 100%)",
+        borderTop: `1px solid ${GOLD}22`,
+        borderBottom: `1px solid ${GOLD}22`,
       }}
     >
       {/* Decorative grid */}
       <div
         aria-hidden
-        className="absolute inset-0 opacity-[0.06] pointer-events-none"
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
         style={{
           backgroundImage:
             "linear-gradient(to right, #D4AF37 1px, transparent 1px), linear-gradient(to bottom, #D4AF37 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
+          backgroundSize: "80px 80px",
         }}
       />
 
-      {/* Glow halo */}
+      {/* Ambient glow - subtle */}
       <div
         aria-hidden
         className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         style={{
-          width: 720,
-          height: 720,
-          background: `radial-gradient(circle, ${GOLD}22 0%, transparent 60%)`,
-          filter: "blur(40px)",
+          width: 800,
+          height: 800,
+          background: `radial-gradient(circle, ${GOLD}18 0%, transparent 60%)`,
+          filter: "blur(50px)",
         }}
       />
 
       <div className="relative max-w-6xl mx-auto">
         {/* Eyebrow */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-14 md:mb-16">
           <div
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full"
-            style={{ background: GOLD + "10", border: `1px solid ${GOLD}55` }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full"
+            style={{ background: GOLD + "08", border: `1px solid ${GOLD}33` }}
           >
-            <ScrollText className="w-3 h-3" style={{ color: GOLD_BRIGHT }} />
-            <span className="text-[10.5px] font-mono tracking-[0.22em] uppercase" style={{ color: GOLD_BRIGHT }}>
+            <ScrollText className="w-3.5 h-3.5" style={{ color: GOLD_BRIGHT }} />
+            <span className="text-xs md:text-sm font-mono tracking-wider uppercase" style={{ color: GOLD_BRIGHT }}>
               The Orakzai Bond Guarantee
             </span>
           </div>

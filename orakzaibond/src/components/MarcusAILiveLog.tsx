@@ -188,9 +188,9 @@ export default function MarcusAILiveLog() {
 
   return (
     <section
-      className="relative py-20 px-4 overflow-hidden"
+      className="relative py-24 md:py-32 px-4 md:px-6 overflow-hidden"
       style={{
-        background: "radial-gradient(ellipse at bottom, rgba(212,175,55,0.05), transparent 60%), #050505",
+        background: "radial-gradient(ellipse at bottom, rgba(212,175,55,0.04), transparent 60%), #050505",
         borderTop: `1px solid ${GOLD}22`,
         borderBottom: `1px solid ${GOLD}22`,
       }}
@@ -201,22 +201,22 @@ export default function MarcusAILiveLog() {
 
       <div className="relative max-w-5xl mx-auto">
         {/* Section header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-4"
-               style={{ background: GOLD + "10", border: `1px solid ${GOLD}55` }}>
-            <Cpu className="w-3 h-3" style={{ color: GOLD_BRIGHT }} />
-            <span className="text-[10.5px] font-mono tracking-[0.2em] uppercase" style={{ color: GOLD_BRIGHT }}>
-              Marcus AI · OKBOND Intelligence Layer
+        <div className="text-center mb-12 md:mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mb-6"
+               style={{ background: GOLD + "08", border: `1px solid ${GOLD}33` }}>
+            <Cpu className="w-3.5 h-3.5" style={{ color: GOLD_BRIGHT }} />
+            <span className="text-xs md:text-sm font-mono tracking-wider uppercase" style={{ color: GOLD_BRIGHT }}>
+              Marcus AI · Intelligence Layer
             </span>
           </div>
           <h2
-            className="text-3xl md:text-4xl font-black uppercase tracking-[0.18em] mb-3"
-            style={{ color: GOLD_BRIGHT, fontFamily: "'Playfair Display', serif" }}
+            className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight mb-4 md:mb-6"
+            style={{ color: "#ffffff", letterSpacing: "-0.02em" }}
           >
             Live Optimization Log
           </h2>
-          <p className="text-sm md:text-base max-w-2xl mx-auto" style={{ color: "#c9b87b" }}>
-            A live window into the autonomous protocol that protects, balances, and grows the OKBOND vault — every second, every cycle.
+          <p className="text-sm md:text-base max-w-2xl mx-auto leading-relaxed" style={{ color: "#a3a3a3" }}>
+            Real-time protocol monitoring. The autonomous system that protects, balances, and grows the OKBOND vault every second.
           </p>
         </div>
 

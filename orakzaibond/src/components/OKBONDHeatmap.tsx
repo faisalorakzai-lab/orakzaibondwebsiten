@@ -63,7 +63,7 @@ export default function OKBONDHeatmap() {
         borderTop: `1px solid ${GOLD}18`,
         borderBottom: `1px solid ${GOLD}18`,
       }}
-      className="relative overflow-hidden py-16 px-4"
+      className="relative overflow-hidden py-24 md:py-32 px-4 md:px-6"
     >
       {/* Subtle radial ambient */}
       <div
@@ -74,7 +74,7 @@ export default function OKBONDHeatmap() {
       />
 
       {/* ── Header ─────────────────────────────────────────────────── */}
-      <div className="relative z-10 text-center mb-8">
+      <div className="relative z-10 text-center mb-12 md:mb-16">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
