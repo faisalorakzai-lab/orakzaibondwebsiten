@@ -24,14 +24,8 @@ interface Winner {
   claimed: boolean;
 }
 
-/* ── Showcase data (pre-draw / no wallet) ─────────────────────────── */
-const SHOWCASE: Winner[] = [
-  { rank: 1, address: "0xAbCd1234F2A3",  display: "0xAbCd…F2A3", prize: "10,000 OKBOND", date: "Jun 9, 2026",  txHash: "0xa1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2", claimed: true  },
-  { rank: 2, address: "0x7712AbCd99aA",  display: "0x7712…99aA", prize: "10,000 OKBOND", date: "Jun 9, 2026",  txHash: "0xb2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3", claimed: true  },
-  { rank: 3, address: "0x3f91EeBbB2c1", display: "0x3f91…B2c1", prize: "10,000 OKBOND", date: "Jun 9, 2026",  txHash: "0xc3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4", claimed: true  },
-  { rank: 4, address: "0xEe4400Dd0d3F", display: "0xEe44…0d3F", prize: "10,000 OKBOND", date: "Jun 9, 2026",  txHash: "0xd4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5", claimed: false },
-  { rank: 5, address: "0xA8b2FfEe1c9D", display: "0xA8b2…1c9D", prize: "10,000 OKBOND", date: "Jun 9, 2026",  txHash: "0xe5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6", claimed: false },
-];
+/* ── No fake showcase data — only live on-chain winners ─────────────────────────── */
+const SHOWCASE: Winner[] = [];
 
 const RANK_META = [
   { label: "Grand Champion", icon: Crown,  color: "#FFD700", glow: "rgba(255,215,0,0.6)",  medal: "🥇" },
@@ -296,7 +290,7 @@ function WinnerRow({ w, i, live }: { w: Winner; i: number; live: boolean }) {
 
 /* ── Main Component ───────────────────────────────────────────────── */
 export default function WinnersHallOfFame({ provider }: WinnersHallOfFameProps) {
-  const [winners, setWinners]   = useState<Winner[]>(SHOWCASE);
+  const [winners, setWinners]   = useState<Winner[]>([]);
   const [live, setLive]         = useState(false);
   const [rewardStr, setRewardStr] = useState("10,000 OKBOND");
 
@@ -330,6 +324,7 @@ export default function WinnersHallOfFame({ provider }: WinnersHallOfFameProps) 
         } catch { break; }
       }
       if (found.length > 0) { setWinners(found); setLive(true); }
+      else { setWinners([]); setLive(false); }
     } catch { /* silent — expected in dev */ }
   }, [provider]);
 
