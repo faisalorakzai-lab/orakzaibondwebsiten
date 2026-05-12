@@ -31,7 +31,7 @@ const LOTTERY_ADDRESS  = "0x5bc55d4b347e39b986864e28604ddca5de6357b7";
 const ADMIN_WALLET     = "0x9b02e2edd6f58d626aaa91889708dbf39dfa8cd7";
 const FALLBACK_RPC     = "https://polygon-rpc.com";
 const EXPLORER         = "https://polygonscan.com";
-const ICO_PRICE_USD    = 0.15;
+const ICO_PRICE_USD    = 0.50;
 const POL_USD          = 0.50;
 
 const ERC20_ABI = [

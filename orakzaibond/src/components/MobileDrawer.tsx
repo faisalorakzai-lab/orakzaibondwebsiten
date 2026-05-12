@@ -271,25 +271,19 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
               </button>
             </div>
 
-            {/* Scrollable nav body — Chairman directive (round 6 FINAL).
-                touch-action is intentionally NOT set here; the round-4
-                pan-y restriction interfered with momentum scroll on some
-                iOS builds, and Chairman insisted it be removed. The
-                browser's default touch-action is what we want here.
-                overflowY is forced with !important via the ref below so
-                no parent .lg:hidden / dark-mode utility can override it. */}
+            {/* Scrollable nav body.
+                The outer div takes flex-1 space and hides overflow.
+                The inner div is absolutely positioned inside it, giving
+                it an explicit height so overflow-y:scroll works on all
+                iOS Safari versions without needing !important tricks. */}
+            <div className="flex-1 relative overflow-hidden">
             <div
-              ref={(el) => {
-                if (el) {
-                  // !important guarantees no global utility (e.g. a
-                  // .overflow-hidden modifier in a parent dark-mode
-                  // class) can disable scrolling here.
-                  el.style.setProperty("overflow-y", "auto", "important");
-                  el.style.setProperty("-webkit-overflow-scrolling", "touch", "important");
-                  el.style.setProperty("overscroll-behavior", "contain", "important");
-                }
+              className="absolute inset-0 py-3 px-2 space-y-0.5"
+              style={{
+                overflowY: "scroll",
+                WebkitOverflowScrolling: "touch",
+                overscrollBehavior: "contain",
               }}
-              className="flex-1 min-h-0 py-3 px-2 space-y-0.5"
             >
               <SectionLabel>Sections</SectionLabel>
               {SECTION_ITEMS.map((item) => (
@@ -352,6 +346,7 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
                 );
               })}
             </div>
+            </div>{/* end outer flex-1 wrapper */}
 
             {/* Footer — socials */}
             <div className="border-t border-border/30 py-3 px-2 flex-shrink-0">

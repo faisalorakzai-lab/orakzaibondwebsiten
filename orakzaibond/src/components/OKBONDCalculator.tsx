@@ -27,7 +27,7 @@ export default function OKBONDCalculator({ adminAPY, adminPrice, adminStage }: O
   const { t } = useLanguage();
   const [amount, setAmount] = useState<string>("1000");
   const [duration, setDuration] = useState<number>(12);
-  const [entryPrice, setEntryPrice] = useState<string>("0.60");
+  const [entryPrice, setEntryPrice] = useState<string>("0.50");
   const [apy, setApy] = useState<number>(adminAPY ?? 18);
   const [icoStage, setIcoStage] = useState<number>(adminStage ?? 1);
   const [referralAmounts, setReferralAmounts] = useState({ l1: "0", l2: "0", l3: "0" });
@@ -64,7 +64,7 @@ export default function OKBONDCalculator({ adminAPY, adminPrice, adminStage }: O
   const principal = parseFloat(amount) || 0;
   const months = duration;
   const apyRate = apy / 100;
-  const entry = parseFloat(entryPrice) || 0.60;
+  const entry = parseFloat(entryPrice) || 0.50;
 
   // Base staking reward (simple interest)
   const baseReward = principal * apyRate * (months / 12);
@@ -84,7 +84,7 @@ export default function OKBONDCalculator({ adminAPY, adminPrice, adminStage }: O
 
   const poolSharePct = principal > 0 ? ((principal / STAKING_POOL) * 100).toFixed(4) : "0";
 
-  const STAGE_PRICES: Record<number, string> = { 1: "$0.15", 2: "$0.25", 3: "$0.50" };
+  const STAGE_PRICES: Record<number, string> = { 1: "$0.50", 2: "$0.70", 3: "$1.00" };
 
   return (
     <section className="py-16 px-4 relative">
