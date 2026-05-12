@@ -211,7 +211,7 @@ export default function Token() {
                   All OKBOND smart contracts have been professionally audited and verified for security, transparency, and compliance. Our audit report is publicly available for full transparency.
                 </p>
                 <motion.a
-                  href="https://drive.google.com/file/d/1uvONnEDac-Z06mrth6TT94N9bRGecyhN/view?usp=drivesdk"
+                  href="https://drive.google.com/file/d/1T_isI9xvQQr_Mbkt1YyBvNF4kLUOcVgj/view?usp=drivesdk"
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(234,179,8,0.5)" }}

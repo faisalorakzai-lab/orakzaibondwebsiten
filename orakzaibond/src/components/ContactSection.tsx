@@ -363,8 +363,8 @@ export default function ContactSection() {
                 },
                 {
                   label: "General Support", sub: "Official Contact Email",
-                  email: "orakzaibond@gmail.com", icon: Mail, color: "96,165,250",
-                  href: "mailto:orakzaibond@gmail.com",
+                  email: "support@orakzaibond.com", icon: Mail, color: "96,165,250",
+                  href: "mailto:support@orakzaibond.com",
                 },
               ].map((c) => (
                 <motion.a key={c.email} href={c.href} whileHover={{ y: -2 }}

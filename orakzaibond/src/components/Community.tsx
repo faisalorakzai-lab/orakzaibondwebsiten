@@ -34,7 +34,6 @@ function timeAgo(iso: string): string {
 /* OKBOND Status Bar — slim glassmorphism strip with live metrics */
 function SovereignStatusBar() {
   const [pulse, setPulse] = useState(74.2);
-  const [conns, setConns] = useState(8142);
   const [clock, setClock] = useState(() => new Date());
   useEffect(() => {
     const id = setInterval(() => {
@@ -44,7 +43,6 @@ function SovereignStatusBar() {
         const next = Math.max(60, Math.min(96, p + drift));
         return Math.round(next * 10) / 10;
       });
-      setConns((c) => c + (Math.random() < 0.42 ? 1 : 0));
     }, 1500);
     return () => clearInterval(id);
   }, []);
@@ -68,10 +66,10 @@ function SovereignStatusBar() {
         </span>
         <Activity className="w-3 h-3 flex-shrink-0" style={{ color: "rgba(244,206,69,0.85)" }} />
         <span className="text-[10px] font-mono uppercase tracking-[0.18em] whitespace-nowrap" style={{ color: "rgba(212,175,55,0.7)" }}>
-          OKBOND Holders Active
+          Polygon Mainnet
         </span>
         <span className="text-xs font-bold tabular-nums" style={{ color: "#F4CE45" }}>
-          {conns.toLocaleString()}
+          Live
         </span>
       </div>
 

@@ -1,10 +1,10 @@
 /**
  * TrustStrip — a compact, sticky trust-signal bar shown across all pages.
  * Shows live/verified status of key transparency pillars:
- *   • Smart contract audited
+ *   • Smart contract security reviewed
  *   • On-chain (Polygon Mainnet)
  *   • Real-world asset backed
- *   • SECP registration in progress
+ *   • Verified contracts on PolygonScan
  *   • 100-year vision
  */
 import { motion } from "framer-motion";
@@ -13,10 +13,10 @@ import { Shield, Zap, Building2, FileCheck, Globe } from "lucide-react";
 const BADGES = [
   {
     icon: Shield,
-    label: "Contract Audited",
+    label: "Contract Security Reviewed",
     color: "#22c55e",
     dot: "#22c55e",
-    href: "https://drive.google.com/file/d/1uvONnEDac-Z06mrth6TT94N9bRGecyhN/view?usp=drivesdk",
+    href: "https://drive.google.com/file/d/1T_isI9xvQQr_Mbkt1YyBvNF4kLUOcVgj/view?usp=drivesdk",
   },
   {
     icon: Zap,
@@ -34,10 +34,10 @@ const BADGES = [
   },
   {
     icon: FileCheck,
-    label: "SECP Registration",
+    label: "Verified · Polygon Mainnet",
     color: "#60A5FA",
-    dot: "#EAB308",
-    href: "/legal",
+    dot: "#22c55e",
+    href: "https://polygonscan.com/token/0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F",
   },
   {
     icon: Globe,

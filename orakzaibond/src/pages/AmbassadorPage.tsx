@@ -188,7 +188,7 @@ export default function AmbassadorPage() {
       stored.push({ ...form });
       localStorage.setItem("okbond_ambassador_registrations", JSON.stringify(stored));
 
-      // 2. Send email to orakzaibond@gmail.com via API
+      // 2. Send email to team@orakzaibond.com via API
       try {
         const res = await fetch("/api/ambassador-email", {
           method: "POST",

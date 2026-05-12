@@ -32,7 +32,7 @@ const socials = [
   },
   {
     name: "Email",
-    href: "mailto:orakzaibond@gmail.com",
+    href: "mailto:info@orakzaibond.com",
     icon: (
       <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect width="20" height="16" x="2" y="4" rx="2" />

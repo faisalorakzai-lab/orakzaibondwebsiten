@@ -41,24 +41,24 @@ const DOC_LINKS = [
   {
     label: "OKBOND PDF",
     icon: <FileText className="w-4 h-4" />,
-    href: "https://drive.google.com/file/d/1ciuxocfbRbwENLaclrpey50EJMxF_pdr/view?usp=drivesdk",
+    href: "https://drive.google.com/file/d/1Q6bClDOeBCBxBZfKdD9SnqSpNFrG-u7A/view?usp=drivesdk",
   },
   {
     label: "Whitepaper",
     icon: <BookOpen className="w-4 h-4" />,
-    href: "https://drive.google.com/file/d/1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh/view?usp=drivesdk",
+    href: "https://drive.google.com/file/d/1Psz7Iy5aREH_ltKPGLglTwR2ln1VTHWS/view?usp=drivesdk",
   },
   {
-    label: "Audit Report",
+    label: "Security Review",
     icon: <Shield className="w-4 h-4" />,
-    href: "https://drive.google.com/file/d/1uvONnEDac-Z06mrth6TT94N9bRGecyhN/view?usp=drivesdk",
+    href: "https://drive.google.com/file/d/1T_isI9xvQQr_Mbkt1YyBvNF4kLUOcVgj/view?usp=drivesdk",
   },
 ];
 
 const SOCIALS = [
   { label: "Twitter",  icon: <Twitter className="w-3.5 h-3.5" />, href: "https://x.com/orakzaibond1" },
   { label: "Telegram", icon: <Send    className="w-3.5 h-3.5" />, href: "https://t.me/orakzaibond"  },
-  { label: "Email",    icon: <Mail    className="w-3.5 h-3.5" />, href: "mailto:orakzaibond@gmail.com" },
+  { label: "Email",    icon: <Mail    className="w-3.5 h-3.5" />, href: "mailto:info@orakzaibond.com" },
 ];
 
 export interface SidebarHandle {

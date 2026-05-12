@@ -43,11 +43,11 @@ const HUBS = [
 ] as const;
 
 const STAT_ROWS = [
-  { label: "Active Regions",    value: "18",          suffix: "" },
-  { label: "OKBOND Holders",    value: "1,248",       suffix: "+" },
-  { label: "Network",           value: "Polygon PoS", suffix: "" },
-  { label: "Reserve Backing",   value: "100",         suffix: "%" },
-  { label: "Founder",           value: "F. Orakzai",  suffix: "" },
+  { label: "Active Regions",    value: "18",              suffix: "" },
+  { label: "Token Holders",     value: "Live Syncing",    suffix: "" },
+  { label: "Network",           value: "Polygon PoS",     suffix: "" },
+  { label: "Reserve Backing",   value: "100",             suffix: "%" },
+  { label: "Founder",           value: "F. Orakzai",      suffix: "" },
 ];
 
 export default function OKBONDHeatmap() {
