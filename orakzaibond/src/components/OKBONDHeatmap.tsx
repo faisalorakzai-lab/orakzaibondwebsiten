@@ -16,6 +16,7 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { useLanguage } from "@/i18n/LanguageContext";
+import { useHolderCount } from "@/hooks/useHolderCount";
 
 const GOLD = "#D4AF37";
 
@@ -42,18 +43,19 @@ const HUBS = [
   [500, 290, 0.7, 0.6,  "Nairobi",    "Africa"],
 ] as const;
 
-const STAT_ROWS = [
-  { label: "Active Regions",    value: "18",              suffix: "" },
-  { label: "Token Holders",     value: "Live Syncing",    suffix: "" },
-  { label: "Network",           value: "Polygon PoS",     suffix: "" },
-  { label: "Reserve Backing",   value: "100",             suffix: "%" },
-  { label: "Founder",           value: "F. Orakzai",      suffix: "" },
-];
-
 export default function OKBONDHeatmap() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const { t } = useLanguage();
+  const { count: holderCount, loading: holderLoading } = useHolderCount();
+
+  const STAT_ROWS = [
+    { label: "Active Regions",  value: "18",                                                    suffix: "" },
+    { label: "Token Holders",   value: holderLoading ? "Syncing…" : (holderCount ?? "On-Chain"), suffix: "" },
+    { label: "Network",         value: "Polygon PoS",                                           suffix: "" },
+    { label: "Reserve Backing", value: "100",                                                   suffix: "%" },
+    { label: "Founder",         value: "F. Orakzai",                                           suffix: "" },
+  ];
 
   return (
     <section

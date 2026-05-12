@@ -166,7 +166,7 @@ const SiteSidebar = forwardRef<SidebarHandle, SiteSidebarProps>((props, ref) => 
         )}
       </div>
 
-      <div className="flex-1 min-h-0 overflow-y-auto py-3 space-y-0.5 px-2">
+      <div className="flex-1 min-h-0 overflow-y-auto py-3 space-y-0.5 px-2" style={{ WebkitOverflowScrolling: "touch", overscrollBehavior: "contain" }}>
         {(expanded || mobile) && (
           <p className="text-[9px] text-muted-foreground/50 uppercase tracking-widest font-bold px-2 mb-2">Sections</p>
         )}
@@ -323,7 +323,7 @@ const SiteSidebar = forwardRef<SidebarHandle, SiteSidebarProps>((props, ref) => 
             <motion.aside
               initial={{ x: -280 }} animate={{ x: 0 }} exit={{ x: -280 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="lg:hidden fixed left-0 top-0 bottom-0 z-50 w-[260px] glass-dark border-r border-border/40 shadow-[4px_0_40px_rgba(0,0,0,0.5)]"
+              className="lg:hidden fixed left-0 top-0 bottom-0 z-50 w-[260px] glass-dark border-r border-border/40 shadow-[4px_0_40px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col"
             >
               <SidebarContent mobile />
             </motion.aside>

@@ -6,6 +6,7 @@ import LiveParticipationFeed from "@/components/LiveParticipationFeed";
 import ThinkTank from "@/components/ThinkTank";
 import SocialHub from "@/components/SocialHub";
 import { supabase, Profile, Post } from "@/lib/supabase";
+import { useHolderCount } from "@/hooks/useHolderCount";
 
 /* ── Admin data types ────────────────────────────────────────────── */
 interface AdminPost {
@@ -35,6 +36,7 @@ function timeAgo(iso: string): string {
 function SovereignStatusBar() {
   const [pulse, setPulse] = useState(74.2);
   const [clock, setClock] = useState(() => new Date());
+  const { count: holderCount, loading: holderLoading } = useHolderCount();
   useEffect(() => {
     const id = setInterval(() => {
       setClock(new Date());
@@ -66,10 +68,10 @@ function SovereignStatusBar() {
         </span>
         <Activity className="w-3 h-3 flex-shrink-0" style={{ color: "rgba(244,206,69,0.85)" }} />
         <span className="text-[10px] font-mono uppercase tracking-[0.18em] whitespace-nowrap" style={{ color: "rgba(212,175,55,0.7)" }}>
-          Polygon Mainnet
+          Token Holders
         </span>
         <span className="text-xs font-bold tabular-nums" style={{ color: "#F4CE45" }}>
-          Live
+          {holderLoading ? "Syncing…" : (holderCount ?? "Live")}
         </span>
       </div>
 
