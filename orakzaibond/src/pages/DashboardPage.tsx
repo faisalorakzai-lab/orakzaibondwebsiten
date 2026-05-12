@@ -4,11 +4,12 @@ import { useProtocolMetrics } from "@/hooks/useProtocolMetrics";
 import { useWallet } from "@/hooks/useWallet";
 import { useICO } from "@/hooks/useICO";
 import { useStaking } from "@/hooks/useStaking";
+import { useTokenPrice } from "@/hooks/useTokenPrice";
 import {
   TrendingUp, Lock, Landmark, Shield, Ticket, Users, Rocket, Activity,
   RefreshCw, ExternalLink, DollarSign, BarChart3, Zap, BookMarked,
   Trophy, Star, Globe, Cpu, PieChart, ChevronRight, Copy, CheckCheck,
-  ArrowUpRight, Wifi, Circle, Coins,
+  ArrowUpRight, Wifi, Circle, Coins, ShieldCheck,
 } from "lucide-react";
 import { Link } from "wouter";
 
@@ -108,6 +109,24 @@ function ContractRow({ label, addr }: { label: string; addr: string }) {
   );
 }
 
+// ── ICO Live Price Display ─────────────────────────────────────────────────────
+function ICOLivePrice() {
+  const tokenPrice = useTokenPrice();
+  return (
+    <span className="flex items-center gap-1.5 font-mono font-bold">
+      <span className="text-white">
+        {tokenPrice.isLoading ? "Syncing…" : tokenPrice.isLive ? tokenPrice.displayPrice : "Initializing"}
+      </span>
+      {tokenPrice.isLive && (
+        <span className="flex items-center gap-1 text-[9px] text-emerald-400 font-mono bg-emerald-400/10 border border-emerald-400/20 px-1.5 py-0.5 rounded-full">
+          <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
+          LIVE
+        </span>
+      )}
+    </span>
+  );
+}
+
 // ── Portfolio Tab ─────────────────────────────────────────────────────────────
 function PortfolioTab({ metrics, icoStats, stakingStats, address }: any) {
   const hasWallet = !!address;
@@ -152,7 +171,7 @@ function PortfolioTab({ metrics, icoStats, stakingStats, address }: any) {
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
               <span className="text-white/50">Price</span>
-              <span className="text-white font-mono font-bold">$0.50 / OKBOND</span>
+              <ICOLivePrice />
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-white/50">Phase Supply</span>
@@ -194,17 +213,20 @@ function PortfolioTab({ metrics, icoStats, stakingStats, address }: any) {
 
 // ── ICO Tab ───────────────────────────────────────────────────────────────────
 function ICOTab({ metrics, icoStats }: any) {
+  const tokenPrice = useTokenPrice();
+  const livePhase1 = tokenPrice.isLive ? tokenPrice.displayPrice : "Live Price Initializing";
+
   const phases = [
-    { id: 1, label: "Phase 1", price: "$0.50", supply: "333,333 OKBOND", status: "live",     roi: "2×",  roiAt: "$1" },
-    { id: 2, label: "Phase 2", price: "$0.70", supply: "333,333 OKBOND", status: "upcoming", roi: "1.4×", roiAt: "$1" },
-    { id: 3, label: "Phase 3", price: "$1.00", supply: "333,334 OKBOND", status: "upcoming", roi: "1×",  roiAt: "$1" },
+    { id: 1, label: "Phase 1", price: livePhase1,  supply: "2,500,000 OKBOND", status: "live",     roi: "3.3×", roiAt: "$0.50" },
+    { id: 2, label: "Phase 2", price: "$0.25",      supply: "2,500,000 OKBOND", status: "upcoming", roi: "2×",   roiAt: "$0.50" },
+    { id: 3, label: "Phase 3", price: "$0.50",      supply: "5,000,000 OKBOND", status: "upcoming", roi: "1×",   roiAt: "$0.50" },
   ];
   const mcScenarios = [
-    { price: "$1",   mcap: "$1M",  x: "2×"   },
-    { price: "$5",   mcap: "$5M",  x: "10×"  },
-    { price: "$10",  mcap: "$10M", x: "20×"  },
-    { price: "$50",  mcap: "$50M", x: "100×" },
-    { price: "$100", mcap: "$100M",x: "200×" },
+    { price: "$0.50", mcap: "$5M",   x: "3.3× (Phase 1)" },
+    { price: "$1",    mcap: "$10M",  x: "6.7×"           },
+    { price: "$5",    mcap: "$50M",  x: "33×"            },
+    { price: "$10",   mcap: "$100M", x: "67×"            },
+    { price: "$50",   mcap: "$500M", x: "333×"           },
   ];
   return (
     <div className="space-y-6">
@@ -251,7 +273,7 @@ function ICOTab({ metrics, icoStats }: any) {
               className="rounded-xl p-4 text-center border border-white/6 bg-white/2 hover:border-[#D4AF37]/30 transition-all">
               <p className="text-white font-black text-lg mb-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{s.price}</p>
               <p className="text-white/35 text-[10px] font-mono mb-2">{s.mcap} mcap</p>
-              <p className="font-bold text-sm" style={{ color: GOLD }}>{s.x} from Phase 1</p>
+              <p className="font-bold text-sm" style={{ color: GOLD }}>{s.x}</p>
             </motion.div>
           ))}
         </div>

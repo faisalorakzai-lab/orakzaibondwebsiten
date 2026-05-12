@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { BrowserProvider, Contract, formatUnits } from "ethers";
 import { TrendingUp, Users, Coins, Activity, Zap, Shield } from "lucide-react";
 import LOTTERY_ABI from "@/lib/contractABI.json";
+import { useTokenPrice } from "@/hooks/useTokenPrice";
 
 const LOTTERY_ADDRESS = "0x5bc55d4b347e39b986864e28604ddca5de6357b7";
 const TOKEN_ADDRESS   = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
@@ -33,16 +34,8 @@ async function countPlayers(contract: Contract, cap = 500): Promise<number> {
 interface Props { provider: BrowserProvider | null; }
 
 export default function StatsStrip({ provider }: Props) {
-  const [stats, setStats] = useState<StatItem[]>([
-    { icon: <Coins className="w-3 h-3" />,     label: "POL Reserve",    value: "—" },
-    { icon: <Users className="w-3 h-3" />,     label: "Participants",   value: "—" },
-    { icon: <TrendingUp className="w-3 h-3" />, label: "OKBOND Supply", value: "10M" },
-    { icon: <Activity className="w-3 h-3" />,  label: "Network",        value: "Polygon PoS" },
-    { icon: <Shield className="w-3 h-3" />,    label: "Reserve",        value: "100% Backed" },
-    { icon: <Zap className="w-3 h-3" />,       label: "Lottery",        value: "Active",      live: true },
-    { icon: <Coins className="w-3 h-3" />,     label: "Phase 1 Price",  value: "$0.15 USDT" },
-    { icon: <TrendingUp className="w-3 h-3" />, label: "Listing Target", value: "$1.00 USDT" },
-  ]);
+  const tokenPrice = useTokenPrice();
+  const [chainStats, setChainStats] = useState<{ polReserve: string; participants: string; supply: string } | null>(null);
 
   const fetchLive = useCallback(async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,16 +52,7 @@ export default function StatsStrip({ provider }: Props) {
       ]);
       const polFmt     = parseFloat(formatUnits(polBal, 18)).toLocaleString(undefined, { maximumFractionDigits: 3 });
       const supplyFmt  = (parseFloat(formatUnits(supply, 18)) / 1_000_000).toFixed(2) + "M";
-      setStats([
-        { icon: <Coins className="w-3 h-3" />,     label: "POL Reserve",    value: polFmt + " POL",    live: true },
-        { icon: <Users className="w-3 h-3" />,     label: "Participants",   value: String(players),    live: true },
-        { icon: <TrendingUp className="w-3 h-3" />, label: "OKBOND Supply", value: supplyFmt },
-        { icon: <Activity className="w-3 h-3" />,  label: "Network",        value: "Polygon PoS" },
-        { icon: <Shield className="w-3 h-3" />,    label: "Reserve",        value: "100% Backed" },
-        { icon: <Zap className="w-3 h-3" />,       label: "Lottery",        value: "Active",           live: true },
-        { icon: <Coins className="w-3 h-3" />,     label: "Phase 1 Price",  value: "$0.15 USDT" },
-        { icon: <TrendingUp className="w-3 h-3" />, label: "Listing Target", value: "$1.00 USDT" },
-      ]);
+      setChainStats({ polReserve: polFmt + " POL", participants: String(players), supply: supplyFmt });
     } catch { /* keep defaults */ }
   }, [provider]);
 
@@ -77,6 +61,23 @@ export default function StatsStrip({ provider }: Props) {
     const id = setInterval(fetchLive, 30_000);
     return () => clearInterval(id);
   }, [fetchLive]);
+
+  const currentPrice = tokenPrice.isLoading
+    ? "Syncing…"
+    : tokenPrice.isLive
+    ? tokenPrice.displayPrice
+    : "Live Price Initializing";
+
+  const stats: StatItem[] = [
+    { icon: <Coins className="w-3 h-3" />,     label: "POL Reserve",    value: chainStats?.polReserve ?? "—",        live: !!chainStats },
+    { icon: <Users className="w-3 h-3" />,     label: "Participants",   value: chainStats?.participants ?? "—",      live: !!chainStats },
+    { icon: <TrendingUp className="w-3 h-3" />, label: "OKBOND Supply", value: chainStats?.supply ?? "10M" },
+    { icon: <Activity className="w-3 h-3" />,  label: "Network",        value: "Polygon PoS" },
+    { icon: <Shield className="w-3 h-3" />,    label: "Reserve",        value: "100% Backed" },
+    { icon: <Zap className="w-3 h-3" />,       label: "Lottery",        value: "Active", live: true },
+    { icon: <Coins className="w-3 h-3" />,     label: "Phase 1 Price",  value: currentPrice, live: tokenPrice.isLive },
+    { icon: <TrendingUp className="w-3 h-3" />, label: "Blockchain",    value: "Polygon #137" },
+  ];
 
   const items = [...stats, ...stats];
 
@@ -89,7 +90,6 @@ export default function StatsStrip({ provider }: Props) {
         borderBottom: `1px solid ${GOLD}20`,
       }}
     >
-      {/* Edge fade — deep black fade, not a background colour */}
       <div
         className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
         style={{ background: "linear-gradient(to right, #050505, transparent)" }}
@@ -128,7 +128,6 @@ export default function StatsStrip({ provider }: Props) {
                 />
               )}
             </div>
-            {/* Separator — tiny gold diamond */}
             <span
               className="flex-shrink-0 w-[3px] h-[3px] rounded-full"
               style={{ background: `${GOLD}30` }}

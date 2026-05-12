@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import {
   Shield, CheckCircle, ExternalLink, Lock, AlertTriangle,
-  FileText, Eye, Zap, Globe, BookOpen, Download,
+  FileText, Eye, Zap, Globe, Download, BadgeCheck,
+  Building2, Award, Landmark, BookOpen,
 } from "lucide-react";
 
 const CONTRACTS = [
@@ -17,16 +18,43 @@ const SECURITY_FEATURES = [
   { icon: <AlertTriangle className="w-5 h-5" />, title: "Emergency Pause",         desc: "Each contract includes an emergency pause mechanism controlled by the multisig for incident response." },
   { icon: <Eye className="w-5 h-5" />,           title: "On-chain Transparency",   desc: "All reserve allocations, staking pools, and treasury movements are fully verifiable on Polygon mainnet." },
   { icon: <Shield className="w-5 h-5" />,        title: "Vault Protection",        desc: "The reserve vault maintains collateral ratios with automated alerts for any reserve deviation." },
-  { icon: <FileText className="w-5 h-5" />,      title: "Smart Contract Audit",    desc: "Core contracts have been reviewed for security vulnerabilities. Audit reports are publicly available." },
+  { icon: <FileText className="w-5 h-5" />,      title: "Smart Contract Review",   desc: "Core contracts have been reviewed for security vulnerabilities. Review reports are publicly available." },
   { icon: <Globe className="w-5 h-5" />,         title: "Decentralized Control",   desc: "Contract ownership is managed via multisig with no single point of failure." },
 ];
 
 const RISK_ITEMS = [
-  "Smart contract risk — despite audits, no code is 100% free of vulnerabilities.",
+  "Smart contract risk — despite security reviews, no code is 100% free of vulnerabilities.",
   "Crypto market volatility — OKBOND token price may fluctuate significantly.",
   "Regulatory uncertainty — DeFi regulations vary by jurisdiction.",
   "Staking lock risk — staked tokens cannot be withdrawn before the lock period ends.",
   "Liquidity risk — exit liquidity depends on market conditions at time of sale.",
+];
+
+const AUDIT_DOCUMENTS = [
+  {
+    label: "Smart Contract Security Review",
+    date: "2026",
+    viewUrl: "https://drive.google.com/file/d/1T_isI9xvQQr_Mbkt1YyBvNF4kLUOcVgj/view?usp=drivesdk",
+    downloadUrl: "https://drive.google.com/uc?export=download&id=1T_isI9xvQQr_Mbkt1YyBvNF4kLUOcVgj",
+    badge: "Security",
+    badgeColor: "#22c55e",
+  },
+  {
+    label: "OKBOND Whitepaper",
+    date: "2026",
+    viewUrl: "https://drive.google.com/file/d/1Psz7Iy5aREH_ltKPGLglTwR2ln1VTHWS/view?usp=drivesdk",
+    downloadUrl: "https://drive.google.com/uc?export=download&id=1Psz7Iy5aREH_ltKPGLglTwR2ln1VTHWS",
+    badge: "Technical",
+    badgeColor: "#60A5FA",
+  },
+  {
+    label: "Marketing Overview PDF",
+    date: "2026",
+    viewUrl: "https://drive.google.com/file/d/1Q6bClDOeBCBxBZfKdD9SnqSpNFrG-u7A/view?usp=drivesdk",
+    downloadUrl: "https://drive.google.com/uc?export=download&id=1Q6bClDOeBCBxBZfKdD9SnqSpNFrG-u7A",
+    badge: "Investor",
+    badgeColor: "#EAB308",
+  },
 ];
 
 function SectionHeader({ icon, title, sub }: { icon: React.ReactNode; title: string; sub?: string }) {
@@ -53,7 +81,34 @@ export default function SecurityPage() {
           <span className="text-xs text-primary font-mono tracking-widest uppercase">Security Center</span>
         </div>
         <h1 className="text-3xl md:text-4xl font-bold text-foreground">Protocol Security</h1>
-        <p className="text-muted-foreground text-sm mt-1">Verified contracts · Audit transparency · Risk disclosures · Compliance</p>
+        <p className="text-muted-foreground text-sm mt-1">Verified contracts · Security review · Risk disclosures · Compliance</p>
+      </motion.div>
+
+      {/* Corporate Verification Banner */}
+      <motion.div
+        initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.02 }}
+        className="rounded-2xl border p-6 mb-6 relative overflow-hidden"
+        style={{ background: "linear-gradient(135deg, rgba(234,179,8,0.08), rgba(20,16,8,0.9))", border: "1px solid rgba(234,179,8,0.2)" }}
+      >
+        <div className="absolute top-0 left-0 right-0 h-px" style={{ background: "linear-gradient(to right, transparent, rgba(234,179,8,0.5), transparent)" }} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { icon: <Building2 className="w-5 h-5" />, title: "Registered Entity", value: "Orakzai Group SMC-Pvt Ltd", sub: "Khyber Pakhtunkhwa, Pakistan", color: "#EAB308" },
+            { icon: <Landmark className="w-5 h-5" />,  title: "Blockchain Network", value: "Polygon Mainnet", sub: "Chain ID 137 · Verified On-Chain", color: "#8247E5" },
+            { icon: <Award className="w-5 h-5" />,     title: "Security Review", value: "Completed", sub: "Smart contracts independently reviewed", color: "#22c55e" },
+          ].map((item) => (
+            <div key={item.title} className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${item.color}15`, border: `1px solid ${item.color}30` }}>
+                <span style={{ color: item.color }}>{item.icon}</span>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-widest font-bold mb-1" style={{ color: item.color }}>{item.title}</p>
+                <p className="text-sm font-bold text-white">{item.value}</p>
+                <p className="text-xs text-zinc-500">{item.sub}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </motion.div>
 
       {/* Verified Contracts */}
@@ -61,7 +116,7 @@ export default function SecurityPage() {
         initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
         className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-sm p-6 mb-6"
       >
-        <SectionHeader icon={<CheckCircle className="w-5 h-5" />} title="Verified Smart Contracts" sub="Polygon Mainnet · All contracts publicly verifiable" />
+        <SectionHeader icon={<CheckCircle className="w-5 h-5" />} title="Verified Smart Contracts" sub="Polygon Mainnet · All contracts publicly verifiable on PolygonScan" />
         <div className="space-y-3">
           {CONTRACTS.map((c, i) => (
             <motion.div
@@ -74,25 +129,23 @@ export default function SecurityPage() {
                   <CheckCircle className="w-4 h-4 text-emerald-400" />
                 </div>
                 <div>
-                  <div className="flex items-center gap-2 mb-0.5">
+                  <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                     <span className="text-sm font-semibold text-foreground">{c.label}</span>
                     <span className="text-[10px] text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded-full">{c.type}</span>
+                    <span className="text-[10px] bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 px-2 py-0.5 rounded-full font-mono font-bold">VERIFIED</span>
                   </div>
                   <p className="font-mono text-xs text-muted-foreground">{c.addr}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 flex-shrink-0">
-                <span className="text-[10px] bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 px-2 py-0.5 rounded-full font-mono font-bold">VERIFIED</span>
-                <a
-                  href={`https://polygonscan.com/address/${c.addr}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs text-primary hover:underline"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  PolygonScan
-                </a>
-              </div>
+              <a
+                href={`https://polygonscan.com/address/${c.addr}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-xs text-primary hover:underline shrink-0"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                PolygonScan
+              </a>
             </motion.div>
           ))}
         </div>
@@ -122,34 +175,53 @@ export default function SecurityPage() {
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        {/* Audit Reports */}
+        {/* Document Vault with Download */}
         <motion.div
           initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
           className="rounded-2xl border border-border/40 bg-card/60 backdrop-blur-sm p-6"
         >
-          <SectionHeader icon={<FileText className="w-5 h-5" />} title="Audit Reports" />
+          <SectionHeader icon={<FileText className="w-5 h-5" />} title="Security Documents" sub="View or download official documentation" />
           <div className="space-y-3">
-            {[
-              { label: "Smart Contract Audit Report", date: "2024", href: "https://drive.google.com/file/d/1uvONnEDac-Z06mrth6TT94N9bRGecyhN/view?usp=drivesdk" },
-              { label: "OKBOND Whitepaper",           date: "2024", href: "https://drive.google.com/file/d/1WSYlOs9UHvMUlfBG6QMocQvrJDSTAnbh/view?usp=drivesdk" },
-              { label: "Protocol Documentation",      date: "2024", href: "https://drive.google.com/file/d/1ciuxocfbRbwENLaclrpey50EJMxF_pdr/view?usp=drivesdk" },
-            ].map(doc => (
-              <a
+            {AUDIT_DOCUMENTS.map(doc => (
+              <div
                 key={doc.label}
-                href={doc.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between rounded-xl bg-muted/20 border border-border/30 px-4 py-3 hover:border-primary/30 hover:bg-primary/5 transition-all group"
+                className="rounded-xl bg-muted/20 border border-border/30 px-4 py-4 hover:border-primary/30 hover:bg-primary/5 transition-all"
               >
-                <div className="flex items-center gap-3">
-                  <BookOpen className="w-4 h-4 text-primary" />
-                  <div>
-                    <p className="text-sm font-medium text-foreground">{doc.label}</p>
-                    <p className="text-xs text-muted-foreground">{doc.date}</p>
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <div className="flex items-center gap-3">
+                    <BookOpen className="w-4 h-4 text-primary" />
+                    <div>
+                      <p className="text-sm font-medium text-foreground">{doc.label}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <p className="text-xs text-muted-foreground">{doc.date}</p>
+                        <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full" style={{ background: `${doc.badgeColor}15`, border: `1px solid ${doc.badgeColor}30`, color: doc.badgeColor }}>{doc.badge}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <Download className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-              </a>
+                <div className="flex items-center gap-3">
+                  <a
+                    href={doc.viewUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-80"
+                    style={{ background: "rgba(212,175,55,0.1)", border: "1px solid rgba(212,175,55,0.2)", color: "#D4AF37" }}
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                    View PDF
+                  </a>
+                  <a
+                    href={doc.downloadUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all hover:opacity-80"
+                    style={{ background: "rgba(96,165,250,0.1)", border: "1px solid rgba(96,165,250,0.2)", color: "#60A5FA" }}
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    Download
+                  </a>
+                </div>
+              </div>
             ))}
           </div>
         </motion.div>

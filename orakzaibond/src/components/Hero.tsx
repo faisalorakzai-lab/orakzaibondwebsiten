@@ -3,6 +3,7 @@ import { Rocket, ShieldCheck, Zap, Lock, ExternalLink, ArrowDown, Globe, Chevron
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@/hooks/useWallet";
 import { useICO } from "@/hooks/useICO";
+import { useTokenPrice } from "@/hooks/useTokenPrice";
 
 const ICO_URL = "/ico";
 
@@ -11,11 +12,9 @@ interface HeroProps {
   address: string | null;
 }
 
-// Premium ambient background — cinematic dark atmosphere, no floating orbs
 function CinematicBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
-      {/* Subtle grid */}
       <div
         className="absolute inset-0"
         style={{
@@ -23,13 +22,9 @@ function CinematicBackground() {
           backgroundSize: "80px 80px",
         }}
       />
-      
-      {/* Ambient glow - subtle, not floating */}
       <div className="absolute inset-0" style={{
         background: "radial-gradient(ellipse 120% 80% at 50% 30%, rgba(212,175,55,0.08) 0%, transparent 50%)"
       }} />
-      
-      {/* Cinematic vignette */}
       <div className="absolute inset-0" style={{
         background: "radial-gradient(ellipse 100% 100% at 50% 50%, transparent 30%, rgba(5,5,5,0.8) 100%)"
       }} />
@@ -46,22 +41,21 @@ const CONTRACTS = [
 ];
 
 const TRUST_BADGES = [
-  { icon: <ShieldCheck className="w-3.5 h-3.5" />, label: "SECP Registered" },
   { icon: <Globe className="w-3.5 h-3.5" />,       label: "Polygon" },
   { icon: <Lock className="w-3.5 h-3.5" />,         label: "Audited" },
+  { icon: <ShieldCheck className="w-3.5 h-3.5" />, label: "Verified Contracts" },
 ];
 
 export default function Hero({ onConnect, address }: HeroProps) {
   const { provider } = useWallet();
   const { stats } = useICO(provider, address);
+  const tokenPrice = useTokenPrice();
 
   const tokensSold = stats ? parseFloat(stats.totalTokensSold) : 0;
-  const totalRaised = stats ? parseFloat(stats.totalRaisedPOL) : 0;
   const progress = Math.min((tokensSold / 75000) * 100, 100);
 
   return (
     <>
-      {/* ═══ HERO ═══════════════════════════════════════════════════ */}
       <section
         className="relative flex flex-col items-center justify-center overflow-hidden bg-[#050505]"
         style={{ paddingTop: "120px", paddingBottom: "80px", minHeight: "100svh" }}
@@ -93,7 +87,7 @@ export default function Hero({ onConnect, address }: HeroProps) {
             ))}
           </motion.div>
 
-          {/* ── 2. ICO live badge ── */}
+          {/* ── 2. ICO live badge with live price ── */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -105,11 +99,14 @@ export default function Hero({ onConnect, address }: HeroProps) {
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
             </span>
             <span className="text-emerald-400 text-xs md:text-sm font-bold uppercase tracking-wider">
-              ICO Phase 1 · $0.50 per OKBOND
+              ICO Phase 1 · {tokenPrice.isLoading ? "Syncing Price…" : tokenPrice.displayPrice} per OKBOND
             </span>
+            {tokenPrice.isLive && (
+              <span className="text-emerald-400/60 text-[10px] font-mono">LIVE</span>
+            )}
           </motion.div>
 
-          {/* ── 3. Main headline — Premium typography ── */}
+          {/* ── 3. Main headline ── */}
           <motion.div
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
@@ -138,7 +135,7 @@ export default function Hero({ onConnect, address }: HeroProps) {
             </h1>
           </motion.div>
 
-          {/* ── 4. Subtitle — Improved spacing ── */}
+          {/* ── 4. Subtitle ── */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -150,7 +147,7 @@ export default function Hero({ onConnect, address }: HeroProps) {
             Built on Polygon. Audited. Sovereign-grade.
           </motion.p>
 
-          {/* ── 5. CTA buttons — Premium styling ── */}
+          {/* ── 5. CTA buttons ── */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
