@@ -23,10 +23,10 @@ TOKEN DISTRIBUTION (official final tokenomics — 10,000,000 total supply):
 - Public Sale (ICO): 10% (1,000,000 OKBOND) — 3 phases, price rises each phase
 
 ICO PHASES:
-- Phase 1 (LIVE): $0.50 per OKBOND — 75,000 OKBOND available
-- Phase 2: $0.70 per OKBOND — 75,000 OKBOND
-- Phase 3: $1.00 per OKBOND — Remaining supply (listing price)
-- Total ICO Allocation: 1,000,000 OKBOND (10% of supply)
+- Phase 1 (LIVE): $0.50 per OKBOND — 333,333 OKBOND available
+- Phase 2: $0.70 per OKBOND — 333,333 OKBOND
+- Phase 3: $1.00 per OKBOND — 333,334 OKBOND (listing price)
+- Total ICO Allocation: 1,000,000 OKBOND (10% of supply, 3 equal rounds)
 
 STAKING PROGRAM:
 - 28% of total supply (2,800,000 OKBOND) allocated as staking rewards

@@ -217,16 +217,16 @@ function ICOTab({ metrics, icoStats }: any) {
   const livePhase1 = tokenPrice.isLive ? tokenPrice.displayPrice : "Live Price Initializing";
 
   const phases = [
-    { id: 1, label: "Phase 1", price: livePhase1,  supply: "75,000 OKBOND", status: "live",     roi: "2×",    roiAt: "$1.00" },
-    { id: 2, label: "Phase 2", price: "$0.70",      supply: "75,000 OKBOND", status: "upcoming", roi: "1.43×", roiAt: "$1.00" },
-    { id: 3, label: "Phase 3", price: "$1.00",      supply: "Remaining",     status: "upcoming", roi: "1×",    roiAt: "$1.00" },
+    { id: 1, label: "Phase 1", price: livePhase1,  supply: "333,333 OKBOND", status: "live",     roi: "2×",    roiAt: "$1.00" },
+    { id: 2, label: "Phase 2", price: "$0.70",      supply: "333,333 OKBOND", status: "upcoming", roi: "1.43×", roiAt: "$1.00" },
+    { id: 3, label: "Phase 3", price: "$1.00",      supply: "333,334 OKBOND", status: "upcoming", roi: "1×",    roiAt: "$1.00" },
   ];
   const mcScenarios = [
-    { price: "$1",    mcap: "$10M",  x: "2× (Phase 1)"  },
-    { price: "$2",    mcap: "$20M",  x: "4×"            },
+    { price: "$2",    mcap: "$20M",  x: "4× (Phase 1)"  },
     { price: "$5",    mcap: "$50M",  x: "10×"           },
+    { price: "$8",    mcap: "$80M",  x: "16×"           },
     { price: "$10",   mcap: "$100M", x: "20×"           },
-    { price: "$50",   mcap: "$500M", x: "100×"          },
+    { price: "$40",   mcap: "$400M", x: "80×"           },
   ];
   return (
     <div className="space-y-6">

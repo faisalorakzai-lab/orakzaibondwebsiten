@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Ticket, Trophy, ShieldCheck, Users, Loader2, RefreshCw } from "lucide-react";
 import { JsonRpcProvider, Contract } from "ethers";
 
-const LOTTERY_ADDRESS = "0x5bc55d4b347e39b986864e28604ddca5de6357b7";
+const LOTTERY_ADDRESS = "0xCF82D9ED107bE2217Ead6ccd4ffc851f71aa38F8";
 
 const LOTTERY_ABI = [
   "function players(uint256) view returns (address)",

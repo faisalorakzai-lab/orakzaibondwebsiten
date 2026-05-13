@@ -17,47 +17,47 @@ const POLYGON_SCAN = "https://polygonscan.com/tx/";
 
 // Phase 1 ends 60 days from April 10, 2026
 const PHASE1_END = new Date("2026-06-09T00:00:00Z").getTime();
-const PHASE1_SUPPLY = 75_000;
+const PHASE1_SUPPLY = 333_333;
 
 const PHASES = [
   {
     id: 1,
     label: "Phase 1",
     status: "live" as const,
-    price: "$0.15",
-    priceNum: 0.15,
-    supply: "75,000 OKBOND",
+    price: "$0.50",
+    priceNum: 0.50,
+    supply: "333,333 OKBOND",
     badge: "LIVE NOW",
     badgeColor: "bg-emerald-500",
     borderColor: "border-emerald-500/60",
     glowColor: "shadow-emerald-500/20",
-    desc: "Early adopter price — lowest entry point",
+    desc: "Lowest entry — open now",
   },
   {
     id: 2,
     label: "Phase 2",
     status: "upcoming" as const,
-    price: "$0.25",
-    priceNum: 0.25,
-    supply: "75,000 OKBOND",
+    price: "$0.70",
+    priceNum: 0.70,
+    supply: "333,333 OKBOND",
     badge: "LOCKED",
     badgeColor: "bg-amber-500",
     borderColor: "border-amber-500/40",
     glowColor: "shadow-amber-500/10",
-    desc: "67% premium over Phase 1",
+    desc: "40% premium over Phase 1",
   },
   {
     id: 3,
     label: "Phase 3",
     status: "upcoming" as const,
-    price: "$0.50",
-    priceNum: 0.50,
-    supply: "Remaining Supply",
+    price: "$1.00",
+    priceNum: 1.00,
+    supply: "333,334 OKBOND",
     badge: "LOCKED",
     badgeColor: "bg-primary/80",
     borderColor: "border-primary/40",
     glowColor: "shadow-primary/10",
-    desc: "Final sale before listing",
+    desc: "Listing price — final entry",
   },
 ];
 
@@ -129,9 +129,9 @@ function ProgressBar({ sold, total }: { sold: number; total: number }) {
 // ── ROI comparison table ───────────────────────────────────────────────────────
 function ROITable() {
   const rows = [
-    { phase: "Phase 1", entry: "$0.15", listing: "$1.00", roi: "567%", status: "live" },
-    { phase: "Phase 2", entry: "$0.25", listing: "$1.00", roi: "300%", status: "upcoming" },
-    { phase: "Phase 3", entry: "$0.50", listing: "$1.00", roi: "100%", status: "upcoming" },
+    { phase: "Phase 1", entry: "$0.50", listing: "$1.00", roi: "100%", status: "live" },
+    { phase: "Phase 2", entry: "$0.70", listing: "$1.00", roi: "43%",  status: "upcoming" },
+    { phase: "Phase 3", entry: "$1.00", listing: "$1.00", roi: "—",    status: "upcoming" },
   ];
   return (
     <div className="overflow-x-auto rounded-2xl border border-primary/20 bg-black/40">
@@ -201,7 +201,7 @@ function BuyForm({ address, provider, isPolygon, onConnect, switchToPolygon }: a
           <div className="flex items-center justify-between">
             <h3 className="text-2xl font-black text-foreground">Buy OKBOND</h3>
             <span className="px-2 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
-              Phase 1 — $0.15
+              Phase 1 — $0.50
             </span>
           </div>
           
@@ -292,7 +292,7 @@ export default function ICOPage() {
                   <CountBox value={cd.seconds} label="Seconds" />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Phase 1 closes on June 9, 2026. Price will increase to <span className="text-amber-400 font-bold">$0.25</span> in Phase 2.
+                  Phase 1 closes when supply runs out. Price will increase to <span className="text-amber-400 font-bold">$0.70</span> in Phase 2.
                 </p>
               </div>
 
@@ -355,7 +355,7 @@ export default function ICOPage() {
                 <h2 className="text-xl font-extrabold">Why Participate?</h2>
                 {[
                   { icon: <ShieldCheck className="w-5 h-5" />, title: "Capital Protection", desc: "Your principal is protected via smart contract logic." },
-                  { icon: <TrendingUp className="w-5 h-5" />, title: "High ROI Potential", desc: "Phase 1 price $0.15 vs target listing price $1.00." },
+                  { icon: <TrendingUp className="w-5 h-5" />, title: "High ROI Potential", desc: "Phase 1 entry at $0.50 — target listing price $1.00 and beyond." },
                   { icon: <Gift className="w-5 h-5" />, title: "MLM Rewards", desc: "Earn up to 5 levels of deep referral commissions." }
                 ].map((item, i) => (
                   <div key={i} className="glass-card rounded-xl border border-primary/20 p-4 flex gap-4 items-start">

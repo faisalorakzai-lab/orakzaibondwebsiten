@@ -272,18 +272,20 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
             </div>
 
             {/* Scrollable nav body.
-                The outer div takes flex-1 space and hides overflow.
-                The inner div is absolutely positioned inside it, giving
-                it an explicit height so overflow-y:scroll works on all
-                iOS Safari versions without needing !important tricks. */}
-            <div className="flex-1 relative overflow-hidden">
+                flex: 1 1 0 + minHeight: 0 makes this div grow to fill
+                the remaining flex space in the aside (which has an
+                explicit height: 100dvh) while also allowing it to shrink
+                below its natural content height — the prerequisite for
+                overflow-y:scroll to activate on iOS Safari.  */}
             <div
-              className="absolute inset-0 py-3 px-2 space-y-0.5"
               style={{
+                flex: "1 1 0",
+                minHeight: 0,
                 overflowY: "scroll",
                 WebkitOverflowScrolling: "touch",
                 overscrollBehavior: "contain",
               }}
+              className="py-3 px-2 space-y-0.5"
             >
               <SectionLabel>Sections</SectionLabel>
               {SECTION_ITEMS.map((item) => (
@@ -346,7 +348,6 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
                 );
               })}
             </div>
-            </div>{/* end outer flex-1 wrapper */}
 
             {/* Footer — socials */}
             <div className="border-t border-border/30 py-3 px-2 flex-shrink-0">

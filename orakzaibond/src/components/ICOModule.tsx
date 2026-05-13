@@ -24,14 +24,14 @@ const TOKENS_PER_POL  = 0.6;
 
 // Phase 1 end date
 const PHASE1_END = new Date("2026-06-30T23:59:59Z").getTime();
-const PHASE1_SUPPLY = 75_000;
+const PHASE1_SUPPLY = 333_333;
 
 const ICO_PHASES = [
-  { id: 1, label: "Phase 1", status: "live",     price: "$0.50", supply: "75,000 OKBOND", badge: "LIVE NOW",
+  { id: 1, label: "Phase 1", status: "live",     price: "$0.50", supply: "333,333 OKBOND", badge: "LIVE NOW",
     badgeColor: "bg-emerald-500", borderColor: "border-emerald-500/50", glow: "shadow-emerald-500/20", desc: "Lowest entry — open now" },
-  { id: 2, label: "Phase 2", status: "upcoming", price: "$0.70", supply: "75,000 OKBOND", badge: "LOCKED",
+  { id: 2, label: "Phase 2", status: "upcoming", price: "$0.70", supply: "333,333 OKBOND", badge: "LOCKED",
     badgeColor: "bg-amber-500/80",  borderColor: "border-amber-500/30",  glow: "shadow-amber-500/10",  desc: "40% premium over Phase 1" },
-  { id: 3, label: "Phase 3", status: "upcoming", price: "$1.00", supply: "Remaining",     badge: "LOCKED",
+  { id: 3, label: "Phase 3", status: "upcoming", price: "$1.00", supply: "333,334 OKBOND", badge: "LOCKED",
     badgeColor: "bg-primary/70",    borderColor: "border-primary/30",    glow: "shadow-primary/10",    desc: "Listing price — final entry" },
 ] as const;
 

@@ -224,7 +224,7 @@ export default function GuidePage() {
             Go to ICO <ArrowRight className="w-5 h-5" />
           </button>
           <p className="text-[10px] text-muted-foreground/50 mt-4 font-mono">
-            Phase 1 supply: 75,000 OKBOND · Ends June 9, 2026
+            Phase 1 supply: 333,333 OKBOND · Limited time
           </p>
         </motion.div>
       </section>
