@@ -5,7 +5,7 @@ import { TrendingUp, Users, Coins, Activity, Zap, Shield } from "lucide-react";
 import LOTTERY_ABI from "@/lib/contractABI.json";
 import { useTokenPrice } from "@/hooks/useTokenPrice";
 
-const LOTTERY_ADDRESS = "0x5bc55d4b347e39b986864e28604ddca5de6357b7";
+const LOTTERY_ADDRESS = "0xCF82D9ED107bE2217Ead6ccd4ffc851f71aa38F8";
 const TOKEN_ADDRESS   = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
 const GOLD = "#D4AF37";
 const ERC20_SUPPLY_ABI = [

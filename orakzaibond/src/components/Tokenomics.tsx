@@ -155,7 +155,7 @@ export default function Tokenomics() {
         >
           <span className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-primary text-xs font-mono font-semibold uppercase tracking-widest">
             <TrendingUp className="w-3.5 h-3.5" />
-            Official Token Distribution
+            Strategic Allocation Model · Whitepaper
           </span>
           <h2 className="text-6xl md:text-7xl font-bold tracking-tight text-foreground mb-6 leading-[0.95] font-heading" style={{ fontFamily: "'Playfair Display', Georgia, serif" }}>
             OKBOND<br />
@@ -164,7 +164,7 @@ export default function Tokenomics() {
             </span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            10 Million fixed supply. Strategic allocation for long-term stability and ecosystem dominance.
+            10 Million fixed supply. Allocations reflect the whitepaper distribution model — live on-chain balances are available in the Ecosystem Metrics section.
           </p>
         </motion.div>
 

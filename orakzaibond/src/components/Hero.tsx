@@ -52,7 +52,7 @@ export default function Hero({ onConnect, address }: HeroProps) {
   const tokenPrice = useTokenPrice();
 
   const tokensSold = stats ? parseFloat(stats.totalTokensSold) : 0;
-  const progress = Math.min((tokensSold / 75000) * 100, 100);
+  const progress = Math.min((tokensSold / 333_333) * 100, 100);
 
   return (
     <>
