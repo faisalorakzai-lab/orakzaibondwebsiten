@@ -68,10 +68,10 @@ const SPECS = [
 
 // ── Price ladder ───────────────────────────────────────────────────────────────
 const PRICE_STEPS = [
-  { label: "Phase 1",       price: "$0.15", note: "ICO Live Now",    active: true,  pct: null },
+  { label: "Phase 1",       price: "$0.50", note: "ICO Live Now",    active: true,  pct: null },
   { label: "Phase 2",       price: "$0.25", note: "Locked",          active: false, pct: "+67%" },
   { label: "Phase 3",       price: "$0.50", note: "Locked",          active: false, pct: "+100%" },
-  { label: "Listing Target",price: "$1.00", note: "Target",          active: false, pct: "+567%" },
+  { label: "Listing Target",price: "$1.00", note: "Target",          active: false, pct: "+100%" },
 ];
 
 const fadeUp = {
@@ -363,7 +363,7 @@ export default function TokenDetails({ provider: _provider }: TokenDetailsProps)
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 border-t border-primary/10 text-center">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse shadow-[0_0_6px_rgba(234,179,8,0.8)]" />
-                <span className="text-sm text-primary font-semibold">Phase 1 is LIVE — $0.15</span>
+                <span className="text-sm text-primary font-semibold">Phase 1 is LIVE — $0.50</span>
               </div>
               <span className="text-muted-foreground/40 text-sm hidden sm:block">·</span>
               <span className="text-sm text-muted-foreground/70">

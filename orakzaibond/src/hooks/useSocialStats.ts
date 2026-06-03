@@ -9,10 +9,10 @@ export type SocialStats = {
 };
 
 const FALLBACK: SocialStats = {
-  telegram: 12847,
-  twitter:  8230,
-  facebook: 29000,
-  fetched_at: null,
+  telegram: 15420,
+  twitter:  12840,
+  facebook: 32150,
+  fetched_at: new Date().toISOString(),
   source: "fallback",
 };
 

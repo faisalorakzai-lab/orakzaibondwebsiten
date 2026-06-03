@@ -38,7 +38,7 @@ const ERC20_ABI = [
 const TICKER_ITEMS = [
   "🚀 Faisal Orakzai just launched the Orakzai Think Tank — submit your ideas and win OKBOND rewards!",
   "🎰 New Jackpot of 10,000 OKBOND is LIVE — Enter before June 9, 2026!",
-  "📈 OKBOND Phase 1 ICO: $0.15 — Target Listing Price $1.00 (+567% ROI)",
+  "📈 OKBOND Phase 1 ICO: $0.50 — Target Listing Price $1.00 (+100% ROI)",
   "🏆 Lottery Draw scheduled for June 9, 2026 at 10:00 PM PKT — Don't miss it!",
   "💡 Orakzai Think Tank is LIVE — Best community ideas win OKBOND bounties!",
   "🌐 Orakzai Bond now live on Polygon PoS — Low fees, instant finality",

@@ -60,7 +60,7 @@ const STEPS = [
       "Ensure you are on Polygon PoS (Chain ID 137) — the site will prompt you to switch if needed",
       "Go to the ICO page and enter how many OKBOND tokens you want to purchase",
       "Approve the OKBOND token spend, then confirm the purchase transaction",
-      "Phase 1 price: $0.15 per OKBOND · Minimum entry: $10 equivalent in POL",
+      "Phase 1 price: $0.50 per OKBOND · Minimum entry: $10 equivalent in POL",
       "Tokens appear in your wallet immediately after the transaction confirms on-chain",
     ],
     links: [
@@ -215,7 +215,7 @@ export default function GuidePage() {
           <Download className="w-10 h-10 text-primary mx-auto mb-4" />
           <h3 className="text-2xl font-extrabold mb-2">Ready to invest?</h3>
           <p className="text-muted-foreground text-sm mb-8 max-w-md mx-auto">
-            Phase 1 is LIVE at <strong className="text-primary">$0.15 / OKBOND</strong>. Listing target is <strong className="text-emerald-400">$1.00</strong> — that's a potential <strong className="text-emerald-400">+567% ROI</strong> for early investors.
+            Phase 1 is LIVE at <strong className="text-primary">$0.50 / OKBOND</strong>. Listing target is <strong className="text-emerald-400">$1.00</strong> — that's a potential <strong className="text-emerald-400">+100% ROI</strong> for early investors.
           </p>
           <button
             onClick={() => navigate("/ico")}

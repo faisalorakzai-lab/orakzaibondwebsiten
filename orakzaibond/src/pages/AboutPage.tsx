@@ -511,8 +511,8 @@ export default function AboutPage() {
             {[
               { value: "Powered by OKBOND",  label: "Infrastructure" },
               { value: "10M",    label: "Total Supply" },
-              { value: "$0.15",  label: "ICO Phase 1 Price" },
-              { value: "567%",   label: "Target ROI" },
+              { value: "$0.50",  label: "ICO Phase 1 Price" },
+              { value: "100%",   label: "Target ROI" },
             ].map((stat, i) => (
               <motion.div key={stat.label} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
                 className="rounded-2xl border border-primary/20 bg-card p-5 text-center">

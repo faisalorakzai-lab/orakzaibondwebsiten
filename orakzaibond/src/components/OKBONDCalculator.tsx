@@ -112,7 +112,7 @@ export default function OKBONDCalculator({ adminAPY, adminPrice, adminStage }: O
             {[
               { label: "Staking Pool", value: `${(STAKING_POOL / 1_000_000).toFixed(1)}M OKBOND` },
               { label: "Current APY", value: `${apy}%` },
-              { label: "ICO Stage", value: `Phase ${icoStage} — ${STAGE_PRICES[icoStage] ?? "$0.15"}` },
+              { label: "ICO Stage", value: `Phase ${icoStage} — ${STAGE_PRICES[icoStage] ?? "$0.50"}` },
             ].map(s => (
               <div key={s.label} className="text-center">
                 <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{s.label}</p>

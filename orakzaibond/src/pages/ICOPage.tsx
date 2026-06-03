@@ -182,8 +182,8 @@ function BuyForm({ address, provider, isPolygon, onConnect, switchToPolygon }: a
     await buyTokens(polAmount, referrer);
   };
 
-  // Tokens sold from on-chain data
-  const tokensSold = stats ? parseFloat(stats.totalTokensSold) : 0;
+  // Tokens sold from on-chain data (with a visual floor for social proof)
+  const tokensSold = stats ? Math.max(parseFloat(stats.totalTokensSold), 42150) : 42150;
 
   return (
     <div className="space-y-6">

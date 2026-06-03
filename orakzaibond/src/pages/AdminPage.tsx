@@ -1185,7 +1185,7 @@ export default function AdminPage() {
                               }`}>
                               Phase {s}
                               <p className="text-[9px] mt-0.5 font-normal">
-                                {s === 1 ? "$0.15" : s === 2 ? "$0.25" : "$0.50"}
+                                {s === 1 ? "$0.50" : s === 2 ? "$0.25" : "$0.50"}
                               </p>
                             </button>
                           ))}
