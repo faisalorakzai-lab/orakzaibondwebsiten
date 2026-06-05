@@ -199,7 +199,7 @@ function BuyForm({ address, provider, isPolygon, onConnect, switchToPolygon }: a
       <div className="glass-card rounded-3xl border border-primary/30 p-8 bg-gradient-to-br from-primary/10 via-background to-background shadow-2xl relative overflow-hidden">
         <div className="relative z-10 space-y-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-2xl font-black text-foreground">Buy OKBOND</h3>
+            <h3 className="text-2xl font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>Acquire OKBOND</h3>
             <span className="px-2 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
               Phase 1 — $0.50
             </span>
@@ -266,11 +266,12 @@ export default function ICOPage() {
                 <ArrowLeft className="w-4 h-4" />Back to Home
               </button>
             </Link>
-            <h1 className="text-5xl md:text-7xl font-black tracking-tighter">
-              Secure Your Stake in the <span className="text-primary">Orakzai Future</span>
+            <h1 className="text-5xl md:text-7xl font-bold tracking-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
+              Secure Your Stake in the <span className="text-primary">Global Future</span>
             </h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-              Participate in the OKBOND ICO and join a community-driven ecosystem designed for capital protection and long-term growth.
+            <p className="text-white/60 max-w-2xl mx-auto text-lg font-normal tracking-wide">
+              Join an elite financial ecosystem backed by real-world luxury assets. 
+              Experience the pinnacle of capital protection and sovereign growth.
             </p>
           </div>
         </div>
