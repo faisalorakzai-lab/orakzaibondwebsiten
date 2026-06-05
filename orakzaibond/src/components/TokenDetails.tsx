@@ -69,9 +69,9 @@ const SPECS = [
 // ── Price ladder ───────────────────────────────────────────────────────────────
 const PRICE_STEPS = [
   { label: "Phase 1",       price: "$0.50", note: "ICO Live Now",    active: true,  pct: null },
-  { label: "Phase 2",       price: "$0.25", note: "Locked",          active: false, pct: "+67%" },
-  { label: "Phase 3",       price: "$0.50", note: "Locked",          active: false, pct: "+100%" },
-  { label: "Listing Target",price: "$1.00", note: "Target",          active: false, pct: "+100%" },
+  { label: "Phase 2",       price: "$0.70", note: "Locked",          active: false, pct: "+40%" },
+  { label: "Phase 3",       price: "$0.90", note: "Locked",          active: false, pct: "+28%" },
+  { label: "Listing Target",price: "$1.00", note: "Target",          active: false, pct: "+11%" },
 ];
 
 const fadeUp = {

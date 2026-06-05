@@ -123,40 +123,32 @@ export default function Navbar({ address, okbondBalance, onConnect, onDisconnect
       </div>
 
       {/* ── Centre nav links ─────────────────────────────────────────────── */}
-      <div className="flex items-center gap-7 text-sm font-medium text-muted-foreground">
-        {/* 1. Home */}
+      <div className="flex items-center gap-8 text-[13px] font-semibold uppercase tracking-widest text-white/60">
         <Link href="/">
           <span className="hover:text-primary transition-colors cursor-pointer">{t("nav.home")}</span>
         </Link>
 
-        {/* 2. Roadmap */}
-        <Link href="/roadmap">
-          <span className="hover:text-primary transition-colors cursor-pointer">{t("nav.roadmap")}</span>
+        <Link href="/about">
+          <span className="hover:text-primary transition-colors cursor-pointer">Ecosystem</span>
         </Link>
 
-        {/* 3. ICO — live badge */}
         <Link href="/ico">
-          <span className="relative flex items-center gap-1.5 hover:text-primary transition-colors font-semibold text-primary cursor-pointer">
+          <span className="relative flex items-center gap-2 hover:text-primary transition-colors text-primary cursor-pointer">
             {t("nav.ico")}
-            <span className="px-1.5 py-0.5 rounded-md bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 text-[8px] font-bold uppercase tracking-widest leading-none animate-pulse">
-              {t("nav.icoLive")}
-            </span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
           </span>
         </Link>
 
-        {/* 4. Tokenomics */}
         <Link href="/tokenomics">
           <span className="hover:text-primary transition-colors cursor-pointer">{t("nav.tokenomics")}</span>
         </Link>
 
-        {/* 5. About Us */}
-        <Link href="/about">
-          <span className="hover:text-primary transition-colors cursor-pointer">{t("nav.aboutUs")}</span>
+        <Link href="/roadmap">
+          <span className="hover:text-primary transition-colors cursor-pointer">{t("nav.roadmap")}</span>
         </Link>
 
-        {/* 6. Legal Vault */}
         <Link href="/legal">
-          <span className="hover:text-primary transition-colors cursor-pointer">Legal</span>
+          <span className="hover:text-primary transition-colors cursor-pointer">Vault</span>
         </Link>
       </div>
 

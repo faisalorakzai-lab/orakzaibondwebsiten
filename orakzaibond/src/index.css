@@ -57,8 +57,8 @@
   --color-sidebar-accent-border: var(--sidebar-accent-border);
   --color-sidebar-ring: hsl(var(--sidebar-ring));
 
-  --font-sans: 'Inter', 'Sora', 'Lexend', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-heading: 'Sora', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: 'Playfair Display', serif;
   --font-display: 'Sora', 'Inter', system-ui, sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
@@ -221,9 +221,15 @@
     scroll-behavior: smooth;
   }
 
-  /* Sovereign headings — Sora */
+  /* Sovereign headings — Playfair Display for Luxury */
   h1, h2, h3, h4, h5, h6,
-  .font-heading, .font-display {
+  .font-heading {
+    font-family: 'Playfair Display', serif;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+
+  .font-display {
     font-family: 'Sora', 'Inter', system-ui, sans-serif;
     letter-spacing: -0.02em;
   }

@@ -114,15 +114,13 @@ export default function Hero({ onConnect, address }: HeroProps) {
             className="mb-6 md:mb-8 max-w-4xl w-full"
           >
             <h1
-              className="font-black tracking-tight leading-[1.08] text-white"
+              className="font-bold tracking-tight leading-[1.1] text-white"
               style={{
-                fontFamily: "'Sora', 'Inter', sans-serif",
-                letterSpacing: "-0.02em",
-                fontSize: "clamp(36px, 7vw, 72px)",
-                fontWeight: 900,
+                fontFamily: "'Playfair Display', serif",
+                fontSize: "clamp(40px, 8vw, 84px)",
               }}
             >
-              Capital Protection
+              The Standard of
               <br />
               <span style={{
                 background: "linear-gradient(135deg, #D4AF37 0%, #F5E27D 35%, #B8942A 100%)",
@@ -130,7 +128,7 @@ export default function Hero({ onConnect, address }: HeroProps) {
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
               }}>
-                Meets Blockchain Sovereignty
+                Sovereign Wealth
               </span>
             </h1>
           </motion.div>
@@ -140,11 +138,11 @@ export default function Hero({ onConnect, address }: HeroProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-white/55 max-w-2xl mb-10 md:mb-14 leading-relaxed font-light"
-            style={{ fontFamily: "'Inter', sans-serif", fontSize: "clamp(15px, 2.2vw, 18px)" }}
+            className="text-white/60 max-w-2xl mb-10 md:mb-14 leading-relaxed font-normal tracking-wide"
+            style={{ fontFamily: "'Inter', sans-serif", fontSize: "clamp(16px, 2.4vw, 20px)" }}
           >
-            The world's first cashback-protected decentralized bond ecosystem.
-            Built on Polygon. Audited. Sovereign-grade.
+            A premier financial ecosystem backed by real-world assets and luxury commerce. 
+            Experience capital protection redefined for the global elite.
           </motion.p>
 
           {/* ── 5. CTA buttons ── */}

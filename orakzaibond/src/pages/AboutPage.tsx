@@ -219,6 +219,8 @@ const values = [
   { icon: Users,       label: "Community First", desc: "Token holders vote on major decisions via on-chain governance." },
   { icon: Target,      label: "Real Utility",    desc: "OKBOND is built for real-world utility within a global digital ecosystem — not just speculation." },
   { icon: Shield,      label: "Protection",      desc: "Capital protection is hardcoded into the Lottery smart contract." },
+  { icon: Sparkles,    label: "Luxury Commerce", desc: "Integrated with Shamim Forever, a premier global luxury brand." },
+  { icon: Globe,       label: "Real Estate",     desc: "Backed by Orakzai Properties, a forthcoming digital real estate marketplace." },
 ];
 
 /* ── Helper Components ────────────────────────────────────────────── */
@@ -502,6 +504,56 @@ export default function AboutPage() {
                 </span>
               </Link>
             </motion.div>
+          </div>
+        </section>
+
+        {/* ── ECOSYSTEM PARTNERS ────────────────────────────────────── */}
+        <section className="px-4 pb-20">
+          <div className="max-w-5xl mx-auto">
+            <div className="flex flex-col md:flex-row gap-6">
+              {/* Shamim Forever */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="flex-1 rounded-3xl border border-primary/20 p-8 bg-gradient-to-br from-primary/5 to-transparent relative overflow-hidden group"
+              >
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <Sparkles className="w-20 h-20 text-primary" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Shamim Forever</h3>
+                <p className="text-primary/80 text-xs font-bold uppercase tracking-widest mb-4">Luxury Brand Partner</p>
+                <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+                  A global luxury powerhouse integrating OKBOND for secure, premium transactions. 
+                  Experience the pinnacle of high-end commerce within our ecosystem.
+                </p>
+                <a href="https://www.shamimforever.com" target="_blank" className="inline-flex items-center gap-2 text-primary text-sm font-bold hover:gap-3 transition-all">
+                  Visit Shamim Forever <ArrowRight className="w-4 h-4" />
+                </a>
+              </motion.div>
+
+              {/* Orakzai Properties */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="flex-1 rounded-3xl border border-white/10 p-8 bg-gradient-to-br from-white/5 to-transparent relative overflow-hidden group"
+              >
+                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                  <Globe className="w-20 h-20 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Orakzai Properties</h3>
+                <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest mb-4">Real Estate Marketplace</p>
+                <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+                  The future of digital real estate. A secure marketplace for tokenized property 
+                  exchanges and high-yield real estate investments. Coming Soon.
+                </p>
+                <span className="inline-flex items-center gap-2 text-muted-foreground/60 text-sm font-bold">
+                  Exploring the Future <Clock className="w-4 h-4" />
+                </span>
+              </motion.div>
+            </div>
           </div>
         </section>
 
