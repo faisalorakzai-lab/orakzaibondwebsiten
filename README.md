@@ -11,9 +11,9 @@
 
 **`[ BLOCKCHAIN BONDS · ON-CHAIN FINANCE · TOKENIZED DEBT INSTRUMENTS ]`**
 
-![Status](https://img.shields.io/badge/Status-Testnet-gold?style=flat-square&labelColor=000)
-![Chain](https://img.shields.io/badge/Chain-Polygon-purple?style=flat-square&labelColor=000)
-![Standard](https://img.shields.io/badge/Token-ERC--1155-D4AF37?style=flat-square&labelColor=000)
+![Status](https://img.shields.io/badge/Status-LIVE-00CC44?style=for-the-badge&labelColor=0A0A0A)
+![Chain](https://img.shields.io/badge/Chain-Polygon-0A0A0A?style=for-the-badge&logo=polygon&logoColor=D4AF37)
+![Standard](https://img.shields.io/badge/Token-ERC--1155-0A0A0A?style=for-the-badge&logoColor=D4AF37)
 
 </div>
 
@@ -24,6 +24,8 @@
 ### ◈ TOKENIZED BONDS · BLOCKCHAIN FINANCE
 
 *Pakistan's first on-chain bond marketplace — bringing traditional fixed-income<br/>instruments onto the Polygon blockchain for transparent, accessible investing.*
+
+**STATUS: 🟢 LIVE**
 
 </div>
 
@@ -45,7 +47,7 @@ KYC/AML:          Integrated compliance   →  Regulatory framework
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                    OKBOND MARKETPLACE                         │
+│                    OKBOND MARKETPLACE  🟢 LIVE                │
 ├────────────────────┬─────────────────┬────────────────────── ┤
 │  GOVERNMENT BONDS  │  CORPORATE DEBT │  REAL ESTATE NOTES   │
 │  • T-Bills (91d)   │  • PKR 50K min  │  • Property-backed   │
@@ -74,15 +76,15 @@ REGISTER → KYC VERIFY → FUND WALLET → BROWSE BONDS
      → PURCHASE TOKEN → RECEIVE YIELD → TRADE / REDEEM
 ```
 
-## ✦ ROADMAP
+## ✦ MILESTONES
 
 - [x] Smart contract architecture (ERC-1155)
-- [x] Testnet deployment on Polygon Mumbai
-- [ ] Security audit (Q3 2025)
-- [ ] SECP regulatory sandbox application
-- [ ] Mainnet launch — institutional pilot
+- [x] Polygon deployment
+- [x] Security audit complete
+- [x] **PLATFORM LIVE** 🟢
 - [ ] DEX integration for secondary market
 - [ ] Mobile app (iOS + Android)
+- [ ] International expansion
 
 ---
 
@@ -90,6 +92,8 @@ REGISTER → KYC VERIFY → FUND WALLET → BROWSE BONDS
 
 *The DeFi arm of the **[ORAKZAI GROUP](https://github.com/faisalorakzai-lab)** financial ecosystem.*
 
-**[📄 Whitepaper](#)** &nbsp;·&nbsp; **[🔗 Testnet App](#)** &nbsp;·&nbsp; **[📊 Analytics](#)**
+**[📄 Whitepaper](#)** &nbsp;·&nbsp; **[🔗 Live App](#)** &nbsp;·&nbsp; **[📊 Analytics](#)**
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-faisalorakzaii-0A0A0A?style=flat-square&logo=linkedin&logoColor=D4AF37)](https://linkedin.com/in/faisalorakzaii)
 
 </div>
