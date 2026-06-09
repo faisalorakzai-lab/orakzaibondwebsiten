@@ -37,7 +37,7 @@ import NotFound from "./pages/not-found";
 import AmbassadorPage from "./pages/AmbassadorPage";
 import LegalPage from "./pages/LegalPage";
 import AdminGate from "./components/AdminGate";
-import WhatsAppBot from "./components/WhatsAppBot";
+import UnifiedContactBadge from "./components/UnifiedContactBadge";
 import DashboardPage from "./pages/DashboardPage";
 import StakingPage from "./pages/StakingPage";
 import VaultPage from "./pages/VaultPage";
@@ -331,8 +331,8 @@ function App() {
       <ErrorBoundary scope="PresenceGlow" silent>
         <PresenceGlow />
       </ErrorBoundary>
-      <ErrorBoundary scope="WhatsAppBot" silent>
-        <WhatsAppBot />
+      <ErrorBoundary scope="UnifiedContactBadge" silent>
+        <UnifiedContactBadge />
       </ErrorBoundary>
       <ErrorBoundary scope="MarcusOrb" silent>
         <MarcusOrb />
