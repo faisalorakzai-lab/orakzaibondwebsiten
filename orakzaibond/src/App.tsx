@@ -37,7 +37,7 @@ import NotFound from "./pages/not-found";
 import AmbassadorPage from "./pages/AmbassadorPage";
 import LegalPage from "./pages/LegalPage";
 import AdminGate from "./components/AdminGate";
-import UnifiedContactBadge from "./components/UnifiedContactBadge";
+import PremiumAIBot from "./components/PremiumAIBot";
 import DashboardPage from "./pages/DashboardPage";
 import StakingPage from "./pages/StakingPage";
 import VaultPage from "./pages/VaultPage";
@@ -46,7 +46,7 @@ import RegistryPage from "./pages/RegistryPage";
 import LiveVaultStatus from "./components/LiveVaultStatus";
 import MarcusAILiveLog from "./components/MarcusAILiveLog";
 import SovereignGuarantee from "./components/SovereignGuarantee";
-import MarcusOrb from "./components/MarcusOrb";
+// import MarcusOrb from "./components/MarcusOrb";
 import PresenceGlow from "./components/PresenceGlow";
 import FilmGrain from "./components/FilmGrain";
 import AIBriefingTicker from "./components/AIBriefingTicker";
@@ -331,12 +331,12 @@ function App() {
       <ErrorBoundary scope="PresenceGlow" silent>
         <PresenceGlow />
       </ErrorBoundary>
-      <ErrorBoundary scope="UnifiedContactBadge" silent>
-        <UnifiedContactBadge />
+      <ErrorBoundary scope="PremiumAIBot" silent>
+        <PremiumAIBot />
       </ErrorBoundary>
-      <ErrorBoundary scope="MarcusOrb" silent>
+      {/* <ErrorBoundary scope="MarcusOrb" silent>
         <MarcusOrb />
-      </ErrorBoundary>
+      </ErrorBoundary> */}
       <ErrorBoundary scope="FilmGrain" silent>
         <FilmGrain />
       </ErrorBoundary>
