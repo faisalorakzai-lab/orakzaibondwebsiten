@@ -1,125 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Orakzai Bond — OKBOND | Real-Asset Backed Token on Polygon</title>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
 
-    <!--
-      CACHE KILL-SWITCH (okb-v6) — runs synchronously before any JS framework.
-      Uses localStorage (NOT Cache Storage / Service Worker) so it works in
-      every browser including Android WebView, Trust Wallet in-app browser,
-      Samsung Internet, and any browser where SW is blocked or stale.
+      <!-- Primary SEO -->
+      <title>Orakzai Bond — OKBOND | World's First Capital-Protected Decentralized Bond</title>
+      <meta name="description" content="Orakzai Bond (OKBOND) — the world's first capital-protected decentralized bond on Polygon. Founded by Faisal Orakzai in 2026. Real-asset backed DeFi token with quantitative fintech infrastructure. Join the sovereign financial revolution." />
+      <meta name="keywords" content="Orakzai Bond, OKBOND, decentralized bond, DeFi Pakistan, blockchain bond, capital protected crypto, Faisal Orakzai, Polygon DeFi, real asset backed token, orakzaibond.com, Pakistani DeFi, OKBOND token, crypto bond Pakistan, quantitative fintech" />
+      <meta name="author" content="Faisal Orakzai" />
+      <meta name="creator" content="Faisal Orakzai" />
+      <meta name="publisher" content="Orakzai Bond" />
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1" />
+      <link rel="canonical" href="https://orakzaibond.com/" />
 
-      On the FIRST load after this deploy the version key won't match:
-        1. Unregister all service workers.
-        2. Delete every Cache Storage entry.
-        3. Hard-reload once (bypasses all browser caches).
-      Second load: key matches → no-op, app starts normally.
+      <!-- Open Graph -->
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://orakzaibond.com/" />
+      <meta property="og:site_name" content="Orakzai Bond" />
+      <meta property="og:title" content="Orakzai Bond — OKBOND | World's First Capital-Protected Decentralized Bond" />
+      <meta property="og:description" content="Orakzai Bond (OKBOND) — real-asset backed DeFi on Polygon. Capital-protected, blockchain-verified, founder-guaranteed. Founded by Faisal Orakzai, 2026." />
+      <meta property="og:image" content="https://orakzaibond.com/opengraph.jpg" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content="Orakzai Bond — OKBOND DeFi Platform" />
+      <meta property="og:locale" content="en_US" />
 
-      To force another full flush in a future deploy, bump 'okb-v6' to 'okb-v7'.
-    -->
-    <script>
-      (function () {
-        var V = "okb-v6";
-        try {
-          if (localStorage.getItem("_okbuild") !== V) {
-            localStorage.setItem("_okbuild", V);
-            var pending = 0, done = false;
-            function go() { if (done) return; done = true; location.reload(true); }
-            if ("serviceWorker" in navigator) {
-              pending++;
-              navigator.serviceWorker.getRegistrations()
-                .then(function (r) { r.forEach(function (s) { try { s.unregister(); } catch (e) {} }); if (--pending === 0) go(); })
-                .catch(function () { if (--pending === 0) go(); });
+      <!-- Twitter Card -->
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content="@faisalorakzaii" />
+      <meta name="twitter:creator" content="@faisalorakzaii" />
+      <meta name="twitter:title" content="Orakzai Bond — OKBOND | Capital-Protected DeFi" />
+      <meta name="twitter:description" content="World's first capital-protected decentralized bond on Polygon. Real-asset backed. Founded by Faisal Orakzai, 2026." />
+      <meta name="twitter:image" content="https://orakzaibond.com/opengraph.jpg" />
+
+      <!-- Additional Meta -->
+      <meta name="theme-color" content="#BF953F" />
+      <meta name="msapplication-TileColor" content="#05060A" />
+
+      <!-- JSON-LD Structured Data -->
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://orakzaibond.com/#organization",
+            "name": "Orakzai Bond",
+            "alternateName": ["OKBOND", "Orakzai Bond DeFi"],
+            "description": "The world's first capital-protected decentralized bond on Polygon blockchain. Real-asset backed DeFi token with quantitative fintech infrastructure.",
+            "url": "https://orakzaibond.com",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://orakzaibond.com/okbond-logo.png",
+              "caption": "Orakzai Bond — OKBOND"
+            },
+            "image": "https://orakzaibond.com/faisal-orakzai.jpg",
+            "foundingDate": "2026",
+            "founder": {
+              "@type": "Person",
+              "@id": "https://www.shamimforever.com/faisal-orakzai#person",
+              "name": "Faisal Orakzai",
+              "url": "https://www.shamimforever.com/faisal-orakzai",
+              "image": "https://orakzaibond.com/faisal-orakzai.jpg",
+              "jobTitle": "Founder & CEO",
+              "sameAs": [
+                "https://www.wikidata.org/wiki/Q140264666",
+                "https://orcid.org/0009-0000-0915-7272",
+                "https://www.linkedin.com/in/faisalorakzaii",
+                "https://x.com/faisalorakzaii"
+              ]
+            },
+            "sameAs": [
+              "https://orakzaibond.com",
+              "http://orakzaibond.com"
+            ],
+            "knowsAbout": [
+              "Decentralized Finance", "Blockchain Bonds", "Asset Tokenization",
+              "Quantitative Fintech", "Capital Protection", "Polygon Network",
+              "DeFi Protocol", "Real Asset Backed Tokens"
+            ],
+            "areaServed": { "@type": "Place", "name": "Worldwide" },
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "customer service",
+              "availableLanguage": ["English", "Urdu"],
+              "url": "https://orakzaibond.com"
             }
-            if ("caches" in window) {
-              pending++;
-              caches.keys()
-                .then(function (k) { return Promise.all(k.map(function (c) { return caches.delete(c); })); })
-                .then(function () { if (--pending === 0) go(); })
-                .catch(function () { if (--pending === 0) go(); });
-            }
-            if (pending === 0) go();
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://orakzaibond.com/#website",
+            "url": "https://orakzaibond.com",
+            "name": "Orakzai Bond",
+            "description": "World's first capital-protected decentralized bond on Polygon. Real-asset backed DeFi.",
+            "publisher": { "@id": "https://orakzaibond.com/#organization" },
+            "inLanguage": "en"
+          },
+          {
+            "@type": "FinancialProduct",
+            "@id": "https://orakzaibond.com/#okbond",
+            "name": "OKBOND Token",
+            "description": "Capital-protected decentralized bond token on Polygon blockchain. Real-asset backed with quantitative fintech infrastructure.",
+            "url": "https://orakzaibond.com",
+            "provider": { "@id": "https://orakzaibond.com/#organization" },
+            "feesAndCommissionsSpecification": "Capital-protected — principal guaranteed",
+            "category": "Decentralized Finance"
+          },
+          {
+            "@type": "Person",
+            "@id": "https://www.shamimforever.com/faisal-orakzai#person",
+            "name": "Faisal Orakzai",
+            "givenName": "Faisal",
+            "familyName": "Orakzai",
+            "alternateName": ["Chairman Faisal Orakzai", "Malak Faisal Orakzai", "faisalorakzaii"],
+            "description": "Founder & CEO of Orakzai Bond. Pakistani entrepreneur specializing in blockchain architecture and decentralized finance. Also founder of Shamim Forever and Orakzai Group.",
+            "url": "https://www.shamimforever.com/faisal-orakzai",
+            "image": "https://orakzaibond.com/faisal-orakzai.jpg",
+            "birthDate": "2006-04-30",
+            "birthPlace": { "@type": "Place", "name": "Pakistan", "addressCountry": "PK" },
+            "nationality": { "@type": "Country", "name": "Pakistan" },
+            "jobTitle": ["Founder & CEO", "Chairman", "Blockchain Architect"],
+            "worksFor": { "@id": "https://orakzaibond.com/#organization" },
+            "identifier": [
+              { "@type": "PropertyValue", "propertyID": "ORCID", "value": "0009-0000-0915-7272", "url": "https://orcid.org/0009-0000-0915-7272" },
+              { "@type": "PropertyValue", "propertyID": "Wikidata", "value": "Q140264666", "url": "https://www.wikidata.org/wiki/Q140264666" }
+            ],
+            "sameAs": [
+              "https://www.wikidata.org/wiki/Q140264666",
+              "https://orcid.org/0009-0000-0915-7272",
+              "https://www.crunchbase.com/person/faisal-orakzai",
+              "https://www.linkedin.com/in/faisalorakzaii",
+              "https://x.com/faisalorakzaii",
+              "https://www.instagram.com/faisalorakzaii",
+              "https://web.facebook.com/faisalorakzaii",
+              "https://tiktok.com/@chairmanorakzai",
+              "https://github.com/faisalorakzai-lab",
+              "https://linktr.ee/faisalorakzaiofficial",
+              "https://peerlist.io/faisalorakzai",
+              "https://hackernoon.com/u/faisalorakzai",
+              "https://www.f6s.com/faisalorakzai",
+              "https://www.shamimforever.com/faisal-orakzai",
+              "https://www.shamimforever.com/founder"
+            ]
           }
-        } catch (e) { /* localStorage blocked in private mode — carry on */ }
-      })();
-    </script>
-
-    <!-- PWA -->
-    <meta name="theme-color" content="#EAB308" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="OKBOND" />
-    <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="apple-touch-icon" href="/okbond-logo.png" />
-
-    <!-- SEO -->
-    <meta name="description" content="Orakzai Bond (OKBOND) — Real-asset backed digital token on Polygon PoS. Liquidity-Backed Capital Retention Model backed by real estate, on-chain reserves, liquidity pools and treasury." />
-    <meta name="keywords" content="OKBOND, Orakzai Bond, Polygon, DeFi, lottery, ICO, staking, capital retention, real estate backed token, Faisal Orakzai, blockchain bond" />
-    <meta name="author" content="Orakzai Group" />
-    <link rel="canonical" href="https://orakzaibond.com/" />
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="Orakzai Bond — OKBOND | Real-Asset Backed Token on Polygon" />
-    <meta property="og:description" content="Beyond Borders. Beyond Limits. Liquidity-Backed Capital Retention Model on Polygon PoS. Backed by real-world assets." />
-    <meta property="og:image" content="/opengraph.jpg" />
-    <meta property="og:url" content="https://orakzaibond.com" />
-    <meta property="og:site_name" content="Orakzai Bond" />
-    <meta property="og:type" content="website" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Orakzai Bond — OKBOND" />
-    <meta name="twitter:description" content="Beyond Borders. Beyond Limits. Real-asset backed token on Polygon with capital retention and on-chain lottery." />
-    <meta name="twitter:image" content="/opengraph.jpg" />
-    <meta name="twitter:site" content="@orakzaibond1" />
-
-    <!-- JSON-LD structured data -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Orakzai Bond",
-        "alternateName": ["OKBOND", "Orakzai Group"],
-        "url": "https://orakzaibond.com",
-        "logo": "https://orakzaibond.com/okbond-logo.png",
-        "description": "Real-asset backed digital token of the Orakzai Group — Liquidity-Backed Capital Retention Model on Polygon PoS.",
-        "sameAs": [
-          "https://x.com/orakzaibond1",
-          "https://t.me/orakzaibond"
-        ],
-        "founder": {
-          "@type": "Person",
-          "name": "Faisal Orakzai"
-        }
+        ]
       }
-    </script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Orakzai Bond — OKBOND",
-        "url": "https://orakzaibond.com",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://orakzaibond.com/?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
-      }
-    </script>
+      </script>
 
-    <!-- Favicon & Fonts -->
-    <link rel="icon" type="image/png" href="/okbond-logo.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="https://generativelanguage.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+      <!-- Favicons -->
+      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      <link rel="manifest" href="/manifest.webmanifest" />
+
+      <!-- Cache strategy (keep existing) -->
+      <script>
+        (function () {
+          var V = "okb-v7";
+          try {
+            if (localStorage.getItem("_okbuild") !== V) {
+              localStorage.setItem("_okbuild", V);
+              var pending = 0, done = false;
+              function go() { if (done) return; done = true; location.reload(true); }
+              if ("serviceWorker" in navigator) {
+                pending++;
+                navigator.serviceWorker.getRegistrations()
+                  .then(function (r) { r.forEach(function (s) { try { s.unregister(); } catch (e) {} }); if (--pending === 0) go(); })
+                  .catch(function () { if (--pending === 0) go(); });
+              }
+              if ("caches" in window) {
+                pending++;
+                caches.keys()
+                  .then(function (k) { return Promise.all(k.map(function (c) { return caches.delete(c); })); })
+                  .then(function () { if (--pending === 0) go(); })
+                  .catch(function () { if (--pending === 0) go(); });
+              }
+              if (pending === 0) go();
+            }
+          } catch (e) {}
+        })();
+      </script>
+    </head>
+    <body>
+      <div id="root"></div>
+      <script type="module" src="/src/main.tsx"></script>
+    </body>
+  </html>
+  
