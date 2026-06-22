@@ -1,10 +1,19 @@
 User-agent: *
-Allow: /
+  Allow: /
 
-# Hidden, wallet-gated admin surfaces — never index
-Disallow: /admin
-Disallow: /admin/
-Disallow: /secret-admin
-Disallow: /secret-admin/
+  # Personal brand pages — index with priority
+  Allow: /faisal-orakzai
+  Allow: /founder
+  Allow: /about
+  Allow: /token
+  Allow: /roadmap
 
-Sitemap: https://orakzaibond.com/sitemap.xml
+  # Admin surfaces — never index
+  Disallow: /admin
+  Disallow: /admin/
+  Disallow: /secret-admin
+  Disallow: /secret-admin/
+  Disallow: /threat-console
+
+  Sitemap: https://orakzaibond.com/sitemap.xml
+  

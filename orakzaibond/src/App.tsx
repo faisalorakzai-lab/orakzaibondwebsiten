@@ -35,6 +35,7 @@ import CommunityHubPage from "./pages/CommunityHubPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/not-found";
 import AmbassadorPage from "./pages/AmbassadorPage";
+import FaisalOrakzaiBioPage from "./pages/FaisalOrakzaiBioPage";
 import LegalPage from "./pages/LegalPage";
 import AdminGate from "./components/AdminGate";
 import PremiumAIBot from "./components/PremiumAIBot";
@@ -313,6 +314,7 @@ function App() {
             <Route path="/community-hub" component={CommunityHubPage} />
             <Route path="/profile/:username" component={ProfilePage} />
             <Route path="/ambassador" component={AmbassadorPage} />
+            <Route path="/faisal-orakzai" component={FaisalOrakzaiBioPage} />
             <Route path="/legal" component={LegalPage} />
             <Route component={NotFound} />
           </Switch>
