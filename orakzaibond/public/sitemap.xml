@@ -1,16 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
-  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-    <url><loc>https://orakzaibond.com/</loc><lastmod>2026-06-22</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
-    <url><loc>https://orakzaibond.com/faisal-orakzai</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.95</priority></url>
-    <url><loc>https://orakzaibond.com/founder</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.90</priority></url>
-    <url><loc>https://orakzaibond.com/about</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.85</priority></url>
-    <url><loc>https://orakzaibond.com/token</loc><lastmod>2026-06-22</lastmod><changefreq>weekly</changefreq><priority>0.90</priority></url>
-    <url><loc>https://orakzaibond.com/roadmap</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.80</priority></url>
-    <url><loc>https://orakzaibond.com/community</loc><lastmod>2026-06-22</lastmod><changefreq>weekly</changefreq><priority>0.80</priority></url>
-    <url><loc>https://orakzaibond.com/winners</loc><lastmod>2026-06-22</lastmod><changefreq>weekly</changefreq><priority>0.75</priority></url>
-    <url><loc>https://orakzaibond.com/ambassador</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.70</priority></url>
-    <url><loc>https://orakzaibond.com/documents</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.70</priority></url>
-    <url><loc>https://orakzaibond.com/dashboard</loc><lastmod>2026-06-22</lastmod><changefreq>daily</changefreq><priority>0.85</priority></url>
-    <url><loc>https://orakzaibond.com/staking</loc><lastmod>2026-06-22</lastmod><changefreq>weekly</changefreq><priority>0.80</priority></url>
-    <url><loc>https://orakzaibond.com/contact</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.65</priority></url>
+  <urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
+    xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+    <!-- ── Core & Brand (Priority 1.0) ── -->
+    <url>
+      <loc>https://orakzaibond.com/</loc>
+      <lastmod>2026-06-23</lastmod>
+      <changefreq>daily</changefreq>
+      <priority>1.0</priority>
+      <image:image>
+        <image:loc>https://orakzaibond.com/og-image.png</image:loc>
+        <image:title>Orakzai Bond — World's First Capital-Protected Decentralized Bond</image:title>
+      </image:image>
+    </url>
+
+    <url>
+      <loc>https://orakzaibond.com/faisal-orakzai</loc>
+      <lastmod>2026-06-23</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>1.0</priority>
+      <image:image>
+        <image:loc>https://orakzaibond.com/faisal-orakzai.jpg</image:loc>
+        <image:title>Faisal Orakzai — Founder &amp; CEO, Orakzai Bond</image:title>
+        <image:caption>Faisal Orakzai, Pakistani entrepreneur and blockchain architect, Founder of Orakzai Bond and Shamim Forever</image:caption>
+      </image:image>
+    </url>
+
+    <url>
+      <loc>https://orakzaibond.com/founder</loc>
+      <lastmod>2026-06-23</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.95</priority>
+      <image:image>
+        <image:loc>https://orakzaibond.com/faisal-orakzai.jpg</image:loc>
+        <image:title>Faisal Orakzai — Founder Story, Orakzai Bond</image:title>
+      </image:image>
+    </url>
+
+    <!-- ── Product & Platform (High Priority) ── -->
+    <url>
+      <loc>https://orakzaibond.com/token</loc>
+      <lastmod>2026-06-23</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.92</priority>
+    </url>
+
+    <url>
+      <loc>https://orakzaibond.com/dashboard</loc>
+      <lastmod>2026-06-23</lastmod>
+      <changefreq>daily</changefreq>
+      <priority>0.90</priority>
+    </url>
+
+    <url>
+      <loc>https://orakzaibond.com/staking</loc>
+      <lastmod>2026-06-23</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.88</priority>
+    </url>
+
+    <url>
+      <loc>https://orakzaibond.com/about</loc>
+      <lastmod>2026-06-23</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.85</priority>
+    </url>
+
+    <url>
+      <loc>https://orakzaibond.com/roadmap</loc>
+      <lastmod>2026-06-23</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.82</priority>
+    </url>
+
+    <!-- ── Community & Content ── -->
+    <url>
+      <loc>https://orakzaibond.com/community</loc>
+      <lastmod>2026-06-23</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.80</priority>
+    </url>
+
+    <url>
+      <loc>https://orakzaibond.com/winners</loc>
+      <lastmod>2026-06-23</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.78</priority>
+    </url>
+
+    <url>
+      <loc>https://orakzaibond.com/ambassador</loc>
+      <lastmod>2026-06-23</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.72</priority>
+    </url>
+
+    <url>
+      <loc>https://orakzaibond.com/documents</loc>
+      <lastmod>2026-06-23</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.70</priority>
+    </url>
+
+    <url>
+      <loc>https://orakzaibond.com/contact</loc>
+      <lastmod>2026-06-23</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.65</priority>
+    </url>
+
   </urlset>
+  

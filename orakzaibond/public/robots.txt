@@ -1,12 +1,21 @@
 User-agent: *
   Allow: /
 
-  # Personal brand pages — index with priority
+  # Personal brand & founder pages — crawl with highest priority
   Allow: /faisal-orakzai
   Allow: /founder
+
+  # Platform pages
   Allow: /about
   Allow: /token
   Allow: /roadmap
+  Allow: /community
+  Allow: /dashboard
+  Allow: /staking
+  Allow: /winners
+  Allow: /ambassador
+  Allow: /documents
+  Allow: /contact
 
   # Admin surfaces — never index
   Disallow: /admin
@@ -15,5 +24,32 @@ User-agent: *
   Disallow: /secret-admin/
   Disallow: /threat-console
 
+  # Block AI harvesters
+  User-agent: GPTBot
+  Disallow: /
+
+  User-agent: ChatGPT-User
+  Disallow: /
+
+  User-agent: CCBot
+  Disallow: /
+
+  User-agent: anthropic-ai
+  Disallow: /
+
+  User-agent: Claude-Web
+  Disallow: /
+
+  User-agent: PerplexityBot
+  Disallow: /
+
+  User-agent: SemrushBot
+  Disallow: /
+
+  User-agent: AhrefsBot
+  Disallow: /
+
+  # Sitemap index
   Sitemap: https://orakzaibond.com/sitemap.xml
+  Sitemap: https://orakzaibond.com/news-sitemap.xml
   
