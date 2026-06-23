@@ -23,7 +23,7 @@ import {
 const GOLD_GRADIENT =
   "linear-gradient(135deg, #BF953F 0%, #FCF6BA 30%, #B38728 50%, #FBF5B7 70%, #AA771C 100%)";
 const MIDNIGHT = "#05060A";
-const PORTRAIT_SRC = "/founder-portrait.png";
+const PORTRAIT_SRC = "/faisal-orakzai.jpg";
 
 const PILLARS = [
   {
