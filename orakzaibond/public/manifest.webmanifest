@@ -1,15 +1,58 @@
 {
   "name": "Orakzai Bond",
   "short_name": "OKBOND",
-  "description": "The sovereign financial layer of the Orakzai Group — Liquidity-Backed Capital Retention Model on Polygon PoS.",
+  "description": "World's first capital-protected decentralized bond on Polygon. Real-asset backed DeFi by Faisal Orakzai.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui",
+    "browser"
+  ],
   "orientation": "portrait",
-  "background_color": "#000000",
-  "theme_color": "#EAB308",
-  "categories": ["finance", "crypto"],
+  "background_color": "#05060A",
+  "theme_color": "#BF953F",
+  "categories": [
+    "finance",
+    "crypto",
+    "defi",
+    "blockchain"
+  ],
   "lang": "en",
+  "dir": "ltr",
+  "id": "orakzai-bond",
   "icons": [
+    {
+      "src": "/okbond-logo.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/okbond-logo.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/okbond-logo.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/okbond-logo.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/okbond-logo.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "/okbond-logo.png",
       "sizes": "192x192",
@@ -18,12 +61,76 @@
     },
     {
       "src": "/okbond-logo.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/okbond-logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
   ],
-  "screenshots": [],
+  "screenshots": [
+    {
+      "src": "/opengraph.jpg",
+      "sizes": "1200x630",
+      "type": "image/jpeg",
+      "label": "Orakzai Bond OKBOND Platform",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Buy OKBOND",
+      "short_name": "Buy",
+      "description": "Purchase OKBOND tokens in the ICO",
+      "url": "/ico",
+      "icons": [
+        {
+          "src": "/okbond-logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Staking",
+      "short_name": "Stake",
+      "description": "Stake OKBOND and earn sovereign yield",
+      "url": "/staking",
+      "icons": [
+        {
+          "src": "/okbond-logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your OKBOND portfolio",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "/okbond-logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Faisal Orakzai",
+      "short_name": "Founder",
+      "description": "Learn about the founder of Orakzai Bond",
+      "url": "/faisal-orakzai",
+      "icons": [
+        {
+          "src": "/faisal-orakzai.jpg",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
   "related_applications": [],
   "prefer_related_applications": false
 }

@@ -1,19 +1,43 @@
 <!DOCTYPE html>
-  <html lang="en">
+  <html lang="en" dir="ltr">
     <head>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta http-equiv="x-dns-prefetch-control" content="on" />
 
-      <!-- Primary SEO -->
+      <!-- DNS Prefetch & Preconnect -->
+      <link rel="preconnect" href="https://polygon.technology" crossorigin />
+      <link rel="preconnect" href="https://api.coingecko.com" crossorigin />
+      <link rel="dns-prefetch" href="//cdn.jsdelivr.net" />
+      <link rel="dns-prefetch" href="//polygon.technology" />
+      <link rel="dns-prefetch" href="//etherscan.io" />
+      <link rel="dns-prefetch" href="//supabase.co" />
+
+      <!-- Primary Meta -->
       <title>Orakzai Bond — OKBOND | World's First Capital-Protected Decentralized Bond</title>
-      <meta name="description" content="Orakzai Bond (OKBOND) — the world's first capital-protected decentralized bond on Polygon. Founded by Faisal Orakzai in 2026. Real-asset backed DeFi token with quantitative fintech infrastructure. Join the sovereign financial revolution." />
-      <meta name="keywords" content="Orakzai Bond, OKBOND, decentralized bond, DeFi Pakistan, blockchain bond, capital protected crypto, Faisal Orakzai, Polygon DeFi, real asset backed token, orakzaibond.com, Pakistani DeFi, OKBOND token, crypto bond Pakistan, quantitative fintech" />
+      <meta name="description" content="Orakzai Bond (OKBOND) — world's first capital-protected decentralized bond on Polygon. Real-asset backed DeFi. Sovereign yield. Founded by Faisal Orakzai, 2026. Join Pakistan's blockchain revolution." />
+      <meta name="keywords" content="Orakzai Bond, OKBOND, decentralized bond, DeFi Pakistan, blockchain bond, capital protected crypto, Faisal Orakzai, Polygon DeFi, real asset backed token, orakzaibond.com, Pakistani DeFi, OKBOND token, crypto bond Pakistan, quantitative fintech, capital protection DeFi, blockchain yield Pakistan, Faisal Orakzai OKBOND, Orakzai Group blockchain, sovereign bond crypto, Malak Faisal Orakzai, Chairman Orakzai, DeFi 2026, Polygon bond token" />
       <meta name="author" content="Faisal Orakzai" />
       <meta name="creator" content="Faisal Orakzai" />
       <meta name="publisher" content="Orakzai Bond" />
+      <meta name="copyright" content="2026 Orakzai Bond. All rights reserved." />
       <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-      <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1" />
+      <meta name="googlebot" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      <meta name="bingbot" content="index, follow, max-image-preview:large, max-snippet:-1" />
+      <meta name="referrer" content="strict-origin-when-cross-origin" />
+      <meta name="format-detection" content="telephone=no" />
+      <meta name="rating" content="general" />
+      <meta name="coverage" content="Worldwide" />
+      <meta name="revisit-after" content="3 days" />
+      <meta name="language" content="English" />
       <link rel="canonical" href="https://orakzaibond.com/" />
+
+      <!-- Geo Tags -->
+      <meta name="geo.region" content="PK" />
+      <meta name="geo.country" content="Pakistan" />
+      <meta name="geo.placename" content="Pakistan" />
+      <meta name="ICBM" content="30.3753, 69.3451" />
 
       <!-- Open Graph -->
       <meta property="og:type" content="website" />
@@ -25,19 +49,33 @@
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:image:alt" content="Orakzai Bond — OKBOND DeFi Platform" />
+      <meta property="og:image:type" content="image/jpeg" />
       <meta property="og:locale" content="en_US" />
+      <meta property="og:locale:alternate" content="ur_PK" />
+      <meta property="article:author" content="https://www.linkedin.com/in/faisalorakzaii" />
+      <meta property="article:publisher" content="https://orakzaibond.com" />
 
-      <!-- Twitter Card -->
+      <!-- Twitter / X Card -->
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@faisalorakzaii" />
       <meta name="twitter:creator" content="@faisalorakzaii" />
       <meta name="twitter:title" content="Orakzai Bond — OKBOND | Capital-Protected DeFi" />
       <meta name="twitter:description" content="World's first capital-protected decentralized bond on Polygon. Real-asset backed. Founded by Faisal Orakzai, 2026." />
       <meta name="twitter:image" content="https://orakzaibond.com/opengraph.jpg" />
+      <meta name="twitter:image:alt" content="Orakzai Bond OKBOND Platform" />
+      <meta name="twitter:label1" content="Founded" />
+      <meta name="twitter:data1" content="2026" />
+      <meta name="twitter:label2" content="Network" />
+      <meta name="twitter:data2" content="Polygon PoS" />
 
-      <!-- Additional Meta -->
+      <!-- Theme & PWA -->
       <meta name="theme-color" content="#BF953F" />
       <meta name="msapplication-TileColor" content="#05060A" />
+      <meta name="msapplication-TileImage" content="/okbond-logo.png" />
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+      <meta name="apple-mobile-web-app-title" content="OKBOND" />
+      <meta name="mobile-web-app-capable" content="yes" />
 
       <!-- JSON-LD Structured Data -->
       <script type="application/ld+json">
@@ -48,45 +86,53 @@
             "@type": "Organization",
             "@id": "https://orakzaibond.com/#organization",
             "name": "Orakzai Bond",
-            "alternateName": ["OKBOND", "Orakzai Bond DeFi"],
+            "legalName": "Orakzai Bond",
+            "alternateName": ["OKBOND", "Orakzai Bond DeFi", "OKBond"],
             "description": "The world's first capital-protected decentralized bond on Polygon blockchain. Real-asset backed DeFi token with quantitative fintech infrastructure.",
             "url": "https://orakzaibond.com",
             "logo": {
               "@type": "ImageObject",
               "url": "https://orakzaibond.com/okbond-logo.png",
-              "caption": "Orakzai Bond — OKBOND"
+              "width": 512,
+              "height": 512,
+              "caption": "Orakzai Bond — OKBOND Official Logo"
             },
-            "image": "https://orakzaibond.com/faisal-orakzai.jpg",
+            "image": {
+              "@type": "ImageObject",
+              "url": "https://orakzaibond.com/opengraph.jpg",
+              "width": 1200,
+              "height": 630
+            },
             "foundingDate": "2026",
+            "foundingLocation": {
+              "@type": "Place",
+              "addressCountry": "PK",
+              "name": "Pakistan"
+            },
             "founder": {
               "@type": "Person",
-              "@id": "https://www.shamimforever.com/faisal-orakzai#person",
+              "@id": "https://orakzaibond.com/faisal-orakzai#person",
               "name": "Faisal Orakzai",
-              "url": "https://www.shamimforever.com/faisal-orakzai",
-              "image": "https://orakzaibond.com/faisal-orakzai.jpg",
-              "jobTitle": "Founder & CEO",
-              "sameAs": [
-                "https://www.wikidata.org/wiki/Q140264666",
-                "https://orcid.org/0009-0000-0915-7272",
-                "https://www.linkedin.com/in/faisalorakzaii",
-                "https://x.com/faisalorakzaii"
-              ]
+              "jobTitle": "Founder & CEO"
             },
             "sameAs": [
-              "https://orakzaibond.com",
-              "http://orakzaibond.com"
+              "https://x.com/faisalorakzaii",
+              "https://www.linkedin.com/in/faisalorakzaii",
+              "https://github.com/faisalorakzai-lab",
+              "https://linktr.ee/faisalorakzaiofficial"
             ],
             "knowsAbout": [
-              "Decentralized Finance", "Blockchain Bonds", "Asset Tokenization",
-              "Quantitative Fintech", "Capital Protection", "Polygon Network",
-              "DeFi Protocol", "Real Asset Backed Tokens"
+              "Decentralized Finance","Blockchain Bonds","Asset Tokenization",
+              "Quantitative Fintech","Capital Protection","Polygon Network",
+              "DeFi Protocol","Real Asset Backed Tokens","Blockchain Architecture","Smart Contracts"
             ],
-            "areaServed": { "@type": "Place", "name": "Worldwide" },
+            "areaServed": {"@type": "Place", "name": "Worldwide"},
+            "numberOfEmployees": {"@type": "QuantitativeValue", "value": "10-50"},
             "contactPoint": {
               "@type": "ContactPoint",
               "contactType": "customer service",
               "availableLanguage": ["English", "Urdu"],
-              "url": "https://orakzaibond.com"
+              "url": "https://orakzaibond.com/contact"
             }
           },
           {
@@ -94,38 +140,97 @@
             "@id": "https://orakzaibond.com/#website",
             "url": "https://orakzaibond.com",
             "name": "Orakzai Bond",
+            "alternateName": "OKBOND",
             "description": "World's first capital-protected decentralized bond on Polygon. Real-asset backed DeFi.",
-            "publisher": { "@id": "https://orakzaibond.com/#organization" },
-            "inLanguage": "en"
+            "publisher": {"@id": "https://orakzaibond.com/#organization"},
+            "inLanguage": ["en", "ur"],
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": {"@type": "EntryPoint", "urlTemplate": "https://orakzaibond.com/search?q={search_term_string}"},
+              "query-input": "required name=search_term_string"
+            }
           },
           {
-            "@type": "FinancialProduct",
+            "@type": "WebPage",
+            "@id": "https://orakzaibond.com/#webpage",
+            "url": "https://orakzaibond.com",
+            "name": "Orakzai Bond — OKBOND | World's First Capital-Protected Decentralized Bond",
+            "description": "Orakzai Bond (OKBOND) — world's first capital-protected decentralized bond on Polygon. Real-asset backed DeFi. Founded by Faisal Orakzai, 2026.",
+            "isPartOf": {"@id": "https://orakzaibond.com/#website"},
+            "about": {"@id": "https://orakzaibond.com/#organization"},
+            "primaryImageOfPage": {"@type": "ImageObject", "url": "https://orakzaibond.com/opengraph.jpg"},
+            "datePublished": "2026-01-01",
+            "dateModified": "2026-06-24",
+            "inLanguage": "en",
+            "speakable": {
+              "@type": "SpeakableSpecification",
+              "cssSelector": ["h1", "h2", ".hero-description", ".speakable"]
+            },
+            "breadcrumb": {"@id": "https://orakzaibond.com/#breadcrumb"}
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://orakzaibond.com/#breadcrumb",
+            "itemListElement": [
+              {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://orakzaibond.com/"},
+              {"@type": "ListItem", "position": 2, "name": "Token", "item": "https://orakzaibond.com/token"},
+              {"@type": "ListItem", "position": 3, "name": "Staking", "item": "https://orakzaibond.com/staking"},
+              {"@type": "ListItem", "position": 4, "name": "About", "item": "https://orakzaibond.com/about"},
+              {"@type": "ListItem", "position": 5, "name": "Faisal Orakzai", "item": "https://orakzaibond.com/faisal-orakzai"}
+            ]
+          },
+          {
+            "@type": ["FinancialProduct", "SoftwareApplication"],
             "@id": "https://orakzaibond.com/#okbond",
             "name": "OKBOND Token",
-            "description": "Capital-protected decentralized bond token on Polygon blockchain. Real-asset backed with quantitative fintech infrastructure.",
-            "url": "https://orakzaibond.com",
-            "provider": { "@id": "https://orakzaibond.com/#organization" },
+            "alternateName": "Orakzai Bond Token",
+            "description": "Capital-protected decentralized bond token on Polygon blockchain. Real-asset backed with quantitative fintech infrastructure. Earn sovereign yield with principal protection.",
+            "url": "https://orakzaibond.com/token",
+            "applicationCategory": "FinanceApplication",
+            "operatingSystem": "Web3, Polygon",
+            "provider": {"@id": "https://orakzaibond.com/#organization"},
+            "offers": {
+              "@type": "Offer",
+              "name": "OKBOND Token",
+              "description": "Capital-protected bond token with sovereign yield",
+              "category": "DeFi Token",
+              "seller": {"@id": "https://orakzaibond.com/#organization"}
+            },
             "feesAndCommissionsSpecification": "Capital-protected — principal guaranteed",
             "category": "Decentralized Finance"
           },
           {
             "@type": "Person",
-            "@id": "https://www.shamimforever.com/faisal-orakzai#person",
+            "@id": "https://orakzaibond.com/faisal-orakzai#person",
             "name": "Faisal Orakzai",
             "givenName": "Faisal",
             "familyName": "Orakzai",
-            "alternateName": ["Chairman Faisal Orakzai", "Malak Faisal Orakzai", "faisalorakzaii"],
-            "description": "Founder & CEO of Orakzai Bond. Pakistani entrepreneur specializing in blockchain architecture and decentralized finance. Also founder of Shamim Forever and Orakzai Group.",
-            "url": "https://www.shamimforever.com/faisal-orakzai",
-            "image": "https://orakzaibond.com/faisal-orakzai.jpg",
+            "honorificPrefix": "Chairman",
+            "alternateName": [
+              "Chairman Faisal Orakzai","Malak Faisal Orakzai",
+              "faisalorakzaii","Faisal Orakzai OKBOND","Orakzai Bond Founder"
+            ],
+            "description": "Founder & CEO of Orakzai Bond (OKBOND). Pakistani blockchain entrepreneur and quantitative fintech architect. Born 30 April 2006 in Pakistan. Also founder of Shamim Forever and the Orakzai Group. Pioneer of capital-protected DeFi on Polygon.",
+            "url": "https://orakzaibond.com/faisal-orakzai",
+            "image": {
+              "@type": "ImageObject",
+              "url": "https://orakzaibond.com/faisal-orakzai.jpg",
+              "caption": "Faisal Orakzai — Founder & CEO, Orakzai Bond"
+            },
             "birthDate": "2006-04-30",
-            "birthPlace": { "@type": "Place", "name": "Pakistan", "addressCountry": "PK" },
-            "nationality": { "@type": "Country", "name": "Pakistan" },
-            "jobTitle": ["Founder & CEO", "Chairman", "Blockchain Architect"],
-            "worksFor": { "@id": "https://orakzaibond.com/#organization" },
+            "birthPlace": {"@type": "Place", "name": "Pakistan", "addressCountry": "PK"},
+            "nationality": {"@type": "Country", "name": "Pakistan"},
+            "jobTitle": ["Founder & CEO", "Chairman", "Blockchain Architect", "Quantitative Fintech Engineer"],
+            "worksFor": {"@id": "https://orakzaibond.com/#organization"},
+            "knowsAbout": [
+              "Blockchain Architecture","Decentralized Finance","Quantitative Finance",
+              "Smart Contracts","Polygon Network","Capital Protection",
+              "Bond Tokenization","DeFi Protocols","Web3 Development"
+            ],
+            "award": ["Founder of Pakistan's first capital-protected DeFi bond, 2026"],
             "identifier": [
-              { "@type": "PropertyValue", "propertyID": "ORCID", "value": "0009-0000-0915-7272", "url": "https://orcid.org/0009-0000-0915-7272" },
-              { "@type": "PropertyValue", "propertyID": "Wikidata", "value": "Q140264666", "url": "https://www.wikidata.org/wiki/Q140264666" }
+              {"@type": "PropertyValue", "propertyID": "ORCID", "value": "0009-0000-0915-7272", "url": "https://orcid.org/0009-0000-0915-7272"},
+              {"@type": "PropertyValue", "propertyID": "Wikidata", "value": "Q140264666", "url": "https://www.wikidata.org/wiki/Q140264666"}
             ],
             "sameAs": [
               "https://www.wikidata.org/wiki/Q140264666",
@@ -142,7 +247,36 @@
               "https://hackernoon.com/u/faisalorakzai",
               "https://www.f6s.com/faisalorakzai",
               "https://www.shamimforever.com/faisal-orakzai",
-              "https://www.shamimforever.com/founder"
+              "https://www.shamimforever.com/founder",
+              "https://orakzaibond.com/faisal-orakzai",
+              "https://orakzaibond.com/founder"
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://orakzaibond.com/#faq",
+            "mainEntity": [
+              {"@type": "Question","name": "What is Orakzai Bond (OKBOND)?","acceptedAnswer": {"@type": "Answer","text": "Orakzai Bond (OKBOND) is the world's first capital-protected decentralized bond built on the Polygon blockchain. It is a real-asset backed DeFi token that guarantees return of principal while generating sovereign yield. Founded by Faisal Orakzai in 2026."}},
+              {"@type": "Question","name": "Who is Faisal Orakzai?","acceptedAnswer": {"@type": "Answer","text": "Faisal Orakzai (born 30 April 2006) is a Pakistani blockchain entrepreneur, quantitative fintech architect, and Founder & CEO of Orakzai Bond. He is also founder of Shamim Forever and the Orakzai Group. Wikidata Q140264666, ORCID 0009-0000-0915-7272."}},
+              {"@type": "Question","name": "What blockchain does OKBOND run on?","acceptedAnswer": {"@type": "Answer","text": "OKBOND runs on the Polygon Proof-of-Stake (PoS) network, chosen for its low transaction fees, high throughput, and EVM compatibility."}},
+              {"@type": "Question","name": "Is OKBOND capital protected?","acceptedAnswer": {"@type": "Answer","text": "Yes. Orakzai Bond operates on a Liquidity-Backed Capital Retention Model (LBCRM). Your principal is protected and backed by real assets. The bond is founder-guaranteed by Faisal Orakzai."}},
+              {"@type": "Question","name": "How do I stake OKBOND?","acceptedAnswer": {"@type": "Answer","text": "Connect your Web3 wallet (MetaMask or WalletConnect) to orakzaibond.com/staking, choose your staking duration, and confirm the transaction. You will earn sovereign yield on your staked OKBOND tokens."}},
+              {"@type": "Question","name": "Where is Orakzai Bond based?","acceptedAnswer": {"@type": "Answer","text": "Orakzai Bond was founded in Pakistan by Faisal Orakzai and operates as a global decentralized platform on Polygon blockchain, serving investors worldwide."}},
+              {"@type": "Question","name": "How can I buy OKBOND?","acceptedAnswer": {"@type": "Answer","text": "Visit orakzaibond.com/ico to participate in the OKBOND Initial Coin Offering. Connect your Web3 wallet and follow the instructions to purchase tokens."}},
+              {"@type": "Question","name": "How can I contact Orakzai Bond?","acceptedAnswer": {"@type": "Answer","text": "Reach Orakzai Bond through orakzaibond.com/contact or follow @faisalorakzaii on X (Twitter) and LinkedIn."}}
+            ]
+          },
+          {
+            "@type": "ItemList",
+            "@id": "https://orakzaibond.com/#keyfeatures",
+            "name": "OKBOND Key Features",
+            "description": "Core features of Orakzai Bond DeFi platform",
+            "itemListElement": [
+              {"@type": "ListItem", "position": 1, "name": "Capital Protection", "url": "https://orakzaibond.com/token"},
+              {"@type": "ListItem", "position": 2, "name": "Sovereign Yield Staking", "url": "https://orakzaibond.com/staking"},
+              {"@type": "ListItem", "position": 3, "name": "Polygon Blockchain", "url": "https://orakzaibond.com/token"},
+              {"@type": "ListItem", "position": 4, "name": "Real Asset Backing", "url": "https://orakzaibond.com/about"},
+              {"@type": "ListItem", "position": 5, "name": "Decentralized Dashboard", "url": "https://orakzaibond.com/dashboard"}
             ]
           }
         ]
@@ -151,12 +285,20 @@
 
       <!-- Favicons -->
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      <link rel="icon" type="image/png" sizes="32x32" href="/okbond-logo.png" />
+      <link rel="icon" type="image/png" sizes="16x16" href="/okbond-logo.png" />
+      <link rel="apple-touch-icon" sizes="180x180" href="/okbond-logo.png" />
+      <link rel="shortcut icon" href="/favicon.svg" />
       <link rel="manifest" href="/manifest.webmanifest" />
 
-      <!-- Cache strategy (keep existing) -->
+      <!-- Preload Critical Assets -->
+      <link rel="preload" href="/okbond-logo.png" as="image" />
+      <link rel="preload" href="/opengraph.jpg" as="image" />
+
+      <!-- Cache Bust -->
       <script>
         (function () {
-          var V = "okb-v7";
+          var V = "okb-v8";
           try {
             if (localStorage.getItem("_okbuild") !== V) {
               localStorage.setItem("_okbuild", V);
@@ -186,4 +328,3 @@
       <script type="module" src="/src/main.tsx"></script>
     </body>
   </html>
-  
