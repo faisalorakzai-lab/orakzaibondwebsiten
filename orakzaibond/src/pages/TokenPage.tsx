@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Token from "@/components/Token";
-import SEO, { PAGE_SEO } from "@/components/SEO";
+import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 export default function TokenPage() {
   useEffect(() => {
@@ -9,12 +9,10 @@ export default function TokenPage() {
     return () => { document.title = "Orakzai Bond"; };
   }, []);
 
+  useSEO(PAGE_SEO.token);
   return (
-    <>
-      <SEO {...PAGE_SEO.token} />
     <main className="flex-1">
       <Token />
     </main>
-    </>
   );
 }

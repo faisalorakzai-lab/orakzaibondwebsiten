@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import ResourcesSection from "@/components/ResourcesSection";
 import SecuritySection from "@/components/SecuritySection";
-import SEO, { PAGE_SEO } from "@/components/SEO";
+import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 export default function DocumentsPage() {
   useEffect(() => {
@@ -10,13 +10,11 @@ export default function DocumentsPage() {
     return () => { document.title = "Orakzai Bond"; };
   }, []);
 
+  useSEO(PAGE_SEO.documents);
   return (
-    <>
-      <SEO {...PAGE_SEO.documents} />
     <main className="flex-1 pt-20">
       <ResourcesSection />
       <SecuritySection />
     </main>
-    </>
   );
 }

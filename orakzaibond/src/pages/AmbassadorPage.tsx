@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Crown, Star, Gem, CheckCircle2, Globe, MessageCircle, User, Link, MapPin, ChevronDown, ChevronUp, Shield, Zap, Award, Activity, Radio } from "lucide-react";
-import SEO, { PAGE_SEO } from "@/components/SEO";
+import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 const TIERS = [
   {
@@ -216,9 +216,8 @@ export default function AmbassadorPage() {
     }
   };
 
+  useSEO(PAGE_SEO.ambassador);
   return (
-    <>
-      <SEO {...PAGE_SEO.ambassador} />
     <div className="min-h-screen w-full relative overflow-x-hidden neural-grid-strong">
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
@@ -678,6 +677,5 @@ export default function AmbassadorPage() {
         </motion.div>
       </div>
     </div>
-    </>
   );
 }

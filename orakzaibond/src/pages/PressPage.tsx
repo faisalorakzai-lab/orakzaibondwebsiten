@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import SEO, { PAGE_SEO } from "@/components/SEO";
+import { useSEO, PAGE_SEO } from "@/components/SEO";
   import { Link } from "wouter";
   import { ExternalLink } from "lucide-react";
   import { motion } from "framer-motion";
@@ -172,9 +172,8 @@ import SEO, { PAGE_SEO } from "@/components/SEO";
 
   export default function PressPage() {
     useSeoHead();
+    useSEO(PAGE_SEO.press);
     return (
-      <>
-        <SEO {...PAGE_SEO.press} />
       <div style={{ background: MIDNIGHT, color: "#f3ecd1", minHeight: "100vh", fontFamily: "'Inter',system-ui,sans-serif" }}>
 
         {/* HEADER */}
@@ -248,7 +247,6 @@ import SEO, { PAGE_SEO } from "@/components/SEO";
           </div>
         </div>
       </div>
-      </>
     );
   }
   

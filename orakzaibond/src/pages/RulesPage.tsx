@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "wouter";
-import SEO, { PAGE_SEO } from "@/components/SEO";
+import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 const EFFECTIVE_DATE  = "8 April 2026";
 
@@ -71,9 +71,8 @@ function BulletList({ items, color = "bg-primary" }: { items: string[]; color?: 
 }
 
 export default function RulesPage() {
+  useSEO(PAGE_SEO.rules);
   return (
-    <>
-      <SEO {...PAGE_SEO.rules} />
     <div className="min-h-screen w-full bg-background text-foreground flex flex-col overflow-x-hidden">
       {/* ── Hero ───────────────────────────────────────────────── */}
       <div className="relative overflow-hidden pt-12 pb-16 border-b border-primary/10">
@@ -222,6 +221,5 @@ export default function RulesPage() {
         </section>
       </main>
     </div>
-    </>
   );
 }

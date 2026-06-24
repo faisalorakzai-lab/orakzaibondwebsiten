@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import LOTTERY_ABI from "@/lib/contractABI.json";
 import { useWallet } from "@/hooks/useWallet";
-import SEO, { PAGE_SEO } from "@/components/SEO";
+import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 const LOTTERY_ADDRESS = "0x5bc55d4b347e39b986864e28604ddca5de6357b7";
 const TOKEN_ADDRESS   = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
@@ -152,9 +152,8 @@ export default function WinnersPage() {
     return <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 border border-blue-500/30 text-blue-400"><Clock className="w-3.5 h-3.5" /> Pending</span>;
   };
 
+  useSEO(PAGE_SEO.winners);
   return (
-    <>
-      <SEO {...PAGE_SEO.winners} />
     <div className="min-h-screen w-full bg-background text-foreground flex flex-col overflow-x-hidden">
       {/* ── Hero ──────────────────────────────────────────────────────── */}
       <div className="relative overflow-hidden pt-28 pb-16 border-b border-primary/10">
@@ -373,6 +372,5 @@ export default function WinnersPage() {
         </div>
       </main>
     </div>
-    </>
   );
 }

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import CommunityHub from "@/components/CommunityHub";
-import SEO, { PAGE_SEO } from "@/components/SEO";
+import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 export default function CommunityHubPage() {
   useEffect(() => {
@@ -9,12 +9,10 @@ export default function CommunityHubPage() {
     return () => { document.title = "Orakzai Bond"; };
   }, []);
 
+  useSEO(PAGE_SEO.communityHub);
   return (
-    <>
-      <SEO {...PAGE_SEO.communityHub} />
     <main className="flex-1 pt-20">
       <CommunityHub />
     </main>
-    </>
   );
 }

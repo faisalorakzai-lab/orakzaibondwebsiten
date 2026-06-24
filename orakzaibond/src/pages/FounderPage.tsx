@@ -1,7 +1,7 @@
 import { useRef, useMemo } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import {
-import SEO, { PAGE_SEO } from "@/components/SEO";
+import { useSEO, PAGE_SEO } from "@/components/SEO";
   ArrowRight,
   Network,
   BrainCircuit,
@@ -70,9 +70,8 @@ const TIMELINE = [
 ];
 
 export default function FounderPage() {
+  useSEO(PAGE_SEO.founder);
   return (
-    <>
-      <SEO {...PAGE_SEO.founder} />
     <div
       className="relative min-h-screen w-full overflow-hidden"
       style={{
@@ -337,7 +336,6 @@ function CornerOrnaments() {
     { bottom: 12, right: 12, borders: "border-b border-r" },
   ];
   return (
-    <>
       {positions.map((p, i) => (
         <span
           key={i}
@@ -352,7 +350,6 @@ function CornerOrnaments() {
           }}
         />
       ))}
-    </>
   );
 }
 
@@ -1333,7 +1330,6 @@ function SectionDivider() {
 
 function BackgroundAtmosphere() {
   return (
-    <>
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-0 -z-0 h-[60vh] w-[120vw] -translate-x-1/2"
@@ -1352,7 +1348,6 @@ function BackgroundAtmosphere() {
           backgroundSize: "80px 80px",
         }}
       />
-    </>
   );
 }
 
@@ -1408,7 +1403,6 @@ function FontInjector() {
     <style>{`
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&display=swap');
     `}</style>
-    </>
   );
 }
 

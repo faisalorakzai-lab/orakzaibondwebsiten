@@ -7,7 +7,7 @@ import {
   Download, BadgeCheck, BookOpen, Award,
 } from "lucide-react";
 import { useLiveBlockchainData } from "@/hooks/useLiveBlockchainData";
-import SEO, { PAGE_SEO } from "@/components/SEO";
+import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 const OKBOND_CONTRACT = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
 const POLYGONSCAN_URL = `https://polygonscan.com/token/${OKBOND_CONTRACT}`;
@@ -114,9 +114,8 @@ export default function LegalPage() {
     ? parseFloat(data.totalSupply).toLocaleString(undefined, { maximumFractionDigits: 0 })
     : null;
 
+  useSEO(PAGE_SEO.legal);
   return (
-    <>
-      <SEO {...PAGE_SEO.legal} />
     <div className="min-h-screen w-full relative overflow-x-hidden neural-grid-strong">
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-24">
 
@@ -532,6 +531,5 @@ export default function LegalPage() {
         </div>
       </div>
     </div>
-    </>
   );
 }

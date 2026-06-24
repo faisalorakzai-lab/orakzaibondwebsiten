@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import {
-import SEO, { PAGE_SEO } from "@/components/SEO";
+import { useSEO, PAGE_SEO } from "@/components/SEO";
   Wallet, Globe, Zap, CheckCircle2, ExternalLink,
   ChevronRight, Download, ShieldCheck, ArrowRight,
 } from "lucide-react";
@@ -80,9 +80,8 @@ const faqs = [
 export default function GuidePage() {
   const [, navigate] = useLocation();
 
+  useSEO(PAGE_SEO.guide);
   return (
-    <>
-      <SEO {...PAGE_SEO.guide} />
     <div className="min-h-screen bg-background text-foreground">
       {/* Hero */}
       <section className="pt-28 pb-14 px-4 text-center relative overflow-hidden">
@@ -232,6 +231,5 @@ export default function GuidePage() {
         </motion.div>
       </section>
     </div>
-    </>
   );
 }

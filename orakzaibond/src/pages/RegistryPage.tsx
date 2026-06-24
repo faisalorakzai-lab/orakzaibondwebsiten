@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useNotebookRegistry } from "@/hooks/useNotebookRegistry";
 import {
-import SEO, { PAGE_SEO } from "@/components/SEO";
+import { useSEO, PAGE_SEO } from "@/components/SEO";
   BookOpen, RefreshCw, CheckCircle, ExternalLink, Clock,
   Hash, Shield, Database, AlertCircle,
 } from "lucide-react";
@@ -41,9 +41,8 @@ export default function RegistryPage() {
     ? data.entries
     : FALLBACK_ENTRIES;
 
+  useSEO(PAGE_SEO.registry);
   return (
-    <>
-      <SEO {...PAGE_SEO.registry} />
     <div className="min-h-screen px-4 md:px-8 py-10 max-w-7xl mx-auto">
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
@@ -207,6 +206,5 @@ export default function RegistryPage() {
         </div>
       </motion.div>
     </div>
-    </>
   );
 }

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useStaking } from "@/hooks/useStaking";
 import { useWallet } from "@/hooks/useWallet";
 import {
-import SEO, { PAGE_SEO } from "@/components/SEO";
+import { useSEO, PAGE_SEO } from "@/components/SEO";
   Lock, Unlock, TrendingUp, Zap, Users, RefreshCw, CheckCircle,
   AlertCircle, Loader2, ExternalLink, Calculator, ArrowRight,
 } from "lucide-react";
@@ -38,9 +38,8 @@ export default function StakingPage() {
   const compoundFinal   = parsedAmount * Math.pow(1 + selectedPool.apy / 100, compoundYears);
   const isPending       = ["approving", "staking", "unstaking", "claiming"].includes(txStatus);
 
+  useSEO(PAGE_SEO.staking);
   return (
-    <>
-      <SEO {...PAGE_SEO.staking} />
     <div className="min-h-screen pb-24 lg:pb-10" style={{ background: "#050505" }}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
 
@@ -150,7 +149,6 @@ export default function StakingPage() {
                   </button>
                 </div>
               ) : (
-                <>
                   <div className="relative mb-4">
                     <input
                       type="number"
@@ -249,7 +247,6 @@ export default function StakingPage() {
                       Claim
                     </button>
                   </div>
-                </>
               )}
             </div>
           </div>
@@ -333,6 +330,5 @@ export default function StakingPage() {
         </div>
       </div>
     </div>
-    </>
   );
 }

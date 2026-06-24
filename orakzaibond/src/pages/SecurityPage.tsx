@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import {
-import SEO, { PAGE_SEO } from "@/components/SEO";
+import { useSEO, PAGE_SEO } from "@/components/SEO";
   Shield, CheckCircle, ExternalLink, Lock, AlertTriangle,
   FileText, Eye, Zap, Globe, Download, BadgeCheck,
   Building2, Award, Landmark, BookOpen,
@@ -71,9 +71,8 @@ function SectionHeader({ icon, title, sub }: { icon: React.ReactNode; title: str
 }
 
 export default function SecurityPage() {
+  useSEO(PAGE_SEO.security);
   return (
-    <>
-      <SEO {...PAGE_SEO.security} />
     <div className="min-h-screen px-4 md:px-8 py-10 max-w-7xl mx-auto">
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
@@ -275,6 +274,5 @@ export default function SecurityPage() {
         </div>
       </motion.div>
     </div>
-    </>
   );
 }
