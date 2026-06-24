@@ -96,6 +96,7 @@ export default function VaultPage() {
           </div>
 
           {chartData.length > 0 ? (
+            <>
               <ResponsiveContainer width="100%" height={180}>
                 <PieChart>
                   <Pie data={chartData} cx="50%" cy="50%" innerRadius={50} outerRadius={75} paddingAngle={3} dataKey="value">
@@ -120,6 +121,7 @@ export default function VaultPage() {
                   </div>
                 ))}
               </div>
+            </>
           ) : (
             <div className="h-[180px] flex items-center justify-center text-muted-foreground text-sm">
               {loading ? "Loading chart data…" : "No allocation data available"}

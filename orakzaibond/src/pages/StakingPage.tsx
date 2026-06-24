@@ -149,6 +149,7 @@ export default function StakingPage() {
                   </button>
                 </div>
               ) : (
+                <>
                   <div className="relative mb-4">
                     <input
                       type="number"
@@ -247,6 +248,7 @@ export default function StakingPage() {
                       Claim
                     </button>
                   </div>
+                </>
               )}
             </div>
           </div>

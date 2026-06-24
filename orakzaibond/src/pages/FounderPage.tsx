@@ -336,6 +336,7 @@ function CornerOrnaments() {
     { bottom: 12, right: 12, borders: "border-b border-r" },
   ];
   return (
+    <>
       {positions.map((p, i) => (
         <span
           key={i}
@@ -350,6 +351,7 @@ function CornerOrnaments() {
           }}
         />
       ))}
+    </>
   );
 }
 
@@ -1330,6 +1332,7 @@ function SectionDivider() {
 
 function BackgroundAtmosphere() {
   return (
+    <>
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-0 -z-0 h-[60vh] w-[120vw] -translate-x-1/2"
@@ -1348,6 +1351,7 @@ function BackgroundAtmosphere() {
           backgroundSize: "80px 80px",
         }}
       />
+    </>
   );
 }
 

@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
   import { motion } from "framer-motion";
   import { Link } from "wouter";
   import { ExternalLink, Linkedin, ChevronRight, ArrowRight } from "lucide-react";
+import { useSEO, PAGE_SEO } from "@/components/SEO";
 
   const GOLD = "linear-gradient(135deg,#BF953F 0%,#FCF6BA 30%,#B38728 50%,#FBF5B7 70%,#AA771C 100%)";
   const MIDNIGHT = "#05060A";
