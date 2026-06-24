@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useStaking } from "@/hooks/useStaking";
 import { useWallet } from "@/hooks/useWallet";
 import {
+import SEO, { PAGE_SEO } from "@/components/SEO";
   Lock, Unlock, TrendingUp, Zap, Users, RefreshCw, CheckCircle,
   AlertCircle, Loader2, ExternalLink, Calculator, ArrowRight,
 } from "lucide-react";
@@ -38,6 +39,8 @@ export default function StakingPage() {
   const isPending       = ["approving", "staking", "unstaking", "claiming"].includes(txStatus);
 
   return (
+    <>
+      <SEO {...PAGE_SEO.staking} />
     <div className="min-h-screen pb-24 lg:pb-10" style={{ background: "#050505" }}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
 
@@ -330,5 +333,6 @@ export default function StakingPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

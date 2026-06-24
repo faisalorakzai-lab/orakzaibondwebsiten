@@ -11,6 +11,7 @@ import { useICO } from "@/hooks/useICO";
 import ReferralDashboard from "@/components/ReferralDashboard";
 import { Button } from "@/components/ui/button";
 import OKBONDCalculator from "@/components/OKBONDCalculator";
+import SEO, { PAGE_SEO } from "@/components/SEO";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 const POLYGON_SCAN = "https://polygonscan.com/tx/";
@@ -255,6 +256,8 @@ export default function ICOPage() {
   const cd = useCountdown(PHASE1_END);
 
   return (
+    <>
+      <SEO {...PAGE_SEO.ico} />
     <div className="w-full bg-background text-foreground flex flex-col overflow-x-hidden">
       <main className="flex-1">
         {/* Hero Section */}
@@ -403,5 +406,6 @@ export default function ICOPage() {
         </div>
       </main>
     </div>
+    </>
   );
 }

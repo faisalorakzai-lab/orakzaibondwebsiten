@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useWelfareMetrics } from "@/hooks/useWelfareMetrics";
 import { useSocialStats } from "@/hooks/useSocialStats";
+import SEO, { PAGE_SEO } from "@/components/SEO";
 
 /* ── Animation Variants ────────────────────────────────────────────── */
 const fadeUp = {
@@ -455,6 +456,8 @@ export default function AboutPage() {
   }, []);
 
   return (
+    <>
+      <SEO {...PAGE_SEO.about} />
     <div className="min-h-screen bg-background text-foreground flex flex-col overflow-x-hidden">
       <main className="flex-1">
         {/* ── Exit Button ───────────────────────────────────────────────────── */}
@@ -1000,5 +1003,6 @@ export default function AboutPage() {
         </section>
       </main>
     </div>
+    </>
   );
 }

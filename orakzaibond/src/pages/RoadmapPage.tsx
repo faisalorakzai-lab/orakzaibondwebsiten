@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Roadmap from "@/components/Roadmap";
+import SEO, { PAGE_SEO } from "@/components/SEO";
 
 export default function RoadmapPage() {
   useEffect(() => {
@@ -9,10 +10,13 @@ export default function RoadmapPage() {
   }, []);
 
   return (
+    <>
+      <SEO {...PAGE_SEO.roadmap} />
     <main className="flex-1 midnight-page">
       <div className="relative z-10">
         <Roadmap />
       </div>
     </main>
+    </>
   );
 }

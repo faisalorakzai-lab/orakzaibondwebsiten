@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import CommunityHub from "@/components/CommunityHub";
+import SEO, { PAGE_SEO } from "@/components/SEO";
 
 export default function CommunityHubPage() {
   useEffect(() => {
@@ -9,8 +10,11 @@ export default function CommunityHubPage() {
   }, []);
 
   return (
+    <>
+      <SEO {...PAGE_SEO.communityHub} />
     <main className="flex-1 pt-20">
       <CommunityHub />
     </main>
+    </>
   );
 }

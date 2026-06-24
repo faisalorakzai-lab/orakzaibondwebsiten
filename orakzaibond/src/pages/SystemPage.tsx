@@ -14,6 +14,7 @@ import { useWallet } from "@/hooks/useWallet";
 import { useICO } from "@/hooks/useICO";
 import LOTTERY_ABI from "@/lib/contractABI.json";
 import { fetchRecentDispatches, type Dispatch } from "@/lib/dispatchBus";
+import SEO, { PAGE_SEO } from "@/components/SEO";
 
 /* ── Live Contract Addresses (Polygon Mainnet) ───────────────────────── */
 const TOKEN_ADDRESS    = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
@@ -412,6 +413,8 @@ export default function SystemPage() {
   const isConnected = !!address;
 
   return (
+    <>
+      <SEO {...PAGE_SEO.system} />
     <div className="min-h-screen w-full bg-background text-foreground flex flex-col overflow-x-hidden" style={{ background: "#04060f" }}>
       {/* ── News Ticker ─────────────────────────────────────────────── */}
       <div className="sticky top-0 left-0 right-0 z-30 border-b overflow-hidden"
@@ -784,5 +787,6 @@ export default function SystemPage() {
         </div>
       </main>
     </div>
+    </>
   );
 }

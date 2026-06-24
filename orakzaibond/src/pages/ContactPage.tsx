@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import ContactSection from "@/components/ContactSection";
+import SEO, { PAGE_SEO } from "@/components/SEO";
 
 export default function ContactPage() {
   useEffect(() => {
@@ -9,8 +10,11 @@ export default function ContactPage() {
   }, []);
 
   return (
+    <>
+      <SEO {...PAGE_SEO.contact} />
     <main className="flex-1 pt-20">
       <ContactSection />
     </main>
+    </>
   );
 }

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ShieldCheck, Trophy, Sparkles, Zap, Clock, ExternalLink, Users, ArrowRight, CheckCircle } from "lucide-react";
 import Lottery from "@/components/Lottery";
 import { useWallet } from "@/hooks/useWallet";
+import SEO, { PAGE_SEO } from "@/components/SEO";
 
 const GOLD = "#D4AF37";
 
@@ -9,6 +10,8 @@ export default function LotteryPage() {
   const { address, connect, provider, isPolygon, switchToPolygon } = useWallet();
 
   return (
+    <>
+      <SEO {...PAGE_SEO.lottery} />
     <div className="min-h-screen pb-24 lg:pb-10" style={{ background: "#050505" }}>
 
       {/* ── Cinematic Header ── */}
@@ -213,5 +216,6 @@ export default function LotteryPage() {
         </motion.div>
       </div>
     </div>
+    </>
   );
 }

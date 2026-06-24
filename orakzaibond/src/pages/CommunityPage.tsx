@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Community from "@/components/Community";
+import SEO, { PAGE_SEO } from "@/components/SEO";
 
 export default function CommunityPage() {
   useEffect(() => {
@@ -9,8 +10,11 @@ export default function CommunityPage() {
   }, []);
 
   return (
+    <>
+      <SEO {...PAGE_SEO.community} />
     <main className="flex-1 pt-20 pb-16 neural-grid-strong relative z-10">
       <Community />
     </main>
+    </>
   );
 }

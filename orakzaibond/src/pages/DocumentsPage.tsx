@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import ResourcesSection from "@/components/ResourcesSection";
 import SecuritySection from "@/components/SecuritySection";
+import SEO, { PAGE_SEO } from "@/components/SEO";
 
 export default function DocumentsPage() {
   useEffect(() => {
@@ -10,9 +11,12 @@ export default function DocumentsPage() {
   }, []);
 
   return (
+    <>
+      <SEO {...PAGE_SEO.documents} />
     <main className="flex-1 pt-20">
       <ResourcesSection />
       <SecuritySection />
     </main>
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import Token from "@/components/Token";
+import SEO, { PAGE_SEO } from "@/components/SEO";
 
 export default function TokenPage() {
   useEffect(() => {
@@ -9,8 +10,11 @@ export default function TokenPage() {
   }, []);
 
   return (
+    <>
+      <SEO {...PAGE_SEO.token} />
     <main className="flex-1">
       <Token />
     </main>
+    </>
   );
 }

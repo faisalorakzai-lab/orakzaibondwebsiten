@@ -1,6 +1,7 @@
 import { useRef, useMemo } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import {
+import SEO, { PAGE_SEO } from "@/components/SEO";
   ArrowRight,
   Network,
   BrainCircuit,
@@ -70,6 +71,8 @@ const TIMELINE = [
 
 export default function FounderPage() {
   return (
+    <>
+      <SEO {...PAGE_SEO.founder} />
     <div
       className="relative min-h-screen w-full overflow-hidden"
       style={{
@@ -1405,6 +1408,7 @@ function FontInjector() {
     <style>{`
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&display=swap');
     `}</style>
+    </>
   );
 }
 

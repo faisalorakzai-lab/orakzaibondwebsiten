@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import SEO, { PAGE_SEO } from "@/components/SEO";
   import { motion } from "framer-motion";
   import { Link } from "wouter";
   import { ExternalLink, Linkedin, ChevronRight, ArrowRight } from "lucide-react";
@@ -136,6 +137,8 @@ import { useEffect } from "react";
     useSeoHead();
 
     return (
+      <>
+        <SEO {...PAGE_SEO.faisalOrakzai} />
       <div style={{background:MIDNIGHT,color:"#f3ecd1",minHeight:"100vh",fontFamily:"'Inter',system-ui,sans-serif"}}>
         <style>{HERO_STYLE}</style>
 
@@ -339,6 +342,7 @@ import { useEffect } from "react";
           </div>
         </div>
       </div>
+      </>
     );
   }
   
