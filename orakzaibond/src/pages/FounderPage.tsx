@@ -1,7 +1,6 @@
 import { useRef, useMemo } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import {
-import { useSEO, PAGE_SEO } from "@/components/SEO";
   ArrowRight,
   Network,
   BrainCircuit,
