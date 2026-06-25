@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Crown, Star, Gem, CheckCircle2, Globe, MessageCircle, User, Link, MapPin, ChevronDown, ChevronUp, Shield, Zap, Award, Activity, Radio } from "lucide-react";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 const TIERS = [
   {

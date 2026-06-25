@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import Token from "@/components/Token";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 export default function TokenPage() {
   useEffect(() => {

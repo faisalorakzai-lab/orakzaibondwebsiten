@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import Community from "@/components/Community";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 export default function CommunityPage() {
   useEffect(() => {

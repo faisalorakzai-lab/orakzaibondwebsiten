@@ -6,7 +6,6 @@ import {
   CheckCircle, Lock, BarChart2, Activity,
 } from "lucide-react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 function fmt(val: string, d = 2): string {
   const n = parseFloat(val);

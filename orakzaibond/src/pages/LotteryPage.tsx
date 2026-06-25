@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { ShieldCheck, Trophy, Sparkles, Zap, Clock, ExternalLink, Users, ArrowRight, CheckCircle } from "lucide-react";
 import Lottery from "@/components/Lottery";
 import { useWallet } from "@/hooks/useWallet";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 const GOLD = "#D4AF37";
 

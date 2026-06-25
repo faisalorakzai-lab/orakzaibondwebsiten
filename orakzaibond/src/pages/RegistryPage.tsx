@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { useNotebookRegistry } from "@/hooks/useNotebookRegistry";
 import {
-import { useSEO, PAGE_SEO } from "@/components/SEO";
   BookOpen, RefreshCw, CheckCircle, ExternalLink, Clock,
   Hash, Shield, Database, AlertCircle,
 } from "lucide-react";

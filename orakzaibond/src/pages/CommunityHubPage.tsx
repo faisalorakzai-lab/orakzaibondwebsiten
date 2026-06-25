@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import CommunityHub from "@/components/CommunityHub";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 export default function CommunityHubPage() {
   useEffect(() => {

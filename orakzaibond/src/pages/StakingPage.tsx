@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useStaking } from "@/hooks/useStaking";
 import { useWallet } from "@/hooks/useWallet";
 import {
-import { useSEO, PAGE_SEO } from "@/components/SEO";
   Lock, Unlock, TrendingUp, Zap, Users, RefreshCw, CheckCircle,
   AlertCircle, Loader2, ExternalLink, Calculator, ArrowRight,
 } from "lucide-react";

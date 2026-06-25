@@ -11,7 +11,6 @@ import { useICO } from "@/hooks/useICO";
 import ReferralDashboard from "@/components/ReferralDashboard";
 import { Button } from "@/components/ui/button";
 import OKBONDCalculator from "@/components/OKBONDCalculator";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 // ── Constants ──────────────────────────────────────────────────────────────────
 const POLYGON_SCAN = "https://polygonscan.com/tx/";

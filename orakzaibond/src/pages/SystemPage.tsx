@@ -14,7 +14,6 @@ import { useWallet } from "@/hooks/useWallet";
 import { useICO } from "@/hooks/useICO";
 import LOTTERY_ABI from "@/lib/contractABI.json";
 import { fetchRecentDispatches, type Dispatch } from "@/lib/dispatchBus";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 /* ── Live Contract Addresses (Polygon Mainnet) ───────────────────────── */
 const TOKEN_ADDRESS    = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";

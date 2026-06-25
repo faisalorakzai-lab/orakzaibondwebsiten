@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import LOTTERY_ABI from "@/lib/contractABI.json";
 import { useWallet } from "@/hooks/useWallet";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 const LOTTERY_ADDRESS = "0x5bc55d4b347e39b986864e28604ddca5de6357b7";
 const TOKEN_ADDRESS   = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";

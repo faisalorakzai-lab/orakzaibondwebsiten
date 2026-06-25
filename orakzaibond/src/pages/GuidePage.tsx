@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import {
-import { useSEO, PAGE_SEO } from "@/components/SEO";
   Wallet, Globe, Zap, CheckCircle2, ExternalLink,
   ChevronRight, Download, ShieldCheck, ArrowRight,
 } from "lucide-react";

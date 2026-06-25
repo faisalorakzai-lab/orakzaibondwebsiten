@@ -6,7 +6,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "wouter";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 const EFFECTIVE_DATE  = "8 April 2026";
 

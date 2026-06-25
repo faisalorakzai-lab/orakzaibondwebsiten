@@ -2,7 +2,6 @@ import { useEffect } from "react";
   import { Link } from "wouter";
   import { ExternalLink } from "lucide-react";
   import { motion } from "framer-motion";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
   const GOLD = "linear-gradient(135deg,#BF953F 0%,#FCF6BA 30%,#B38728 50%,#FBF5B7 70%,#AA771C 100%)";
   const MIDNIGHT = "#05060A";

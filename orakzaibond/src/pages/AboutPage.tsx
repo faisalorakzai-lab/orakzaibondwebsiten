@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { useWelfareMetrics } from "@/hooks/useWelfareMetrics";
 import { useSocialStats } from "@/hooks/useSocialStats";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 /* ── Animation Variants ────────────────────────────────────────────── */
 const fadeUp = {

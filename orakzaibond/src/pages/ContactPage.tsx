@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import ContactSection from "@/components/ContactSection";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 export default function ContactPage() {
   useEffect(() => {

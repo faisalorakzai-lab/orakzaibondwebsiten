@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import ResourcesSection from "@/components/ResourcesSection";
 import SecuritySection from "@/components/SecuritySection";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 export default function DocumentsPage() {
   useEffect(() => {

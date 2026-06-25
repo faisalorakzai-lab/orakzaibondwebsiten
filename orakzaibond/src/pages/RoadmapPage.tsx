@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import Roadmap from "@/components/Roadmap";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 export default function RoadmapPage() {
   useEffect(() => {

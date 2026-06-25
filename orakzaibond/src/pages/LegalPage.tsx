@@ -7,7 +7,6 @@ import {
   Download, BadgeCheck, BookOpen, Award,
 } from "lucide-react";
 import { useLiveBlockchainData } from "@/hooks/useLiveBlockchainData";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 const OKBOND_CONTRACT = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
 const POLYGONSCAN_URL = `https://polygonscan.com/token/${OKBOND_CONTRACT}`;

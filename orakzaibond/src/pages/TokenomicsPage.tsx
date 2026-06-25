@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import Tokenomics from "@/components/Tokenomics";
-import { useSEO, PAGE_SEO } from "@/components/SEO";
 
 export default function TokenomicsPage() {
   useEffect(() => {
