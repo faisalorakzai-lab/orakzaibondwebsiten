@@ -1,238 +1,353 @@
 import { useEffect } from "react";
-  import { motion } from "framer-motion";
-  import { Link } from "wouter";
-  import { ExternalLink, ChevronRight, ArrowRight } from "lucide-react";
+    import { motion } from "framer-motion";
+    import { Link } from "wouter";
+    import { ExternalLink, ChevronRight, ArrowRight } from "lucide-react";
 
-  const GOLD = "linear-gradient(135deg,#BF953F 0%,#FCF6BA 30%,#B38728 50%,#FBF5B7 70%,#AA771C 100%)";
-  const MIDNIGHT = "#05060A";
-  const TODAY = "2026-06-25";
+    const GOLD = "linear-gradient(135deg,#BF953F 0%,#FCF6BA 30%,#B38728 50%,#FBF5B7 70%,#AA771C 100%)";
+    const MIDNIGHT = "#05060A";
+    const TODAY_DATE = "2026-06-26";
 
-  function useSeoHead() {
-    useEffect(() => {
-      const prev = document.title;
-      document.title = "Faisal Orakzai — Founder & CEO of Orakzai Bond | Blockchain Architect";
-      const tags: Array<[string,string,string]> = [
-        ["name","description","Faisal Orakzai is the Founder & CEO of Orakzai Bond (OKBOND) — world's first capital-protected decentralized bond on Polygon. Born April 30, 2006, Orakzai Pakistan. Blockchain architect, DeFi builder, luxury brand founder. Wikidata Q140264666."],
-        ["name","keywords","Faisal Orakzai, Chairman Faisal Orakzai, Faisal Orakzai Orakzai Bond, faisalorakzaii, OKBOND founder, Orakzai Bond CEO, Pakistani blockchain entrepreneur, DeFi founder Pakistan, Malak Faisal Orakzai, Faisal Orakzai blockchain, Wikidata Q140264666"],
-        ["property","og:title","Faisal Orakzai — Founder & CEO of Orakzai Bond | Pakistani Blockchain Architect"],
-        ["property","og:description","Pakistani entrepreneur born 2006. Founder of Orakzai Bond (OKBOND), Shamim Forever & Orakzai Group. Blockchain architect building world's first capital-protected DeFi bond on Polygon. Wikidata Q140264666."],
-        ["property","og:image","https://orakzaibond.com/faisal-orakzai.jpg"],
-        ["property","og:url","https://orakzaibond.com/faisal-orakzai"],
-        ["property","og:type","profile"],
-        ["property","og:site_name","Orakzai Bond"],
-        ["property","profile:first_name","Faisal"],
-        ["property","profile:last_name","Orakzai"],
-        ["property","profile:username","faisalorakzaii"],
-        ["name","twitter:card","summary_large_image"],
-        ["name","twitter:site","@faisalorakzaii"],
-        ["name","twitter:creator","@faisalorakzaii"],
-        ["name","twitter:title","Faisal Orakzai — Founder & CEO, Orakzai Bond"],
-        ["name","twitter:description","Pakistani blockchain architect. Founder of Orakzai Bond (OKBOND), world's first capital-protected DeFi bond on Polygon. Born 2006. Wikidata Q140264666."],
-        ["name","twitter:image","https://orakzaibond.com/faisal-orakzai.jpg"],
-        ["name","robots","index, follow, max-image-preview:large, max-snippet:-1"],
-      ];
-      const added: HTMLMetaElement[] = [];
-      tags.forEach(([attr, key, val]) => {
-        let el = document.querySelector(`meta[${attr}="${key}"]`) as HTMLMetaElement | null;
-        if (!el) { el = document.createElement("meta"); el.setAttribute(attr, key); document.head.appendChild(el); added.push(el); }
-        el.setAttribute("content", val);
-      });
-      let canon = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
-      if (!canon) { canon = document.createElement("link"); canon.setAttribute("rel","canonical"); document.head.appendChild(canon); }
-      canon.setAttribute("href","https://orakzaibond.com/faisal-orakzai");
-
-      const ldId = "faisal-bio-ld";
-      let ld = document.getElementById(ldId) as HTMLScriptElement | null;
-      if (!ld) { ld = document.createElement("script") as HTMLScriptElement; ld.id = ldId; ld.type = "application/ld+json"; document.head.appendChild(ld); }
-      ld.textContent = JSON.stringify({
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "ProfilePage",
-            "@id": "https://orakzaibond.com/faisal-orakzai#profilepage",
-            "url": "https://orakzaibond.com/faisal-orakzai",
-            "name": "Faisal Orakzai — Founder & CEO of Orakzai Bond | Pakistani Blockchain Architect",
-            "description": "Official profile page of Faisal Orakzai, Founder & CEO of Orakzai Bond (OKBOND), Pakistani blockchain architect and entrepreneur. Wikidata Q140264666.",
-            "datePublished": "2026-01-01",
-            "dateModified": TODAY,
-            "inLanguage": "en",
-            "isPartOf": {"@id":"https://orakzaibond.com/#website"},
-            "about": {"@id":"https://www.wikidata.org/wiki/Q140264666"},
-            "mainEntity": {"@id":"https://www.wikidata.org/wiki/Q140264666"},
-            "breadcrumb": {
-              "@type": "BreadcrumbList",
-              "itemListElement": [
-                {"@type":"ListItem","position":1,"name":"Home","item":"https://orakzaibond.com/"},
-                {"@type":"ListItem","position":2,"name":"Faisal Orakzai","item":"https://orakzaibond.com/faisal-orakzai"}
-              ]
-            }
+    // ─── Complete ProfilePage + Person Schema (Shamim Forever Authority Pattern) ───
+    const profilePageSchema = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "ProfilePage",
+          "@id": "https://orakzaibond.com/faisal-orakzai#profilepage",
+          "url": "https://orakzaibond.com/faisal-orakzai",
+          "name": "Faisal Orakzai — Founder & CEO of Orakzai Bond | Pakistani Blockchain Architect",
+          "description": "Official profile of Faisal Orakzai (born 30 April 2006, Tirah, Orakzai). Founder & CEO of Orakzai Bond (OKBOND). Founder & Chairman of Shamim Forever. Stevie® Gold Award winner 2026. Wikidata Q140264666.",
+          "datePublished": "2026-01-01T00:00:00Z",
+          "dateModified": TODAY_DATE + "T00:00:00Z",
+          "inLanguage": "en",
+          "isPartOf": {
+            "@type": "WebSite",
+            "@id": "https://orakzaibond.com/#website",
+            "url": "https://orakzaibond.com",
+            "name": "Orakzai Bond"
           },
-          {
-            "@type": "Person",
-            "@id": "https://www.wikidata.org/wiki/Q140264666",
-            "name": "Faisal Orakzai",
-            "givenName": "Faisal",
-            "familyName": "Orakzai",
-            "additionalName": "Moeen",
-            "honorificPrefix": "Chairman",
-            "alternateName": ["Chairman Faisal Orakzai","Malak Faisal Orakzai","faisalorakzaii","Faisal Orakzai OKBOND"],
-            "disambiguatingDescription": "Pakistani entrepreneur and blockchain architect (born 30 April 2006, Tirah, Orakzai). Founder of Orakzai Bond (OKBOND) and Shamim Forever. Not to be confused with Dr. Faisal Moeen Orakzai, who is a separate individual.",
-            "description": "Faisal Orakzai (born 30 April 2006, Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan) is a Pakistani blockchain architect and serial entrepreneur. Founder & CEO of Orakzai Bond (OKBOND) — the world's first capital-protected decentralized bond on Polygon. Founder & Chairman of Shamim Forever luxury house. Chairman of Orakzai Group. Stevie® Gold Award winner 2026.",
-            "url": "https://orakzaibond.com/faisal-orakzai",
-            "mainEntityOfPage": "https://orakzaibond.com/faisal-orakzai",
-            "image": {"@type":"ImageObject","url":"https://orakzaibond.com/faisal-orakzai.jpg","width":1080,"height":1080,"caption":"Faisal Orakzai — Founder & CEO of Orakzai Bond, Pakistani Blockchain Entrepreneur"},
-            "birthDate": "2006-04-30",
-            "birthPlace": {
-              "@type": "Place",
-              "name": "Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan",
-              "addressRegion": "Khyber Pakhtunkhwa",
-              "addressCountry": "PK",
-              "geo": {"@type":"GeoCoordinates","latitude":33.6,"longitude":70.2}
-            },
-            "nationality": {"@type":"Country","name":"Pakistan"},
-            "gender": "Male",
-            "jobTitle": ["Founder & CEO","Chairman","Blockchain Architect","Quantitative Fintech Engineer"],
-            "award": [
-              "Stevie® Gold Award — Best Young Entrepreneur, 2026 International Business Awards (Orakzai Group SMC)",
-              "NUST 50 Under 50 — Entrepreneurship"
-            ],
-            "worksFor": [
-              {"@type":"Organization","name":"Orakzai Bond","url":"https://orakzaibond.com","@id":"https://orakzaibond.com/#organization","foundingDate":"2026"},
-              {"@type":"Organization","name":"Shamim Forever","url":"https://www.shamimforever.com","foundingDate":"2023"},
-              {"@type":"Organization","name":"Orakzai Group","foundingDate":"2023"}
-            ],
-            "owns": [
-              {"@type":"Organization","name":"Orakzai Bond (OKBOND)","url":"https://orakzaibond.com"},
-              {"@type":"Organization","name":"Shamim Forever","url":"https://www.shamimforever.com"},
-              {"@type":"Organization","name":"Orakzai Group SMC"}
-            ],
-            "alumniOf": {"@type":"CollegeOrUniversity","name":"Ziauddin University","url":"https://zu.edu.pk","address":{"@type":"PostalAddress","addressLocality":"Karachi","addressRegion":"Sindh","addressCountry":"PK"}},
-            "knowsAbout": ["Blockchain Architecture","Decentralized Finance","Smart Contracts","Polygon Network","Capital Protection","Luxury Commerce","Real Asset Tokenization","Quantitative Finance","NFT","Web3","DeFi Protocol Design"],
-            "identifier": [
-              {"@type":"PropertyValue","propertyID":"ORCID","value":"0009-0000-0915-7272","url":"https://orcid.org/0009-0000-0915-7272"},
-              {"@type":"PropertyValue","propertyID":"Wikidata","value":"Q140264666","url":"https://www.wikidata.org/wiki/Q140264666"}
-            ],
-            "sameAs": [
-              "https://www.wikidata.org/wiki/Q140264666",
-              "https://orcid.org/0009-0000-0915-7272",
-              "https://scholar.google.com/citations?user=ER8h90UAAAAJ",
-              "https://www.crunchbase.com/person/faisal-orakzai",
-              "https://www.linkedin.com/in/faisalorakzaii",
-              "https://x.com/faisalorakzaii",
-              "https://www.instagram.com/faisalorakzaii",
-              "https://web.facebook.com/faisalorakzaii",
-              "https://tiktok.com/@chairmanorakzai",
-              "https://github.com/faisalorakzai-lab",
-              "https://linktr.ee/faisalorakzaiofficial",
-              "https://peerlist.io/faisalorakzai",
-              "https://hackernoon.com/u/faisalorakzai",
-              "https://www.genglobal.org/user/faisal1",
-              "https://www.shamimforever.com/faisal-orakzai",
-              "https://en.everybodywiki.com/Faisal_Orakzai",
-              "https://www.f6s.com/faisalorakzai",
-              "https://pa.bio/faisalorakzaii",
-              "https://bio.site/faisalorakzai",
-              "https://www.pinterest.com/faisalorakzaii",
-              "https://theorg.com/org/orakzai-bond?person=faisal-orakzai",
-              "https://orakzaibond.com/founder",
-              "https://www.shamimforever.com/founder"
-            ]
+          "about": { "@id": "https://www.wikidata.org/wiki/Q140264666" },
+          "mainEntity": { "@id": "https://www.wikidata.org/wiki/Q140264666" },
+          "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": "https://orakzaibond.com/faisal-orakzai.jpg",
+            "width": 1080,
+            "height": 1080,
+            "caption": "Faisal Orakzai — Founder & CEO, Orakzai Bond"
           },
-          {
-            "@type": "FAQPage",
-            "mainEntity": [
-              {"@type":"Question","name":"Who is Faisal Orakzai?","acceptedAnswer":{"@type":"Answer","text":"Faisal Orakzai (born April 30, 2006, Orakzai, Pakistan) is a Pakistani blockchain architect and serial entrepreneur — Founder & CEO of Orakzai Bond (OKBOND), the world's first capital-protected decentralized bond on Polygon, and Founder & Chairman of Shamim Forever luxury house."}},
-              {"@type":"Question","name":"What is Faisal Orakzai known for?","acceptedAnswer":{"@type":"Answer","text":"Faisal Orakzai is known for founding Orakzai Bond (OKBOND) in 2026 — the world's first capital-protected DeFi bond on Polygon. He also founded Shamim Forever in 2023, a global digital luxury house, and chairs Orakzai Group."}},
-              {"@type":"Question","name":"What companies did Faisal Orakzai found?","acceptedAnswer":{"@type":"Answer","text":"Faisal Orakzai founded: (1) Orakzai Bond (OKBOND) in 2026 — world's first capital-protected DeFi bond on Polygon; (2) Shamim Forever in 2023 — global digital luxury house; (3) Orakzai Group in 2023 — strategic holding company for blockchain and luxury ventures."}},
-              {"@type":"Question","name":"Where is Faisal Orakzai from?","acceptedAnswer":{"@type":"Answer","text":"Faisal Orakzai is from Orakzai, Khyber Pakhtunkhwa, Pakistan. He is based in Karachi and studied at Ziauddin University."}},
-              {"@type":"Question","name":"Is Faisal Orakzai on Wikipedia?","acceptedAnswer":{"@type":"Answer","text":"Yes. Faisal Orakzai has an official entry on Wikidata (Q140264666) and EverybodyWiki. His ORCID is 0009-0000-0915-7272. He also appears on Crunchbase, TheOrg, F6S, and Y Combinator Startup School."}},
-              {"@type":"Question","name":"What is Faisal Orakzai's social media?","acceptedAnswer":{"@type":"Answer","text":"Official handles: Twitter/X: @faisalorakzaii, Instagram: @faisalorakzaii, TikTok: @chairmanorakzai, LinkedIn: linkedin.com/in/faisalorakzaii, Facebook: facebook.com/faisalorakzaii, GitHub: github.com/faisalorakzai-lab, Linktree: linktr.ee/faisalorakzaiofficial."}},
-              {"@type":"Question","name":"How can I contact Faisal Orakzai?","acceptedAnswer":{"@type":"Answer","text":"Faisal Orakzai can be reached through orakzaibond.com/contact, via LinkedIn at linkedin.com/in/faisalorakzaii, or through X @faisalorakzaii."}},
-              {"@type":"Question","name":"What is Faisal Orakzai's role in Orakzai Bond?","acceptedAnswer":{"@type":"Answer","text":"Faisal Orakzai is the Founder & CEO and Chairman of Orakzai Bond. He architected the OKBOND protocol — the world's first capital-protected decentralized bond on Polygon — combining quantitative fintech infrastructure with real-asset backing."}}
+          "speakable": {
+            "@type": "SpeakableSpecification",
+            "cssSelector": ["h1", "h2", ".fo-description", ".fo-bio"]
+          },
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://orakzaibond.com/" },
+              { "@type": "ListItem", "position": 2, "name": "Faisal Orakzai", "item": "https://orakzaibond.com/faisal-orakzai" }
             ]
           }
-        ]
-      });
+        },
+        {
+          "@type": "Person",
+          "@id": "https://www.wikidata.org/wiki/Q140264666",
+          "name": "Faisal Orakzai",
+          "givenName": "Faisal",
+          "familyName": "Orakzai",
+          "additionalName": "Moeen",
+          "honorificPrefix": "Chairman",
+          "alternateName": [
+            "Chairman Faisal Orakzai",
+            "Malak Faisal Orakzai",
+            "faisalorakzaii",
+            "Faisal Orakzai OKBOND",
+            "Muhammad Faisal Orakzai"
+          ],
+          "disambiguatingDescription": "Pakistani entrepreneur and blockchain architect (born 30 April 2006, Tirah, Orakzai). Founder of Orakzai Bond (OKBOND) and Shamim Forever. Not to be confused with Dr. Faisal Moeen Orakzai, who is a separate individual.",
+          "description": "Faisal Orakzai (born 30 April 2006, Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan) is a Pakistani blockchain architect and serial entrepreneur. Founder & CEO of Orakzai Bond (OKBOND) — the world's first capital-protected decentralized bond on Polygon. Founder & Chairman of Shamim Forever luxury house. Chairman of Orakzai Group SMC. Stevie® Gold Award winner 2026.",
+          "url": "https://orakzaibond.com/faisal-orakzai",
+          "mainEntityOfPage": "https://orakzaibond.com/faisal-orakzai",
+          "image": [
+            {
+              "@type": "ImageObject",
+              "contentUrl": "https://orakzaibond.com/faisal-orakzai.jpg",
+              "url": "https://orakzaibond.com/faisal-orakzai.jpg",
+              "width": 1080, "height": 1080,
+              "caption": "Faisal Orakzai — Founder & CEO of Orakzai Bond, Pakistani Blockchain Entrepreneur",
+              "name": "Faisal Orakzai official portrait"
+            },
+            {
+              "@type": "ImageObject",
+              "contentUrl": "https://www.shamimforever.com/founder-faisal-orakzai.jpg",
+              "url": "https://www.shamimforever.com/founder-faisal-orakzai.jpg",
+              "width": 800, "height": 800,
+              "caption": "Faisal Orakzai — Founder & Chairman, Shamim Forever & Orakzai Bond",
+              "name": "Faisal Orakzai Shamim Forever portrait"
+            },
+            {
+              "@type": "ImageObject",
+              "contentUrl": "https://orakzaibond.com/founder-portrait.png",
+              "url": "https://orakzaibond.com/founder-portrait.png",
+              "width": 800, "height": 800,
+              "caption": "Faisal Orakzai — Blockchain Architect",
+              "name": "Faisal Orakzai founder portrait"
+            }
+          ],
+          "birthDate": "2006-04-30",
+          "birthPlace": {
+            "@type": "Place",
+            "name": "Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan",
+            "addressRegion": "Khyber Pakhtunkhwa",
+            "addressCountry": "PK",
+            "geo": { "@type": "GeoCoordinates", "latitude": 33.6, "longitude": 70.2 }
+          },
+          "nationality": { "@type": "Country", "name": "Pakistan" },
+          "gender": "Male",
+          "knowsLanguage": [
+            { "@type": "Language", "name": "English", "alternateName": "en" },
+            { "@type": "Language", "name": "Urdu", "alternateName": "ur" },
+            { "@type": "Language", "name": "Pashto", "alternateName": "ps" }
+          ],
+          "jobTitle": ["Founder & CEO", "Chairman", "Blockchain Architect", "Quantitative Fintech Engineer"],
+          "hasOccupation": [
+            {
+              "@type": "Occupation",
+              "name": "Entrepreneur",
+              "occupationLocation": { "@type": "Country", "name": "Pakistan" },
+              "description": "Founder and builder of sovereign blockchain and luxury enterprises"
+            },
+            {
+              "@type": "Occupation",
+              "name": "Blockchain Architect",
+              "occupationLocation": { "@type": "Country", "name": "Pakistan" },
+              "description": "Designs and deploys Polygon-based DeFi protocols and smart contract systems"
+            },
+            {
+              "@type": "Occupation",
+              "name": "Quantitative Fintech Engineer",
+              "occupationLocation": { "@type": "Country", "name": "Pakistan" },
+              "description": "Builds institutional-grade fintech and capital protection infrastructure"
+            }
+          ],
+          "affiliation": [
+            { "@type": "Organization", "name": "Orakzai Bond", "url": "https://orakzaibond.com" },
+            { "@type": "Organization", "name": "Shamim Forever", "url": "https://www.shamimforever.com" },
+            { "@type": "Organization", "name": "Orakzai Group SMC" }
+          ],
+          "memberOf": {
+            "@type": "Organization",
+            "name": "Orakzai Group SMC",
+            "description": "Multi-sector international conglomerate founded by Faisal Orakzai"
+          },
+          "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "Ziauddin University",
+            "url": "https://zu.edu.pk",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Karachi",
+              "addressRegion": "Sindh",
+              "addressCountry": "PK"
+            }
+          },
+          "award": [
+            "Stevie® Gold Award — Best Young Entrepreneur, 2026 International Business Awards (Orakzai Group SMC)",
+            "NUST 50 Under 50 — Entrepreneurship",
+            "2026 International Business Awards Nominee — Pioneering Decentralized Financial Infrastructure and Digital Luxury Ecosystems"
+          ],
+          "knowsAbout": [
+            "Blockchain Architecture",
+            "Quantitative Fintech",
+            "Decentralized Finance",
+            "Capital Protection Instruments",
+            "Asset Management",
+            "Luxury Commerce",
+            "NFT Technology",
+            "Polygon Blockchain",
+            "DeFi Protocol Design",
+            "Smart Contracts",
+            "Tokenomics",
+            "Enterprise Automation",
+            "Real-World Asset Tokenization",
+            "Cryptographic Provenance",
+            "Sovereign Digital Networks",
+            "Pakistani DeFi"
+          ],
+          "worksFor": [
+            {
+              "@type": "Organization",
+              "@id": "https://orakzaibond.com/#organization",
+              "name": "Orakzai Bond",
+              "url": "https://orakzaibond.com"
+            },
+            {
+              "@type": "Organization",
+              "@id": "https://www.shamimforever.com/#organization",
+              "name": "Shamim Forever",
+              "url": "https://www.shamimforever.com"
+            }
+          ],
+          "owns": [
+            {
+              "@type": "Organization",
+              "name": "Orakzai Bond (OKBOND)",
+              "url": "https://orakzaibond.com",
+              "foundingDate": "2026"
+            },
+            {
+              "@type": "Organization",
+              "name": "Shamim Forever",
+              "url": "https://www.shamimforever.com",
+              "foundingDate": "2023"
+            },
+            { "@type": "Organization", "name": "Orakzai Group SMC" }
+          ],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "corporate",
+            "email": "info@orakzaibond.com",
+            "availableLanguage": ["English", "Urdu"]
+          },
+          "identifier": [
+            {
+              "@type": "PropertyValue",
+              "propertyID": "Wikidata",
+              "value": "Q140264666",
+              "url": "https://www.wikidata.org/wiki/Q140264666"
+            },
+            {
+              "@type": "PropertyValue",
+              "propertyID": "ORCID",
+              "value": "0009-0000-0915-7272",
+              "url": "https://orcid.org/0009-0000-0915-7272"
+            }
+          ],
+          "sameAs": [
+            "https://www.wikidata.org/wiki/Q140264666",
+            "https://orcid.org/0009-0000-0915-7272",
+            "https://www.crunchbase.com/person/faisal-orakzai",
+            "https://x.com/faisalorakzaii",
+            "https://www.linkedin.com/in/faisalorakzaii",
+            "https://www.instagram.com/faisalorakzaii",
+            "https://web.facebook.com/faisalorakzaii",
+            "https://tiktok.com/@chairmanorakzai",
+            "https://github.com/faisalorakzai-lab",
+            "https://scholar.google.com/citations?user=ER8h90UAAAAJ",
+            "https://linktr.ee/faisalorakzaiofficial",
+            "https://www.f6s.com/faisalorakzai",
+            "https://peerlist.io/faisalorakzai",
+            "https://hackernoon.com/u/faisalorakzai",
+            "https://www.pinterest.com/faisalorakzaii",
+            "https://orakzaibond.com/faisal-orakzai",
+            "https://www.shamimforever.com/faisal-orakzai",
+            "https://www.shamimforever.com/founder",
+            "https://www.prlog.org/13154317-young-pakistani-entrepreneur-expands-global-vision-through-okbond-and-shamim-forever.html"
+          ]
+        }
+      ]
+    };
 
-      return () => {
-        document.title = prev;
-        if (ld) ld.remove();
-        added.forEach(el => el.remove());
-      };
-    }, []);
-  }
+    const faqSchema = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Who is Faisal Orakzai?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Faisal Orakzai (born 30 April 2006, Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan) is a Pakistani blockchain architect and serial entrepreneur. He is the Founder & CEO of Orakzai Bond (OKBOND) — the world's first capital-protected decentralized bond on Polygon — and Founder & Chairman of Shamim Forever luxury house. He is the Chairman of Orakzai Group SMC and a Stevie® Gold Award winner 2026."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is Orakzai Bond (OKBOND)?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Orakzai Bond (OKBOND) is the world's first capital-protected decentralized bond on the Polygon blockchain. It is a real-asset backed DeFi token founded by Faisal Orakzai that provides sovereign yield with principal protection to investors worldwide."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Where is Faisal Orakzai from?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Faisal Orakzai was born on 30 April 2006 in Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan. He studied at Ziauddin University in Karachi."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What awards has Faisal Orakzai won?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Faisal Orakzai won the Stevie® Gold Award for Best Young Entrepreneur at the 2026 International Business Awards (Orakzai Group SMC). He is also a NUST 50 Under 50 honoree for Entrepreneurship and a 2026 International Business Awards Nominee."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Faisal Orakzai on Wikidata?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Faisal Orakzai is listed on Wikidata as Q140264666. His ORCID is 0009-0000-0915-7272."
+          }
+        }
+      ]
+    };
 
-  const fadeUp = { hidden:{opacity:0,y:28}, show:{opacity:1,y:0,transition:{duration:0.55,ease:"easeOut"}} };
-  const stagger = { hidden:{}, show:{transition:{staggerChildren:0.07}} };
+    function useSeoHead() {
+      useEffect(() => {
+        const prev = document.title;
+        document.title = "Faisal Orakzai — Founder & CEO of Orakzai Bond | Blockchain Architect";
 
-  const TIMELINE = [
-    {year:"2018",title:"The Foundation",    body:"Entered Real Estate, building the initial vision for asset-backed wealth creation across Pakistan."},
-    {year:"2021",title:"Test of Character", body:"Amid a global market crash, chose character over capital — paused operations to personally ensure investors faced zero loss."},
-    {year:"2023",title:"Empire Begins",     body:"Founded Shamim Forever (global luxury house) and Orakzai Group — building institutions designed to last generations."},
-    {year:"2026",title:"OKBOND Launch",     body:"Launched Orakzai Bond — world's first capital-protected decentralized bond on Polygon. The culmination of a decade-long vision."},
-  ];
+        const tags: Array<[string,string,string]> = [
+          ["name","description","Faisal Orakzai is the Founder & CEO of Orakzai Bond (OKBOND) — world's first capital-protected decentralized bond on Polygon. Born April 30, 2006, Orakzai Pakistan. Blockchain architect, DeFi builder, luxury brand founder. Wikidata Q140264666."],
+          ["name","keywords","Faisal Orakzai, Chairman Faisal Orakzai, Faisal Orakzai Orakzai Bond, faisalorakzaii, OKBOND founder, Orakzai Bond CEO, Pakistani blockchain entrepreneur, DeFi founder Pakistan, Malak Faisal Orakzai, Faisal Orakzai blockchain, Wikidata Q140264666, Faisal Orakzai ORCID, Faisal Orakzai Shamim Forever"],
+          ["property","og:title","Faisal Orakzai — Founder & CEO of Orakzai Bond | Pakistani Blockchain Architect"],
+          ["property","og:description","Pakistani entrepreneur born 2006. Founder of Orakzai Bond (OKBOND), Shamim Forever & Orakzai Group. Blockchain architect building world's first capital-protected DeFi bond on Polygon. Wikidata Q140264666."],
+          ["property","og:image","https://orakzaibond.com/faisal-orakzai.jpg"],
+          ["property","og:url","https://orakzaibond.com/faisal-orakzai"],
+          ["property","og:type","profile"],
+          ["property","og:site_name","Orakzai Bond"],
+          ["property","profile:first_name","Faisal"],
+          ["property","profile:last_name","Orakzai"],
+          ["property","profile:username","faisalorakzaii"],
+          ["name","twitter:card","summary_large_image"],
+          ["name","twitter:site","@faisalorakzaii"],
+          ["name","twitter:creator","@faisalorakzaii"],
+          ["name","twitter:title","Faisal Orakzai — Founder & CEO, Orakzai Bond"],
+          ["name","twitter:description","Pakistani blockchain architect. Founder of Orakzai Bond (OKBOND), world's first capital-protected DeFi bond on Polygon. Born 2006. Wikidata Q140264666."],
+          ["name","twitter:image","https://orakzaibond.com/faisal-orakzai.jpg"],
+          ["name","robots","index, follow, max-image-preview:large, max-snippet:-1"],
+        ];
 
-  const VENTURES = [
-    {name:"Orakzai Bond",  role:"Founder & CEO",     year:"2026",desc:"World's first capital-protected decentralized bond on Polygon. Quantitative fintech + real-asset backing.",url:"https://orakzaibond.com",tags:["DeFi","Blockchain","Polygon"]},
-    {name:"Shamim Forever",role:"Founder & Chairman", year:"2023",desc:"Sovereign digital luxury house — bespoke fragrances, high jewellery, blockchain-verified couture.",url:"https://www.shamimforever.com",tags:["Luxury","E-Commerce","NFT"]},
-    {name:"Orakzai Group", role:"Chairman",            year:"2023",desc:"Strategic holding company overseeing digital innovation, luxury commerce, and blockchain ventures globally.",url:null,tags:["Holdings","Investment","Strategy"]},
-  ];
+        const added: HTMLMetaElement[] = [];
+        tags.forEach(([attr, key, val]) => {
+          let el = document.querySelector(`meta[${attr}="${key}"]`) as HTMLMetaElement | null;
+          if (!el) { el = document.createElement("meta"); el.setAttribute(attr, key); document.head.appendChild(el); added.push(el); }
+          el.setAttribute("content", val);
+        });
 
-  const LINKS = [
-    {l:"LinkedIn",      u:"https://www.linkedin.com/in/faisalorakzaii"},
-    {l:"X / Twitter",  u:"https://x.com/faisalorakzaii"},
-    {l:"Instagram",    u:"https://www.instagram.com/faisalorakzaii"},
-    {l:"TikTok",       u:"https://tiktok.com/@chairmanorakzai"},
-    {l:"Facebook",     u:"https://web.facebook.com/faisalorakzaii"},
-    {l:"GitHub",       u:"https://github.com/faisalorakzai-lab"},
-    {l:"Crunchbase",   u:"https://www.crunchbase.com/person/faisal-orakzai"},
-    {l:"Peerlist",     u:"https://peerlist.io/faisalorakzai"},
-    {l:"HackerNoon",   u:"https://hackernoon.com/u/faisalorakzai"},
-    {l:"Wikidata",     u:"https://www.wikidata.org/wiki/Q140264666"},
-    {l:"ORCID",        u:"https://orcid.org/0009-0000-0915-7272"},
-    {l:"GEN Global",   u:"https://www.genglobal.org/user/faisal1"},
-    {l:"Y Combinator", u:"https://www.startupschool.org/cofounder-matching/candidate/Hm8t79WI2"},
-    {l:"F6S",          u:"https://www.f6s.com/faisalorakzai"},
-    {l:"Linktree",     u:"https://linktr.ee/faisalorakzaiofficial"},
-    {l:"Shamim Forever",u:"https://www.shamimforever.com/faisal-orakzai"},
-    {l:"EverybodyWiki",u:"https://en.everybodywiki.com/Faisal_Orakzai"},
-    {l:"Pinterest",    u:"https://www.pinterest.com/faisalorakzaii"},
-    {l:"TheOrg",       u:"https://theorg.com/org/orakzai-bond?person=faisal-orakzai"},
-    {l:"Gust",         u:"https://gust.com/user/014bee5e-1c09-4f2d-b5ae-f5c937bbcc0e"},
-    {l:"BeBee",        u:"https://bebee.com/pk/people/faisalorakzai"},
-    {l:"pa.bio",       u:"https://pa.bio/faisalorakzaii"},
-    {l:"bio.site",     u:"https://bio.site/faisalorakzai"},
-    {l:"LeetCode",     u:"https://leetcode.com/u/faisalorakzai/"},
-  ];
+        let canon = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+        if (!canon) { canon = document.createElement("link"); canon.setAttribute("rel","canonical"); document.head.appendChild(canon); }
+        canon.setAttribute("href","https://orakzaibond.com/faisal-orakzai");
 
-  const FAQS = [
-    {q:"Who is Faisal Orakzai?",a:"Faisal Orakzai (born April 30, 2006, Orakzai, Pakistan) is a Pakistani blockchain architect and serial entrepreneur. He is the Founder & CEO of Orakzai Bond (OKBOND) — the world's first capital-protected decentralized bond on Polygon blockchain — and Founder & Chairman of Shamim Forever global luxury house."},
-    {q:"What is Faisal Orakzai known for?",a:"Faisal Orakzai is known for founding Orakzai Bond (OKBOND) in 2026 — the world's first capital-protected DeFi bond on Polygon. He also founded Shamim Forever in 2023, a global digital luxury house, and chairs Orakzai Group, a strategic holding company."},
-    {q:"What blockchain projects has Faisal Orakzai built?",a:"Faisal Orakzai architected the OKBOND protocol on Polygon with capital-protected bond tokens, smart contract staking, time-bound liquidity pools, and DeFi lotteries. He also integrated blockchain-verified NFT couture with Shamim Forever luxury house."},
-    {q:"Where can I find Faisal Orakzai's official profiles?",a:"Official profiles: Wikidata Q140264666, ORCID 0009-0000-0915-7272, LinkedIn /in/faisalorakzaii, X @faisalorakzaii, Crunchbase, EverybodyWiki, Peerlist, Linktree. Official websites: orakzaibond.com and shamimforever.com."},
-    {q:"Is Faisal Orakzai on Wikipedia or Wikidata?",a:"Yes. Faisal Orakzai has an official entry on Wikidata (Q140264666) and EverybodyWiki. His ORCID researcher profile is 0009-0000-0915-7272. He also appears on Crunchbase, TheOrg, F6S, and Y Combinator Startup School."},
-    {q:"What companies did Faisal Orakzai found?",a:"Faisal Orakzai founded: (1) Orakzai Bond (OKBOND) in 2026 — world's first capital-protected DeFi bond on Polygon; (2) Shamim Forever in 2023 — global digital luxury house; (3) Orakzai Group in 2023 — strategic holding company for blockchain and luxury ventures globally."},
-    {q:"What is Faisal Orakzai's social media?",a:"Official handles: Twitter/X: @faisalorakzaii, Instagram: @faisalorakzaii, TikTok: @chairmanorakzai, LinkedIn: linkedin.com/in/faisalorakzaii, Facebook: facebook.com/faisalorakzaii, GitHub: github.com/faisalorakzai-lab, Linktree: linktr.ee/faisalorakzaiofficial."},
-    {q:"How can I contact Faisal Orakzai?",a:"Faisal Orakzai can be reached through orakzaibond.com/contact, via LinkedIn at linkedin.com/in/faisalorakzaii, or through X @faisalorakzaii. Business enquiries for Shamim Forever: shamimforever.com."},
-  ];
+        // Inject ProfilePage + Person schema
+        const ldIds = ["faisal-bio-profilepage-ld", "faisal-bio-faq-ld"];
+        const ldData = [profilePageSchema, faqSchema];
+        ldIds.forEach((id, i) => {
+          let ld = document.getElementById(id) as HTMLScriptElement | null;
+          if (!ld) { ld = document.createElement("script") as HTMLScriptElement; ld.id = id; ld.type = "application/ld+json"; document.head.appendChild(ld); }
+          ld.textContent = JSON.stringify(ldData[i]);
+        });
 
-  const ORG_PANEL = [
-    {org:"Orakzai Bond",  role:"Founder & CEO / Chairman",since:"2026",url:"https://orakzaibond.com",      badge:"DeFi · Blockchain · Polygon"},
-    {org:"Shamim Forever",role:"Founder & Chairman",      since:"2023",url:"https://www.shamimforever.com",badge:"Luxury · NFT · E-Commerce"},
-    {org:"Orakzai Group", role:"Chairman",                since:"2023",url:null,                           badge:"Holdings · Investment · Strategy"},
-  ];
-
-  const HERO_STYLE = `
-    .fo-hero-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:280px 1fr;gap:56px;align-items:center;}
-    @media(max-width:768px){
-      .fo-hero-grid{grid-template-columns:1fr;gap:32px;text-align:center;}
-      .fo-hero-portrait{margin:0 auto;}
-      .fo-hero-pills,.fo-hero-stats,.fo-hero-ctas{justify-content:center!important;flex-wrap:wrap;}
-      .fo-h1{font-size:44px!important;}
+        return () => {
+          document.title = prev;
+          added.forEach(el => el.remove());
+          ldIds.forEach(id => document.getElementById(id)?.remove());
+        };
+      }, []);
     }
-  `;
 
-  export default function FaisalOrakzaiBioPage() {
+export default function FaisalOrakzaiBioPage() {
     useSeoHead();
     return (
       <div style={{background:MIDNIGHT,color:"#f3ecd1",minHeight:"100vh",fontFamily:"'Inter',system-ui,sans-serif"}}>
