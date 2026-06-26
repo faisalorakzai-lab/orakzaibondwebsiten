@@ -1,4 +1,4 @@
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import {
   ArrowRight,
@@ -68,7 +68,63 @@ const TIMELINE = [
   },
 ];
 
-export default function FounderPage() {
+
+  const PAGE_SEO = {
+    founder: {
+      title: "Faisal Orakzai — Founder & Chairman | Orakzai Bond (OKBOND)",
+      description:
+        "Muhammad Faisal Orakzai (فیصل اورکزئی) — Pakistani blockchain entrepreneur, Founder & Chairman of Orakzai Group and Orakzai Bond (OKBOND) on Polygon Layer-2. Born 30 April 2006, Orakzai Agency, KPK, Pakistan.",
+    },
+  };
+
+  function useSEO(seo: { title: string; description: string }) {
+    useEffect(() => {
+      if (seo?.title) document.title = seo.title;
+      const meta = document.querySelector('meta[name="description"]');
+      if (meta && seo?.description) meta.setAttribute("content", seo.description);
+      // Inject Person structured data for Google Knowledge Panel
+      const existing = document.getElementById("founder-seo-jsonld");
+      if (existing) existing.remove();
+      const script = document.createElement("script");
+      script.id = "founder-seo-jsonld";
+      script.type = "application/ld+json";
+      script.text = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Person",
+        name: "Muhammad Faisal Orakzai",
+        alternateName: ["Faisal Orakzai", "فیصل اورکزئی", "Faisal Orakzai Pakistan", "Faisal Orakzai Blockchain"],
+        birthDate: "2006-04-30",
+        birthPlace: { "@type": "Place", name: "Orakzai Agency, Tirah, Khyber Pakhtunkhwa, Pakistan" },
+        nationality: "Pakistani",
+        jobTitle: "Founder & Chairman",
+        worksFor: [
+          { "@type": "Organization", name: "Orakzai Group", url: "https://faisalorakzai.com" },
+          { "@type": "Organization", name: "Orakzai Bond", url: "https://orakzaibond.com" },
+          { "@type": "Organization", name: "Shamim Forever", url: "https://www.shamimforever.com" },
+        ],
+        url: "https://orakzaibond.com/founder",
+        image: "https://orakzaibond.com/faisal-orakzai.jpg",
+        sameAs: [
+          "https://faisalorakzai.com/founder",
+          "https://www.shamimforever.com/founder",
+          "https://orakzaibond.com/faisal-orakzai",
+          "https://www.linkedin.com/in/faisalorakzaii",
+          "https://x.com/faisalorakzaii",
+          "https://www.instagram.com/faisalorakzaii",
+          "https://www.wikidata.org/wiki/Q140264666",
+          "https://www.crunchbase.com/person/faisal-orakzai",
+          "https://en.everybodywiki.com/Faisal_Orakzai",
+        ],
+        description:
+          "Pakistani blockchain entrepreneur, Founder of Orakzai Bond (OKBOND) on Polygon Layer-2, Shamim Forever luxury brand. Pioneer in real estate tokenization and AI automation in Pakistan.",
+        knowsAbout: ["Blockchain", "Artificial Intelligence", "Real Estate", "Polygon", "DeFi", "Luxury Brands", "Tokenization", "OKBOND"],
+      });
+      document.head.appendChild(script);
+      return () => { const s = document.getElementById("founder-seo-jsonld"); if (s) s.remove(); };
+    }, []);
+  }
+
+  export default function FounderPage() {
   useSEO(PAGE_SEO.founder);
   return (
     <div
