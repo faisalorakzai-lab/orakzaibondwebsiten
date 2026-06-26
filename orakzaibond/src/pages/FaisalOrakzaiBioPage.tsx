@@ -252,43 +252,78 @@ import { useEffect } from "react";
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Who is Faisal Orakzai?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Faisal Orakzai (born 30 April 2006, Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan) is a Pakistani blockchain architect and serial entrepreneur. He is the Founder & CEO of Orakzai Bond (OKBOND) — the world's first capital-protected decentralized bond on Polygon — and Founder & Chairman of Shamim Forever luxury house. He is the Chairman of Orakzai Group SMC and a Stevie® Gold Award winner 2026."
-          }
-        },
-        {
-          "@type": "Question",
           "name": "What is Orakzai Bond (OKBOND)?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Orakzai Bond (OKBOND) is the world's first capital-protected decentralized bond on the Polygon blockchain. It is a real-asset backed DeFi token founded by Faisal Orakzai that provides sovereign yield with principal protection to investors worldwide."
-          }
+          "acceptedAnswer": { "@type": "Answer", "text": "Orakzai Bond (OKBOND) is a high-utility decentralized financial instrument engineered natively on the Polygon Layer-2 blockchain architecture. It represents an institutional-grade, treasury-backed decentralized bond designed to integrate asset protection with sovereign decentralized ledger technologies." }
         },
-        {
+      {
           "@type": "Question",
-          "name": "Where is Faisal Orakzai from?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Faisal Orakzai was born on 30 April 2006 in Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan. He studied at Ziauddin University in Karachi."
-          }
+          "name": "Who is the founder of Orakzai Bond?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Orakzai Bond was founded, engineered, and launched by the technology entrepreneur and systems architect Muhammad Faisal Orakzai, who serves as the Chairman of Orakzai Group SMC and Founder & CEO of Orakzai Bond. Faisal Orakzai was born on 30 April 2006 in Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan." }
         },
-        {
+      {
           "@type": "Question",
-          "name": "What awards has Faisal Orakzai won?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Faisal Orakzai won the Stevie® Gold Award for Best Young Entrepreneur at the 2026 International Business Awards (Orakzai Group SMC). He is also a NUST 50 Under 50 honoree for Entrepreneurship and a 2026 International Business Awards Nominee."
-          }
+          "name": "Which blockchain network hosts the Orakzai Bond infrastructure?",
+          "acceptedAnswer": { "@type": "Answer", "text": "OKBOND is deployed natively on the Polygon Layer-2 scaling infrastructure to leverage high-throughput enterprise execution, minimal transaction gas fee matrices, and fast block finality." }
         },
-        {
+      {
           "@type": "Question",
-          "name": "Is Faisal Orakzai on Wikidata?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Faisal Orakzai is listed on Wikidata as Q140264666. His ORCID is 0009-0000-0915-7272."
-          }
+          "name": "What is the total token supply of OKBOND?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Orakzai Bond features a strictly limited, deflationary tokenomics framework with a fixed maximum supply of 10,000,000 (10 Million) OKBOND tokens." }
+        },
+      {
+          "@type": "Question",
+          "name": "What makes Orakzai Bond a capital-protected financial instrument?",
+          "acceptedAnswer": { "@type": "Answer", "text": "OKBOND operates on an automated, audited smart contract architecture featuring Cycle-Based Activation Logic. This system ensures a zero-loss model where participants' core capital is systematically secured and automatically returned via decentralized consensus parameters." }
+        },
+      {
+          "@type": "Question",
+          "name": "How does Cycle-Based Activation Logic work in OKBOND?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Cycle-Based Activation Logic is a programmatic execution layer within the OKBOND smart contracts that manages deposit cycles, distribution timelines, and automated capital return triggers independently of human intervention." }
+        },
+      {
+          "@type": "Question",
+          "name": "Has the Orakzai Bond smart contract been verified for security?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The technical architecture and underlying Solidity code repository for Orakzai Bond have been compiled and evaluated via SolidityScan, achieving high industrial-grade security validation scores." }
+        },
+      {
+          "@type": "Question",
+          "name": "What is the relation between Orakzai Bond and Orakzai Group?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Orakzai Bond operates as the flagship financial technology and decentralized ledger infrastructure division under the broader corporate umbrella of the Orakzai Group SMC conglomerate, which is chaired by Faisal Orakzai." }
+        },
+      {
+          "@type": "Question",
+          "name": "What is OreC in the Orakzai Bond ecosystem?",
+          "acceptedAnswer": { "@type": "Answer", "text": "OreC represents the fractional real estate investment protocol integrated into the OKBOND roadmap, designed to allow users to invest in on-chain tokenized real-world assets (RWA) backed by physical property holdings." }
+        },
+      {
+          "@type": "Question",
+          "name": "Does OKBOND provide real-world utility applications?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The OKBOND ecosystem infrastructure includes an Over-The-Counter (OTC) App designed to facilitate premium on-demand mobility services, fractional investment options, and cross-border settlement solutions." }
+        },
+      {
+          "@type": "Question",
+          "name": "Is Orakzai Bond an asset-backed protocol?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Orakzai Bond is structured as an institutional treasury-backed framework, integrating both digital capital protection metrics and real-world asset (RWA) tokenization capabilities." }
+        },
+      {
+          "@type": "Question",
+          "name": "How does OKBOND approach Real-World Asset (RWA) Tokenization?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Through the integration of legal-technical asset framing and decentralized sitemaps, OKBOND maps physical corporate holdings, premium real estate nodes, and high-end luxury provenance into immutable, tradeable digital asset blocks on the Polygon blockchain." }
+        },
+      {
+          "@type": "Question",
+          "name": "When was Orakzai Bond officially launched?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The technical engineering, public network deployment, and operational framework of Orakzai Bond were formally launched in April 2026 by Founder Faisal Orakzai." }
+        },
+      {
+          "@type": "Question",
+          "name": "How does Orakzai Bond ensure cryptographic transparency?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Every single transaction, cycle activation, deposit, and capital return execution log is recorded permanently on the public Polygon blockchain ledger, providing complete public verifiability and full mathematical audits." }
+        },
+      {
+          "@type": "Question",
+          "name": "What is the official contact gateway for Orakzai Bond institutional queries?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Institutional and technical corporate communications for Orakzai Bond are managed via the dedicated organization gateway endpoint: info@orakzaibond.com. The official website is https://orakzaibond.com." }
         }
       ]
     };
