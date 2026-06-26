@@ -177,7 +177,19 @@ import { useEffect } from "react";
               "@type": "Organization",
               "@id": "https://orakzaibond.com/#organization",
               "name": "Orakzai Bond",
-              "url": "https://orakzaibond.com"
+              "alternateName": "OKBOND",
+              "url": "https://orakzaibond.com",
+              "foundingDate": "2026-04-01",
+              "sameAs": [
+                "https://x.com/orakzaibond",
+                "https://www.facebook.com/orakzaibond",
+                "https://www.instagram.com/orakzaibond",
+                "https://www.tiktok.com/@orakzaibond",
+                "https://www.linkedin.com/company/orakzaibond",
+                "https://www.crunchbase.com/organization/orakzai-bond",
+                "https://t.me/orakzaibond",
+                "https://github.com/orakzaibond"
+              ]
             },
             {
               "@type": "Organization",
@@ -446,6 +458,44 @@ import { useEffect } from "react";
         ]
       };
 
+      // ─── Orakzai Bond Organization — all platform sameAs (SF LD[1] pattern) ───
+      const okbondOrgSchema = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Orakzai Bond",
+        "alternateName": "OKBOND",
+        "url": "https://orakzaibond.com",
+        "logo": "https://orakzaibond.com/logo.png",
+        "foundingDate": "2026-04-01",
+        "founder": {
+          "@type": "Person",
+          "@id": "https://www.wikidata.org/wiki/Q140264666",
+          "name": "Muhammad Faisal Orakzai",
+          "jobTitle": "Founder & CEO"
+        },
+        "award": "Stevie® Gold Award 2026 — Best Young Entrepreneur (International Business Awards — Orakzai Group SMC)",
+        "description": "World's first capital-protected decentralized bond on Polygon blockchain. Founded April 2026 by Faisal Orakzai. 10 million fixed supply OKBOND token. Cycle-Based Activation Logic. SolidityScan security verified.",
+        "sameAs": [
+          "https://orakzaibond.com",
+          "https://x.com/orakzaibond",
+          "https://www.facebook.com/orakzaibond",
+          "https://www.instagram.com/orakzaibond",
+          "https://www.tiktok.com/@orakzaibond",
+          "https://www.linkedin.com/company/orakzaibond",
+          "https://www.crunchbase.com/organization/orakzai-bond",
+          "https://www.youtube.com/@orakzaibond",
+          "https://t.me/orakzaibond",
+          "https://www.reddit.com/r/orakzaibond",
+          "https://github.com/orakzaibond",
+          "https://github.com/faisalorakzai-lab",
+          "https://linktr.ee/faisalorakzaiofficial",
+          "https://www.wikidata.org/wiki/Q140264666"
+        ],
+        "knowsAbout": [
+          "Decentralized Finance (DeFi)", "Polygon Blockchain", "Capital Protection",
+          "Cycle-Based Activation Logic", "Real-World Asset Tokenization", "Smart Contract Security"
+        ]
+      };
     function useSeoHead() {
       useEffect(() => {
         const prev = document.title;
@@ -486,11 +536,13 @@ import { useEffect } from "react";
         // Inject ProfilePage + Person schema
         const ldIds = [
             "faisal-bio-profilepage-ld", "faisal-bio-faq-ld",
-            "faisal-bio-standalone-ld", "faisal-bio-breadcrumb-ld", "faisal-bio-faqfaisal-ld"
+            "faisal-bio-standalone-ld", "faisal-bio-breadcrumb-ld",
+            "faisal-bio-faqfaisal-ld", "faisal-bio-okbondorg-ld"
           ];
           const ldData = [
             profilePageSchema, faqSchema,
-            profilePageStandaloneSchema, breadcrumbSchema, faqFaisalSchema
+            profilePageStandaloneSchema, breadcrumbSchema,
+            faqFaisalSchema, okbondOrgSchema
           ];
         ldIds.forEach((id, i) => {
           let ld = document.getElementById(id) as HTMLScriptElement | null;
