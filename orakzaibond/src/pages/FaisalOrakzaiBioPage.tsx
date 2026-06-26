@@ -240,11 +240,21 @@ import { useEffect } from "react";
             "https://orakzaibond.com/faisal-orakzai",
             "https://www.shamimforever.com/faisal-orakzai",
             "https://www.shamimforever.com/founder",
-            "https://www.prlog.org/13154317-young-pakistani-entrepreneur-expands-global-vision-through-okbond-and-shamim-forever.html"
-          ]
-        }
-      ]
-    };
+            "https://www.prlog.org/13154317-young-pakistani-entrepreneur-expands-global-vision-through-okbond-and-shamim-forever.html",
+              "https://www.genglobal.org/user/faisal1",
+              "https://theorg.com/org/orakzai-bond",
+              "https://en.everybodywiki.com/Faisal_Orakzai",
+              "https://www.youtube.com/@faisalorakzaii"
+            ],
+            "hasCredential": [
+              { "@type": "EducationalOccupationalCredential", "credentialCategory": "award", "name": "Stevie® Gold Award — Best Young Entrepreneur 2026" },
+              { "@type": "EducationalOccupationalCredential", "credentialCategory": "award", "name": "NUST 50 Under 50 — Young Entrepreneurship Award" },
+              { "@type": "EducationalOccupationalCredential", "credentialCategory": "membership", "name": "GEN Global Entrepreneurship Network — Featured Founder" },
+              { "@type": "EducationalOccupationalCredential", "credentialCategory": "certification", "name": "Y Combinator Startup School — Certified Founder" }
+            ]
+          }
+        ]
+      };
 
     const faqSchema = {
       "@context": "https://schema.org",
@@ -328,6 +338,114 @@ import { useEffect } from "react";
       ]
     };
 
+      // ─── Standalone ProfilePage (Google KP anchor — SF LD[8] pattern) ───
+      const profilePageStandaloneSchema = {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "@id": "https://orakzaibond.com/faisal-orakzai#profilepage",
+        "url": "https://orakzaibond.com/faisal-orakzai",
+        "name": "Faisal Orakzai — Founder & CEO, Orakzai Bond | Pakistani Blockchain Architect",
+        "dateCreated": "2026-01-01",
+        "dateModified": "2026-06-26",
+        "mainEntity": {
+          "@type": "Person",
+          "@id": "https://orakzaibond.com/faisal-orakzai#person",
+          "name": "Faisal Orakzai",
+          "givenName": "Faisal",
+          "familyName": "Orakzai",
+          "url": "https://orakzaibond.com/faisal-orakzai",
+          "image": {
+            "@type": "ImageObject",
+            "url": "https://orakzaibond.com/faisal-orakzai.jpg",
+            "caption": "Faisal Orakzai — Founder & CEO of Orakzai Bond"
+          },
+          "description": "Faisal Orakzai is the Founder & CEO of Orakzai Bond (OKBOND) — the world's first capital-protected decentralized bond on Polygon blockchain — and Founder & Chairman of Shamim Forever luxury house. Born 30 April 2006, Tirah, Orakzai, Pakistan. Wikidata Q140264666. Stevie® Gold Award 2026 winner.",
+          "jobTitle": "Founder & CEO",
+          "worksFor": {
+            "@type": "Organization",
+            "@id": "https://orakzaibond.com/#organization",
+            "name": "Orakzai Bond"
+          },
+          "nationality": { "@type": "Country", "name": "Pakistan" },
+          "alumniOf": [
+            { "@type": "CollegeOrUniversity", "name": "Ziauddin University", "url": "https://zu.edu.pk" },
+            { "@type": "Organization", "name": "NUST Pakistan" }
+          ],
+          "award": [
+            "Stevie® Gold Award — Best Young Entrepreneur, 2026 International Business Awards",
+            "NUST Pakistan 50 Under 50 Entrepreneurship Award",
+            "GEN Global Entrepreneurship Network — Featured Founder",
+            "Wikidata Verified Public Figure (Q140264666)"
+          ],
+          "hasCredential": [
+            { "@type": "EducationalOccupationalCredential", "credentialCategory": "award", "name": "Stevie® Gold Award — Best Young Entrepreneur 2026" },
+            { "@type": "EducationalOccupationalCredential", "credentialCategory": "award", "name": "NUST 50 Under 50 — Young Entrepreneur" },
+            { "@type": "EducationalOccupationalCredential", "credentialCategory": "membership", "name": "GEN Global Entrepreneurship Network Member" },
+            { "@type": "EducationalOccupationalCredential", "credentialCategory": "certification", "name": "Y Combinator Startup School" }
+          ],
+          "sameAs": [
+            "https://www.wikidata.org/wiki/Q140264666",
+            "https://orcid.org/0009-0000-0915-7272",
+            "https://www.crunchbase.com/person/faisal-orakzai",
+            "https://hackernoon.com/u/faisalorakzai",
+            "https://www.genglobal.org/user/faisal1",
+            "https://theorg.com/org/orakzai-bond",
+            "https://en.everybodywiki.com/Faisal_Orakzai",
+            "https://www.linkedin.com/in/faisalorakzaii",
+            "https://orakzaibond.com/faisal-orakzai",
+            "https://www.shamimforever.com/faisal-orakzai",
+            "https://www.shamimforever.com/founder"
+          ]
+        },
+        "speakable": {
+          "@type": "SpeakableSpecification",
+          "cssSelector": ["h1", ".fo-description", ".fo-bio", ".faq-answer"]
+        }
+      };
+
+      // ─── BreadcrumbList (standalone — SF LD[9] pattern) ───
+      const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://orakzaibond.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Faisal Orakzai", "item": "https://orakzaibond.com/faisal-orakzai" }
+        ]
+      };
+
+      // ─── Person-focused FAQPage (SF LD[10] pattern — KP description signal) ───
+      const faqFaisalSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Who is Faisal Orakzai?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Faisal Orakzai is the Founder & CEO of Orakzai Bond (OKBOND) — Pakistan's first institutional capital-protected decentralized bond on Polygon blockchain — and Founder & Chairman of Shamim Forever luxury house and Orakzai Group SMC. Born 30 April 2006, Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan. Wikidata Q140264666. Stevie® Gold Award 2026 winner." }
+          },
+          {
+            "@type": "Question",
+            "name": "What are Faisal Orakzai's biggest achievements?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Faisal Orakzai's achievements include: Orakzai Bond (OKBOND) — world's first capital-protected DeFi bond on Polygon; Shamim Forever — Pakistan's first global blockchain luxury house; Stevie® Gold Award 2026; NUST 50 Under 50 Entrepreneurship Award; Wikidata Q140264666 verified public figure; ORCID researcher 0009-0000-0915-7272." }
+          },
+          {
+            "@type": "Question",
+            "name": "What companies does Faisal Orakzai own?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Faisal Orakzai owns: Orakzai Bond (OKBOND) — institutional DeFi bond on Polygon (founded 2026); Shamim Forever — global luxury house for bespoke jewelry, fragrances, and couture (founded 2023); Orakzai Group SMC — the parent conglomerate." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is Faisal Orakzai's educational background?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Faisal Orakzai studied at Ziauddin University, Karachi, Pakistan. He is a NUST Pakistan 50 Under 50 Entrepreneurship honoree and a certified Y Combinator Startup School founder." }
+          },
+          {
+            "@type": "Question",
+            "name": "How can I contact Faisal Orakzai or Orakzai Bond?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Contact Faisal Orakzai and Orakzai Bond at: info@orakzaibond.com. Social: @faisalorakzaii on X (Twitter), LinkedIn, Instagram. Official: https://orakzaibond.com and https://www.shamimforever.com." }
+          }
+        ]
+      };
+
     function useSeoHead() {
       useEffect(() => {
         const prev = document.title;
@@ -366,8 +484,14 @@ import { useEffect } from "react";
         canon.setAttribute("href","https://orakzaibond.com/faisal-orakzai");
 
         // Inject ProfilePage + Person schema
-        const ldIds = ["faisal-bio-profilepage-ld", "faisal-bio-faq-ld"];
-        const ldData = [profilePageSchema, faqSchema];
+        const ldIds = [
+            "faisal-bio-profilepage-ld", "faisal-bio-faq-ld",
+            "faisal-bio-standalone-ld", "faisal-bio-breadcrumb-ld", "faisal-bio-faqfaisal-ld"
+          ];
+          const ldData = [
+            profilePageSchema, faqSchema,
+            profilePageStandaloneSchema, breadcrumbSchema, faqFaisalSchema
+          ];
         ldIds.forEach((id, i) => {
           let ld = document.getElementById(id) as HTMLScriptElement | null;
           if (!ld) { ld = document.createElement("script") as HTMLScriptElement; ld.id = id; ld.type = "application/ld+json"; document.head.appendChild(ld); }
