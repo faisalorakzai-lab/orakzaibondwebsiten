@@ -1,6 +1,39 @@
-User-agent: *
+User-agent: Googlebot
   Allow: /
 
+  User-agent: Googlebot-Image
+  Allow: /
+
+  User-agent: Googlebot-News
+  Allow: /
+
+  User-agent: Bingbot
+  Allow: /
+  Crawl-delay: 5
+
+  User-agent: Applebot
+  Allow: /
+
+  User-agent: facebookexternalhit
+  Allow: /
+
+  User-agent: Twitterbot
+  Allow: /
+
+  User-agent: LinkedInBot
+  Allow: /
+
+  User-agent: WhatsApp
+  Allow: /
+
+  User-agent: Slackbot
+  Allow: /
+
+  User-agent: Discordbot
+  Allow: /
+
+  User-agent: *
+  Allow: /
   Allow: /faisal-orakzai
   Allow: /founder
   Allow: /about
@@ -26,7 +59,6 @@ User-agent: *
   Allow: /press
   Allow: /legal
   Allow: /system
-
   Disallow: /admin
   Disallow: /admin/
   Disallow: /secret-admin
@@ -34,6 +66,7 @@ User-agent: *
   Disallow: /threat-console
   Disallow: /marcus-defense
   Disallow: /profile/
+  Disallow: /api/
 
   User-agent: GPTBot
   Disallow: /
@@ -67,10 +100,7 @@ User-agent: *
   User-agent: DotBot
   Disallow: /
 
-  User-agent: Bingbot
-  Allow: /
-  Crawl-delay: 5
-
   Sitemap: https://orakzaibond.com/sitemap.xml
   Sitemap: https://orakzaibond.com/news-sitemap.xml
+  Host: https://orakzaibond.com
   
