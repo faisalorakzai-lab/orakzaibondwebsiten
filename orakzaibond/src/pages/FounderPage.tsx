@@ -80,6 +80,15 @@ const TIMELINE = [
   function useSEO(seo: { title: string; description: string }) {
     useEffect(() => {
       if (seo?.title) document.title = seo.title;
+      // Set canonical URL
+      let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+      if (!canonical) {
+        canonical = document.createElement('link') as HTMLLinkElement;
+        canonical.rel = 'canonical';
+        document.head.appendChild(canonical);
+      }
+      canonical.href = 'https://orakzaibond.com/founder';
+
       const meta = document.querySelector('meta[name="description"]');
       if (meta && seo?.description) meta.setAttribute("content", seo.description);
       // Inject Person structured data for Google Knowledge Panel
