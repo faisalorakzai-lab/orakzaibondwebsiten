@@ -1,3 +1,4 @@
+import { useSEO, PAGE_SEO } from "@/components/SEO";
 import { motion } from "framer-motion";
 import {
   Shield, CheckCircle, ExternalLink, Lock, AlertTriangle,

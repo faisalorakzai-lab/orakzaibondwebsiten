@@ -1,3 +1,4 @@
+import { useSEO, PAGE_SEO } from "@/components/SEO";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {

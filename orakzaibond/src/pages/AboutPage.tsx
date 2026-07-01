@@ -1,3 +1,4 @@
+import { useSEO, PAGE_SEO } from "@/components/SEO";
 import { useState, useEffect, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";

@@ -1,3 +1,4 @@
+import { useSEO, PAGE_SEO } from "@/components/SEO";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {

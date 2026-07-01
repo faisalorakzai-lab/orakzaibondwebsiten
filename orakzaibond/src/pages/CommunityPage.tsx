@@ -1,3 +1,4 @@
+import { useSEO, PAGE_SEO } from "@/components/SEO";
 import { useEffect } from "react";
 import Community from "@/components/Community";
 

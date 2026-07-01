@@ -1,3 +1,4 @@
+import { useSEO, PAGE_SEO } from "@/components/SEO";
 import { useEffect } from "react";
 import Token from "@/components/Token";
 
