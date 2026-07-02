@@ -23,7 +23,7 @@ import {
 const GOLD_GRADIENT =
   "linear-gradient(135deg, #BF953F 0%, #FCF6BA 30%, #B38728 50%, #FBF5B7 70%, #AA771C 100%)";
 const MIDNIGHT = "#05060A";
-const PORTRAIT_SRC = "/faisal-orakzai.jpg";
+const PORTRAIT_SRC = "/faisal-orakzai-smiling.jpg";
 
 const PILLARS = [
   {
@@ -112,7 +112,11 @@ const TIMELINE = [
           { "@type": "Organization", name: "Shamim Forever", url: "https://www.shamimforever.com" },
         ],
         url: "https://orakzaibond.com/founder",
-        image: "https://orakzaibond.com/faisal-orakzai.jpg",
+        image: [
+          { "@type": "ImageObject", "url": "https://orakzaibond.com/faisal-orakzai-smiling.jpg", "width": 800, "height": 800, "caption": "Faisal Orakzai — Founder & Chairman, smiling portrait", "representativeOfPage": true },
+          { "@type": "ImageObject", "url": "https://orakzaibond.com/faisal-orakzai-kurta.jpg", "width": 800, "height": 1000, "caption": "Faisal Orakzai — Chairman Orakzai, shalwar qameez" },
+          { "@type": "ImageObject", "url": "https://orakzaibond.com/faisal-orakzai-formal.png", "width": 800, "height": 1000, "caption": "Faisal Orakzai — Chairman Orakzai Group, formal suit" }
+        ],
         sameAs: [
           "https://faisalorakzai.com/founder",
           "https://www.shamimforever.com/founder",

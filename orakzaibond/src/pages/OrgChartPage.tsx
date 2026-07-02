@@ -7,7 +7,7 @@ import { useEffect } from "react";
   function useSeoHead() {
     useEffect(() => {
       const prev = document.title;
-      document.title = "Orakzai Bond — Team & Organization Chart | Leadership Structure";
+      document.title = "Team & Organization — Orakzai Bond (OKBOND) | Faisal Orakzai Leadership";
       const ld = document.createElement("script");
       ld.id = "ob-org-ld"; ld.type = "application/ld+json";
       ld.textContent = JSON.stringify({

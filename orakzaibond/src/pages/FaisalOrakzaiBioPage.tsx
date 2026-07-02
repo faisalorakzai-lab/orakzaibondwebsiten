@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
     const GOLD = "linear-gradient(135deg,#BF953F 0%,#FCF6BA 30%,#B38728 50%,#FBF5B7 70%,#AA771C 100%)";
     const MIDNIGHT = "#05060A";
-    const TODAY_DATE = "2026-06-26";
+    const TODAY_DATE = "2026-07-02";
 
     // ─── Complete ProfilePage + Person Schema (Shamim Forever Authority Pattern) ───
     const profilePageSchema = {
@@ -30,10 +30,10 @@ import { useEffect } from "react";
           "mainEntity": { "@id": "https://www.wikidata.org/wiki/Q140264666" },
           "primaryImageOfPage": {
             "@type": "ImageObject",
-            "url": "https://orakzaibond.com/faisal-orakzai.jpg",
-            "width": 1080,
-            "height": 1080,
-            "caption": "Faisal Orakzai — Founder & CEO, Orakzai Bond"
+            "url": "https://orakzaibond.com/faisal-orakzai-smiling.jpg",
+            "width": 800,
+            "height": 800,
+            "caption": "Faisal Orakzai — Founder & CEO, Orakzai Bond, smiling portrait"
           },
           "speakable": {
             "@type": "SpeakableSpecification",
@@ -67,30 +67,11 @@ import { useEffect } from "react";
           "url": "https://orakzaibond.com/faisal-orakzai",
           "mainEntityOfPage": "https://orakzaibond.com/faisal-orakzai",
           "image": [
-            {
-              "@type": "ImageObject",
-              "contentUrl": "https://orakzaibond.com/faisal-orakzai.jpg",
-              "url": "https://orakzaibond.com/faisal-orakzai.jpg",
-              "width": 1080, "height": 1080,
-              "caption": "Faisal Orakzai — Founder & CEO of Orakzai Bond, Pakistani Blockchain Entrepreneur",
-              "name": "Faisal Orakzai official portrait"
-            },
-            {
-              "@type": "ImageObject",
-              "contentUrl": "https://www.shamimforever.com/founder-faisal-orakzai.jpg",
-              "url": "https://www.shamimforever.com/founder-faisal-orakzai.jpg",
-              "width": 800, "height": 800,
-              "caption": "Faisal Orakzai — Founder & Chairman, Shamim Forever & Orakzai Bond",
-              "name": "Faisal Orakzai Shamim Forever portrait"
-            },
-            {
-              "@type": "ImageObject",
-              "contentUrl": "https://orakzaibond.com/founder-portrait.png",
-              "url": "https://orakzaibond.com/founder-portrait.png",
-              "width": 800, "height": 800,
-              "caption": "Faisal Orakzai — Blockchain Architect",
-              "name": "Faisal Orakzai founder portrait"
-            }
+            { "@type": "ImageObject", "contentUrl": "https://orakzaibond.com/faisal-orakzai-smiling.jpg", "url": "https://orakzaibond.com/faisal-orakzai-smiling.jpg", "width": 800, "height": 800, "caption": "Faisal Orakzai — Founder & CEO of Orakzai Bond, smiling portrait", "name": "Faisal Orakzai smiling portrait", "representativeOfPage": true },
+            { "@type": "ImageObject", "contentUrl": "https://orakzaibond.com/faisal-orakzai-kurta.jpg", "url": "https://orakzaibond.com/faisal-orakzai-kurta.jpg", "width": 800, "height": 1000, "caption": "Faisal Orakzai — Chairman Orakzai, shalwar qameez portrait", "name": "Faisal Orakzai shalwar qameez portrait" },
+            { "@type": "ImageObject", "contentUrl": "https://orakzaibond.com/faisal-orakzai-formal.png", "url": "https://orakzaibond.com/faisal-orakzai-formal.png", "width": 800, "height": 1000, "caption": "Faisal Orakzai — Chairman Orakzai Group, formal black suit portrait", "name": "Faisal Orakzai formal portrait" },
+            { "@type": "ImageObject", "contentUrl": "https://orakzaibond.com/faisal-orakzai.jpg", "url": "https://orakzaibond.com/faisal-orakzai.jpg", "width": 1080, "height": 1080, "caption": "Faisal Orakzai — Founder & CEO of Orakzai Bond, official portrait", "name": "Faisal Orakzai official portrait" },
+            { "@type": "ImageObject", "contentUrl": "https://www.shamimforever.com/faisal-orakzai-smiling.jpg", "url": "https://www.shamimforever.com/faisal-orakzai-smiling.jpg", "width": 800, "height": 800, "caption": "Faisal Orakzai — Founder & Chairman, Shamim Forever, smiling portrait", "name": "Faisal Orakzai Shamim Forever smiling portrait" }
           ],
           "birthDate": "2006-04-30",
           "birthPlace": {
@@ -358,7 +339,7 @@ import { useEffect } from "react";
         "url": "https://orakzaibond.com/faisal-orakzai",
         "name": "Faisal Orakzai — Founder & CEO, Orakzai Bond | Pakistani Blockchain Architect",
         "dateCreated": "2026-01-01",
-        "dateModified": "2026-06-26",
+        "dateModified": "2026-07-02",
         "mainEntity": {
           "@type": "Person",
           "@id": "https://orakzaibond.com/faisal-orakzai#person",
@@ -366,11 +347,11 @@ import { useEffect } from "react";
           "givenName": "Faisal",
           "familyName": "Orakzai",
           "url": "https://orakzaibond.com/faisal-orakzai",
-          "image": {
-            "@type": "ImageObject",
-            "url": "https://orakzaibond.com/faisal-orakzai.jpg",
-            "caption": "Faisal Orakzai — Founder & CEO of Orakzai Bond"
-          },
+          "image": [
+            { "@type": "ImageObject", "url": "https://orakzaibond.com/faisal-orakzai-smiling.jpg", "width": 800, "height": 800, "caption": "Faisal Orakzai — Founder & CEO of Orakzai Bond, smiling portrait", "representativeOfPage": true },
+            { "@type": "ImageObject", "url": "https://orakzaibond.com/faisal-orakzai-kurta.jpg", "width": 800, "height": 1000, "caption": "Faisal Orakzai — Chairman Orakzai, shalwar qameez" },
+            { "@type": "ImageObject", "url": "https://orakzaibond.com/faisal-orakzai-formal.png", "width": 800, "height": 1000, "caption": "Faisal Orakzai — Chairman Orakzai Group, formal suit" }
+          ],
           "description": "Faisal Orakzai is the Founder & CEO of Orakzai Bond (OKBOND) — the world's first capital-protected decentralized bond on Polygon blockchain — and Founder & Chairman of Shamim Forever luxury house. Born 30 April 2006, Tirah, Orakzai, Pakistan. Wikidata Q140264666. Stevie® Gold Award 2026 winner.",
           "jobTitle": "Founder & CEO",
           "worksFor": {
@@ -506,7 +487,7 @@ import { useEffect } from "react";
           ["name","keywords","Faisal Orakzai, Chairman Faisal Orakzai, Faisal Orakzai Orakzai Bond, faisalorakzaii, OKBOND founder, Orakzai Bond CEO, Pakistani blockchain entrepreneur, DeFi founder Pakistan, Malak Faisal Orakzai, Faisal Orakzai blockchain, Wikidata Q140264666, Faisal Orakzai ORCID, Faisal Orakzai Shamim Forever"],
           ["property","og:title","Faisal Orakzai — Founder & CEO of Orakzai Bond | Pakistani Blockchain Architect"],
           ["property","og:description","Pakistani entrepreneur born 2006. Founder of Orakzai Bond (OKBOND), Shamim Forever & Orakzai Group. Blockchain architect building world's first capital-protected DeFi bond on Polygon. Wikidata Q140264666."],
-          ["property","og:image","https://orakzaibond.com/faisal-orakzai.jpg"],
+          ["property","og:image","https://orakzaibond.com/faisal-orakzai-smiling.jpg"],
           ["property","og:url","https://orakzaibond.com/faisal-orakzai"],
           ["property","og:type","profile"],
           ["property","og:site_name","Orakzai Bond"],
@@ -518,7 +499,7 @@ import { useEffect } from "react";
           ["name","twitter:creator","@faisalorakzaii"],
           ["name","twitter:title","Faisal Orakzai — Founder & CEO, Orakzai Bond"],
           ["name","twitter:description","Pakistani blockchain architect. Founder of Orakzai Bond (OKBOND), world's first capital-protected DeFi bond on Polygon. Born 2006. Wikidata Q140264666."],
-          ["name","twitter:image","https://orakzaibond.com/faisal-orakzai.jpg"],
+          ["name","twitter:image","https://orakzaibond.com/faisal-orakzai-smiling.jpg"],
           ["name","robots","index, follow, max-image-preview:large, max-snippet:-1"],
         ];
 
@@ -573,7 +554,7 @@ export default function FaisalOrakzaiBioPage() {
               <div style={{position:"relative",display:"inline-flex",alignItems:"center",justifyContent:"center"}}>
                 <div style={{position:"absolute",inset:-5,borderRadius:"50%",background:"conic-gradient(from 0deg,#BF953F,#FCF6BA,#B38728,#FBF5B7,#AA771C,#FCF6BA,#BF953F)",filter:"blur(1px)",opacity:0.9}} />
                 <div style={{position:"absolute",inset:4,borderRadius:"50%",background:MIDNIGHT}} />
-                <img src="/faisal-orakzai.jpg" alt="Faisal Orakzai — Founder & CEO of Orakzai Bond, Pakistani Blockchain Entrepreneur"
+                <img src="/faisal-orakzai-smiling.jpg" alt="Faisal Orakzai — Founder & CEO of Orakzai Bond, Pakistani Blockchain Entrepreneur"
                   style={{position:"relative",width:240,height:240,borderRadius:"50%",objectFit:"cover",objectPosition:"top center",margin:14}}
                   loading="eager" />
               </div>

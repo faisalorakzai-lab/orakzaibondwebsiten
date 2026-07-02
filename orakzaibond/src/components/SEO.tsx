@@ -119,13 +119,13 @@ import { useEffect } from "react";
       description:
         "Faisal Orakzai (born 30 April 2006) is a Pakistani blockchain entrepreneur and Founder & CEO of Orakzai Bond (OKBOND). Wikidata Q140264666. ORCID 0009-0000-0915-7272.",
       canonical: BASE_URL + "/faisal-orakzai",
-      ogImage: "https://orakzaibond.com/faisal-orakzai.jpg",
+      ogImage: "https://orakzaibond.com/faisal-orakzai-smiling.jpg",
       ogType: "profile",
       structuredData: {
         "@context": "https://schema.org",
         "@type": "ProfilePage",
         dateCreated: "2026-01-01",
-        dateModified: "2026-06-24",
+        dateModified: "2026-07-02",
         mainEntity: {
           "@type": "Person",
           "@id": "https://orakzaibond.com/faisal-orakzai#person",
@@ -194,8 +194,8 @@ import { useEffect } from "react";
       description:
         "The story of Faisal Orakzai — Pakistani blockchain architect who founded Orakzai Bond (OKBOND), world's first capital-protected DeFi bond on Polygon, at age 20.",
       canonical: BASE_URL + "/founder",
-      ogImage: "https://orakzaibond.com/faisal-orakzai.jpg",
-      ogType: "article",
+      ogImage: "https://orakzaibond.com/faisal-orakzai-smiling.jpg",
+      ogType: "profile",
     },
     about: {
       title: "About Orakzai Bond — OKBOND | Pakistan's DeFi Revolution",
@@ -298,7 +298,7 @@ import { useEffect } from "react";
       description:
         "Meet the Orakzai Bond team. Leadership, advisors, and organization structure behind OKBOND. Founded by Faisal Orakzai.",
       canonical: BASE_URL + "/team",
-      ogImage: "https://orakzaibond.com/orakzai-group-logo.jpg",
+      ogImage: "https://orakzaibond.com/opengraph.jpg",
     },
     vault: {
       title: "Vault — OKBOND Capital Reserve & Real Asset Backing",
