@@ -141,10 +141,12 @@ import { useEffect } from "react";
           ],
           description:
             "Founder & CEO of Orakzai Bond (OKBOND). Pakistani blockchain entrepreneur. Born 30 April 2006.",
-          image: {
-            "@type": "ImageObject",
-            url: "https://orakzaibond.com/faisal-orakzai.jpg",
-          },
+          image: [
+            { "@type": "ImageObject", url: "https://orakzaibond.com/faisal-orakzai-smiling.jpg", width: 800, height: 800, caption: "Faisal Orakzai — Founder & CEO, smiling portrait", representativeOfPage: true },
+            { "@type": "ImageObject", url: "https://orakzaibond.com/faisal-orakzai-kurta.jpg", width: 800, height: 1000, caption: "Faisal Orakzai — Chairman Orakzai, shalwar qameez" },
+            { "@type": "ImageObject", url: "https://orakzaibond.com/faisal-orakzai-formal.png", width: 800, height: 1000, caption: "Faisal Orakzai — Chairman Orakzai Group, formal suit" },
+            { "@type": "ImageObject", url: "https://orakzaibond.com/faisal-orakzai.jpg", width: 1080, height: 1080, caption: "Faisal Orakzai — Founder & CEO of Orakzai Bond official portrait" },
+          ],
           birthDate: "2006-04-30",
           birthPlace: { "@type": "Place", name: "Pakistan", addressCountry: "PK" },
           nationality: { "@type": "Country", name: "Pakistan" },
@@ -178,6 +180,11 @@ import { useEffect } from "react";
             "https://linktr.ee/faisalorakzaiofficial",
             "https://hackernoon.com/u/faisalorakzai",
             "https://www.shamimforever.com/faisal-orakzai",
+            "https://faisalorakzai.vercel.app",
+            "https://www.youtube.com/@faisalorakzai",
+            "https://scholar.google.com/citations?user=ER8h90UAAAAJ",
+            "https://www.f6s.com/faisalorakzai",
+            "https://peerlist.io/faisalorakzai",
           ],
         },
       },
