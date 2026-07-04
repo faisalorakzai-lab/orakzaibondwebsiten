@@ -100,8 +100,9 @@ const TIMELINE = [
       script.text = JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Person",
-        name: "Muhammad Faisal Orakzai",
-        alternateName: ["Faisal Orakzai", "فیصل اورکزئی", "Faisal Orakzai Pakistan", "Faisal Orakzai Blockchain"],
+        "@id": "https://faisalorakzai.com/#person",
+        name: "Faisal Orakzai",
+        alternateName: ["Muhammad Faisal Orakzai", "فیصل اورکزئی", "Faisal Orakzai Pakistan", "Faisal Orakzai Blockchain", "Chairman Faisal Orakzai", "Malak Faisal Orakzai"],
         birthDate: "2006-04-30",
         birthPlace: { "@type": "Place", name: "Orakzai Agency, Tirah, Khyber Pakhtunkhwa, Pakistan" },
         nationality: "Pakistani",
