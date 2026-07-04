@@ -128,19 +128,19 @@ import { useEffect } from "react";
         dateModified: "2026-07-02",
         mainEntity: {
           "@type": "Person",
-          "@id": "https://orakzaibond.com/faisal-orakzai#person",
+          "@id": "https://faisalorakzai.com/#person",
           name: "Faisal Orakzai",
           givenName: "Faisal",
           familyName: "Orakzai",
-          honorificPrefix: "Chairman",
           alternateName: [
+            "Muhammad Faisal Orakzai",
             "Chairman Faisal Orakzai",
             "Malak Faisal Orakzai",
             "faisalorakzaii",
             "Orakzai Bond Founder",
           ],
           description:
-            "Founder & CEO of Orakzai Bond (OKBOND). Pakistani blockchain entrepreneur. Born 30 April 2006.",
+            "Founder & Chairman of Orakzai Bond (OKBOND). Pakistani blockchain entrepreneur. Born 30 April 2006.",
           image: [
             { "@type": "ImageObject", url: "https://orakzaibond.com/faisal-orakzai-smiling.jpg", width: 800, height: 800, caption: "Faisal Orakzai — Founder & CEO, smiling portrait", representativeOfPage: true },
             { "@type": "ImageObject", url: "https://orakzaibond.com/faisal-orakzai-kurta.jpg", width: 800, height: 1000, caption: "Faisal Orakzai — Chairman Orakzai, shalwar qameez" },
@@ -150,7 +150,7 @@ import { useEffect } from "react";
           birthDate: "2006-04-30",
           birthPlace: { "@type": "Place", name: "Pakistan", addressCountry: "PK" },
           nationality: { "@type": "Country", name: "Pakistan" },
-          jobTitle: ["Founder & CEO", "Chairman", "Blockchain Architect"],
+          jobTitle: ["Founder & Chairman", "Blockchain Architect"],
           worksFor: {
             "@type": "Organization",
             name: "Orakzai Bond",
