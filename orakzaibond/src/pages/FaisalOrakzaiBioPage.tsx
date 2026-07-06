@@ -119,17 +119,14 @@ import { useEffect } from "react";
             "name": "Orakzai Group SMC",
             "description": "Multi-sector international conglomerate founded by Faisal Orakzai"
           },
-          "alumniOf": {
-            "@type": "CollegeOrUniversity",
-            "name": "Ziauddin University",
-            "url": "https://zu.edu.pk",
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": "Karachi",
-              "addressRegion": "Sindh",
-              "addressCountry": "PK"
-            }
-          },
+          "alumniOf": [
+            { "@type": "CollegeOrUniversity", "name": "Ziauddin University", "url": "https://www.zu.edu.pk", "description": "Matriculation in Sciences — Islamiat, Pakistan Studies, Education Civics (Board of Secondary Education, Karachi)", "address": { "@type": "PostalAddress", "addressLocality": "Karachi", "addressCountry": "PK" }, "startDate": "2024-04", "endDate": "2026-04" },
+            { "@type": "EducationalOrganization", "name": "Founder Institute", "url": "https://fi.co", "description": "Founder Program — Karachi, South Asia 2026 (Entrepreneurship & Venture Building)", "address": { "@type": "PostalAddress", "addressLocality": "Karachi", "addressCountry": "PK" }, "startDate": "2025-04", "endDate": "2026-09" },
+            { "@type": "EducationalOrganization", "name": "Y Combinator", "url": "https://www.ycombinator.com", "description": "Startup Accelerator Program — Entrepreneurship / Entrepreneurial Studies", "address": { "@type": "PostalAddress", "addressLocality": "San Francisco", "addressRegion": "CA", "addressCountry": "US" }, "startDate": "2026-06" },
+            { "@type": "EducationalOrganization", "name": "Global Self-Education Platform (GSEP)", "description": "Silent Empire Building — self-directed learning from books, mentors, and real-world experience. Skills: Business Analysis, Advertising", "startDate": "2019-01" },
+            { "@type": "EducationalOrganization", "name": "Yahya Public School", "address": { "@type": "PostalAddress", "addressLocality": "Kohat", "addressRegion": "Khyber Pakhtunkhwa", "addressCountry": "PK" } },
+            { "@type": "EducationalOrganization", "name": "Madrassa Mahad-ul-Uleman", "address": { "@type": "PostalAddress", "addressLocality": "Kohat", "addressRegion": "Khyber Pakhtunkhwa", "addressCountry": "PK" } }
+          ],
           "award": [
             "Stevie® Gold Award — Best Young Entrepreneur, 2026 International Business Awards (Orakzai Group SMC)",
             "NUST 50 Under 50 — Entrepreneurship",
@@ -361,8 +358,12 @@ import { useEffect } from "react";
           },
           "nationality": { "@type": "Country", "name": "Pakistan" },
           "alumniOf": [
-            { "@type": "CollegeOrUniversity", "name": "Ziauddin University", "url": "https://zu.edu.pk" },
-            { "@type": "Organization", "name": "NUST Pakistan" }
+            { "@type": "CollegeOrUniversity", "name": "Ziauddin University", "url": "https://www.zu.edu.pk", "description": "Matriculation in Sciences — Islamiat, Pakistan Studies, Education Civics (Board of Secondary Education, Karachi)", "address": { "@type": "PostalAddress", "addressLocality": "Karachi", "addressCountry": "PK" }, "startDate": "2024-04", "endDate": "2026-04" },
+            { "@type": "EducationalOrganization", "name": "Founder Institute", "url": "https://fi.co", "description": "Founder Program — Karachi, South Asia 2026 (Entrepreneurship & Venture Building)", "address": { "@type": "PostalAddress", "addressLocality": "Karachi", "addressCountry": "PK" }, "startDate": "2025-04", "endDate": "2026-09" },
+            { "@type": "EducationalOrganization", "name": "Y Combinator", "url": "https://www.ycombinator.com", "description": "Startup Accelerator Program — Entrepreneurship / Entrepreneurial Studies", "address": { "@type": "PostalAddress", "addressLocality": "San Francisco", "addressRegion": "CA", "addressCountry": "US" }, "startDate": "2026-06" },
+            { "@type": "EducationalOrganization", "name": "Global Self-Education Platform (GSEP)", "description": "Silent Empire Building — self-directed learning from books, mentors, and real-world experience. Skills: Business Analysis, Advertising", "startDate": "2019-01" },
+            { "@type": "EducationalOrganization", "name": "Yahya Public School", "address": { "@type": "PostalAddress", "addressLocality": "Kohat", "addressRegion": "Khyber Pakhtunkhwa", "addressCountry": "PK" } },
+            { "@type": "EducationalOrganization", "name": "Madrassa Mahad-ul-Uleman", "address": { "@type": "PostalAddress", "addressLocality": "Kohat", "addressRegion": "Khyber Pakhtunkhwa", "addressCountry": "PK" } }
           ],
           "award": [
             "Stevie® Gold Award — Best Young Entrepreneur, 2026 International Business Awards",
@@ -627,6 +628,33 @@ export default function FaisalOrakzaiBioPage() {
                     </div>
                     <p style={{color:"#3a3530",fontSize:10,letterSpacing:"0.15em",textTransform:"uppercase",margin:0}}>{o.badge}</p>
                   </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* EDUCATION */}
+        <section style={{padding:"60px 20px",borderTop:"1px solid #111"}}>
+          <div style={{maxWidth:1100,margin:"0 auto"}}>
+            <motion.div initial="hidden" whileInView="show" viewport={{once:true}} variants={stagger}>
+              <motion.p variants={fadeUp} style={{color:"#BF953F",fontSize:10,letterSpacing:"0.4em",textTransform:"uppercase",marginBottom:32}}>Education</motion.p>
+              <div style={{display:"flex",flexDirection:"column",gap:0}}>
+                {[
+                  {name:"Y Combinator",detail:"Startup Accelerator — Entrepreneurship / Entrepreneurial Studies",period:"Jun 2026 – Present"},
+                  {name:"Founder Institute",detail:"Founder Program, Karachi (South Asia 2026) — Venture Building",period:"Apr 2025 – Sep 2026"},
+                  {name:"Ziauddin University",detail:"Matriculation in Sciences — Islamiat, Pakistan Studies, Civics (Board of Secondary Education)",period:"Apr 2024 – Apr 2026"},
+                  {name:"Global Self-Education Platform (GSEP)",detail:"Silent Empire Building — Business Analysis, Advertising",period:"Jan 2019 – Present"},
+                  {name:"Yahya Public School, Kohat",detail:"Early education",period:""},
+                  {name:"Madrassa Mahad-ul-Uleman, Kohat",detail:"Early education",period:""},
+                ].map(e=>(
+                  <div key={e.name} style={{borderTop:"1px solid #111",padding:"18px 0",display:"flex",justifyContent:"space-between",gap:16,flexWrap:"wrap"}}>
+                    <div>
+                      <p style={{color:"#f3ecd1",fontSize:14,fontWeight:500,margin:"0 0 4px"}}>{e.name}</p>
+                      <p style={{color:"#5a554d",fontSize:12,lineHeight:1.6,margin:0}}>{e.detail}</p>
+                    </div>
+                    {e.period && <span style={{color:"#3a3530",fontSize:11,letterSpacing:"0.1em",whiteSpace:"nowrap"}}>{e.period}</span>}
+                  </div>
                 ))}
               </div>
             </motion.div>
