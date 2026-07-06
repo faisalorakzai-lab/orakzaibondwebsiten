@@ -107,6 +107,14 @@ const TIMELINE = [
         birthPlace: { "@type": "Place", name: "Orakzai Agency, Tirah, Khyber Pakhtunkhwa, Pakistan" },
         nationality: "Pakistani",
         jobTitle: "Founder & Chairman",
+        alumniOf: [
+          { "@type": "CollegeOrUniversity", name: "Ziauddin University", url: "https://www.zu.edu.pk", description: "Matriculation in Sciences — Islamiat, Pakistan Studies, Education Civics (Board of Secondary Education, Karachi)", address: { "@type": "PostalAddress", addressLocality: "Karachi", addressCountry: "PK" }, startDate: "2024-04", endDate: "2026-04" },
+          { "@type": "EducationalOrganization", name: "Founder Institute", url: "https://fi.co", description: "Founder Program — Karachi, South Asia 2026 (Entrepreneurship & Venture Building)", address: { "@type": "PostalAddress", addressLocality: "Karachi", addressCountry: "PK" }, startDate: "2025-04", endDate: "2026-09" },
+          { "@type": "EducationalOrganization", name: "Y Combinator", url: "https://www.ycombinator.com", description: "Startup Accelerator Program — Entrepreneurship / Entrepreneurial Studies", address: { "@type": "PostalAddress", addressLocality: "San Francisco", addressRegion: "CA", addressCountry: "US" }, startDate: "2026-06" },
+          { "@type": "EducationalOrganization", name: "Global Self-Education Platform (GSEP)", description: "Silent Empire Building — self-directed learning from books, mentors, and real-world experience. Skills: Business Analysis, Advertising", startDate: "2019-01" },
+          { "@type": "EducationalOrganization", name: "Yahya Public School", address: { "@type": "PostalAddress", addressLocality: "Kohat", addressRegion: "Khyber Pakhtunkhwa", addressCountry: "PK" } },
+          { "@type": "EducationalOrganization", name: "Madrassa Mahad-ul-Uleman", address: { "@type": "PostalAddress", addressLocality: "Kohat", addressRegion: "Khyber Pakhtunkhwa", addressCountry: "PK" } },
+        ],
         worksFor: [
           { "@type": "Organization", name: "Orakzai Group", url: "https://faisalorakzai.com" },
           { "@type": "Organization", name: "Orakzai Bond", url: "https://orakzaibond.com" },
@@ -160,6 +168,8 @@ const TIMELINE = [
         <MissionSection />
         <SectionDivider />
         <TimelineSection />
+        <SectionDivider />
+        <EducationSection />
         <SectionDivider />
         <PillarsSection />
         <SectionDivider />
@@ -634,6 +644,56 @@ function TimelineSection() {
             <TimelineItem key={event.year} event={event} index={i} />
           ))}
         </ol>
+      </div>
+    </section>
+  );
+}
+
+const EDUCATION = [
+  { name: "Y Combinator", detail: "Startup Accelerator — Entrepreneurship / Entrepreneurial Studies", period: "Jun 2026 – Present" },
+  { name: "Founder Institute", detail: "Founder Program, Karachi (South Asia 2026) — Venture Building", period: "Apr 2025 – Sep 2026" },
+  { name: "Ziauddin University", detail: "Matriculation in Sciences — Islamiat, Pakistan Studies, Civics (Board of Secondary Education)", period: "Apr 2024 – Apr 2026" },
+  { name: "Global Self-Education Platform (GSEP)", detail: "Silent Empire Building — Business Analysis, Advertising", period: "Jan 2019 – Present" },
+  { name: "Yahya Public School, Kohat", detail: "Early education", period: "" },
+  { name: "Madrassa Mahad-ul-Uleman, Kohat", detail: "Early education", period: "" },
+];
+
+function EducationSection() {
+  return (
+    <section
+      data-testid="section-education"
+      className="relative mx-auto w-full max-w-4xl px-6 py-24 md:py-32"
+    >
+      <header className="mb-14 text-center md:mb-16">
+        <p style={chapterLabelStyle()} className="mb-3">
+          Education
+        </p>
+        <h2 style={headingStyle()} className="text-4xl md:text-6xl">
+          <span style={goldTextStyle()}>Foundations of Learning</span>
+        </h2>
+      </header>
+      <div className="flex flex-col">
+        {EDUCATION.map((e) => (
+          <div
+            key={e.name}
+            className="flex flex-wrap items-baseline justify-between gap-3 border-t py-5"
+            style={{ borderColor: "rgba(191,149,63,0.18)" }}
+          >
+            <div>
+              <p className="text-sm md:text-base" style={{ color: "#f3ecd1", fontWeight: 500, margin: 0 }}>
+                {e.name}
+              </p>
+              <p className="text-xs md:text-sm mt-1" style={{ color: "rgba(201,194,169,0.7)", lineHeight: 1.6, margin: 0 }}>
+                {e.detail}
+              </p>
+            </div>
+            {e.period && (
+              <span className="text-xs whitespace-nowrap" style={{ color: "rgba(191,149,63,0.75)", letterSpacing: "0.08em" }}>
+                {e.period}
+              </span>
+            )}
+          </div>
+        ))}
       </div>
     </section>
   );
