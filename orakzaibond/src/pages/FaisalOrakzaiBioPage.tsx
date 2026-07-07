@@ -158,16 +158,14 @@ import { useEffect } from "react";
               "alternateName": "OKBOND",
               "url": "https://orakzaibond.com",
               "foundingDate": "2026-04-01",
-              "sameAs": [
-                "https://x.com/orakzaibond",
+              "sameAs":["https://imdb.me/faisalorakzai","https://x.com/orakzaibond",
                 "https://www.facebook.com/orakzaibond",
                 "https://www.instagram.com/orakzaibond",
                 "https://www.tiktok.com/@orakzaibond",
                 "https://www.linkedin.com/company/orakzaibond",
                 "https://www.crunchbase.com/organization/orakzai-bond",
                 "https://t.me/orakzaibond",
-                "https://github.com/orakzaibond"
-              ]
+                "https://github.com/orakzaibond"]
             },
             {
               "@type": "Organization",
@@ -211,8 +209,7 @@ import { useEffect } from "react";
               "url": "https://orcid.org/0009-0000-0915-7272"
             }
           ],
-          "sameAs": [
-            "https://www.wikidata.org/wiki/Q140264666",
+          "sameAs":["https://imdb.me/faisalorakzai","https://www.wikidata.org/wiki/Q140264666",
             "https://orcid.org/0009-0000-0915-7272",
             "https://www.crunchbase.com/person/faisal-orakzai",
             "https://x.com/faisalorakzaii",
@@ -234,8 +231,7 @@ import { useEffect } from "react";
               "https://www.genglobal.org/user/faisal1",
               "https://theorg.com/org/orakzai-bond",
               "https://en.everybodywiki.com/Faisal_Orakzai",
-              "https://www.youtube.com/@faisalorakzaii"
-            ],
+              "https://www.youtube.com/@faisalorakzaii"],
             "hasCredential": [
               { "@type": "EducationalOccupationalCredential", "credentialCategory": "award", "name": "Stevie® Gold Award — Best Young Entrepreneur 2026" },
               { "@type": "EducationalOccupationalCredential", "credentialCategory": "award", "name": "NUST 50 Under 50 — Young Entrepreneurship Award" },
@@ -377,8 +373,7 @@ import { useEffect } from "react";
             { "@type": "EducationalOccupationalCredential", "credentialCategory": "membership", "name": "GEN Global Entrepreneurship Network Member" },
             { "@type": "EducationalOccupationalCredential", "credentialCategory": "certification", "name": "Y Combinator Startup School" }
           ],
-          "sameAs": [
-            "https://www.wikidata.org/wiki/Q140264666",
+          "sameAs":["https://imdb.me/faisalorakzai","https://www.wikidata.org/wiki/Q140264666",
             "https://orcid.org/0009-0000-0915-7272",
             "https://www.crunchbase.com/person/faisal-orakzai",
             "https://hackernoon.com/u/faisalorakzai",
@@ -388,8 +383,7 @@ import { useEffect } from "react";
             "https://www.linkedin.com/in/faisalorakzaii",
             "https://orakzaibond.com/faisal-orakzai",
             "https://www.shamimforever.com/faisal-orakzai",
-            "https://www.shamimforever.com/founder"
-          ]
+            "https://www.shamimforever.com/founder"]
         },
         "speakable": {
           "@type": "SpeakableSpecification",
@@ -457,8 +451,7 @@ import { useEffect } from "react";
         },
         "award": "Stevie® Gold Award 2026 — Best Young Entrepreneur (International Business Awards — Orakzai Group SMC)",
         "description": "World's first capital-protected decentralized bond on Polygon blockchain. Founded April 2026 by Faisal Orakzai. 10 million fixed supply OKBOND token. Cycle-Based Activation Logic. SolidityScan security verified.",
-        "sameAs": [
-          "https://orakzaibond.com",
+        "sameAs":["https://imdb.me/faisalorakzai","https://orakzaibond.com",
           "https://x.com/orakzaibond",
           "https://www.facebook.com/orakzaibond",
           "https://www.instagram.com/orakzaibond",
@@ -471,8 +464,7 @@ import { useEffect } from "react";
           "https://github.com/orakzaibond",
           "https://github.com/faisalorakzai-lab",
           "https://linktr.ee/faisalorakzaiofficial",
-          "https://www.wikidata.org/wiki/Q140264666"
-        ],
+          "https://www.wikidata.org/wiki/Q140264666"],
         "knowsAbout": [
           "Decentralized Finance (DeFi)", "Polygon Blockchain", "Capital Protection",
           "Cycle-Based Activation Logic", "Real-World Asset Tokenization", "Smart Contract Security"
