@@ -11,7 +11,7 @@ import {
   Linkedin,
   Facebook,
   Instagram,
-  Send,
+  Send
 } from "lucide-react";
 
 /* =============================================================================
@@ -29,43 +29,43 @@ const PILLARS = [
   {
     icon: Network,
     name: "OSG Infrastructure",
-    description: "Proprietary Layer-1 grid for absolute digital autonomy.",
+    description: "Proprietary Layer-1 grid for absolute digital autonomy."
   },
   {
     icon: BrainCircuit,
     name: "OrakzaiX (Marcus AI)",
     description:
-      "Level-9 autonomous intelligence engine governing global liquidity and risk management.",
+      "Level-9 autonomous intelligence engine governing global liquidity and risk management."
   },
   {
     icon: Globe2,
     name: "The Global Super-Ecosystem",
     description:
-      "A multi-sector portfolio spanning Smart-City Development (OPC) and Autonomous Transport (OTC).",
-  },
+      "A multi-sector portfolio spanning Smart-City Development (OPC) and Autonomous Transport (OTC)."
+  }
 ];
 
 const TIMELINE = [
   {
     year: "2018",
     title: "The Foundation",
-    body: "Entered the Real Estate sector, building the initial vision for asset-backed wealth.",
+    body: "Entered the Real Estate sector, building the initial vision for asset-backed wealth."
   },
   {
     year: "2021",
     title: "The Test of Character",
-    body: "Amidst a global market crash, Faisal chose Character over Capital. To ensure his investors faced zero loss, he paused operations and returned to professional employment to personally stabilize financial obligations.",
+    body: "Amidst a global market crash, Faisal chose Character over Capital. To ensure his investors faced zero loss, he paused operations and returned to professional employment to personally stabilize financial obligations."
   },
   {
     year: "2023",
     title: "The Rise of an Empire",
-    body: "Armed with raw grit and a decade of experience, Faisal laid the cornerstone of the Orakzai Group — a global conglomerate designed to be unshakeable.",
+    body: "Armed with raw grit and a decade of experience, Faisal laid the cornerstone of the Orakzai Group — a global conglomerate designed to be unshakeable."
   },
   {
     year: "2026",
     title: "$OKBOND Launch",
-    body: "The culmination of a 12-year vision, launching the world's first Capital-Protected Decentralized Bond.",
-  },
+    body: "The culmination of a 12-year vision, launching the world's first Capital-Protected Decentralized Bond."
+  }
 ];
 
 
@@ -73,8 +73,8 @@ const TIMELINE = [
     founder: {
       title: "Faisal Orakzai — Founder & Chairman | Orakzai Bond (OKBOND)",
       description:
-        "Muhammad Faisal Orakzai (فیصل اورکزئی) — Pakistani blockchain entrepreneur, Founder & Chairman of Orakzai Group and Orakzai Bond (OKBOND) on Polygon Layer-2. Born 30 April 2006, Orakzai Agency, KPK, Pakistan.",
-    },
+        "Muhammad Faisal Orakzai (فیصل اورکزئی) — Pakistani blockchain entrepreneur, Founder & Chairman of Orakzai Group and Orakzai Bond (OKBOND) on Polygon Layer-2. Born 30 April 2006, Orakzai Agency, KPK, Pakistan."
+    }
   };
 
   function useSEO(seo: { title: string; description: string }) {
@@ -113,12 +113,12 @@ const TIMELINE = [
           { "@type": "EducationalOrganization", name: "Y Combinator", url: "https://www.ycombinator.com", description: "Startup Accelerator Program — Entrepreneurship / Entrepreneurial Studies", address: { "@type": "PostalAddress", addressLocality: "San Francisco", addressRegion: "CA", addressCountry: "US" }, startDate: "2026-06" },
           { "@type": "EducationalOrganization", name: "Global Self-Education Platform (GSEP)", description: "Silent Empire Building — self-directed learning from books, mentors, and real-world experience. Skills: Business Analysis, Advertising", startDate: "2019-01" },
           { "@type": "EducationalOrganization", name: "Yahya Public School", address: { "@type": "PostalAddress", addressLocality: "Kohat", addressRegion: "Khyber Pakhtunkhwa", addressCountry: "PK" } },
-          { "@type": "EducationalOrganization", name: "Madrassa Mahad-ul-Uleman", address: { "@type": "PostalAddress", addressLocality: "Kohat", addressRegion: "Khyber Pakhtunkhwa", addressCountry: "PK" } },
+          { "@type": "EducationalOrganization", name: "Madrassa Mahad-ul-Uleman", address: { "@type": "PostalAddress", addressLocality: "Kohat", addressRegion: "Khyber Pakhtunkhwa", addressCountry: "PK" } }
         ],
         worksFor: [
           { "@type": "Organization", name: "Orakzai Group", url: "https://faisalorakzai.com" },
           { "@type": "Organization", name: "Orakzai Bond", url: "https://orakzaibond.com" },
-          { "@type": "Organization", name: "Shamim Forever", url: "https://www.shamimforever.com" },
+          { "@type": "Organization", name: "Shamim Forever", url: "https://www.shamimforever.com" }
         ],
         url: "https://orakzaibond.com/founder",
         image: [
@@ -140,7 +140,7 @@ const TIMELINE = [
         ],
         description:
           "Pakistani blockchain entrepreneur, Founder of Orakzai Bond (OKBOND) on Polygon Layer-2, Shamim Forever luxury brand. Pioneer in real estate tokenization and AI automation in Pakistan.",
-        knowsAbout: ["Blockchain", "Artificial Intelligence", "Real Estate", "Polygon", "DeFi", "Luxury Brands", "Tokenization", "OKBOND"],
+        knowsAbout: ["Blockchain", "Artificial Intelligence", "Real Estate", "Polygon", "DeFi", "Luxury Brands", "Tokenization", "OKBOND"]
       });
       document.head.appendChild(script);
       return () => { const s = document.getElementById("founder-seo-jsonld"); if (s) s.remove(); };
@@ -156,7 +156,7 @@ const TIMELINE = [
         background: MIDNIGHT,
         color: "#f3ecd1",
         fontFamily:
-          "'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
+          "'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif"
       }}
     >
       <FontInjector />
@@ -187,7 +187,7 @@ function Hero() {
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
-    offset: ["start start", "end start"],
+    offset: ["start start", "end start"]
   });
 
   // Chairman's directive: parallax must be extremely slow — frosted glass
@@ -219,7 +219,7 @@ function Hero() {
               className="block h-px w-10"
               style={{
                 background:
-                  "linear-gradient(90deg, transparent, #FCF6BA, transparent)",
+                  "linear-gradient(90deg, transparent, #FCF6BA, transparent)"
               }}
             />
             Founder Profile
@@ -235,7 +235,7 @@ function Hero() {
               fontFamily: "'Playfair Display', Georgia, serif",
               fontWeight: 500,
               lineHeight: 1.05,
-              letterSpacing: "-0.015em",
+              letterSpacing: "-0.015em"
             }}
             className="text-[2.5rem] md:text-[4.6rem]"
           >
@@ -254,7 +254,7 @@ function Hero() {
             className="mt-7 text-lg italic md:text-xl"
             style={{
               fontFamily: "'Playfair Display', Georgia, serif",
-              color: "#d8caa1",
+              color: "#d8caa1"
             }}
           >
             Founder &amp; Chairman, Orakzai Group
@@ -264,7 +264,7 @@ function Hero() {
             className="my-7 h-px w-24"
             style={{
               background:
-                "linear-gradient(90deg, #BF953F, #FCF6BA, transparent)",
+                "linear-gradient(90deg, #BF953F, #FCF6BA, transparent)"
             }}
           />
 
@@ -291,7 +291,7 @@ function Hero() {
               style={{
                 letterSpacing: "0.28em",
                 color: "#c9b87a",
-                transition: "color 240ms ease",
+                transition: "color 240ms ease"
               }}
               onMouseEnter={(e) => (e.currentTarget.style.color = "#FCF6BA")}
               onMouseLeave={(e) => (e.currentTarget.style.color = "#c9b87a")}
@@ -310,7 +310,7 @@ function Hero() {
             transition={{
               duration: 1.4,
               delay: 0.2,
-              ease: [0.22, 1, 0.36, 1],
+              ease: [0.22, 1, 0.36, 1]
             }}
             className="relative mx-auto aspect-[4/5] w-full max-w-[440px]"
           >
@@ -321,7 +321,7 @@ function Hero() {
               style={{
                 background: GOLD_GRADIENT,
                 filter: "blur(22px)",
-                opacity: 0.5,
+                opacity: 0.5
               }}
             />
 
@@ -342,7 +342,7 @@ function Hero() {
                   style={{
                     y: portraitY,
                     scale: portraitScale,
-                    transformOrigin: "center center",
+                    transformOrigin: "center center"
                   }}
                   draggable={false}
                   onError={(e) => {
@@ -358,7 +358,7 @@ function Hero() {
                   style={{
                     opacity: overlayOpacity,
                     background:
-                      "linear-gradient(180deg, transparent 50%, rgba(5,6,10,0.85) 100%), radial-gradient(120% 80% at 30% 30%, transparent 0%, rgba(5,6,10,0.4) 80%)",
+                      "linear-gradient(180deg, transparent 50%, rgba(5,6,10,0.85) 100%), radial-gradient(120% 80% at 30% 30%, transparent 0%, rgba(5,6,10,0.4) 80%)"
                   }}
                 />
                 <CornerOrnaments />
@@ -376,7 +376,7 @@ function Hero() {
                   "linear-gradient(135deg, rgba(20,18,12,0.92) 0%, rgba(10,9,6,0.96) 100%)",
                 backdropFilter: "blur(16px)",
                 WebkitBackdropFilter: "blur(16px)",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.5)"
               }}
             >
               <span aria-hidden="true" style={goldRingStyle("9999px")} />
@@ -385,7 +385,7 @@ function Hero() {
                 style={{
                   fontFamily: "'Playfair Display', Georgia, serif",
                   color: "#FCF6BA",
-                  letterSpacing: "0.06em",
+                  letterSpacing: "0.06em"
                 }}
               >
                 EST. 2018 · Orakzai Group
@@ -413,7 +413,7 @@ function CornerOrnaments() {
     { top: 12, left: 12, borders: "border-t border-l" },
     { top: 12, right: 12, borders: "border-t border-r" },
     { bottom: 12, left: 12, borders: "border-b border-l" },
-    { bottom: 12, right: 12, borders: "border-b border-r" },
+    { bottom: 12, right: 12, borders: "border-b border-r" }
   ];
   return (
     <>
@@ -427,7 +427,7 @@ function CornerOrnaments() {
             left: p.left,
             right: p.right,
             bottom: p.bottom,
-            borderColor: "rgba(252,246,186,0.55)",
+            borderColor: "rgba(252,246,186,0.55)"
           }}
         />
       ))}
@@ -471,14 +471,14 @@ function MissionSection() {
               style={{
                 background: GOLD_GRADIENT,
                 boxShadow:
-                  "inset 0 0 0 2px rgba(5,6,10,0.6), 0 0 28px rgba(252,246,186,0.4)",
+                  "inset 0 0 0 2px rgba(5,6,10,0.6), 0 0 28px rgba(252,246,186,0.4)"
               }}
             >
               <span
                 style={{
                   fontFamily: "'Playfair Display', Georgia, serif",
                   fontWeight: 700,
-                  color: MIDNIGHT,
+                  color: MIDNIGHT
                 }}
                 className="text-lg"
               >
@@ -489,7 +489,7 @@ function MissionSection() {
               className="h-px flex-1"
               style={{
                 background:
-                  "linear-gradient(90deg, #BF953F, #FCF6BA, transparent)",
+                  "linear-gradient(90deg, #BF953F, #FCF6BA, transparent)"
               }}
             />
           </div>
@@ -498,7 +498,7 @@ function MissionSection() {
             className="mb-7 text-xl tracking-wide md:text-3xl"
             style={{
               fontFamily: "'Playfair Display', Georgia, serif",
-              color: "#FCF6BA",
+              color: "#FCF6BA"
             }}
           >
             Zero-Loss Paradigm
@@ -530,14 +530,14 @@ function MissionSection() {
             {[
               { label: "Capital Protection", value: "100%" },
               { label: "Network", value: "Polygon" },
-              { label: "Asset Class", value: "RWA-Backed" },
+              { label: "Asset Class", value: "RWA-Backed" }
             ].map((m) => (
               <div key={m.label} className="text-center">
                 <p
                   className="text-2xl md:text-3xl"
                   style={{
-                    ...goldTextStyle(),
-                    fontFamily: "'Playfair Display', Georgia, serif",
+                    ..goldTextStyle(),
+                    fontFamily: "'Playfair Display', Georgia, serif"
                   }}
                 >
                   {m.value}
@@ -546,7 +546,7 @@ function MissionSection() {
                   className="mt-2 text-[10px] uppercase"
                   style={{
                     letterSpacing: "0.22em",
-                    color: "rgba(201,184,122,0.7)",
+                    color: "rgba(201,184,122,0.7)"
                   }}
                 >
                   {m.label}
@@ -567,13 +567,13 @@ function TimelineSection() {
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start 75%", "end 25%"],
+    offset: ["start 75%", "end 25%"]
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 120,
     damping: 28,
-    mass: 0.4,
+    mass: 0.4
   });
 
   const lineHeight = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
@@ -611,7 +611,7 @@ function TimelineSection() {
           className="absolute left-6 top-0 bottom-0 w-px md:left-1/2 md:-translate-x-1/2"
           style={{
             background:
-              "linear-gradient(180deg, transparent 0%, rgba(191,149,63,0.18) 8%, rgba(191,149,63,0.18) 92%, transparent 100%)",
+              "linear-gradient(180deg, transparent 0%, rgba(191,149,63,0.18) 8%, rgba(191,149,63,0.18) 92%, transparent 100%)"
           }}
         />
 
@@ -624,7 +624,7 @@ function TimelineSection() {
             background:
               "linear-gradient(180deg, #BF953F 0%, #FCF6BA 30%, #B38728 50%, #FBF5B7 70%, #AA771C 100%)",
             boxShadow:
-              "0 0 8px rgba(252,246,186,0.55), 0 0 22px rgba(191,149,63,0.35)",
+              "0 0 8px rgba(252,246,186,0.55), 0 0 22px rgba(191,149,63,0.35)"
           }}
         />
 
@@ -636,7 +636,7 @@ function TimelineSection() {
             opacity: glowOpacity,
             background:
               "radial-gradient(circle, rgba(252,246,186,0.55) 0%, rgba(191,149,63,0.25) 40%, transparent 70%)",
-            filter: "blur(8px)",
+            filter: "blur(8px)"
           }}
         />
 
@@ -656,7 +656,7 @@ const EDUCATION = [
   { name: "Ziauddin University", detail: "Matriculation in Sciences — Islamiat, Pakistan Studies, Civics (Board of Secondary Education)", period: "Apr 2024 – Apr 2026" },
   { name: "Global Self-Education Platform (GSEP)", detail: "Silent Empire Building — Business Analysis, Advertising", period: "Jan 2019 – Present" },
   { name: "Yahya Public School, Kohat", detail: "Early education", period: "" },
-  { name: "Madrassa Mahad-ul-Uleman, Kohat", detail: "Early education", period: "" },
+  { name: "Madrassa Mahad-ul-Uleman, Kohat", detail: "Early education", period: "" }
 ];
 
 function EducationSection() {
@@ -702,7 +702,7 @@ function EducationSection() {
 
 function TimelineItem({
   event,
-  index,
+  index
 }: {
   event: (typeof TIMELINE)[number];
   index: number;
@@ -728,14 +728,14 @@ function TimelineItem({
             boxShadow:
               "0 0 0 4px " +
               MIDNIGHT +
-              ", 0 0 0 5px rgba(191,149,63,0.45), 0 0 22px rgba(252,246,186,0.55)",
+              ", 0 0 0 5px rgba(191,149,63,0.45), 0 0 22px rgba(252,246,186,0.55)"
           }}
         />
         <span
           className="relative h-2 w-2 rounded-full"
           style={{
             background: MIDNIGHT,
-            boxShadow: "inset 0 0 4px rgba(252,246,186,0.4)",
+            boxShadow: "inset 0 0 4px rgba(252,246,186,0.4)"
           }}
         />
       </span>
@@ -756,7 +756,7 @@ function TimelineItem({
             WebkitBackgroundClip: "text",
             backgroundClip: "text",
             WebkitTextFillColor: "transparent",
-            letterSpacing: "-0.02em",
+            letterSpacing: "-0.02em"
           }}
         >
           {event.year}
@@ -765,7 +765,7 @@ function TimelineItem({
           className="mt-3 text-2xl md:text-3xl"
           style={{
             fontFamily: "'Playfair Display', Georgia, serif",
-            color: "#f3ecd1",
+            color: "#f3ecd1"
           }}
         >
           {event.title}
@@ -825,7 +825,7 @@ function PillarsSection() {
               transition={{
                 duration: 0.85,
                 delay: i * 0.12,
-                ease: [0.22, 1, 0.36, 1],
+                ease: [0.22, 1, 0.36, 1]
               }}
               whileHover={{ y: -6 }}
               className="group flex flex-col p-8 md:p-10"
@@ -838,7 +838,7 @@ function PillarsSection() {
                     className="relative flex h-14 w-14 items-center justify-center rounded-full"
                     style={{
                       background:
-                        "linear-gradient(135deg, rgba(191,149,63,0.18) 0%, rgba(170,119,28,0.08) 100%)",
+                        "linear-gradient(135deg, rgba(191,149,63,0.18) 0%, rgba(170,119,28,0.08) 100%)"
                     }}
                   >
                     <span aria-hidden="true" style={goldRingStyle("9999px")} />
@@ -852,7 +852,7 @@ function PillarsSection() {
                     style={{
                       fontFamily: "'Playfair Display', Georgia, serif",
                       letterSpacing: "0.3em",
-                      color: "#8a6a1c",
+                      color: "#8a6a1c"
                     }}
                     className="text-[11px]"
                   >
@@ -864,7 +864,7 @@ function PillarsSection() {
                   className="mb-4 text-2xl md:text-[1.65rem]"
                   style={{
                     fontFamily: "'Playfair Display', Georgia, serif",
-                    color: "#f3ecd1",
+                    color: "#f3ecd1"
                   }}
                 >
                   {pillar.name}
@@ -874,7 +874,7 @@ function PillarsSection() {
                   className="mb-5 h-px w-12"
                   style={{
                     background:
-                      "linear-gradient(90deg, #BF953F, transparent)",
+                      "linear-gradient(90deg, #BF953F, transparent)"
                   }}
                 />
 
@@ -919,13 +919,13 @@ function ClosingSection() {
             style={{
               fontFamily: "'Playfair Display', Georgia, serif",
               lineHeight: 1.45,
-              color: "#f3ecd1",
+              color: "#f3ecd1"
             }}
           >
             <span
               style={{
-                ...goldTextStyle(),
-                fontFamily: "'Playfair Display', Georgia, serif",
+                ..goldTextStyle(),
+                fontFamily: "'Playfair Display', Georgia, serif"
               }}
               className="text-5xl md:text-7xl"
             >
@@ -935,8 +935,8 @@ function ClosingSection() {
             the fires of resilience and enduring character.
             <span
               style={{
-                ...goldTextStyle(),
-                fontFamily: "'Playfair Display', Georgia, serif",
+                ..goldTextStyle(),
+                fontFamily: "'Playfair Display', Georgia, serif"
               }}
               className="text-5xl md:text-7xl"
             >
@@ -989,7 +989,7 @@ function PageFooter() {
         style={{
           background:
             "linear-gradient(90deg, transparent, rgba(191,149,63,0.55), transparent)",
-          opacity: 0.55,
+          opacity: 0.55
         }}
       />
       <div className="flex flex-col items-center justify-between gap-3 text-center md:flex-row md:text-left">
@@ -998,7 +998,7 @@ function PageFooter() {
           style={{
             fontFamily: "'Playfair Display', Georgia, serif",
             letterSpacing: "0.04em",
-            color: "#c9b87a",
+            color: "#c9b87a"
           }}
         >
           Orakzai Group{" "}
@@ -1024,7 +1024,7 @@ function GoldButton({
   children,
   href,
   testId,
-  large = false,
+  large = false
 }: {
   children: React.ReactNode;
   href?: string;
@@ -1047,7 +1047,7 @@ function GoldButton({
         boxShadow:
           "0 12px 32px -8px rgba(191,149,63,0.55), 0 0 0 1px rgba(252,246,186,0.3) inset",
         transition: "transform 360ms cubic-bezier(0.22,1,0.36,1)",
-        textDecoration: "none",
+        textDecoration: "none"
       }}
       onMouseEnter={(e: any) =>
         (e.currentTarget.style.transform = "translateY(-2px)")
@@ -1059,7 +1059,7 @@ function GoldButton({
         className="absolute inset-0 -translate-x-full transition-transform duration-1000 ease-out group-hover:translate-x-full"
         style={{
           background:
-            "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)",
+            "linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent)"
         }}
       />
       <span
@@ -1092,7 +1092,7 @@ function CrunchbaseBadge() {
         border: "1px solid rgba(255,215,0,0.55)",
         boxShadow:
           "0 0 18px rgba(255,215,0,0.25), 0 0 36px rgba(255,215,0,0.12), 0 6px 18px rgba(0,0,0,0.5)",
-        textDecoration: "none",
+        textDecoration: "none"
       }}
       aria-label="Crunchbase Global Rank #988 — view profile"
     >
@@ -1101,7 +1101,7 @@ function CrunchbaseBadge() {
         style={{
           background:
             "linear-gradient(135deg, #FFD700 0%, #FCF6BA 50%, #BF953F 100%)",
-          boxShadow: "0 0 10px rgba(255,215,0,0.55)",
+          boxShadow: "0 0 10px rgba(255,215,0,0.55)"
         }}
         aria-hidden="true"
       >
@@ -1124,7 +1124,7 @@ function CrunchbaseBadge() {
           className="text-[8px] uppercase"
           style={{
             letterSpacing: "0.28em",
-            color: "rgba(255,215,0,0.7)",
+            color: "rgba(255,215,0,0.7)"
           }}
         >
           Crunchbase Global Rank
@@ -1136,7 +1136,7 @@ function CrunchbaseBadge() {
             letterSpacing: "0.04em",
             textShadow:
               "0 0 8px rgba(255,215,0,0.55), 0 0 16px rgba(255,215,0,0.3)",
-            fontFamily: "'Playfair Display', Georgia, serif",
+            fontFamily: "'Playfair Display', Georgia, serif"
           }}
         >
           #988
@@ -1148,7 +1148,7 @@ function CrunchbaseBadge() {
         className="pointer-events-none absolute inset-0 -translate-x-full rounded-full transition-transform duration-1000 ease-out group-hover:translate-x-full"
         style={{
           background:
-            "linear-gradient(90deg, transparent, rgba(255,215,0,0.18), transparent)",
+            "linear-gradient(90deg, transparent, rgba(255,215,0,0.18), transparent)"
         }}
       />
     </motion.a>
@@ -1167,7 +1167,7 @@ function IntegrityBadge() {
         background:
           "linear-gradient(135deg, rgba(20,18,12,0.65) 0%, rgba(10,9,6,0.8) 100%)",
         backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)"
       }}
     >
       <span aria-hidden="true" style={goldRingStyle("9999px")} />
@@ -1186,7 +1186,7 @@ function IntegrityBadge() {
       </span>
       <span
         className="relative text-[11px] font-medium uppercase"
-        style={{ ...goldTextStyle(), letterSpacing: "0.18em" }}
+        style={{ ..goldTextStyle(), letterSpacing: "0.18em" }}
       >
         Admin-Controlled Integrity Verified
       </span>
@@ -1214,8 +1214,8 @@ function Signature() {
             opacity: 1,
             y: 0,
             filter: "blur(0px)",
-            transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
-          },
+            transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] }
+          }
         }}
         style={{
           fontFamily: "'Mr Dafoe', 'Allura', 'Dancing Script', cursive",
@@ -1234,7 +1234,7 @@ function Signature() {
             "drop-shadow(0 0 10px rgba(252,246,186,0.45)) drop-shadow(0 0 22px rgba(191,149,63,0.35))",
           paddingBottom: "0.18em",
           transform: "rotate(-3deg)",
-          transformOrigin: "center",
+          transformOrigin: "center"
         }}
       >
         Faisal Orakzai
@@ -1275,8 +1275,8 @@ function Signature() {
             visible: {
               pathLength: 1,
               opacity: 1,
-              transition: { duration: 1.6, ease: "easeInOut", delay: 0.6 },
-            },
+              transition: { duration: 1.6, ease: "easeInOut", delay: 0.6 }
+            }
           }}
         />
 
@@ -1292,8 +1292,8 @@ function Signature() {
             visible: {
               pathLength: 1,
               opacity: 1,
-              transition: { duration: 0.8, ease: "easeInOut", delay: 1.6 },
-            },
+              transition: { duration: 0.8, ease: "easeInOut", delay: 1.6 }
+            }
           }}
         />
       </motion.svg>
@@ -1316,22 +1316,22 @@ function SocialBar() {
         <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
           <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
         </svg>
-      ),
+      )
     },
     {
       name: "Telegram",
       href: "https://t.me/FaisalOrakzai1",
-      icon: <Send style={{ width: 20, height: 20 }} strokeWidth={1.6} aria-hidden="true" />,
+      icon: <Send style={{ width: 20, height: 20 }} strokeWidth={1.6} aria-hidden="true" />
     },
     {
       name: "Facebook",
       href: "https://www.facebook.com/faisalorakzaiofficial",
-      icon: <Facebook style={{ width: 20, height: 20 }} strokeWidth={1.6} aria-hidden="true" />,
+      icon: <Facebook style={{ width: 20, height: 20 }} strokeWidth={1.6} aria-hidden="true" />
     },
     {
       name: "Instagram",
       href: "https://www.instagram.com/orakzaifaisal",
-      icon: <Instagram style={{ width: 20, height: 20 }} strokeWidth={1.6} aria-hidden="true" />,
+      icon: <Instagram style={{ width: 20, height: 20 }} strokeWidth={1.6} aria-hidden="true" />
     },
     {
       name: "Crunchbase",
@@ -1342,14 +1342,14 @@ function SocialBar() {
         <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
           <path d="M9.5 8.2c-2.1 0-3.8 1.7-3.8 3.8s1.7 3.8 3.8 3.8c1.3 0 2.4-.6 3.1-1.6l-1.6-.9c-.3.4-.9.7-1.5.7-1.1 0-2-.9-2-2s.9-2 2-2c.6 0 1.1.3 1.5.7l1.6-.9C11.9 8.8 10.8 8.2 9.5 8.2zM16.4 8.2c-.7 0-1.4.2-1.9.6V5.5h-1.8v10.1h1.8v-.4c.5.4 1.2.6 1.9.6 2.1 0 3.8-1.7 3.8-3.8s-1.7-3.8-3.8-3.8zm-.2 5.8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z" />
         </svg>
-      ),
+      )
     },
     {
       name: "LinkedIn",
       href: "https://www.linkedin.com/in/orakzaifaisal",
       badge: "Premium",
-      icon: <Linkedin style={{ width: 20, height: 20 }} strokeWidth={1.6} aria-hidden="true" />,
-    },
+      icon: <Linkedin style={{ width: 20, height: 20 }} strokeWidth={1.6} aria-hidden="true" />
+    }
   ];
 
   return (
@@ -1367,7 +1367,7 @@ function SocialBar() {
         WebkitBackdropFilter: "blur(16px) saturate(140%)",
         border: "1px solid rgba(252,246,186,0.22)",
         boxShadow:
-          "0 12px 36px -12px rgba(191,149,63,0.35), 0 0 0 1px rgba(252,246,186,0.04) inset",
+          "0 12px 36px -12px rgba(191,149,63,0.35), 0 0 0 1px rgba(252,246,186,0.04) inset"
       }}
     >
       <span
@@ -1381,7 +1381,7 @@ function SocialBar() {
             "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
           WebkitMaskComposite: "xor",
           maskComposite: "exclude",
-          opacity: 0.55,
+          opacity: 0.55
         }}
       />
       {SOCIALS.map((s) => (
@@ -1396,7 +1396,7 @@ function SocialBar() {
           style={{
             color: "#c9b87a",
             transition: "all 300ms ease",
-            textDecoration: "none",
+            textDecoration: "none"
           }}
           onMouseEnter={(e) => {
             const el = e.currentTarget as HTMLAnchorElement;
@@ -1426,7 +1426,7 @@ function SocialBar() {
                 color: s.highlight ? "#FFD700" : "#c9b87a",
                 textShadow: s.highlight
                   ? "0 0 8px rgba(255,215,0,0.55)"
-                  : "none",
+                  : "none"
               }}
             >
               {s.badge}
@@ -1454,7 +1454,7 @@ function SectionDivider() {
       style={{
         background:
           "linear-gradient(90deg, transparent 0%, rgba(191,149,63,0.5) 50%, transparent 100%)",
-        opacity: 0.4,
+        opacity: 0.4
       }}
     />
   );
@@ -1468,7 +1468,7 @@ function BackgroundAtmosphere() {
         className="pointer-events-none absolute left-1/2 top-0 -z-0 h-[60vh] w-[120vw] -translate-x-1/2"
         style={{
           background:
-            "radial-gradient(ellipse at center top, rgba(191,149,63,0.10) 0%, rgba(252,246,186,0.04) 30%, transparent 65%)",
+            "radial-gradient(ellipse at center top, rgba(191,149,63,0.10) 0%, rgba(252,246,186,0.04) 30%, transparent 65%)"
         }}
       />
       <div
@@ -1478,7 +1478,7 @@ function BackgroundAtmosphere() {
           opacity: 0.04,
           backgroundImage:
             "linear-gradient(rgba(252,246,186,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(252,246,186,0.6) 1px, transparent 1px)",
-          backgroundSize: "80px 80px",
+          backgroundSize: "80px 80px"
         }}
       />
     </>
@@ -1493,7 +1493,7 @@ function GoldDust({ count = 24 }: { count?: number }) {
         size: Math.random() * 2.2 + 0.6,
         delay: Math.random() * 18,
         duration: 18 + Math.random() * 22,
-        opacity: 0.25 + Math.random() * 0.55,
+        opacity: 0.25 + Math.random() * 0.55
       })),
     [count]
   );
@@ -1524,7 +1524,7 @@ function GoldDust({ count = 24 }: { count?: number }) {
               "radial-gradient(circle, rgba(252,246,186,1) 0%, rgba(191,149,63,0.7) 50%, transparent 100%)",
             boxShadow: "0 0 6px rgba(252,246,186,0.8)",
             opacity: p.opacity,
-            animation: `ok-dust-drift ${p.duration}s linear ${p.delay}s infinite`,
+            animation: `ok-dust-drift ${p.duration}s linear ${p.delay}s infinite`
           }}
         />
       ))}
@@ -1548,7 +1548,7 @@ function goldTextStyle(): React.CSSProperties {
     WebkitBackgroundClip: "text",
     backgroundClip: "text",
     WebkitTextFillColor: "transparent",
-    color: "transparent" as any,
+    color: "transparent" as any
   };
 }
 
@@ -1563,7 +1563,7 @@ function goldRingStyle(radius: string): React.CSSProperties {
       "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
     WebkitMaskComposite: "xor",
     maskComposite: "exclude",
-    pointerEvents: "none",
+    pointerEvents: "none"
   };
 }
 
@@ -1579,16 +1579,16 @@ function glassCardStyle(): React.CSSProperties {
     boxShadow:
       "0 30px 60px -30px rgba(191,149,63,0.25), 0 0 0 1px rgba(252,246,186,0.04) inset",
     transition:
-      "transform 400ms cubic-bezier(0.22,1,0.36,1), box-shadow 400ms cubic-bezier(0.22,1,0.36,1)",
+      "transform 400ms cubic-bezier(0.22,1,0.36,1), box-shadow 400ms cubic-bezier(0.22,1,0.36,1)"
   };
 }
 
 function chapterLabelStyle(): React.CSSProperties {
   return {
-    ...goldTextStyle(),
+    ..goldTextStyle(),
     fontSize: "11px",
     letterSpacing: "0.32em",
-    textTransform: "uppercase",
+    textTransform: "uppercase"
   };
 }
 
@@ -1597,6 +1597,6 @@ function headingStyle(): React.CSSProperties {
     fontFamily: "'Playfair Display', Georgia, serif",
     fontWeight: 500,
     lineHeight: 1.1,
-    letterSpacing: "-0.015em",
+    letterSpacing: "-0.015em"
   };
 }
