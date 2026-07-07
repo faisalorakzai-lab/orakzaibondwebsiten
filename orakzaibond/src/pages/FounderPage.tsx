@@ -127,15 +127,16 @@ const TIMELINE = [
           { "@type": "ImageObject", "url": "https://orakzaibond.com/faisal-orakzai-formal.png", "width": 800, "height": 1000, "caption": "Faisal Orakzai — Chairman Orakzai Group, formal suit" }
         ],
         sameAs: [
+          "https://imdb.me/faisalorakzai",
           "https://faisalorakzai.com/founder",
-          "https://www.shamimforever.com/founder",
-          "https://orakzaibond.com/faisal-orakzai",
-          "https://www.linkedin.com/in/faisalorakzaii",
-          "https://x.com/faisalorakzaii",
-          "https://www.instagram.com/faisalorakzaii",
-          "https://www.wikidata.org/wiki/Q140264666",
-          "https://www.crunchbase.com/person/faisal-orakzai",
-          "https://en.everybodywiki.com/Faisal_Orakzai",
+                    "https://www.shamimforever.com/founder",
+                    "https://orakzaibond.com/faisal-orakzai",
+                    "https://www.linkedin.com/in/faisalorakzaii",
+                    "https://x.com/faisalorakzaii",
+                    "https://www.instagram.com/faisalorakzaii",
+                    "https://www.wikidata.org/wiki/Q140264666",
+                    "https://www.crunchbase.com/person/faisal-orakzai",
+                    "https://en.everybodywiki.com/Faisal_Orakzai"
         ],
         description:
           "Pakistani blockchain entrepreneur, Founder of Orakzai Bond (OKBOND) on Polygon Layer-2, Shamim Forever luxury brand. Pioneer in real estate tokenization and AI automation in Pakistan.",
