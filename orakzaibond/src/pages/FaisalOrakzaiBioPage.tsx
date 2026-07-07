@@ -16,7 +16,6 @@ import { useEffect } from "react";
           "@id": "https://orakzaibond.com/faisal-orakzai#profilepage",
           "url": "https://orakzaibond.com/faisal-orakzai",
           "name": "Faisal Orakzai — Founder & CEO of Orakzai Bond | Pakistani Blockchain Architect",
-          "description": "Official profile of Faisal Orakzai (born 30 April 2006, Tirah, Orakzai). Founder & CEO of Orakzai Bond (OKBOND). Founder & Chairman of Shamim Forever. Stevie® Gold Award winner 2026. Wikidata Q140264666.",
           "datePublished": "2026-01-01T00:00:00Z",
           "dateModified": TODAY_DATE + "T00:00:00Z",
           "inLanguage": "en",
@@ -63,7 +62,6 @@ import { useEffect } from "react";
             "Muhammad Faisal Orakzai"
           ],
           "disambiguatingDescription": "Pakistani entrepreneur and blockchain architect (born 30 April 2006, Tirah, Orakzai). Founder of Orakzai Bond (OKBOND) and Shamim Forever. Not to be confused with Dr. Faisal Moeen Orakzai, who is a separate individual.",
-          "description": "Faisal Orakzai (born 30 April 2006, Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan) is a Pakistani blockchain architect and serial entrepreneur. Founder & CEO of Orakzai Bond (OKBOND) — the world's first capital-protected decentralized bond on Polygon. Founder & Chairman of Shamim Forever luxury house. Chairman of Orakzai Group SMC. Stevie® Gold Award winner 2026.",
           "url": "https://orakzaibond.com/faisal-orakzai",
           "mainEntityOfPage": "https://orakzaibond.com/faisal-orakzai",
           "image": [
@@ -126,11 +124,6 @@ import { useEffect } from "react";
             { "@type": "EducationalOrganization", "name": "Global Self-Education Platform (GSEP)", "description": "Silent Empire Building — self-directed learning from books, mentors, and real-world experience. Skills: Business Analysis, Advertising", "startDate": "2019-01" },
             { "@type": "EducationalOrganization", "name": "Yahya Public School", "address": { "@type": "PostalAddress", "addressLocality": "Kohat", "addressRegion": "Khyber Pakhtunkhwa", "addressCountry": "PK" } },
             { "@type": "EducationalOrganization", "name": "Madrassa Mahad-ul-Uleman", "address": { "@type": "PostalAddress", "addressLocality": "Kohat", "addressRegion": "Khyber Pakhtunkhwa", "addressCountry": "PK" } }
-          ],
-          "award": [
-            "Stevie® Gold Award — Best Young Entrepreneur, 2026 International Business Awards (Orakzai Group SMC)",
-            "NUST 50 Under 50 — Entrepreneurship",
-            "2026 International Business Awards Nominee — Pioneering Decentralized Financial Infrastructure and Digital Luxury Ecosystems"
           ],
           "knowsAbout": [
             "Blockchain Architecture",
@@ -233,8 +226,6 @@ import { useEffect } from "react";
               "https://en.everybodywiki.com/Faisal_Orakzai",
               "https://www.youtube.com/@faisalorakzaii"],
             "hasCredential": [
-              { "@type": "EducationalOccupationalCredential", "credentialCategory": "award", "name": "Stevie® Gold Award — Best Young Entrepreneur 2026" },
-              { "@type": "EducationalOccupationalCredential", "credentialCategory": "award", "name": "NUST 50 Under 50 — Young Entrepreneurship Award" },
               { "@type": "EducationalOccupationalCredential", "credentialCategory": "membership", "name": "GEN Global Entrepreneurship Network — Featured Founder" },
               { "@type": "EducationalOccupationalCredential", "credentialCategory": "certification", "name": "Y Combinator Startup School — Certified Founder" }
             ]
@@ -345,7 +336,6 @@ import { useEffect } from "react";
             { "@type": "ImageObject", "url": "https://orakzaibond.com/faisal-orakzai-kurta.jpg", "width": 800, "height": 1000, "caption": "Faisal Orakzai — Chairman Orakzai, shalwar qameez" },
             { "@type": "ImageObject", "url": "https://orakzaibond.com/faisal-orakzai-formal.png", "width": 800, "height": 1000, "caption": "Faisal Orakzai — Chairman Orakzai Group, formal suit" }
           ],
-          "description": "Faisal Orakzai is the Founder & CEO of Orakzai Bond (OKBOND) — the world's first capital-protected decentralized bond on Polygon blockchain — and Founder & Chairman of Shamim Forever luxury house. Born 30 April 2006, Tirah, Orakzai, Pakistan. Wikidata Q140264666. Stevie® Gold Award 2026 winner.",
           "jobTitle": "Founder & CEO",
           "worksFor": {
             "@type": "Organization",
@@ -361,15 +351,7 @@ import { useEffect } from "react";
             { "@type": "EducationalOrganization", "name": "Yahya Public School", "address": { "@type": "PostalAddress", "addressLocality": "Kohat", "addressRegion": "Khyber Pakhtunkhwa", "addressCountry": "PK" } },
             { "@type": "EducationalOrganization", "name": "Madrassa Mahad-ul-Uleman", "address": { "@type": "PostalAddress", "addressLocality": "Kohat", "addressRegion": "Khyber Pakhtunkhwa", "addressCountry": "PK" } }
           ],
-          "award": [
-            "Stevie® Gold Award — Best Young Entrepreneur, 2026 International Business Awards",
-            "NUST Pakistan 50 Under 50 Entrepreneurship Award",
-            "GEN Global Entrepreneurship Network — Featured Founder",
-            "Wikidata Verified Public Figure (Q140264666)"
-          ],
           "hasCredential": [
-            { "@type": "EducationalOccupationalCredential", "credentialCategory": "award", "name": "Stevie® Gold Award — Best Young Entrepreneur 2026" },
-            { "@type": "EducationalOccupationalCredential", "credentialCategory": "award", "name": "NUST 50 Under 50 — Young Entrepreneur" },
             { "@type": "EducationalOccupationalCredential", "credentialCategory": "membership", "name": "GEN Global Entrepreneurship Network Member" },
             { "@type": "EducationalOccupationalCredential", "credentialCategory": "certification", "name": "Y Combinator Startup School" }
           ],
@@ -409,12 +391,12 @@ import { useEffect } from "react";
           {
             "@type": "Question",
             "name": "Who is Faisal Orakzai?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Faisal Orakzai is the Founder & CEO of Orakzai Bond (OKBOND) — Pakistan's first institutional capital-protected decentralized bond on Polygon blockchain — and Founder & Chairman of Shamim Forever luxury house and Orakzai Group SMC. Born 30 April 2006, Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan. Wikidata Q140264666. Stevie® Gold Award 2026 winner." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Faisal Orakzai is the Founder & CEO of Orakzai Bond (OKBOND) — Pakistan's first institutional capital-protected decentralized bond on Polygon blockchain — and Founder & Chairman of Shamim Forever luxury house and Orakzai Group SMC. Born 30 April 2006, Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan. Wikidata Q140264666." }
           },
           {
             "@type": "Question",
             "name": "What are Faisal Orakzai's biggest achievements?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Faisal Orakzai's achievements include: Orakzai Bond (OKBOND) — world's first capital-protected DeFi bond on Polygon; Shamim Forever — Pakistan's first global blockchain luxury house; Stevie® Gold Award 2026; NUST 50 Under 50 Entrepreneurship Award; Wikidata Q140264666 verified public figure; ORCID researcher 0009-0000-0915-7272." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Faisal Orakzai's achievements include: Orakzai Bond (OKBOND) — world's first capital-protected DeFi bond on Polygon; Shamim Forever — Pakistan's first global blockchain luxury house; Wikidata Q140264666 verified public figure; ORCID researcher 0009-0000-0915-7272." }
           },
           {
             "@type": "Question",
@@ -424,7 +406,7 @@ import { useEffect } from "react";
           {
             "@type": "Question",
             "name": "What is Faisal Orakzai's educational background?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Faisal Orakzai studied at Ziauddin University, Karachi, Pakistan. He is a NUST Pakistan 50 Under 50 Entrepreneurship honoree and a certified Y Combinator Startup School founder." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Faisal Orakzai studied at Ziauddin University, Karachi, Pakistan. He is a " }
           },
           {
             "@type": "Question",
@@ -449,7 +431,6 @@ import { useEffect } from "react";
           "name": "Muhammad Faisal Orakzai",
           "jobTitle": "Founder & CEO"
         },
-        "award": "Stevie® Gold Award 2026 — Best Young Entrepreneur (International Business Awards — Orakzai Group SMC)",
         "description": "World's first capital-protected decentralized bond on Polygon blockchain. Founded April 2026 by Faisal Orakzai. 10 million fixed supply OKBOND token. Cycle-Based Activation Logic. SolidityScan security verified.",
         "sameAs":["https://imdb.me/faisalorakzai","https://orakzaibond.com",
           "https://x.com/orakzaibond",
@@ -493,7 +474,7 @@ import { useEffect } from "react";
           ["name","twitter:title","Faisal Orakzai — Founder & CEO, Orakzai Bond"],
           ["name","twitter:description","Pakistani blockchain architect. Founder of Orakzai Bond (OKBOND), world's first capital-protected DeFi bond on Polygon. Born 2006. Wikidata Q140264666."],
           ["name","twitter:image","https://orakzaibond.com/faisal-orakzai-smiling.jpg"],
-          ["name","robots","index, follow, max-image-preview:large, max-snippet:-1"],
+          ["name","robots","index, follow, max-image-preview:large, max-snippet:-1"]
         ];
 
         const added: HTMLMetaElement[] = [];
@@ -638,7 +619,7 @@ export default function FaisalOrakzaiBioPage() {
                   {name:"Ziauddin University",detail:"Matriculation in Sciences — Islamiat, Pakistan Studies, Civics (Board of Secondary Education)",period:"Apr 2024 – Apr 2026"},
                   {name:"Global Self-Education Platform (GSEP)",detail:"Silent Empire Building — Business Analysis, Advertising",period:"Jan 2019 – Present"},
                   {name:"Yahya Public School, Kohat",detail:"Early education",period:""},
-                  {name:"Madrassa Mahad-ul-Uleman, Kohat",detail:"Early education",period:""},
+                  {name:"Madrassa Mahad-ul-Uleman, Kohat",detail:"Early education",period:""}
                 ].map(e=>(
                   <div key={e.name} style={{borderTop:"1px solid #111",padding:"18px 0",display:"flex",justifyContent:"space-between",gap:16,flexWrap:"wrap"}}>
                     <div>
