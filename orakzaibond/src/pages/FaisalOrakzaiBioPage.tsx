@@ -25,8 +25,8 @@ import { useEffect } from "react";
             "url": "https://orakzaibond.com",
             "name": "Orakzai Bond"
           },
-          "about": { "@id": "https://www.wikidata.org/wiki/Q140264666" },
-          "mainEntity": { "@id": "https://www.wikidata.org/wiki/Q140264666" },
+          "about": { "@id": "https://www.wikidata.org/wiki/Q140588912" },
+          "mainEntity": { "@id": "https://www.wikidata.org/wiki/Q140588912" },
           "primaryImageOfPage": {
             "@type": "ImageObject",
             "url": "https://orakzaibond.com/faisal-orakzai-smiling.jpg",
@@ -48,7 +48,7 @@ import { useEffect } from "react";
         },
         {
           "@type": "Person",
-          "@id": "https://www.wikidata.org/wiki/Q140264666",
+          "@id": "https://www.wikidata.org/wiki/Q140588912",
           "name": "Faisal Orakzai",
           "givenName": "Faisal",
           "familyName": "Orakzai",
@@ -86,25 +86,25 @@ import { useEffect } from "react";
             { "@type": "Language", "name": "Urdu", "alternateName": "ur" },
             { "@type": "Language", "name": "Pashto", "alternateName": "ps" }
           ],
-          "jobTitle": ["Founder & CEO", "Chairman", "Blockchain Architect", "Quantitative Fintech Engineer"],
+          "jobTitle": ["Technology Entrepreneur & Computer Scientist","Founder & Chairman — Orakzai Group","Blockchain Architect","AI Researcher & Entrepreneur"],
           "hasOccupation": [
             {
               "@type": "Occupation",
-              "name": "Entrepreneur",
+              "name": "Technology Entrepreneur",
               "occupationLocation": { "@type": "Country", "name": "Pakistan" },
-              "description": "Founder and builder of sovereign blockchain and luxury enterprises"
+              "description": "Founder and Chairman of Orakzai Group — sovereign technology holding company spanning blockchain, AI, fintech, and digital infrastructure."
+            },
+            {
+              "@type": "Occupation",
+              "name": "Computer Scientist",
+              "occupationLocation": { "@type": "Country", "name": "Pakistan" },
+              "description": "Researcher and practitioner in blockchain architecture, cryptographic systems, and distributed computing protocols."
             },
             {
               "@type": "Occupation",
               "name": "Blockchain Architect",
               "occupationLocation": { "@type": "Country", "name": "Pakistan" },
-              "description": "Designs and deploys Polygon-based DeFi protocols and smart contract systems"
-            },
-            {
-              "@type": "Occupation",
-              "name": "Quantitative Fintech Engineer",
-              "occupationLocation": { "@type": "Country", "name": "Pakistan" },
-              "description": "Builds institutional-grade fintech and capital protection infrastructure"
+              "description": "Designs and deploys Polygon-based DeFi protocols and smart contract systems including Orakzai Bond (OKBOND)."
             }
           ],
           "affiliation": [
@@ -192,8 +192,8 @@ import { useEffect } from "react";
             {
               "@type": "PropertyValue",
               "propertyID": "Wikidata",
-              "value": "Q140264666",
-              "url": "https://www.wikidata.org/wiki/Q140264666"
+              "value": "Q140588912",
+              "url": "https://www.wikidata.org/wiki/Q140588912"
             },
             {
               "@type": "PropertyValue",
@@ -202,7 +202,10 @@ import { useEffect } from "react";
               "url": "https://orcid.org/0009-0000-0915-7272"
             }
           ],
-          "sameAs":["https://imdb.me/faisalorakzai","https://www.wikidata.org/wiki/Q140264666",
+          "sameAs":["https://www.wikidata.org/wiki/Q140588912",
+            "https://faisalorakzai.com",
+            "https://faisalorakzai.com/founder",
+            "https://imdb.me/faisalorakzai",
             "https://orcid.org/0009-0000-0915-7272",
             "https://www.crunchbase.com/person/faisal-orakzai",
             "https://x.com/faisalorakzaii",
@@ -221,10 +224,10 @@ import { useEffect } from "react";
             "https://www.shamimforever.com/faisal-orakzai",
             "https://www.shamimforever.com/founder",
             "https://www.prlog.org/13154317-young-pakistani-entrepreneur-expands-global-vision-through-okbond-and-shamim-forever.html",
-              "https://www.genglobal.org/user/faisal1",
-              "https://theorg.com/org/orakzai-bond",
-              "https://en.everybodywiki.com/Faisal_Orakzai",
-              "https://www.youtube.com/@faisalorakzaii"],
+            "https://www.genglobal.org/user/faisal1",
+            "https://theorg.com/org/orakzai-bond",
+            "https://en.everybodywiki.com/Faisal_Orakzai",
+            "https://www.youtube.com/@faisalorakzaii"],
             "hasCredential": [
               { "@type": "EducationalOccupationalCredential", "credentialCategory": "membership", "name": "GEN Global Entrepreneurship Network — Featured Founder" },
               { "@type": "EducationalOccupationalCredential", "credentialCategory": "certification", "name": "Y Combinator Startup School — Certified Founder" }
@@ -355,14 +358,23 @@ import { useEffect } from "react";
             { "@type": "EducationalOccupationalCredential", "credentialCategory": "membership", "name": "GEN Global Entrepreneurship Network Member" },
             { "@type": "EducationalOccupationalCredential", "credentialCategory": "certification", "name": "Y Combinator Startup School" }
           ],
-          "sameAs":["https://imdb.me/faisalorakzai","https://www.wikidata.org/wiki/Q140264666",
+          "sameAs":["https://www.wikidata.org/wiki/Q140588912",
+            "https://faisalorakzai.com",
+            "https://faisalorakzai.com/founder",
+            "https://imdb.me/faisalorakzai",
             "https://orcid.org/0009-0000-0915-7272",
             "https://www.crunchbase.com/person/faisal-orakzai",
+            "https://x.com/faisalorakzaii",
+            "https://www.linkedin.com/in/faisalorakzaii",
+            "https://www.instagram.com/faisalorakzaii",
+            "https://web.facebook.com/faisalorakzaii",
+            "https://tiktok.com/@chairmanorakzai",
+            "https://github.com/faisalorakzai-lab",
             "https://hackernoon.com/u/faisalorakzai",
             "https://www.genglobal.org/user/faisal1",
             "https://theorg.com/org/orakzai-bond",
             "https://en.everybodywiki.com/Faisal_Orakzai",
-            "https://www.linkedin.com/in/faisalorakzaii",
+            "https://linktr.ee/faisalorakzaiofficial",
             "https://orakzaibond.com/faisal-orakzai",
             "https://www.shamimforever.com/faisal-orakzai",
             "https://www.shamimforever.com/founder"]
@@ -391,12 +403,12 @@ import { useEffect } from "react";
           {
             "@type": "Question",
             "name": "Who is Faisal Orakzai?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Faisal Orakzai is the Founder & CEO of Orakzai Bond (OKBOND) — Pakistan's first institutional capital-protected decentralized bond on Polygon blockchain — and Founder & Chairman of Shamim Forever luxury house and Orakzai Group SMC. Born 30 April 2006, Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan. Wikidata Q140264666." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Faisal Orakzai is the Founder & CEO of Orakzai Bond (OKBOND) — Pakistan's first institutional capital-protected decentralized bond on Polygon blockchain — and Founder & Chairman of Shamim Forever luxury house and Orakzai Group SMC. Born 30 April 2006, Tirah, Orakzai, Khyber Pakhtunkhwa, Pakistan. Wikidata Q140588912." }
           },
           {
             "@type": "Question",
             "name": "What are Faisal Orakzai's biggest achievements?",
-            "acceptedAnswer": { "@type": "Answer", "text": "Faisal Orakzai's achievements include: Orakzai Bond (OKBOND) — world's first capital-protected DeFi bond on Polygon; Shamim Forever — Pakistan's first global blockchain luxury house; Wikidata Q140264666 verified public figure; ORCID researcher 0009-0000-0915-7272." }
+            "acceptedAnswer": { "@type": "Answer", "text": "Faisal Orakzai's achievements include: Orakzai Bond (OKBOND) — world's first capital-protected DeFi bond on Polygon; Shamim Forever — Pakistan's first global blockchain luxury house; Wikidata Q140588912 verified public figure; ORCID researcher 0009-0000-0915-7272." }
           },
           {
             "@type": "Question",
@@ -427,7 +439,7 @@ import { useEffect } from "react";
         "foundingDate": "2026-04-01",
         "founder": {
           "@type": "Person",
-          "@id": "https://www.wikidata.org/wiki/Q140264666",
+          "@id": "https://www.wikidata.org/wiki/Q140588912",
           "name": "Muhammad Faisal Orakzai",
           "jobTitle": "Founder & CEO"
         },
@@ -445,7 +457,7 @@ import { useEffect } from "react";
           "https://github.com/orakzaibond",
           "https://github.com/faisalorakzai-lab",
           "https://linktr.ee/faisalorakzaiofficial",
-          "https://www.wikidata.org/wiki/Q140264666"],
+          "https://www.wikidata.org/wiki/Q140588912"],
         "knowsAbout": [
           "Decentralized Finance (DeFi)", "Polygon Blockchain", "Capital Protection",
           "Cycle-Based Activation Logic", "Real-World Asset Tokenization", "Smart Contract Security"
@@ -457,10 +469,10 @@ import { useEffect } from "react";
         document.title = "Faisal Orakzai — Founder & CEO of Orakzai Bond | Blockchain Architect";
 
         const tags: Array<[string,string,string]> = [
-          ["name","description","Faisal Orakzai is the Founder & CEO of Orakzai Bond (OKBOND) — world's first capital-protected decentralized bond on Polygon. Born April 30, 2006, Orakzai Pakistan. Blockchain architect, DeFi builder, luxury brand founder. Wikidata Q140264666."],
-          ["name","keywords","Faisal Orakzai, Chairman Faisal Orakzai, Faisal Orakzai Orakzai Bond, faisalorakzaii, OKBOND founder, Orakzai Bond CEO, Pakistani blockchain entrepreneur, DeFi founder Pakistan, Malak Faisal Orakzai, Faisal Orakzai blockchain, Wikidata Q140264666, Faisal Orakzai ORCID, Faisal Orakzai Shamim Forever"],
+          ["name","description","Faisal Orakzai is the Founder & CEO of Orakzai Bond (OKBOND) — world's first capital-protected decentralized bond on Polygon. Born April 30, 2006, Orakzai Pakistan. Blockchain architect, DeFi builder, luxury brand founder. Wikidata Q140588912."],
+          ["name","keywords","Faisal Orakzai, Chairman Faisal Orakzai, Faisal Orakzai Orakzai Bond, faisalorakzaii, OKBOND founder, Orakzai Bond CEO, Pakistani blockchain entrepreneur, DeFi founder Pakistan, Malak Faisal Orakzai, Faisal Orakzai blockchain, Wikidata Q140588912, Faisal Orakzai ORCID, Faisal Orakzai Shamim Forever"],
           ["property","og:title","Faisal Orakzai — Founder & CEO of Orakzai Bond | Pakistani Blockchain Architect"],
-          ["property","og:description","Pakistani entrepreneur born 2006. Founder of Orakzai Bond (OKBOND), Shamim Forever & Orakzai Group. Blockchain architect building world's first capital-protected DeFi bond on Polygon. Wikidata Q140264666."],
+          ["property","og:description","Pakistani entrepreneur born 2006. Founder of Orakzai Bond (OKBOND), Shamim Forever & Orakzai Group. Blockchain architect building world's first capital-protected DeFi bond on Polygon. Wikidata Q140588912."],
           ["property","og:image","https://orakzaibond.com/faisal-orakzai-smiling.jpg"],
           ["property","og:url","https://orakzaibond.com/faisal-orakzai"],
           ["property","og:type","profile"],
@@ -472,7 +484,7 @@ import { useEffect } from "react";
           ["name","twitter:site","@faisalorakzaii"],
           ["name","twitter:creator","@faisalorakzaii"],
           ["name","twitter:title","Faisal Orakzai — Founder & CEO, Orakzai Bond"],
-          ["name","twitter:description","Pakistani blockchain architect. Founder of Orakzai Bond (OKBOND), world's first capital-protected DeFi bond on Polygon. Born 2006. Wikidata Q140264666."],
+          ["name","twitter:description","Pakistani blockchain architect. Founder of Orakzai Bond (OKBOND), world's first capital-protected DeFi bond on Polygon. Born 2006. Wikidata Q140588912."],
           ["name","twitter:image","https://orakzaibond.com/faisal-orakzai-smiling.jpg"],
           ["name","robots","index, follow, max-image-preview:large, max-snippet:-1"]
         ];
@@ -533,8 +545,8 @@ export default function FaisalOrakzaiBioPage() {
                   loading="eager" />
               </div>
               <div style={{display:"flex",gap:8,flexWrap:"wrap",justifyContent:"center"}}>
-                <a href="https://www.wikidata.org/wiki/Q140264666" target="_blank" rel="noopener noreferrer"
-                  style={{padding:"4px 10px",border:"1px solid rgba(191,149,63,0.45)",color:"#BF953F",fontSize:10,letterSpacing:"0.2em",textTransform:"uppercase",textDecoration:"none"}}>✓ Wikidata Q140264666</a>
+                <a href="https://www.wikidata.org/wiki/Q140588912" target="_blank" rel="noopener noreferrer"
+                  style={{padding:"4px 10px",border:"1px solid rgba(191,149,63,0.45)",color:"#BF953F",fontSize:10,letterSpacing:"0.2em",textTransform:"uppercase",textDecoration:"none"}}>✓ Wikidata Q140588912</a>
                 <a href="https://orcid.org/0009-0000-0915-7272" target="_blank" rel="noopener noreferrer"
                   style={{padding:"4px 10px",border:"1px solid rgba(191,149,63,0.45)",color:"#BF953F",fontSize:10,letterSpacing:"0.2em",textTransform:"uppercase",textDecoration:"none"}}>✓ ORCID</a>
                 <a href="https://en.everybodywiki.com/Faisal_Orakzai" target="_blank" rel="noopener noreferrer"

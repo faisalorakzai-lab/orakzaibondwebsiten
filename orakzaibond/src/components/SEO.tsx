@@ -117,7 +117,7 @@ import { useEffect } from "react";
     faisalOrakzai: {
       title: "Faisal Orakzai — Founder & CEO of Orakzai Bond",
       description:
-        "Faisal Orakzai (born 30 April 2006) is a Pakistani blockchain entrepreneur and Founder & CEO of Orakzai Bond (OKBOND). Wikidata Q140264666. ORCID 0009-0000-0915-7272.",
+        "Faisal Orakzai (born 30 April 2006) is a Pakistani Technology Entrepreneur & Computer Scientist — Founder & Chairman of Orakzai Bond (OKBOND), Shamim Forever, and Orakzai Group. Wikidata Q140588912. ORCID 0009-0000-0915-7272.",
       canonical: BASE_URL + "/faisal-orakzai",
       ogImage: "https://orakzaibond.com/faisal-orakzai-smiling.jpg",
       ogType: "profile",
@@ -165,11 +165,11 @@ import { useEffect } from "react";
             {
               "@type": "PropertyValue",
               propertyID: "Wikidata",
-              value: "Q140264666",
+              value: "Q140588912",
             },
           ],
           sameAs: [
-            "https://www.wikidata.org/wiki/Q140264666",
+            "https://www.wikidata.org/wiki/Q140588912",
             "https://orcid.org/0009-0000-0915-7272",
             "https://www.linkedin.com/in/faisalorakzaii",
             "https://x.com/faisalorakzaii",
