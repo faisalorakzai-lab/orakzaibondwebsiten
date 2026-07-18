@@ -54,6 +54,7 @@ import PresenceGlow from "./components/PresenceGlow";
 import FilmGrain from "./components/FilmGrain";
 import AIBriefingTicker from "./components/AIBriefingTicker";
 import OKBONDHeatmap from "./components/OKBONDHeatmap";
+import OKBONDFAQSection from "./components/OKBONDFAQSection";
 import TrustStrip from "./components/TrustStrip";
 import WalletModal from "./components/WalletModal";
 // OKBONDCalculator was previously rendered on the homepage; per Chairman
@@ -266,6 +267,9 @@ function App() {
                 <SovereignGuarantee />
                 <ErrorBoundary scope="OKBONDHeatmap" silent>
                   <OKBONDHeatmap />
+                </ErrorBoundary>
+                <ErrorBoundary scope="OKBONDFAQSection" silent>
+                  <OKBONDFAQSection />
                 </ErrorBoundary>
               </>
             </Route>
