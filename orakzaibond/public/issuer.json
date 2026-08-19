@@ -1,0 +1,9 @@
+{
+  "@context": "https://w3id.org/openbadges/v2",
+  "type": "Profile",
+  "id": "https://orakzaibond.com/issuer.json",
+  "name": "Orakzai Bond",
+  "url": "https://orakzaibond.com",
+  "email": "info@orakzaibond.com",
+  "description": "Orakzai Bond is an elite community and infrastructure provider for the next generation of tech leaders."
+}

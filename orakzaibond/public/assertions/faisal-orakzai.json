@@ -1,0 +1,15 @@
+{
+  "@context": "https://w3id.org/openbadges/v2",
+  "type": "Assertion",
+  "id": "https://orakzaibond.com/assertions/faisal-orakzai.json",
+  "recipient": {
+    "type": "email",
+    "hashed": false,
+    "identity": "imorakzai1122@gmail.com"
+  },
+  "issuedOn": "2026-08-19T12:00:00Z",
+  "badge": "https://orakzaibond.com/badges/orakzai-bond-class.json",
+  "verification": {
+    "type": "HostedBadge"
+  }
+}

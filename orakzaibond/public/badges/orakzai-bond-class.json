@@ -1,0 +1,10 @@
+{
+  "@context": "https://w3id.org/openbadges/v2",
+  "type": "BadgeClass",
+  "id": "https://orakzaibond.com/badges/orakzai-bond-class.json",
+  "name": "ORAKZAI BOND",
+  "description": "Exclusive badge for Orakzai Bond members, representing leadership, elite networking, and commitment to the tech ecosystem.",
+  "image": "https://orakzaibond.com/badges/orakzai-bond.png",
+  "criteria": "https://orakzaibond.com/criteria.json",
+  "issuer": "https://orakzaibond.com/issuer.json"
+}
