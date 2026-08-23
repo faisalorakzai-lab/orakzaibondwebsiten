@@ -1,0 +1,56 @@
+{
+  "network": "polygon-mainnet",
+  "chainId": 137,
+  "deployer": "0x9b02e2Edd6F58D626aAa91889708dbF39dfa8Cd7",
+  "source": "PolygonScan verified contract pages",
+  "contracts": {
+    "OrakzaiBond": {
+      "address": "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F",
+      "polygonscan": "https://polygonscan.com/address/0xc89729da02a8c2e282ec3070a9a680e01be2e22f#code",
+      "sourceVerification": "exact-match",
+      "compiler": "0.8.26",
+      "license": "not-specified",
+      "independentAudit": "not-submitted"
+    },
+    "OKBOND_ICO_V8": {
+      "address": "0x7BB2458740c4F491277973212309d831385Ab9D7",
+      "polygonscan": "https://polygonscan.com/address/0x7bb2458740c4f491277973212309d831385ab9d7#code",
+      "sourceVerification": "exact-match",
+      "compiler": "0.8.26",
+      "license": "MIT",
+      "independentAudit": "not-submitted"
+    },
+    "OrakzaiBondLottery": {
+      "address": "0x5BC55d4b347e39B986864E28604Ddca5dE6357B7",
+      "polygonscan": "https://polygonscan.com/address/0x5bc55d4b347e39b986864e28604ddca5de6357b7#code",
+      "sourceVerification": "exact-match",
+      "compiler": "0.8.20",
+      "license": "MIT",
+      "independentAudit": "not-submitted"
+    },
+    "OKBOND_Vault_V7": {
+      "address": "0x3Cb45d2022e2E15AFa8C4822647B89935a2ceD08",
+      "polygonscan": "https://polygonscan.com/address/0x3cb45d2022e2e15afa8c4822647b89935a2ced08#code",
+      "sourceVerification": "exact-match",
+      "compiler": "0.8.26",
+      "license": "MIT",
+      "independentAudit": "not-submitted"
+    },
+    "Orakzai_OKZ": {
+      "address": "0x417260F7af5192754e656E30582Bcb0A1BE20aC3",
+      "polygonscan": "https://polygonscan.com/address/0x417260f7af5192754e656e30582bcb0a1be20ac3#code",
+      "sourceVerification": "pending-confirmation",
+      "compiler": null,
+      "license": null,
+      "independentAudit": "not-confirmed"
+    },
+    "OrakzaiBond_legacy": {
+      "address": "0x6F539e4232c045cCAc08e2009d97BdC72815472a",
+      "polygonscan": "https://polygonscan.com/address/0x6f539e4232c045ccac08e2009d97bdc72815472a#code",
+      "sourceVerification": "exact-match",
+      "compiler": "0.8.20",
+      "license": "MIT",
+      "independentAudit": "not-submitted"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@orakzai/okbond-contracts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Hardhat workspace for reproducible Orakzai Bond Polygon contract evidence",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "lint": "prettier --check .",
+    "format": "prettier --write .",
+    "verify:addresses": "hardhat run scripts/verify-addresses.ts --network polygon",
+    "deploy:local": "hardhat run scripts/deploy.ts --network hardhat"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^6.1.0",
+    "@types/node": "^22.15.0",
+    "dotenv": "^16.5.0",
+    "hardhat": "^2.22.19",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.4.0"
+  }
+}
