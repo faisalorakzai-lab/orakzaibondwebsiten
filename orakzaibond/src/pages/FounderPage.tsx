@@ -536,7 +536,7 @@ function MissionSection() {
                 <p
                   className="text-2xl md:text-3xl"
                   style={{
-                    ..goldTextStyle(),
+                    ...goldTextStyle(),
                     fontFamily: "'Playfair Display', Georgia, serif"
                   }}
                 >
@@ -924,7 +924,7 @@ function ClosingSection() {
           >
             <span
               style={{
-                ..goldTextStyle(),
+                ...goldTextStyle(),
                 fontFamily: "'Playfair Display', Georgia, serif"
               }}
               className="text-5xl md:text-7xl"
@@ -935,7 +935,7 @@ function ClosingSection() {
             the fires of resilience and enduring character.
             <span
               style={{
-                ..goldTextStyle(),
+                ...goldTextStyle(),
                 fontFamily: "'Playfair Display', Georgia, serif"
               }}
               className="text-5xl md:text-7xl"
@@ -1186,7 +1186,7 @@ function IntegrityBadge() {
       </span>
       <span
         className="relative text-[11px] font-medium uppercase"
-        style={{ ..goldTextStyle(), letterSpacing: "0.18em" }}
+        style={{ ...goldTextStyle(), letterSpacing: "0.18em" }}
       >
         Admin-Controlled Integrity Verified
       </span>
@@ -1585,7 +1585,7 @@ function glassCardStyle(): React.CSSProperties {
 
 function chapterLabelStyle(): React.CSSProperties {
   return {
-    ..goldTextStyle(),
+    ...goldTextStyle(),
     fontSize: "11px",
     letterSpacing: "0.32em",
     textTransform: "uppercase"
