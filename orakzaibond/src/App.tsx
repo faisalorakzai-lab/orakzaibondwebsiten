@@ -341,9 +341,11 @@ function App() {
       <ErrorBoundary scope="PresenceGlow" silent>
         <PresenceGlow />
       </ErrorBoundary>
-      <ErrorBoundary scope="PremiumAIBot" silent>
-        <PremiumAIBot />
-      </ErrorBoundary>
+      {location !== "/" && (
+        <ErrorBoundary scope="PremiumAIBot" silent>
+          <PremiumAIBot />
+        </ErrorBoundary>
+      )}
       {/* <ErrorBoundary scope="MarcusOrb" silent>
         <MarcusOrb />
       </ErrorBoundary> */}
