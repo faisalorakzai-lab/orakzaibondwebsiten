@@ -1,227 +1,243 @@
-import { motion } from "framer-motion";
-import { Rocket, ShieldCheck, Zap, Lock, ExternalLink, ArrowDown, Globe, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useWallet } from "@/hooks/useWallet";
-import { useICO } from "@/hooks/useICO";
-import { useTokenPrice } from "@/hooks/useTokenPrice";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  ArrowDown,
+  ArrowRight,
+  Building2,
+  CarFront,
+  Hotel,
+  Zap,
+} from "lucide-react";
+import "./Hero.css";
 
-const ICO_URL = "/ico";
+const EcosystemScene = lazy(() => import("./EcosystemScene"));
 
 interface HeroProps {
   onConnect: () => void;
   address: string | null;
 }
 
-function CinematicBackground() {
+const SERVICES = [
+  {
+    label: "STAYS & TRAVEL",
+    detail: "Hotels & journeys",
+    icon: Hotel,
+    position: "top",
+  },
+  {
+    label: "REAL ESTATE",
+    detail: "Places to call home",
+    icon: Building2,
+    position: "left",
+  },
+  {
+    label: "MOBILITY",
+    detail: "Move with ease",
+    icon: CarFront,
+    position: "right",
+  },
+  {
+    label: "EVERYDAY SERVICES",
+    detail: "Utilities & essentials",
+    icon: Zap,
+    position: "bottom",
+  },
+] as const;
+
+function StaticEcosystem() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `linear-gradient(rgba(212,175,55,0.015) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.015) 1px, transparent 1px)`,
-          backgroundSize: "80px 80px",
-        }}
-      />
-      <div className="absolute inset-0" style={{
-        background: "radial-gradient(ellipse 120% 80% at 50% 30%, rgba(212,175,55,0.08) 0%, transparent 50%)"
-      }} />
-      <div className="absolute inset-0" style={{
-        background: "radial-gradient(ellipse 100% 100% at 50% 50%, transparent 30%, rgba(5,5,5,0.8) 100%)"
-      }} />
+    <div className="okbond-static-orb" aria-hidden="true">
+      <div className="okbond-static-orb__ring okbond-static-orb__ring--one" />
+      <div className="okbond-static-orb__ring okbond-static-orb__ring--two" />
+      <div className="okbond-static-orb__sphere">
+        <div className="okbond-static-orb__wordmark">
+          OK<span>BOND</span>
+          <small>ORAKZAI ECOSYSTEM</small>
+        </div>
+      </div>
     </div>
   );
 }
 
-const CONTRACTS = [
-  { name: "OKBOND Token",      addr: "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F" },
-  { name: "ICO",               addr: "0x7BB2458740c4F491277973212309d831385Ab9D7" },
-  { name: "Staking",           addr: "0x5067e9E4Ef827cE0Cc06a44B786668522732fB4e" },
-  { name: "Vault",             addr: "0x3Cb45d2022e2E15AFa8C4822647B89935a2ceD08" },
-  { name: "Notebook Registry", addr: "0xa6a1C3D97e629326ad812e97e927622A8dA711a3" },
-];
+export default function Hero(_props: HeroProps) {
+  const visualRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const [webglAvailable, setWebglAvailable] = useState(false);
+  const [sceneReady, setSceneReady] = useState(false);
 
-const TRUST_BADGES = [
-  { icon: <Globe className="w-3.5 h-3.5" />,       label: "Polygon" },
-  { icon: <Lock className="w-3.5 h-3.5" />,         label: "Audited" },
-  { icon: <ShieldCheck className="w-3.5 h-3.5" />, label: "Verified Contracts" },
-];
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      setWebglAvailable(false);
+      return;
+    }
 
-export default function Hero({ onConnect, address }: HeroProps) {
-  const { provider } = useWallet();
-  const { stats } = useICO(provider, address);
-  const tokenPrice = useTokenPrice();
+    let supported = false;
+    try {
+      const canvas = document.createElement("canvas");
+      supported = Boolean(
+        canvas.getContext("webgl2") || canvas.getContext("webgl"),
+      );
+    } catch {
+      supported = false;
+    }
+    setWebglAvailable(supported);
+  }, [prefersReducedMotion]);
 
-  const tokensSold = stats ? parseFloat(stats.totalTokensSold) : 0;
-  const progress = Math.min((tokensSold / 333_333) * 100, 100);
+  useEffect(() => {
+    const target = visualRef.current;
+    if (!target) return;
+
+    if (!("IntersectionObserver" in window)) {
+      setSceneReady(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setSceneReady(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "120px" },
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
+
+  const reveal = (delay: number) =>
+    prefersReducedMotion
+      ? { initial: false as const, animate: { opacity: 1 } }
+      : {
+          initial: { opacity: 0, y: 18 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] as const },
+        };
 
   return (
-    <>
-      <section
-        className="relative flex flex-col items-center justify-center overflow-hidden bg-[#050505]"
-        style={{ paddingTop: "120px", paddingBottom: "80px", minHeight: "100svh" }}
-      >
-        <CinematicBackground />
+    <section className="okbond-hero relative isolate overflow-hidden">
+      <div className="okbond-hero__grid" aria-hidden="true" />
+      <div className="okbond-hero__glow" aria-hidden="true" />
 
-        <div className="relative z-10 w-full max-w-5xl mx-auto px-4 md:px-6 flex flex-col items-center text-center">
-
-          {/* ── 1. Trust indicators row ── */}
-          <motion.div
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex items-center gap-2 flex-wrap justify-center mb-8 md:mb-10"
-          >
-            {TRUST_BADGES.map((b) => (
-              <span
-                key={b.label}
-                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-xs md:text-sm font-semibold uppercase tracking-wider border"
-                style={{
-                  borderColor: "rgba(212,175,55,0.2)",
-                  color: "rgba(212,175,55,0.8)",
-                  background: "rgba(212,175,55,0.05)",
-                }}
-              >
-                {b.icon}
-                <span>{b.label}</span>
-              </span>
-            ))}
+      <div className="okbond-hero__layout relative z-10 mx-auto grid w-full max-w-7xl items-center gap-2 px-5 pb-8 pt-24 sm:px-8 md:grid-cols-[0.92fr_1.08fr] md:gap-4 md:px-10 md:pb-14 md:pt-28">
+        <div className="okbond-hero__copy">
+          <motion.div {...reveal(0)} className="okbond-hero__eyebrow">
+            <span className="okbond-hero__status-dot" aria-hidden="true" />
+            ORAKZAI <span aria-hidden="true">/</span> THE OKBOND ECOSYSTEM
           </motion.div>
 
-          {/* ── 2. ICO live badge with live price ── */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.08 }}
-            className="mb-8 md:mb-10 flex items-center gap-2.5 px-4 md:px-5 py-2.5 rounded-full border border-emerald-500/25 bg-emerald-500/8 backdrop-blur-sm"
+          <motion.h1
+            {...reveal(0.08)}
+            className="okbond-hero__title mt-5 text-[clamp(2.8rem,8vw,5.8rem)] leading-[0.98] md:mt-7"
           >
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-pulse absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-            </span>
-            <span className="text-emerald-400 text-xs md:text-sm font-bold uppercase tracking-wider">
-              ICO Phase 1 · {tokenPrice.isLoading ? "Syncing Price…" : tokenPrice.displayPrice} per OKBOND
-            </span>
-            {tokenPrice.isLive && (
-              <span className="text-emerald-400/60 text-[10px] font-mono">LIVE</span>
-            )}
-          </motion.div>
+            One Ecosystem.
+            <br />
+            <span>A World of Possibilities.</span>
+          </motion.h1>
 
-          {/* ── 3. Main headline ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.12 }}
-            className="mb-6 md:mb-8 max-w-4xl w-full"
-          >
-            <h1
-              className="font-bold tracking-tight leading-[1.1] text-white"
-              style={{
-                fontFamily: "'Playfair Display', serif",
-                fontSize: "clamp(40px, 8vw, 84px)",
-              }}
-            >
-              The Standard of
-              <br />
-              <span style={{
-                background: "linear-gradient(135deg, #D4AF37 0%, #F5E27D 35%, #B8942A 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}>
-                Sovereign Wealth
-              </span>
-            </h1>
-          </motion.div>
-
-          {/* ── 4. Subtitle ── */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-white/60 max-w-2xl mb-10 md:mb-14 leading-relaxed font-normal tracking-wide"
-            style={{ fontFamily: "'Inter', sans-serif", fontSize: "clamp(16px, 2.4vw, 20px)" }}
+            {...reveal(0.16)}
+            className="okbond-hero__description mt-5 max-w-xl text-base leading-7 sm:text-lg sm:leading-8"
           >
-            A premier financial ecosystem backed by real-world assets and luxury commerce. 
-            Experience capital protection redefined for the global elite.
+            Discover properties, book stays, explore transportation, and access
+            everyday services through the growing OKBOND ecosystem.
           </motion.p>
 
-          {/* ── 5. CTA buttons ── */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.28 }}
-            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 md:gap-5 mb-12 md:mb-16 w-full max-w-sm sm:max-w-none sm:justify-center"
+            {...reveal(0.24)}
+            className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
           >
-            <motion.a
-              href={ICO_URL}
-              whileHover={{ scale: 1.04, boxShadow: "0 0 48px rgba(212,175,55,0.4)" }}
-              whileTap={{ scale: 0.96 }}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl font-bold relative overflow-hidden"
-              style={{
-                height: "56px",
-                padding: "0 32px",
-                background: "linear-gradient(135deg, #D4AF37 0%, #F5E27D 40%, #B8942A 100%)",
-                color: "#050505",
-                boxShadow: "0 0 32px rgba(212,175,55,0.3), inset 0 1px 0 rgba(255,255,255,0.3)",
-                fontFamily: "'Sora', 'Inter', sans-serif",
-                fontSize: "16px",
-                fontWeight: 700,
+            <a
+              className="okbond-hero__button okbond-hero__button--primary"
+              href="#okbond-ecosystem"
+              onClick={(event) => {
+                event.preventDefault();
+                visualRef.current?.scrollIntoView({
+                  behavior: prefersReducedMotion ? "auto" : "smooth",
+                  block: "center",
+                });
               }}
             >
-              <Rocket className="w-5 h-5" />
-              Buy OKBOND Now
-            </motion.a>
-
-            {!address ? (
-              <Button
-                onClick={onConnect}
-                variant="outline"
-                className="h-14 rounded-2xl font-bold border-[#D4AF37]/25 text-[#D4AF37] hover:bg-[#D4AF37]/8 hover:border-[#D4AF37]/50 transition-all"
-                style={{ 
-                  fontFamily: "'Sora', 'Inter', sans-serif", 
-                  padding: "0 32px", 
-                  fontSize: "16px",
-                  fontWeight: 700,
-                }}
-              >
-                Connect Wallet
-              </Button>
-            ) : (
-              <a
-                href="/dashboard"
-                className="inline-flex items-center justify-center gap-2 h-14 px-8 rounded-2xl font-bold border-[#D4AF37]/25 text-[#D4AF37] hover:bg-[#D4AF37]/8 hover:border-[#D4AF37]/50 transition-all border"
-                style={{ 
-                  fontFamily: "'Sora', 'Inter', sans-serif", 
-                  fontSize: "16px",
-                  fontWeight: 700,
-                }}
-              >
-                Dashboard
-                <ChevronRight className="w-4 h-4" />
-              </a>
-            )}
+              Explore the Ecosystem
+              <ArrowDown className="h-4 w-4" aria-hidden="true" />
+            </a>
+            <a
+              className="okbond-hero__button okbond-hero__button--secondary"
+              href="/about"
+            >
+              Discover OKBOND
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </a>
           </motion.div>
 
-          {/* ── 6. Scroll indicator ── */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="absolute bottom-8 md:bottom-12 left-1/2 transform -translate-x-1/2"
+            {...reveal(0.32)}
+            className="okbond-hero__footnote mt-7 flex items-center gap-3"
           >
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="flex flex-col items-center gap-2"
-            >
-              <p className="text-xs md:text-sm uppercase tracking-wider" style={{ color: "rgba(212,175,55,0.5)" }}>
-                Scroll to explore
-              </p>
-              <ArrowDown className="w-4 h-4" style={{ color: "rgba(212,175,55,0.5)" }} />
-            </motion.div>
+            <span className="okbond-hero__footnote-line" aria-hidden="true" />
+            A connected experience, designed around everyday life.
           </motion.div>
         </div>
-      </section>
-    </>
+
+        <motion.div
+          {...reveal(0.12)}
+          className="okbond-hero__visual-wrap"
+        >
+          <div
+            id="okbond-ecosystem"
+            ref={visualRef}
+            className="okbond-hero__visual"
+            role="img"
+            aria-label="OKBOND ecosystem globe surrounded by hotels and travel, real estate, mobility, and everyday services"
+          >
+            <div className="okbond-hero__visual-halo" aria-hidden="true" />
+            {webglAvailable && sceneReady ? (
+              <Suspense fallback={<StaticEcosystem />}>
+                <div className="okbond-hero__scene" aria-hidden="true">
+                  <EcosystemScene reducedMotion={Boolean(prefersReducedMotion)} />
+                </div>
+              </Suspense>
+            ) : (
+              <StaticEcosystem />
+            )}
+
+            {SERVICES.map(({ label, detail, icon: Icon, position }, index) => (
+              <motion.div
+                key={label}
+                className={`okbond-service-card okbond-service-card--${position}`}
+                aria-hidden="true"
+                animate={
+                  prefersReducedMotion
+                    ? { opacity: 1 }
+                    : { opacity: 1, y: [0, index % 2 === 0 ? -5 : 5, 0] }
+                }
+                transition={{
+                  opacity: { duration: 0.45, delay: 0.3 + index * 0.08 },
+                  y: {
+                    duration: 5 + index * 0.45,
+                    delay: index * 0.2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  },
+                }}
+              >
+                <span className="okbond-service-card__icon">
+                  <Icon className="h-4 w-4" strokeWidth={1.6} />
+                </span>
+                <span className="okbond-service-card__copy">
+                  <span className="okbond-service-card__label">{label}</span>
+                  <span className="okbond-service-card__detail">{detail}</span>
+                </span>
+              </motion.div>
+            ))}
+          </div>
+          <div className="okbond-hero__visual-caption" aria-hidden="true">
+            <span>ONE CONNECTED WORLD</span>
+            <span className="okbond-hero__caption-line" />
+            <span>OKBOND · ORAKZAI</span>
+          </div>
+        </motion.div>
+      </div>
+    </section>
   );
 }
