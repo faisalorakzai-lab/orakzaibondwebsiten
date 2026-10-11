@@ -11,9 +11,9 @@ import { useEffect } from "react";
   }
 
   const SITE_NAME = "Orakzai Bond";
-  const DEFAULT_TITLE = "Orakzai Bond (OKBOND) | Capital-Protected DeFi on Polygon";
+  const DEFAULT_TITLE = "Orakzai Bond (OKBOND) | Blockchain Platform on Polygon";
   const DEFAULT_DESC =
-    "World's first capital-protected decentralized bond on Polygon. Real-asset backed DeFi by Faisal Orakzai. Earn sovereign yield with principal protection.";
+    "Explore Orakzai Bond (OKBOND), a blockchain project on Polygon. Learn about its ecosystem, token information, technology, team, roadmap, and official documents.";
   const DEFAULT_OG_IMAGE = "https://orakzaibond.com/opengraph.jpg";
   const BASE_URL = "https://orakzaibond.com";
 
@@ -113,86 +113,66 @@ import { useEffect } from "react";
   }
 
   export const PAGE_SEO: Record<string, SEOProps> = {
-    home: { canonical: BASE_URL + "/" },
+    home: { description: DEFAULT_DESC, canonical: BASE_URL + "/" },
     faisalOrakzai: {
-      title: "Faisal Orakzai — Founder & CEO of Orakzai Bond",
+      title: "Faisal Orakzai | Founder of Orakzai Bond",
       description:
-        "Faisal Orakzai (born 30 April 2006) is a Pakistani Technology Entrepreneur & Computer Scientist — Founder & Chairman of Orakzai Bond (OKBOND), Shamim Forever, and Orakzai Group. Wikidata Q140588912. ORCID 0009-0000-0915-7272.",
+        "Official profile of Faisal Orakzai, founder of Orakzai Bond (OKBOND). Explore his work and the OKBOND project.",
       canonical: BASE_URL + "/faisal-orakzai",
       ogImage: "https://orakzaibond.com/faisal-orakzai-smiling.jpg",
       ogType: "profile",
       structuredData: {
         "@context": "https://schema.org",
-        "@type": "ProfilePage",
-        dateCreated: "2026-01-01",
-        dateModified: "2026-07-02",
-        mainEntity: {
-          "@type": "Person",
-          "@id": "https://faisalorakzai.com/#person",
-          name: "Faisal Orakzai",
-          givenName: "Faisal",
-          familyName: "Orakzai",
-          alternateName: [
-            "Muhammad Faisal Orakzai",
-            "Chairman Faisal Orakzai",
-            "Malak Faisal Orakzai",
-            "faisalorakzaii",
-            "Orakzai Bond Founder",
-          ],
-          description:
-            "Founder & Chairman of Orakzai Bond (OKBOND). Pakistani blockchain entrepreneur. Born 30 April 2006.",
-          image: [
-            { "@type": "ImageObject", url: "https://orakzaibond.com/faisal-orakzai-smiling.jpg", width: 800, height: 800, caption: "Faisal Orakzai — Founder & CEO, smiling portrait", representativeOfPage: true },
-            { "@type": "ImageObject", url: "https://orakzaibond.com/faisal-orakzai-kurta.jpg", width: 800, height: 1000, caption: "Faisal Orakzai — Chairman Orakzai, shalwar qameez" },
-            { "@type": "ImageObject", url: "https://orakzaibond.com/faisal-orakzai-formal.png", width: 800, height: 1000, caption: "Faisal Orakzai — Chairman Orakzai Group, formal suit" },
-            { "@type": "ImageObject", url: "https://orakzaibond.com/faisal-orakzai.jpg", width: 1080, height: 1080, caption: "Faisal Orakzai — Founder & CEO of Orakzai Bond official portrait" },
-          ],
-          birthDate: "2006-04-30",
-          birthPlace: { "@type": "Place", name: "Pakistan", addressCountry: "PK" },
-          nationality: { "@type": "Country", name: "Pakistan" },
-          jobTitle: ["Founder & Chairman", "Blockchain Architect"],
-          worksFor: {
+        "@graph": [
+          {
             "@type": "Organization",
-            name: "Orakzai Bond",
-            url: "https://orakzaibond.com",
+            "@id": `${BASE_URL}/#organization`,
+            name: SITE_NAME,
+            alternateName: "OKBOND",
+            url: `${BASE_URL}/`,
+            founder: { "@id": `${BASE_URL}/faisal-orakzai#person` },
           },
-          identifier: [
-            {
-              "@type": "PropertyValue",
-              propertyID: "ORCID",
-              value: "0009-0000-0915-7272",
-            },
-            {
-              "@type": "PropertyValue",
-              propertyID: "Wikidata",
-              value: "Q140588912",
-            },
-          ],
-          sameAs: [
-            "https://www.wikidata.org/wiki/Q140588912",
-            "https://orcid.org/0009-0000-0915-7272",
-            "https://www.linkedin.com/in/faisalorakzaii",
-            "https://x.com/faisalorakzaii",
-            "https://www.instagram.com/faisalorakzaii",
-            "https://web.facebook.com/faisalorakzaii",
-            "https://tiktok.com/@chairmanorakzai",
-            "https://github.com/faisalorakzai-lab",
-            "https://linktr.ee/faisalorakzaiofficial",
-            "https://hackernoon.com/u/faisalorakzai",
-            "https://www.shamimforever.com/faisal-orakzai",
-            "https://faisalorakzai.vercel.app",
-            "https://www.youtube.com/@faisalorakzai",
-            "https://scholar.google.com/citations?user=ER8h90UAAAAJ",
-            "https://www.f6s.com/faisalorakzai",
-            "https://peerlist.io/faisalorakzai",
-          ],
-        },
+          {
+            "@type": "WebSite",
+            "@id": `${BASE_URL}/#website`,
+            url: `${BASE_URL}/`,
+            name: SITE_NAME,
+            publisher: { "@id": `${BASE_URL}/#organization` },
+          },
+          {
+            "@type": "Person",
+            "@id": `${BASE_URL}/faisal-orakzai#person`,
+            name: "Faisal Orakzai",
+            url: `${BASE_URL}/faisal-orakzai`,
+            image: "https://orakzaibond.com/faisal-orakzai-smiling.jpg",
+            worksFor: { "@id": `${BASE_URL}/#organization` },
+            sameAs: [
+              "https://x.com/faisalorakzaii",
+              "https://www.linkedin.com/in/faisalorakzaii",
+              "https://www.instagram.com/faisalorakzaii",
+              "https://web.facebook.com/faisalorakzaii",
+              "https://tiktok.com/@chairmanorakzai",
+              "https://github.com/faisalorakzai-lab",
+            ],
+          },
+          {
+            "@type": "ProfilePage",
+            "@id": `${BASE_URL}/faisal-orakzai#profilepage`,
+            url: `${BASE_URL}/faisal-orakzai`,
+            name: "Faisal Orakzai | Official Founder Profile",
+            description:
+              "Official profile of Faisal Orakzai, founder of Orakzai Bond (OKBOND). Explore his work and the OKBOND project.",
+            isPartOf: { "@id": `${BASE_URL}/#website` },
+            mainEntity: { "@id": `${BASE_URL}/faisal-orakzai#person` },
+            inLanguage: "en",
+          },
+        ],
       },
     },
     founder: {
-      title: "Founder Story — Faisal Orakzai | Pakistan's DeFi Pioneer",
+      title: "Faisal Orakzai | Founder of Orakzai Bond (OKBOND)",
       description:
-        "The story of Faisal Orakzai — Pakistani blockchain architect who founded Orakzai Bond (OKBOND), world's first capital-protected DeFi bond on Polygon, at age 20.",
+        "Learn about Faisal Orakzai, founder of Orakzai Bond (OKBOND), and explore the project's people, history, and ecosystem.",
       canonical: BASE_URL + "/founder",
       ogImage: "https://orakzaibond.com/faisal-orakzai-smiling.jpg",
       ogType: "profile",

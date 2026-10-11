@@ -66,6 +66,14 @@
   ],
   "rewrites": [
     {
+      "source": "/faisal-orakzai",
+      "destination": "/faisal-orakzai.html"
+    },
+    {
+      "source": "/founder",
+      "destination": "/founder.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
