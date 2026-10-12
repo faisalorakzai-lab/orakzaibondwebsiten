@@ -134,7 +134,6 @@ const TIMELINE = [
                     "https://www.linkedin.com/in/faisalorakzaii",
                     "https://x.com/faisalorakzaii",
                     "https://www.instagram.com/faisalorakzaii",
-                    "https://www.wikidata.org/wiki/Q140264666",
                     "https://www.crunchbase.com/person/faisal-orakzai",
                     "https://en.everybodywiki.com/Faisal_Orakzai"
         ],

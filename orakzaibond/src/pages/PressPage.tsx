@@ -41,8 +41,7 @@ import { useEffect } from "react";
             "sameAs": [
               "https://theorg.com/org/orakzai-bond",
               "https://www.crunchbase.com/organization/orakzai-bond",
-              "https://hackernoon.com/u/faisalorakzai",
-              "https://www.wikidata.org/wiki/Q140264666"
+              "https://hackernoon.com/u/faisalorakzai"
             ]
           },
           {
@@ -106,15 +105,6 @@ import { useEffect } from "react";
       url: "https://theorg.com/org/orakzai-bond",
       date: "2026",
       tag: "Organization",
-    },
-    {
-      outlet: "Wikidata",
-      type: "Encyclopedia Entry",
-      headline: "Faisal Orakzai — Verified Wikidata Entry (Q140264666)",
-      excerpt: "Faisal Orakzai is documented on Wikidata (Q140264666), the open knowledge graph used by Google, Wikipedia, and Bing to verify public figures.",
-      url: "https://www.wikidata.org/wiki/Q140264666",
-      date: "2025",
-      tag: "Verification",
     },
     {
       outlet: "Crunchbase",

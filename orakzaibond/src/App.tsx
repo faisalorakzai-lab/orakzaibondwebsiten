@@ -66,6 +66,75 @@ import WalletModal from "./components/WalletModal";
 
 console.log("App.tsx module loaded");
 
+function HomeHeroFallback({ onRetry }: { onRetry: () => void }) {
+  return (
+    <section className="relative flex min-h-[58vh] items-center overflow-hidden bg-[#050505] px-5 py-12 text-[#f4efe3] sm:px-8 md:min-h-[660px]">
+      <div className="mx-auto w-full max-w-7xl">
+        <p className="text-xs font-semibold tracking-[0.2em] text-amber-200/80">
+          ORAKZAI / THE OKBOND ECOSYSTEM
+        </p>
+        <h1 className="mt-5 max-w-4xl font-serif text-4xl leading-tight sm:text-5xl md:text-7xl">
+          One Ecosystem.
+          <br />
+          <span className="text-amber-200">A World of Possibilities.</span>
+        </h1>
+        <p className="mt-5 max-w-2xl text-base leading-7 text-white/70 sm:text-lg">
+          Discover properties, book stays, explore transportation, and access
+          everyday services through the growing OKBOND ecosystem.
+        </p>
+        <div className="mt-7 flex flex-wrap items-center gap-3">
+          <a
+            href="/about"
+            className="rounded-full border border-amber-200/50 px-5 py-3 text-sm font-semibold text-amber-100"
+          >
+            Discover OKBOND
+          </a>
+          <button
+            type="button"
+            onClick={onRetry}
+            className="rounded-full border border-white/20 px-5 py-3 text-sm text-white/80"
+          >
+            Retry hero
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HomeSectionFallback({
+  label,
+  onRetry,
+}: {
+  label: string;
+  onRetry: () => void;
+}) {
+  return (
+    <section
+      role="alert"
+      className="w-full bg-[#050505] px-5 py-8 text-[#f4efe3] sm:px-8"
+    >
+      <div className="mx-auto flex max-w-5xl flex-col gap-3 rounded-xl border border-amber-300/20 bg-white/[0.02] p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="font-medium text-amber-100">
+            {label} is temporarily unavailable.
+          </p>
+          <p className="mt-1 text-sm text-white/60">
+            The rest of the homepage is still available.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={onRetry}
+          className="w-fit rounded-full border border-amber-200/30 px-4 py-2 text-sm text-amber-100"
+        >
+          Retry section
+        </button>
+      </div>
+    </section>
+  );
+}
+
 function App() {
   const { address, connect, disconnect, error: walletError, clearError, okbondBalance } = useWallet();
   const [walletModalOpen, setWalletModalOpen] = useState(false);
@@ -261,10 +330,47 @@ function App() {
                   must stack vertically at full width on every breakpoint
                   via its own responsive grid; no horizontal scroll. */}
               <>
-                <Hero onConnect={connect} address={address} />
-                <LiveVaultStatus />
-                <MarcusAILiveLog />
-                <SovereignGuarantee />
+                <ErrorBoundary
+                  scope="HomeHero"
+                  fallback={(_error, retry) => (
+                    <HomeHeroFallback onRetry={retry} />
+                  )}
+                >
+                  <Hero onConnect={connect} address={address} />
+                </ErrorBoundary>
+                <ErrorBoundary
+                  scope="HomeLiveVaultStatus"
+                  fallback={(_error, retry) => (
+                    <HomeSectionFallback
+                      label="Live vault status"
+                      onRetry={retry}
+                    />
+                  )}
+                >
+                  <LiveVaultStatus />
+                </ErrorBoundary>
+                <ErrorBoundary
+                  scope="HomeMarcusAILog"
+                  fallback={(_error, retry) => (
+                    <HomeSectionFallback
+                      label="Live optimization log"
+                      onRetry={retry}
+                    />
+                  )}
+                >
+                  <MarcusAILiveLog />
+                </ErrorBoundary>
+                <ErrorBoundary
+                  scope="HomeSovereignGuarantee"
+                  fallback={(_error, retry) => (
+                    <HomeSectionFallback
+                      label="Orakzai Bond overview"
+                      onRetry={retry}
+                    />
+                  )}
+                >
+                  <SovereignGuarantee />
+                </ErrorBoundary>
                 <ErrorBoundary scope="OKBONDHeatmap" silent>
                   <OKBONDHeatmap />
                 </ErrorBoundary>

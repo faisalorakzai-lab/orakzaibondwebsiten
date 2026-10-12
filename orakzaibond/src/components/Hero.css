@@ -409,6 +409,24 @@
   background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.55), transparent);
 }
 
+@media (max-width: 767px) {
+  .okbond-hero {
+    min-height: 0;
+  }
+
+  .okbond-hero__layout {
+    min-height: 0;
+  }
+
+  .okbond-hero__copy {
+    padding: 0.25rem 0 0.75rem;
+  }
+
+  .okbond-hero__visual {
+    height: clamp(17rem, 66vw, 20rem);
+  }
+}
+
 @media (min-width: 768px) {
   .okbond-hero__copy {
     padding: 2rem 0;
