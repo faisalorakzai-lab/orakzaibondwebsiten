@@ -168,12 +168,12 @@ export default function Hero(_props: HeroProps) {
           >
             <a
               className="okbond-hero__button okbond-hero__button--primary"
-              href="#okbond-ecosystem"
+              href="#okbond-discovery"
               onClick={(event) => {
                 event.preventDefault();
-                visualRef.current?.scrollIntoView({
+                document.getElementById("okbond-discovery")?.scrollIntoView({
                   behavior: prefersReducedMotion ? "auto" : "smooth",
-                  block: "center",
+                  block: "start",
                 });
               }}
             >

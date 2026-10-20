@@ -159,6 +159,17 @@ if (!["Organization", "WebSite", "WebPage"].every((type) => homeTypes.includes(t
 if (!/<div\b[^>]*id=["']root["'][^>]*>[\s\S]*?<h1\b/i.test(homeHtml)) {
   throw new Error("Visible homepage fallback heading is missing");
 }
+const ecosystemFallbackText = [
+  "Everything Connected.",
+  "OKBOND STAYS",
+  "OKBOND MOBILITY",
+  "OKBOND PROPERTIES",
+  "OKBOND PAY",
+];
+if (!ecosystemFallbackText.every((text) => homeHtml.includes(text))) {
+  throw new Error("Visible homepage ecosystem discovery fallback is incomplete");
+}
+
 if (/<noscript\b|id=["']faq["']|left\s*:\s*-9999px|clip\s*:\s*rect/i.test(homeHtml)) {
   throw new Error("Legacy hidden homepage SEO content remains in the build");
 }
