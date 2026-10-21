@@ -7,6 +7,7 @@ import MobileBottomNav from "./components/MobileBottomNav";
 import { useIsDesktop } from "./hooks/useIsDesktop";
 import Hero from "./components/Hero";
 import EcosystemDiscovery from "./components/EcosystemDiscovery";
+import UtilityExplorer from "./components/UtilityExplorer";
 import SiteSidebar, { SidebarHandle } from "./components/SiteSidebar";
 import MobileDrawer from "./components/MobileDrawer";
 import Footer from "./components/Footer";
@@ -341,6 +342,9 @@ function App() {
                 </ErrorBoundary>
                 <ErrorBoundary scope="HomeEcosystemDiscovery" silent>
                   <EcosystemDiscovery />
+                </ErrorBoundary>
+                <ErrorBoundary scope="HomeUtilityExplorer" silent>
+                  <UtilityExplorer />
                 </ErrorBoundary>
                 <ErrorBoundary
                   scope="HomeLiveVaultStatus"
