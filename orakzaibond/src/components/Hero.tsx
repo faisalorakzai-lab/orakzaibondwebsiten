@@ -8,6 +8,8 @@ import {
   Hotel,
   Zap,
 } from "lucide-react";
+import ErrorBoundary from "./ErrorBoundary";
+import { PAGE_SEO, useSEO } from "./SEO";
 import "./Hero.css";
 
 const EcosystemScene = lazy(() => import("./EcosystemScene"));
@@ -19,24 +21,28 @@ interface HeroProps {
 
 const SERVICES = [
   {
+    slug: "stays",
     label: "STAYS & TRAVEL",
     detail: "Hotels & journeys",
     icon: Hotel,
     position: "top",
   },
   {
+    slug: "properties",
     label: "REAL ESTATE",
     detail: "Places to call home",
     icon: Building2,
     position: "left",
   },
   {
+    slug: "mobility",
     label: "MOBILITY",
     detail: "Move with ease",
     icon: CarFront,
     position: "right",
   },
   {
+    slug: "pay",
     label: "EVERYDAY SERVICES",
     detail: "Utilities & essentials",
     icon: Zap,
@@ -60,6 +66,7 @@ function StaticEcosystem() {
 }
 
 export default function Hero(_props: HeroProps) {
+  useSEO(PAGE_SEO.home);
   const visualRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
   const [webglAvailable, setWebglAvailable] = useState(false);
@@ -67,6 +74,22 @@ export default function Hero(_props: HeroProps) {
 
   useEffect(() => {
     if (prefersReducedMotion) {
+      setWebglAvailable(false);
+      return;
+    }
+
+    // Keep WebGL off touch-first/small screens. Some Android WebViews report
+    // WebGL support but fail while creating the renderer; the CSS globe is
+    // deliberately the reliable mobile presentation.
+    let preferStatic = false;
+    try {
+      preferStatic = window.matchMedia(
+        "(max-width: 767px), (pointer: coarse)",
+      ).matches;
+    } catch {
+      preferStatic = false;
+    }
+    if (preferStatic) {
       setWebglAvailable(false);
       return;
     }
@@ -119,7 +142,7 @@ export default function Hero(_props: HeroProps) {
       <div className="okbond-hero__grid" aria-hidden="true" />
       <div className="okbond-hero__glow" aria-hidden="true" />
 
-      <div className="okbond-hero__layout relative z-10 mx-auto grid w-full max-w-7xl items-center gap-2 px-5 pb-8 pt-24 sm:px-8 md:grid-cols-[0.92fr_1.08fr] md:gap-4 md:px-10 md:pb-14 md:pt-28">
+      <div className="okbond-hero__layout relative z-10 mx-auto grid w-full max-w-7xl items-start gap-2 px-5 pb-8 pt-10 sm:px-8 md:grid-cols-[0.92fr_1.08fr] md:items-center md:gap-4 md:px-10 md:pb-14 md:pt-28">
         <div className="okbond-hero__copy">
           <motion.div {...reveal(0)} className="okbond-hero__eyebrow">
             <span className="okbond-hero__status-dot" aria-hidden="true" />
@@ -128,7 +151,7 @@ export default function Hero(_props: HeroProps) {
 
           <motion.h1
             {...reveal(0.08)}
-            className="okbond-hero__title mt-5 text-[clamp(2.8rem,8vw,5.8rem)] leading-[0.98] md:mt-7"
+            className="okbond-hero__title mt-4 text-[clamp(2.4rem,8vw,5.8rem)] leading-[0.98] md:mt-7 md:text-[clamp(2.8rem,8vw,5.8rem)]"
           >
             One Ecosystem.
             <br />
@@ -137,7 +160,7 @@ export default function Hero(_props: HeroProps) {
 
           <motion.p
             {...reveal(0.16)}
-            className="okbond-hero__description mt-5 max-w-xl text-base leading-7 sm:text-lg sm:leading-8"
+            className="okbond-hero__description mt-4 max-w-xl text-base leading-7 md:mt-5 sm:text-lg sm:leading-8"
           >
             Discover properties, book stays, explore transportation, and access
             everyday services through the growing OKBOND ecosystem.
@@ -145,16 +168,16 @@ export default function Hero(_props: HeroProps) {
 
           <motion.div
             {...reveal(0.24)}
-            className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center"
+            className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-center md:mt-7"
           >
             <a
               className="okbond-hero__button okbond-hero__button--primary"
-              href="#okbond-ecosystem"
+              href="#okbond-discovery"
               onClick={(event) => {
                 event.preventDefault();
-                visualRef.current?.scrollIntoView({
+                document.getElementById("okbond-discovery")?.scrollIntoView({
                   behavior: prefersReducedMotion ? "auto" : "smooth",
-                  block: "center",
+                  block: "start",
                 });
               }}
             >
@@ -172,7 +195,7 @@ export default function Hero(_props: HeroProps) {
 
           <motion.div
             {...reveal(0.32)}
-            className="okbond-hero__footnote mt-7 flex items-center gap-3"
+            className="okbond-hero__footnote mt-4 flex items-center gap-3 md:mt-7"
           >
             <span className="okbond-hero__footnote-line" aria-hidden="true" />
             A connected experience, designed around everyday life.
@@ -187,25 +210,33 @@ export default function Hero(_props: HeroProps) {
             id="okbond-ecosystem"
             ref={visualRef}
             className="okbond-hero__visual"
-            role="img"
-            aria-label="OKBOND ecosystem globe surrounded by hotels and travel, real estate, mobility, and everyday services"
+            role="group"
+            aria-label="Explore OKBOND ecosystem services"
           >
             <div className="okbond-hero__visual-halo" aria-hidden="true" />
             {webglAvailable && sceneReady ? (
-              <Suspense fallback={<StaticEcosystem />}>
-                <div className="okbond-hero__scene" aria-hidden="true">
-                  <EcosystemScene reducedMotion={Boolean(prefersReducedMotion)} />
-                </div>
-              </Suspense>
+              <ErrorBoundary
+                scope="HomepageEcosystem3D"
+                fallback={() => <StaticEcosystem />}
+              >
+                <Suspense fallback={<StaticEcosystem />}>
+                  <div className="okbond-hero__scene" aria-hidden="true">
+                    <EcosystemScene
+                      reducedMotion={Boolean(prefersReducedMotion)}
+                    />
+                  </div>
+                </Suspense>
+              </ErrorBoundary>
             ) : (
               <StaticEcosystem />
             )}
 
-            {SERVICES.map(({ label, detail, icon: Icon, position }, index) => (
-              <motion.div
-                key={label}
+            {SERVICES.map(({ slug, label, detail, icon: Icon, position }, index) => (
+              <motion.a
+                key={slug}
+                href={"#okbond-service-" + slug}
+                aria-label={"Explore " + label + ": " + detail}
                 className={`okbond-service-card okbond-service-card--${position}`}
-                aria-hidden="true"
                 animate={
                   prefersReducedMotion
                     ? { opacity: 1 }
@@ -221,20 +252,20 @@ export default function Hero(_props: HeroProps) {
                   },
                 }}
               >
-                <span className="okbond-service-card__icon">
+                <span className="okbond-service-card__icon" aria-hidden="true">
                   <Icon className="h-4 w-4" strokeWidth={1.6} />
                 </span>
                 <span className="okbond-service-card__copy">
                   <span className="okbond-service-card__label">{label}</span>
                   <span className="okbond-service-card__detail">{detail}</span>
                 </span>
-              </motion.div>
+              </motion.a>
             ))}
           </div>
           <div className="okbond-hero__visual-caption" aria-hidden="true">
             <span>ONE CONNECTED WORLD</span>
             <span className="okbond-hero__caption-line" />
-            <span>OKBOND · ORAKZAI</span>
+            <span>OKBOND Â· ORAKZAI</span>
           </div>
         </motion.div>
       </div>

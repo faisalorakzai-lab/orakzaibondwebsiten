@@ -5,6 +5,7 @@ import { useEffect } from "react";
 
     const GOLD = "linear-gradient(135deg,#BF953F 0%,#FCF6BA 30%,#B38728 50%,#FBF5B7 70%,#AA771C 100%)";
     const MIDNIGHT = "#05060A";
+    /*
     const TODAY_DATE = "2026-07-02";
 
     // ─── Complete ProfilePage + Person Schema (Shamim Forever Authority Pattern) ───
@@ -463,16 +464,19 @@ import { useEffect } from "react";
           "Cycle-Based Activation Logic", "Real-World Asset Tokenization", "Smart Contract Security"
         ]
       };
+    */
     function useSeoHead() {
       useEffect(() => {
         const prev = document.title;
-        document.title = "Faisal Orakzai — Founder & CEO of Orakzai Bond | Blockchain Architect";
+        const title = "Faisal Orakzai | Official Founder Profile";
+        const description =
+          "Official profile of Faisal Orakzai, founder of Orakzai Bond (OKBOND). Explore his work and the OKBOND project.";
+        document.title = title;
 
         const tags: Array<[string,string,string]> = [
-          ["name","description","Faisal Orakzai is the Founder & CEO of Orakzai Bond (OKBOND) — world's first capital-protected decentralized bond on Polygon. Born April 30, 2006, Orakzai Pakistan. Blockchain architect, DeFi builder, luxury brand founder. Wikidata Q140588912."],
-          ["name","keywords","Faisal Orakzai, Chairman Faisal Orakzai, Faisal Orakzai Orakzai Bond, faisalorakzaii, OKBOND founder, Orakzai Bond CEO, Pakistani blockchain entrepreneur, DeFi founder Pakistan, Malak Faisal Orakzai, Faisal Orakzai blockchain, Wikidata Q140588912, Faisal Orakzai ORCID, Faisal Orakzai Shamim Forever"],
-          ["property","og:title","Faisal Orakzai — Founder & CEO of Orakzai Bond | Pakistani Blockchain Architect"],
-          ["property","og:description","Pakistani entrepreneur born 2006. Founder of Orakzai Bond (OKBOND), Shamim Forever & Orakzai Group. Blockchain architect building world's first capital-protected DeFi bond on Polygon. Wikidata Q140588912."],
+          ["name","description",description],
+          ["property","og:title",title],
+          ["property","og:description",description],
           ["property","og:image","https://orakzaibond.com/faisal-orakzai-smiling.jpg"],
           ["property","og:url","https://orakzaibond.com/faisal-orakzai"],
           ["property","og:type","profile"],
@@ -483,44 +487,107 @@ import { useEffect } from "react";
           ["name","twitter:card","summary_large_image"],
           ["name","twitter:site","@faisalorakzaii"],
           ["name","twitter:creator","@faisalorakzaii"],
-          ["name","twitter:title","Faisal Orakzai — Founder & CEO, Orakzai Bond"],
-          ["name","twitter:description","Pakistani blockchain architect. Founder of Orakzai Bond (OKBOND), world's first capital-protected DeFi bond on Polygon. Born 2006. Wikidata Q140588912."],
+          ["name","twitter:title",title],
+          ["name","twitter:description",description],
           ["name","twitter:image","https://orakzaibond.com/faisal-orakzai-smiling.jpg"],
           ["name","robots","index, follow, max-image-preview:large, max-snippet:-1"]
         ];
 
         const added: HTMLMetaElement[] = [];
+        const previousMeta: Array<{ element: HTMLMetaElement; content: string | null }> = [];
         tags.forEach(([attr, key, val]) => {
           let el = document.querySelector(`meta[${attr}="${key}"]`) as HTMLMetaElement | null;
-          if (!el) { el = document.createElement("meta"); el.setAttribute(attr, key); document.head.appendChild(el); added.push(el); }
+          if (!el) {
+            el = document.createElement("meta");
+            el.setAttribute(attr, key);
+            document.head.appendChild(el);
+            added.push(el);
+          } else {
+            previousMeta.push({ element: el, content: el.getAttribute("content") });
+          }
           el.setAttribute("content", val);
         });
 
         let canon = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+        const createdCanonical = !canon;
+        const previousCanonical = canon?.getAttribute("href") ?? null;
         if (!canon) { canon = document.createElement("link"); canon.setAttribute("rel","canonical"); document.head.appendChild(canon); }
         canon.setAttribute("href","https://orakzaibond.com/faisal-orakzai");
 
-        // Inject ProfilePage + Person schema
-        const ldIds = [
-            "faisal-bio-profilepage-ld", "faisal-bio-faq-ld",
-            "faisal-bio-standalone-ld", "faisal-bio-breadcrumb-ld",
-            "faisal-bio-faqfaisal-ld", "faisal-bio-okbondorg-ld"
-          ];
-          const ldData = [
-            profilePageSchema, faqSchema,
-            profilePageStandaloneSchema, breadcrumbSchema,
-            faqFaisalSchema, okbondOrgSchema
-          ];
-        ldIds.forEach((id, i) => {
-          let ld = document.getElementById(id) as HTMLScriptElement | null;
-          if (!ld) { ld = document.createElement("script") as HTMLScriptElement; ld.id = id; ld.type = "application/ld+json"; document.head.appendChild(ld); }
-          ld.textContent = JSON.stringify(ldData[i]);
-        });
+        const legacySchemaIds = [
+          "faisal-bio-profilepage-ld",
+          "faisal-bio-faq-ld",
+          "faisal-bio-standalone-ld",
+          "faisal-bio-breadcrumb-ld",
+          "faisal-bio-faqfaisal-ld",
+          "faisal-bio-okbondorg-ld",
+        ];
+        legacySchemaIds.forEach((id) => document.getElementById(id)?.remove());
+
+        const personId = "https://orakzaibond.com/faisal-orakzai#person";
+        const profileSchema = {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://orakzaibond.com/#organization",
+              name: "Orakzai Bond",
+              alternateName: "OKBOND",
+              url: "https://orakzaibond.com/",
+              founder: { "@id": personId },
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://orakzaibond.com/#website",
+              url: "https://orakzaibond.com/",
+              name: "Orakzai Bond",
+              publisher: { "@id": "https://orakzaibond.com/#organization" },
+            },
+            {
+              "@type": "Person",
+              "@id": personId,
+              name: "Faisal Orakzai",
+              url: "https://orakzaibond.com/faisal-orakzai",
+              image: "https://orakzaibond.com/faisal-orakzai-smiling.jpg",
+              worksFor: { "@id": "https://orakzaibond.com/#organization" },
+              sameAs: [
+                "https://x.com/faisalorakzaii",
+                "https://www.linkedin.com/in/faisalorakzaii",
+                "https://www.instagram.com/faisalorakzaii",
+                "https://web.facebook.com/faisalorakzaii",
+                "https://tiktok.com/@chairmanorakzai",
+                "https://github.com/faisalorakzai-lab",
+              ],
+            },
+            {
+              "@type": "ProfilePage",
+              "@id": "https://orakzaibond.com/faisal-orakzai#profilepage",
+              url: "https://orakzaibond.com/faisal-orakzai",
+              name: title,
+              description,
+              isPartOf: { "@id": "https://orakzaibond.com/#website" },
+              mainEntity: { "@id": personId },
+              inLanguage: "en",
+            },
+          ],
+        };
+        const ld = document.createElement("script");
+        ld.id = "faisal-bio-profile-ld";
+        ld.type = "application/ld+json";
+        ld.textContent = JSON.stringify(profileSchema);
+        document.head.appendChild(ld);
 
         return () => {
           document.title = prev;
-          added.forEach(el => el.remove());
-          ldIds.forEach(id => document.getElementById(id)?.remove());
+          added.forEach((el) => el.remove());
+          previousMeta.forEach(({ element, content }) => {
+            if (content === null) element.removeAttribute("content");
+            else element.setAttribute("content", content);
+          });
+          if (createdCanonical) canon?.remove();
+          else if (previousCanonical === null) canon?.removeAttribute("href");
+          else canon?.setAttribute("href", previousCanonical);
+          ld.remove();
         };
       }, []);
     }
@@ -545,8 +612,8 @@ export default function FaisalOrakzaiBioPage() {
                   loading="eager" />
               </div>
               <div style={{display:"flex",gap:8,flexWrap:"wrap",justifyContent:"center"}}>
-                <a href="https://www.wikidata.org/wiki/Q140588912" target="_blank" rel="noopener noreferrer"
-                  style={{padding:"4px 10px",border:"1px solid rgba(191,149,63,0.45)",color:"#BF953F",fontSize:10,letterSpacing:"0.2em",textTransform:"uppercase",textDecoration:"none"}}>✓ Wikidata Q140588912</a>
+                <a href="/faisal-orakzai"
+                  style={{padding:"4px 10px",border:"1px solid rgba(191,149,63,0.45)",color:"#BF953F",fontSize:10,letterSpacing:"0.2em",textTransform:"uppercase",textDecoration:"none"}}>Official profile</a>
                 <a href="https://orcid.org/0009-0000-0915-7272" target="_blank" rel="noopener noreferrer"
                   style={{padding:"4px 10px",border:"1px solid rgba(191,149,63,0.45)",color:"#BF953F",fontSize:10,letterSpacing:"0.2em",textTransform:"uppercase",textDecoration:"none"}}>✓ ORCID</a>
                 <a href="https://en.everybodywiki.com/Faisal_Orakzai" target="_blank" rel="noopener noreferrer"

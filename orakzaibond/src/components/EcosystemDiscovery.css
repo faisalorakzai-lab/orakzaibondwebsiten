@@ -1,0 +1,519 @@
+.okbond-discovery {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(3.75rem, 8vw, 7.25rem) 1.25rem;
+  color: #f4efe5;
+  background:
+    radial-gradient(ellipse at 12% 18%, rgba(31, 78, 58, 0.22), transparent 38%),
+    radial-gradient(ellipse at 89% 22%, rgba(198, 155, 62, 0.12), transparent 32%),
+    linear-gradient(180deg, #070a09 0%, #090a08 55%, #060807 100%);
+  scroll-margin-top: 5rem;
+}
+
+.okbond-discovery::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background-image: linear-gradient(rgba(226, 190, 104, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(226, 190, 104, 0.025) 1px, transparent 1px);
+  background-size: 52px 52px;
+  content: "";
+  mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 80%, transparent);
+}
+
+.okbond-discovery__container {
+  width: min(100%, 78rem);
+  margin: 0 auto;
+}
+
+.okbond-discovery__header {
+  margin-bottom: 2.25rem;
+}
+
+.okbond-discovery__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0 0 1rem;
+  color: rgba(242, 211, 143, 0.82);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.okbond-discovery__eyebrow > span {
+  width: 0.42rem;
+  height: 0.42rem;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: #d5b267;
+  box-shadow: 0 0 14px rgba(214, 177, 95, 0.72);
+}
+
+.okbond-discovery__intro {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.okbond-discovery__intro h2 {
+  margin: 0;
+  color: #fbf7ee;
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: clamp(2.15rem, 5vw, 4.15rem);
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+}
+
+.okbond-discovery__subtitle {
+  margin: 0.8rem 0 0;
+  color: rgba(238, 233, 222, 0.72);
+  font-size: clamp(0.98rem, 1.8vw, 1.12rem);
+  line-height: 1.65;
+}
+
+.okbond-discovery__availability {
+  max-width: 23rem;
+  margin: 0 0 0.25rem;
+  color: rgba(235, 229, 216, 0.56);
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
+.okbond-discovery__rail {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.okbond-discovery__card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 26rem;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 1.35rem;
+  background:
+    linear-gradient(155deg, rgba(14, 17, 16, 0.98), rgba(7, 9, 8, 0.98)) padding-box,
+    linear-gradient(140deg, rgba(224, 193, 126, 0.52), rgba(104, 82, 42, 0.18) 38%, rgba(239, 209, 151, 0.3)) border-box;
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.26), inset 0 1px rgba(255, 255, 255, 0.035);
+  transition: transform 260ms ease, box-shadow 260ms ease, border-color 260ms ease;
+}
+
+.okbond-discovery__art {
+  --art-glow: rgba(210, 175, 104, 0.3);
+  position: relative;
+  display: grid;
+  min-height: 11.25rem;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 78%, var(--art-glow), transparent 46%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+}
+
+.okbond-discovery__art--mobility {
+  --art-glow: rgba(82, 151, 119, 0.29);
+}
+
+.okbond-discovery__art--properties {
+  --art-glow: rgba(208, 165, 85, 0.28);
+}
+
+.okbond-discovery__art--pay {
+  --art-glow: rgba(61, 139, 105, 0.3);
+}
+
+.okbond-discovery__art-orbit {
+  position: absolute;
+  width: 11.5rem;
+  height: 6.25rem;
+  border: 1px solid rgba(224, 197, 141, 0.16);
+  border-radius: 50%;
+  transform: rotate(-24deg);
+}
+
+.okbond-discovery__art-orbit--inner {
+  width: 8.6rem;
+  height: 4.7rem;
+  border-color: rgba(224, 197, 141, 0.11);
+  transform: rotate(34deg);
+}
+
+.okbond-discovery__art-object {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 7.1rem;
+  height: 6rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.34rem;
+  border: 1px solid rgba(231, 204, 151, 0.38);
+  border-radius: 1rem 1rem 0.55rem 0.55rem;
+  color: #f6e4bd;
+  background: linear-gradient(145deg, rgba(46, 51, 42, 0.96), rgba(12, 16, 13, 0.98) 65%);
+  box-shadow: 12px 17px 26px rgba(0, 0, 0, 0.5), inset 0 1px rgba(255, 255, 255, 0.16), inset -6px -7px 16px rgba(0, 0, 0, 0.35);
+  transform: perspective(700px) rotateX(8deg) rotateY(-8deg);
+  transition: transform 280ms ease, box-shadow 280ms ease;
+}
+
+.okbond-discovery__art-object--mobility {
+  width: 9rem;
+  height: 4.65rem;
+  flex-direction: row;
+  gap: 0.55rem;
+  border-radius: 1.8rem 2.15rem 0.8rem 0.8rem;
+  transform: perspective(700px) rotateX(7deg) rotateY(-9deg) translateY(0.3rem);
+}
+
+.okbond-discovery__art-object--properties {
+  width: 5.6rem;
+  height: 7.1rem;
+  border-radius: 0.55rem 0.55rem 0.35rem 0.35rem;
+  background: linear-gradient(145deg, rgba(60, 55, 39, 0.98), rgba(13, 15, 12, 0.98) 68%);
+}
+
+.okbond-discovery__art-object--pay {
+  width: 8.5rem;
+  height: 5.1rem;
+  align-items: flex-start;
+  padding-left: 1.1rem;
+  border-radius: 0.9rem;
+  background: linear-gradient(135deg, rgba(36, 65, 52, 0.98), rgba(12, 20, 16, 0.98) 70%);
+  transform: perspective(700px) rotateX(8deg) rotateY(-12deg) rotateZ(-4deg);
+}
+
+.okbond-discovery__art-icon {
+  width: 2.15rem;
+  height: 2.15rem;
+  filter: drop-shadow(0 0 12px rgba(245, 218, 161, 0.23));
+}
+
+.okbond-discovery__art-wordmark {
+  color: rgba(255, 247, 229, 0.88);
+  font-size: 0.53rem;
+  font-weight: 750;
+  letter-spacing: 0.19em;
+}
+
+.okbond-discovery__art-label {
+  color: rgba(238, 213, 163, 0.7);
+  font-size: 0.42rem;
+  letter-spacing: 0.16em;
+}
+
+.okbond-discovery__art-index {
+  position: absolute;
+  right: 1rem;
+  bottom: 0.85rem;
+  color: rgba(224, 199, 151, 0.55);
+  font-size: 0.6rem;
+  letter-spacing: 0.13em;
+}
+
+.okbond-discovery__card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 0.85rem 1.1rem 1.15rem;
+}
+
+.okbond-discovery__card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.okbond-discovery__category {
+  color: rgba(234, 228, 216, 0.62);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+}
+
+.okbond-discovery__coming-soon {
+  display: inline-flex;
+  min-height: 1.55rem;
+  align-items: center;
+  border: 1px solid rgba(214, 180, 105, 0.28);
+  border-radius: 999px;
+  padding: 0.22rem 0.56rem;
+  color: #e9cd92;
+  background: rgba(199, 164, 86, 0.075);
+  font-size: 0.61rem;
+  font-weight: 650;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+}
+
+.okbond-discovery__card-title {
+  margin: 0.7rem 0 0;
+  color: #f5ead1;
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: clamp(1.05rem, 1.4vw, 1.28rem);
+  font-weight: 550;
+  letter-spacing: 0.035em;
+}
+
+.okbond-discovery__card-description {
+  margin: 0.55rem 0 1rem;
+  color: rgba(237, 233, 224, 0.68);
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+
+.okbond-discovery__action {
+  display: inline-flex;
+  width: 100%;
+  min-height: 2.9rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: auto;
+  border: 1px solid rgba(222, 188, 115, 0.4);
+  border-radius: 999px;
+  padding: 0.65rem 0.9rem 0.65rem 1rem;
+  color: #f1d79d;
+  background: rgba(214, 178, 99, 0.055);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+  transition: color 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.okbond-discovery__action svg,
+.okbond-discovery__about-link svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  transition: transform 180ms ease;
+}
+
+.okbond-discovery__action:hover {
+  border-color: rgba(238, 206, 141, 0.75);
+  color: #fff1cf;
+  background: rgba(214, 178, 99, 0.13);
+}
+
+.okbond-discovery__action:hover svg,
+.okbond-discovery__about-link:hover svg {
+  transform: translateX(0.18rem);
+}
+
+.okbond-discovery__action:focus-visible,
+.okbond-discovery__dialog-close:focus-visible,
+.okbond-discovery__close-link:focus-visible,
+.okbond-discovery__about-link:focus-visible {
+  outline: 2px solid #e4c377;
+  outline-offset: 3px;
+}
+
+.okbond-discovery__disclosure {
+  margin: 1.15rem 0 0;
+  color: rgba(233, 229, 219, 0.48);
+  font-size: 0.69rem;
+  line-height: 1.6;
+}
+
+.okbond-discovery__dialog {
+  position: fixed;
+  width: min(92vw, 38rem);
+  max-width: 38rem;
+  max-height: min(82vh, 42rem);
+  overflow-y: auto;
+  border: 1px solid rgba(218, 186, 112, 0.46);
+  border-radius: 1.4rem;
+  padding: 0;
+  color: #f6f0e3;
+  background:
+    radial-gradient(ellipse at 92% 8%, rgba(89, 107, 65, 0.18), transparent 34%),
+    linear-gradient(150deg, #10130f, #080a09 72%);
+  box-shadow: 0 30px 100px rgba(0, 0, 0, 0.72);
+}
+
+.okbond-discovery__dialog::backdrop {
+  background: rgba(2, 4, 3, 0.78);
+  backdrop-filter: blur(7px);
+}
+
+.okbond-discovery__dialog-content {
+  position: relative;
+  padding: clamp(1.5rem, 5vw, 2.4rem);
+}
+
+.okbond-discovery__dialog-close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  display: grid;
+  width: 2.6rem;
+  height: 2.6rem;
+  place-items: center;
+  border: 1px solid rgba(235, 229, 214, 0.17);
+  border-radius: 999px;
+  color: #eee4ce;
+  background: rgba(255, 255, 255, 0.035);
+  cursor: pointer;
+}
+
+.okbond-discovery__dialog-close svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.okbond-discovery__dialog .okbond-discovery__eyebrow {
+  margin-right: 3.1rem;
+  margin-bottom: 1.2rem;
+}
+
+.okbond-discovery__dialog h2 {
+  margin: 1rem 0 0;
+  color: #f5e7c8;
+  font-family: var(--font-heading, Georgia, serif);
+  font-size: clamp(1.75rem, 7vw, 2.5rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.okbond-discovery__dialog-category {
+  margin: 0.55rem 0 0;
+  color: #d7bd83;
+  font-size: 0.82rem;
+}
+
+.okbond-discovery__dialog-description,
+.okbond-discovery__dialog-note {
+  color: rgba(241, 236, 225, 0.74);
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+.okbond-discovery__dialog-description {
+  margin: 1.5rem 0 0.8rem;
+}
+
+.okbond-discovery__dialog-note {
+  margin: 0;
+  border-left: 2px solid rgba(221, 187, 111, 0.72);
+  padding-left: 0.9rem;
+  color: rgba(241, 236, 225, 0.58);
+  font-size: 0.82rem;
+}
+
+.okbond-discovery__dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: 1.7rem;
+}
+
+.okbond-discovery__about-link,
+.okbond-discovery__close-link {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.5rem;
+  border: 0;
+  padding: 0.35rem 0;
+  color: #f0d394;
+  background: transparent;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 650;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.okbond-discovery__close-link {
+  color: rgba(239, 234, 224, 0.64);
+}
+
+@media (max-width: 639px) {
+  .okbond-discovery {
+    padding-right: 0;
+    padding-left: 1.1rem;
+  }
+
+  .okbond-discovery__intro {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.8rem;
+    padding-right: 1.1rem;
+  }
+
+  .okbond-discovery__availability {
+    max-width: 32rem;
+  }
+
+  .okbond-discovery__rail {
+    display: flex;
+    overflow-x: auto;
+    gap: 0.85rem;
+    margin-right: 0;
+    padding: 0.15rem 1.1rem 1rem 0;
+    scroll-snap-type: x mandatory;
+    scrollbar-color: rgba(213, 178, 103, 0.42) transparent;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .okbond-discovery__card {
+    min-height: 27rem;
+    flex: 0 0 min(83vw, 21rem);
+    scroll-snap-align: start;
+  }
+
+  .okbond-discovery__disclosure {
+    padding-right: 1.1rem;
+  }
+}
+
+@media (min-width: 1100px) {
+  .okbond-discovery__rail {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .okbond-discovery__card {
+    min-height: 27rem;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .okbond-discovery__card:hover {
+    box-shadow: 0 26px 66px rgba(0, 0, 0, 0.42), 0 0 34px rgba(204, 167, 92, 0.07);
+    transform: translateY(-5px) perspective(1000px) rotateX(0.8deg) rotateY(-0.8deg);
+  }
+
+  .okbond-discovery__card:hover .okbond-discovery__art-object {
+    box-shadow: 17px 21px 32px rgba(0, 0, 0, 0.55), inset 0 1px rgba(255, 255, 255, 0.18), inset -6px -7px 16px rgba(0, 0, 0, 0.35);
+    transform: perspective(700px) rotateX(5deg) rotateY(-5deg) translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .okbond-discovery__card,
+  .okbond-discovery__art-object,
+  .okbond-discovery__action,
+  .okbond-discovery__action svg,
+  .okbond-discovery__about-link svg {
+    scroll-behavior: auto;
+    transition: none;
+  }
+
+  .okbond-discovery__card:hover,
+  .okbond-discovery__card:hover .okbond-discovery__art-object {
+    transform: none;
+  }
+}

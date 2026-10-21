@@ -288,6 +288,10 @@
 
 .okbond-service-card {
   position: absolute;
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
   z-index: 3;
   display: flex;
   width: 9.25rem;
@@ -303,6 +307,16 @@
     inset 0 1px 0 rgba(255, 244, 211, 0.055);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
+}
+
+.okbond-service-card:hover {
+  border-color: rgba(226, 196, 119, 0.72);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.48), 0 0 20px rgba(212, 175, 55, 0.12);
+}
+
+.okbond-service-card:focus-visible {
+  outline: 2px solid #e2c477;
+  outline-offset: 4px;
 }
 
 .okbond-service-card--top {
@@ -407,6 +421,24 @@
   width: 2rem;
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.55), transparent);
+}
+
+@media (max-width: 767px) {
+  .okbond-hero {
+    min-height: 0;
+  }
+
+  .okbond-hero__layout {
+    min-height: 0;
+  }
+
+  .okbond-hero__copy {
+    padding: 0.25rem 0 0.75rem;
+  }
+
+  .okbond-hero__visual {
+    height: clamp(17rem, 66vw, 20rem);
+  }
 }
 
 @media (min-width: 768px) {
