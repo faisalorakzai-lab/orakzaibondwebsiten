@@ -1,241 +1,211 @@
-import { motion, useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
-import { Vault, Activity, Shield, Coins, Building2, Landmark, Zap } from "lucide-react";
+import { useState, type CSSProperties } from "react";
+import { Activity, ArrowUpRight, Building2, Landmark, Shield, Zap } from "lucide-react";
+import "./LiveVaultStatus.css";
 
-const GOLD = "#D4AF37";
-const GOLD_BRIGHT = "#F4CE45";
+const allocations = [
+  {
+    id: "city",
+    name: "Azaan Smart City",
+    percent: "60%",
+    amount: "$4,500,000",
+    description: "Real estate allocation",
+    detail: "Illustrative allocation",
+    icon: Building2,
+    start: 0,
+    end: 216,
+  },
+  {
+    id: "outlets",
+    name: "Shamim Forever Global Outlets",
+    percent: "20%",
+    amount: "$1,500,000",
+    description: "Global outlet expansion target: 10+ outlets",
+    detail: "Illustrative expansion target",
+    icon: Landmark,
+    start: 216,
+    end: 288,
+  },
+  {
+    id: "security",
+    name: "Security Reserve",
+    percent: "10%",
+    amount: "$750,000",
+    description: "Planned five-year security lock",
+    detail: "Planned reserve target",
+    icon: Shield,
+    start: 288,
+    end: 324,
+  },
+  {
+    id: "utilities",
+    name: "Utilities",
+    percent: "10%",
+    amount: "$750,000",
+    description: "Utility and ecosystem infrastructure",
+    detail: "Illustrative infrastructure target",
+    icon: Zap,
+    start: 324,
+    end: 360,
+  },
+] as const;
 
-/* Live "last sync" clock — proves the widget is alive */
-function LiveClock() {
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  return (
-    <span className="font-mono tabular-nums">
-      {now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })} UTC
-    </span>
-  );
-}
+const vaultAddress = "0x3Cb45d2022e2E15AFa8C4822647B89935a2ceD08";
+const vaultExplorerUrl = "https://polygonscan.com/address/0x3cb45d2022e2e15afa8c4822647b89935a2ced08";
 
 export default function LiveVaultStatus() {
+  const [selectedId, setSelectedId] = useState<string>(allocations[0].id);
+  const selected = allocations.find((item) => item.id === selectedId) ?? allocations[0];
+  const ringStyle = {
+    "--sv-active-start": selected.start + "deg",
+    "--sv-active-end": selected.end + "deg",
+  } as CSSProperties;
+
   return (
-    <section
-      id="live-vault"
-      className="relative py-24 md:py-32 px-4 md:px-6 overflow-hidden"
-      style={{
-        background: "radial-gradient(ellipse at top, rgba(212,175,55,0.04), transparent 60%), #050505",
-        borderTop: `1px solid ${GOLD}22`,
-        borderBottom: `1px solid ${GOLD}22`,
-      }}
-    >
-      {/* Subtle grid backdrop */}
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-[0.05] pointer-events-none"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, #D4AF37 1px, transparent 1px), linear-gradient(to bottom, #D4AF37 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
-        }}
-      />
+    <section id="live-vault" className="sv-section" aria-labelledby="sv-heading">
+      <div className="sv-wrap">
+        <header className="sv-heading">
+          <span className="sv-eyebrow">
+            <span className="sv-eyebrow-dot" aria-hidden="true" />
+            OKBOND Financial Infrastructure
+          </span>
+          <h2 id="sv-heading">The Sovereign Vault</h2>
+          <p>
+            A transparent view of OKBOND&apos;s stated capital allocation and ecosystem strategy.
+          </p>
+        </header>
 
-      <div className="relative max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-16 md:mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-6"
-            style={{ background: GOLD + "08", border: `1px solid ${GOLD}33` }}
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-pulse absolute inline-flex h-full w-full rounded-full opacity-75"
-                    style={{ background: "#22c55e" }} />
-              <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "#22c55e" }} />
-            </span>
-            <span className="text-xs md:text-sm font-mono tracking-[0.15em] uppercase" style={{ color: GOLD_BRIGHT }}>
-              Smart Contract Integration Coming
-            </span>
-          </motion.div>
-
-          <motion.h2
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight mb-4 md:mb-6"
-            style={{ color: "#ffffff", letterSpacing: "-0.02em" }}
-          >
-            Live Vault Status
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-sm md:text-base max-w-2xl mx-auto leading-relaxed"
-            style={{ color: "#a3a3a3" }}
-          >
-            Real-time Polygon Mainnet data integration launching soon. The Orakzai reserve backing every $OKBOND token will be transparently displayed on-chain.
-          </motion.p>
-        </div>
-
-        {/* Coming Soon Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8 md:mb-10">
-          {/* TVL Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55 }}
-            className="relative rounded-2xl p-6 md:p-8 overflow-hidden group"
-            style={{
-              background: "linear-gradient(160deg, rgba(20,16,8,0.6), rgba(8,6,3,0.6))",
-              backdropFilter: "blur(12px)",
-              border: `1px solid ${GOLD}33`,
-              boxShadow: `0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 ${GOLD}11`,
-            }}
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg" style={{ background: GOLD + "11" }}>
-                  <Vault className="w-5 h-5" style={{ color: GOLD }} />
-                </div>
-                <p className="text-xs md:text-sm uppercase tracking-wider font-semibold" style={{ color: GOLD + "cc" }}>
-                  Total Value Locked
-                </p>
-              </div>
-            </div>
-            <p
-              className="text-3xl md:text-4xl font-black tracking-tight mb-3"
-              style={{ color: "#ffffff" }}
+        <div className="sv-layout">
+          <div className="sv-visual">
+            <div
+              className="sv-stage"
+              role="img"
+              aria-label={
+                "CSS 3D vault illustration. Selected allocation: " + selected.name + ", " +
+                selected.percent + ", " + selected.amount + ". Select an allocation card to highlight it."
+              }
             >
-              Live On-Chain Soon
-            </p>
-            <p className="text-xs md:text-sm" style={{ color: "#727272" }}>
-              Fetching real-time data from Polygon smart contracts
-            </p>
-          </motion.div>
-
-          {/* RWA Backing Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.55, delay: 0.08 }}
-            className="relative rounded-2xl p-6 md:p-8 overflow-hidden group"
-            style={{
-              background: "linear-gradient(160deg, rgba(20,16,8,0.6), rgba(8,6,3,0.6))",
-              backdropFilter: "blur(12px)",
-              border: `1px solid ${GOLD}33`,
-              boxShadow: `0 8px 24px rgba(0,0,0,0.4), inset 0 1px 0 ${GOLD}11`,
-            }}
-          >
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg" style={{ background: GOLD + "11" }}>
-                  <Shield className="w-5 h-5" style={{ color: GOLD }} />
+              <div className="sv-vault" aria-hidden="true">
+                <div className="sv-vault__backplate" />
+                <div className="sv-vault__ring" style={ringStyle} />
+                <div className="sv-vault__inner-ring" />
+                <div className="sv-vault__core">
+                  <span className="sv-core-kicker">Selected allocation</span>
+                  <span className="sv-core-name">{selected.name}</span>
+                  <span className="sv-core-amount">{selected.amount}</span>
+                  <span className="sv-core-percent">{selected.percent}</span>
                 </div>
-                <p className="text-xs md:text-sm uppercase tracking-wider font-semibold" style={{ color: GOLD + "cc" }}>
-                  Real-World Asset Backing
-                </p>
+                {allocations.map((item, index) => {
+                  const Icon = item.icon;
+                  return (
+                    <span
+                      key={item.id}
+                      className={
+                        "sv-node sv-node--" + (index + 1) +
+                        (item.id === selected.id ? " is-active" : "")
+                      }
+                    >
+                      <Icon strokeWidth={1.6} />
+                    </span>
+                  );
+                })}
               </div>
+              <span className="sv-stage-caption">Lightweight CSS 3D · no live balance is shown</span>
             </div>
-            <p
-              className="text-3xl md:text-4xl font-black tracking-tight mb-3"
-              style={{ color: "#ffffff" }}
-            >
-              Live On-Chain Soon
-            </p>
-            <p className="text-xs md:text-sm" style={{ color: "#727272" }}>
-              100% collateralized by sovereign assets
-            </p>
-          </motion.div>
-        </div>
 
-        {/* Reserve Breakdown Placeholder */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.55, delay: 0.16 }}
-          className="rounded-2xl p-6 md:p-8"
-          style={{
-            background: "linear-gradient(160deg, rgba(15,12,6,0.5), rgba(5,4,2,0.5))",
-            backdropFilter: "blur(12px)",
-            border: `1px solid ${GOLD}22`,
-            boxShadow: `0 8px 24px rgba(0,0,0,0.3), inset 0 1px 0 ${GOLD}11`,
-          }}
-        >
-          <div className="flex items-center justify-between mb-6 md:mb-8">
-            <p className="text-xs md:text-sm uppercase tracking-wider font-semibold" style={{ color: GOLD + "cc" }}>
-              Reserve Composition
-            </p>
-            <p className="text-xs md:text-sm font-mono" style={{ color: GOLD + "88" }}>
-              Last sync: <LiveClock />
-            </p>
+            <div className="sv-total">
+              <div>
+                <span className="sv-total-label">Stated Allocation</span>
+                <strong className="sv-total-value">$7,500,000</strong>
+              </div>
+              <span className="sv-total-note">Illustrative total<br />Verification pending</span>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-            {[
-              { label: "Real Estate Holdings", icon: Building2 },
-              { label: "Gold Reserve", icon: Coins },
-              { label: "Operating Cash & T-Bills", icon: Landmark },
-              { label: "Liquidity Pools (Polygon)", icon: Activity },
-            ].map((item, i) => {
-              const Icon = item.icon;
-              return (
-                <motion.div
-                  key={item.label}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 + i * 0.06 }}
-                  className="rounded-xl p-4 md:p-5"
-                  style={{
-                    background: "rgba(212,175,55,0.03)",
-                    border: `1px solid ${GOLD}22`,
-                  }}
-                >
-                  <div className="flex items-center gap-2 mb-3">
-                    <Icon className="w-4 h-4" style={{ color: GOLD }} />
-                    <p className="text-xs md:text-sm uppercase tracking-wider font-semibold truncate" style={{ color: GOLD + "cc" }}>
-                      {item.label}
-                    </p>
-                  </div>
-                  <p className="text-lg md:text-xl font-black" style={{ color: "#ffffff" }}>
-                    —
-                  </p>
-                  <p className="text-xs mt-2" style={{ color: "#727272" }}>
-                    Coming soon
-                  </p>
-                </motion.div>
-              );
-            })}
+          <div className="sv-allocation-panel">
+            <div className="sv-panel-head">
+              <h3>Allocation Breakdown</h3>
+              <span className="sv-status">STATED · NOT VERIFIED</span>
+            </div>
+            <div className="sv-card-grid" aria-label="Select an allocation to highlight it in the vault visualization">
+              {allocations.map((item) => {
+                const Icon = item.icon;
+                const active = item.id === selected.id;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="sv-card"
+                    aria-pressed={active}
+                    onClick={() => setSelectedId(item.id)}
+                  >
+                    <span className="sv-card-top">
+                      <span className="sv-card-title">
+                        <span className="sv-card-icon"><Icon strokeWidth={1.7} /></span>
+                        <span className="sv-card-name">{item.name}</span>
+                      </span>
+                      <span className="sv-card-pct">{item.percent}</span>
+                    </span>
+                    <span className="sv-card-amount">{item.amount}</span>
+                    <span className="sv-card-desc">{item.description}</span>
+                    <span className="sv-card-foot">{item.detail}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </motion.div>
+        </div>
 
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.55, delay: 0.24 }}
-          className="mt-10 md:mt-14 text-center"
-        >
-          <p className="text-xs md:text-sm uppercase tracking-wider font-semibold" style={{ color: GOLD + "cc" }}>
-            <Zap className="w-4 h-4 inline mr-2" style={{ color: GOLD }} />
-            Smart Contract: 0xCF82D9ED107bE2217Ead6ccd4ffc851f71aa38F8
+        <section className="sv-transparency" aria-labelledby="sv-transparency-heading">
+          <div className="sv-transparency-head">
+            <h3 id="sv-transparency-heading">Transparency Record</h3>
+            <span className="sv-record-note">Source details listed as recorded in the repository</span>
+          </div>
+          <dl className="sv-detail-grid">
+            <div className="sv-detail">
+              <dt>Total stated allocation</dt>
+              <dd>US$7,500,000</dd>
+            </div>
+            <div className="sv-detail">
+              <dt>Allocation breakdown</dt>
+              <dd>60% · 20% · 10% · 10%</dd>
+            </div>
+            <div className="sv-detail">
+              <dt>Blockchain network</dt>
+              <dd>Polygon PoS · Chain ID 137</dd>
+            </div>
+            <div className="sv-detail">
+              <dt>OKBOND vault contract</dt>
+              <dd>
+                <a className="sv-contract" href={vaultExplorerUrl} target="_blank" rel="noreferrer noopener">
+                  <span>{vaultAddress}</span><ArrowUpRight aria-hidden="true" />
+                </a>
+              </dd>
+            </div>
+            <div className="sv-detail">
+              <dt>Verification status</dt>
+              <dd>Stated allocation — verification pending</dd>
+            </div>
+            <div className="sv-detail">
+              <dt>Independent audit</dt>
+              <dd>Not submitted, per repository record</dd>
+            </div>
+            <div className="sv-detail">
+              <dt>Last verified update</dt>
+              <dd>Not recorded in the source record</dd>
+            </div>
+            <div className="sv-detail">
+              <dt>Contract source record</dt>
+              <dd>Exact-match source verification listed in repository</dd>
+            </div>
+          </dl>
+          <p className="sv-disclaimer">
+            <strong>Transparency note:</strong> Allocation figures and percentages are illustrative stated targets and have not been independently verified. They are not live TVL, proof of asset backing, or an audit.
           </p>
-          <p className="text-xs mt-2" style={{ color: "#727272" }}>
-            Lottery contract integration in progress
+          <p className="sv-live-claim">
+            <Activity aria-hidden="true" />
+            No real-time reserve balance or verification timestamp is available here; none is presented as live data.
           </p>
-        </motion.div>
+        </section>
       </div>
     </section>
   );
