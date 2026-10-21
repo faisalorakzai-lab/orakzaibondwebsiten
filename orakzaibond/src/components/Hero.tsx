@@ -44,7 +44,7 @@ const SERVICES = [
   {
     slug: "pay",
     label: "EVERYDAY SERVICES",
-    detail: "Utilities & essentials",
+    detail: "Bills & essentials",
     icon: Zap,
     position: "bottom",
   },
@@ -172,10 +172,10 @@ export default function Hero(_props: HeroProps) {
           >
             <a
               className="okbond-hero__button okbond-hero__button--primary"
-              href="#okbond-discovery"
+              href="#okbond-ecosystem"
               onClick={(event) => {
                 event.preventDefault();
-                document.getElementById("okbond-discovery")?.scrollIntoView({
+                document.getElementById("okbond-ecosystem")?.scrollIntoView({
                   behavior: prefersReducedMotion ? "auto" : "smooth",
                   block: "start",
                 });
@@ -234,7 +234,7 @@ export default function Hero(_props: HeroProps) {
             {SERVICES.map(({ slug, label, detail, icon: Icon, position }, index) => (
               <motion.a
                 key={slug}
-                href={"#okbond-service-" + slug}
+                href={"/services/" + slug}
                 aria-label={"Explore " + label + ": " + detail}
                 className={`okbond-service-card okbond-service-card--${position}`}
                 animate={

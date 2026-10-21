@@ -6,8 +6,6 @@ import MobileNavbar from "./components/MobileNavbar";
 import MobileBottomNav from "./components/MobileBottomNav";
 import { useIsDesktop } from "./hooks/useIsDesktop";
 import Hero from "./components/Hero";
-import EcosystemDiscovery from "./components/EcosystemDiscovery";
-import UtilityExplorer from "./components/UtilityExplorer";
 import SiteSidebar, { SidebarHandle } from "./components/SiteSidebar";
 import MobileDrawer from "./components/MobileDrawer";
 import Footer from "./components/Footer";
@@ -48,6 +46,7 @@ import StakingPage from "./pages/StakingPage";
 import VaultPage from "./pages/VaultPage";
 import SecurityPage from "./pages/SecurityPage";
 import RegistryPage from "./pages/RegistryPage";
+import ServiceExplorerPage from "./pages/ServiceExplorerPage";
 import LiveVaultStatus from "./components/LiveVaultStatus";
 import MarcusAILiveLog from "./components/MarcusAILiveLog";
 import SovereignGuarantee from "./components/SovereignGuarantee";
@@ -340,12 +339,6 @@ function App() {
                 >
                   <Hero onConnect={connect} address={address} />
                 </ErrorBoundary>
-                <ErrorBoundary scope="HomeEcosystemDiscovery" silent>
-                  <EcosystemDiscovery />
-                </ErrorBoundary>
-                <ErrorBoundary scope="HomeUtilityExplorer" silent>
-                  <UtilityExplorer />
-                </ErrorBoundary>
                 <ErrorBoundary
                   scope="HomeLiveVaultStatus"
                   fallback={(_error, retry) => (
@@ -386,6 +379,9 @@ function App() {
                   <OKBONDFAQSection />
                 </ErrorBoundary>
               </>
+            </Route>
+            <Route path="/services/:slug">
+              {(params) => <ServiceExplorerPage slug={params.slug} />}
             </Route>
             <Route path="/about" component={AboutPage} />
             <Route path="/founder" component={FounderPage} />

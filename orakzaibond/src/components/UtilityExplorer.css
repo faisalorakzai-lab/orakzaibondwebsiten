@@ -60,7 +60,7 @@
   box-shadow: 0 0 14px rgba(214, 177, 95, 0.72);
 }
 
-.okbond-explorer__header h2 {
+.okbond-explorer__header h1 {
   margin: 0;
   color: #fbf7ee;
   font-family: var(--font-heading, Georgia, serif);

@@ -160,18 +160,26 @@ if (!/<div\b[^>]*id=["']root["'][^>]*>[\s\S]*?<h1\b/i.test(homeHtml)) {
   throw new Error("Visible homepage fallback heading is missing");
 }
 const ecosystemFallbackText = [
-  "Everything Connected.",
-  "OKBOND STAYS",
-  "OKBOND MOBILITY",
-  "OKBOND PROPERTIES",
-  "OKBOND PAY",
-  "Your World. Connected.",
-  "Hotels &amp; Stays",
-  "Utility Payments",
-  "Preview only",
+  "Choose a service.",
+  "/services/stays",
+  "/services/properties",
+  "/services/mobility",
+  "/services/pay",
 ];
 if (!ecosystemFallbackText.every((text) => homeHtml.includes(text))) {
-  throw new Error("Visible homepage ecosystem discovery fallback is incomplete");
+  throw new Error("Visible homepage service-card fallback is incomplete");
+}
+if (
+  [
+    "OKBOND STAYS",
+    "OKBOND MOBILITY",
+    "OKBOND PROPERTIES",
+    "OKBOND PAY",
+    "Your World. Connected.",
+    "Preview only",
+  ].some((text) => homeHtml.includes(text))
+) {
+  throw new Error("Service preview content must stay on its dedicated page");
 }
 
 if (/<noscript\b|id=["']faq["']|left\s*:\s*-9999px|clip\s*:\s*rect/i.test(homeHtml)) {

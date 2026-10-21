@@ -360,15 +360,17 @@
 }
 
 .okbond-service-card__label {
+  display: -webkit-box;
   overflow: hidden;
   color: rgba(243, 232, 203, 0.91);
   font-family: "Space Grotesk", "Inter", sans-serif;
   font-size: 0.55rem;
   font-weight: 700;
   letter-spacing: 0.095em;
-  line-height: 1.2;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.15;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
 }
 
 .okbond-service-card__detail {

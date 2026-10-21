@@ -18,7 +18,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import "./UtilityExplorer.css";
 
-type CategoryId = "stays" | "properties" | "transport" | "utilities";
+export type CategoryId = "stays" | "properties" | "transport" | "utilities";
 
 type Category = {
   id: CategoryId;
@@ -204,8 +204,12 @@ function ConceptScene({ category }: { category: Category }) {
   );
 }
 
-export default function UtilityExplorer() {
-  const [activeId, setActiveId] = useState<CategoryId>("stays");
+export default function UtilityExplorer({
+  initialCategory = "stays",
+}: {
+  initialCategory?: CategoryId;
+}) {
+  const [activeId, setActiveId] = useState<CategoryId>(initialCategory);
   const [notice, setNotice] = useState("");
   const [propertyIntent, setPropertyIntent] = useState<"buy" | "rent">("buy");
   const [selectedUtility, setSelectedUtility] = useState("Electricity");
@@ -251,7 +255,7 @@ export default function UtilityExplorer() {
             <p className="okbond-explorer__eyebrow">
               <span aria-hidden="true" /> OKBOND SERVICE EXPLORER
             </p>
-            <h2 id="okbond-explorer-title">Your World. Connected.</h2>
+            <h1 id="okbond-explorer-title">Your World. Connected.</h1>
             <p className="okbond-explorer__subtitle">
               Explore the services and digital experiences being developed
               across the OKBOND ecosystem.
