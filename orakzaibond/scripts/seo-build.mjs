@@ -5,7 +5,7 @@ const SITE_URL = "https://orakzaibond.com";
 const PERSON_URL = `${SITE_URL}/faisal-orakzai`;
 const PERSON_ID = `${PERSON_URL}#person`;
 const DESCRIPTION =
-  "Explore Orakzai Bond (OKBOND), a blockchain project on Polygon. Learn about its ecosystem, token information, technology, team, roadmap, and official documents.";
+  "Explore Orakzai Bond (OKBOND), a blockchain project on Polygon, and preview its developing ecosystem for stays, properties, transport, and everyday utility services.";
 const JSON_LD_PATTERN =
   /<script\b(?=[^>]*\btype=["']application\/ld\+json["'])[^>]*>([\s\S]*?)<\/script>/gi;
 
@@ -165,6 +165,10 @@ const ecosystemFallbackText = [
   "OKBOND MOBILITY",
   "OKBOND PROPERTIES",
   "OKBOND PAY",
+  "Your World. Connected.",
+  "Hotels &amp; Stays",
+  "Utility Payments",
+  "Preview only",
 ];
 if (!ecosystemFallbackText.every((text) => homeHtml.includes(text))) {
   throw new Error("Visible homepage ecosystem discovery fallback is incomplete");
