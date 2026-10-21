@@ -55,10 +55,10 @@ const vaultExplorerUrl = "https://polygonscan.com/address/0x3cb45d2022e2e15afa8c
 export default function LiveVaultStatus() {
   const [selectedId, setSelectedId] = useState<string>(allocations[0].id);
   const selected = allocations.find((item) => item.id === selectedId) ?? allocations[0];
-  const ringStyle = {
+  const ringStyle: CSSProperties & { "--sv-active-start": string; "--sv-active-end": string } = {
     "--sv-active-start": selected.start + "deg",
     "--sv-active-end": selected.end + "deg",
-  } as CSSProperties;
+  };
 
   return (
     <section id="live-vault" className="sv-section" aria-labelledby="sv-heading">
