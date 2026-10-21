@@ -5,7 +5,7 @@ const SITE_URL = "https://orakzaibond.com";
 const PERSON_URL = `${SITE_URL}/faisal-orakzai`;
 const PERSON_ID = `${PERSON_URL}#person`;
 const DESCRIPTION =
-  "Explore Orakzai Bond (OKBOND), a blockchain project on Polygon, and preview its developing ecosystem for stays, properties, transport, and everyday utility services.";
+  "Explore Orakzai Bond (OKBOND), its stated Sovereign Vault allocations and Polygon smart-contract references. Figures are illustrative, not independently verified.";
 const JSON_LD_PATTERN =
   /<script\b(?=[^>]*\btype=["']application\/ld\+json["'])[^>]*>([\s\S]*?)<\/script>/gi;
 
