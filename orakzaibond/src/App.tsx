@@ -40,7 +40,6 @@ import FaisalOrakzaiBioPage from "./pages/FaisalOrakzaiBioPage";
   import PressPage from "./pages/PressPage";
 import LegalPage from "./pages/LegalPage";
 import AdminGate from "./components/AdminGate";
-import PremiumAIBot from "./components/PremiumAIBot";
 import DashboardPage from "./pages/DashboardPage";
 import StakingPage from "./pages/StakingPage";
 import VaultPage from "./pages/VaultPage";
@@ -451,11 +450,6 @@ function App() {
       <ErrorBoundary scope="PresenceGlow" silent>
         <PresenceGlow />
       </ErrorBoundary>
-      {location !== "/" && (
-        <ErrorBoundary scope="PremiumAIBot" silent>
-          <PremiumAIBot />
-        </ErrorBoundary>
-      )}
       {/* <ErrorBoundary scope="MarcusOrb" silent>
         <MarcusOrb />
       </ErrorBoundary> */}
