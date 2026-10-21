@@ -21,24 +21,28 @@ interface HeroProps {
 
 const SERVICES = [
   {
+    slug: "stays",
     label: "STAYS & TRAVEL",
     detail: "Hotels & journeys",
     icon: Hotel,
     position: "top",
   },
   {
+    slug: "properties",
     label: "REAL ESTATE",
     detail: "Places to call home",
     icon: Building2,
     position: "left",
   },
   {
+    slug: "mobility",
     label: "MOBILITY",
     detail: "Move with ease",
     icon: CarFront,
     position: "right",
   },
   {
+    slug: "pay",
     label: "EVERYDAY SERVICES",
     detail: "Utilities & essentials",
     icon: Zap,
@@ -206,8 +210,8 @@ export default function Hero(_props: HeroProps) {
             id="okbond-ecosystem"
             ref={visualRef}
             className="okbond-hero__visual"
-            role="img"
-            aria-label="OKBOND ecosystem globe surrounded by hotels and travel, real estate, mobility, and everyday services"
+            role="group"
+            aria-label="Explore OKBOND ecosystem services"
           >
             <div className="okbond-hero__visual-halo" aria-hidden="true" />
             {webglAvailable && sceneReady ? (
@@ -227,11 +231,12 @@ export default function Hero(_props: HeroProps) {
               <StaticEcosystem />
             )}
 
-            {SERVICES.map(({ label, detail, icon: Icon, position }, index) => (
-              <motion.div
-                key={label}
+            {SERVICES.map(({ slug, label, detail, icon: Icon, position }, index) => (
+              <motion.a
+                key={slug}
+                href={"#okbond-service-" + slug}
+                aria-label={"Explore " + label + ": " + detail}
                 className={`okbond-service-card okbond-service-card--${position}`}
-                aria-hidden="true"
                 animate={
                   prefersReducedMotion
                     ? { opacity: 1 }
@@ -247,20 +252,20 @@ export default function Hero(_props: HeroProps) {
                   },
                 }}
               >
-                <span className="okbond-service-card__icon">
+                <span className="okbond-service-card__icon" aria-hidden="true">
                   <Icon className="h-4 w-4" strokeWidth={1.6} />
                 </span>
                 <span className="okbond-service-card__copy">
                   <span className="okbond-service-card__label">{label}</span>
                   <span className="okbond-service-card__detail">{detail}</span>
                 </span>
-              </motion.div>
+              </motion.a>
             ))}
           </div>
           <div className="okbond-hero__visual-caption" aria-hidden="true">
             <span>ONE CONNECTED WORLD</span>
             <span className="okbond-hero__caption-line" />
-            <span>OKBOND · ORAKZAI</span>
+            <span>OKBOND Â· ORAKZAI</span>
           </div>
         </motion.div>
       </div>

@@ -142,6 +142,7 @@ export default function EcosystemDiscovery() {
           {SERVICES.map((service) => (
             <article
               className="okbond-discovery__card"
+              id={"okbond-service-" + service.slug}
               key={service.slug}
               aria-labelledby={"okbond-service-title-" + service.slug}
             >
