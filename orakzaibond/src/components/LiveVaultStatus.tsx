@@ -1,5 +1,5 @@
 import { useState, type CSSProperties } from "react";
-import { Activity, ArrowUpRight, Building2, CheckCircle, Landmark, Shield, Zap } from "lucide-react";
+import { Activity, ArrowUpRight, Building2, Landmark, Shield, Zap } from "lucide-react";
 import "./LiveVaultStatus.css";
 
 const allocations = [
@@ -51,7 +51,6 @@ const allocations = [
 
 const vaultAddress = "0x3Cb45d2022e2E15AFa8C4822647B89935a2ceD08";
 const vaultExplorerUrl = "https://polygonscan.com/address/0x3cb45d2022e2e15afa8c4822647b89935a2ced08";
-const evidenceRecordUrl = "https://github.com/faisalorakzai-lab/orakzaibondwebsiten/blob/main/contracts/deployments/polygon-mainnet.json";
 
 export default function LiveVaultStatus() {
   const [selectedId, setSelectedId] = useState<string>(allocations[0].id);
@@ -118,14 +117,13 @@ export default function LiveVaultStatus() {
                 <span className="sv-total-label">Stated Allocation</span>
                 <strong className="sv-total-value">$7,500,000</strong>
               </div>
-              <span className="sv-total-note">Illustrative total<br />Allocation evidence pending</span>
+              <span className="sv-total-note">Illustrative total</span>
             </div>
           </div>
 
           <div className="sv-allocation-panel">
             <div className="sv-panel-head">
               <h3>Allocation Breakdown</h3>
-              <span className="sv-status">STATED · NOT VERIFIED</span>
             </div>
             <div className="sv-card-grid" aria-label="Select an allocation to highlight it in the vault visualization">
               {allocations.map((item) => {
@@ -184,22 +182,20 @@ export default function LiveVaultStatus() {
             </div>
             <div className="sv-detail">
               <dt>Verification status</dt>
-              <dd>Allocation evidence pending — not independently verified</dd>
+              <dd>Stated allocation record</dd>
             </div>
             <div className="sv-detail">
               <dt>Vault source verification</dt>
               <dd>
-                <span className="sv-contract"><CheckCircle aria-hidden="true" /> VERIFIED ON-CHAIN SOURCE</span>
-                <br />Exact-match source record on PolygonScan; this does not certify reserves, ownership, or an audit.
+                Source record on PolygonScan
+                <br />Contract source information is listed separately from allocation figures.
               </dd>
             </div>
             <div className="sv-detail">
               <dt>Verification method</dt>
               <dd>
-                <a className="sv-contract" href={evidenceRecordUrl} target="_blank" rel="noreferrer noopener">
-                  Repository deployment record <ArrowUpRight aria-hidden="true" />
-                </a>
-                <br />Polygon PoS · Chain ID 137 · source-to-bytecode exact-match record
+                Polygon PoS · Chain ID 137
+                <br />Repository deployment record and PolygonScan reference
               </dd>
             </div>
             <div className="sv-detail">
@@ -212,11 +208,11 @@ export default function LiveVaultStatus() {
             </div>
             <div className="sv-detail">
               <dt>Contract source record</dt>
-              <dd>Exact-match source verification listed in repository and linked to PolygonScan</dd>
+              <dd>Repository record linked to PolygonScan</dd>
             </div>
           </dl>
           <p className="sv-disclaimer">
-            <strong>Transparency note:</strong> Allocation figures and percentages are illustrative stated targets and have not been independently verified. They are not live TVL, proof of asset backing, or an audit.
+            <strong>Transparency note:</strong> Allocation figures and percentages are illustrative stated targets. They are not live TVL, proof of asset backing, or an audit.
           </p>
           <p className="sv-live-claim">
             <Activity aria-hidden="true" />
