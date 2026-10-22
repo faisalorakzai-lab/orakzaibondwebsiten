@@ -1,11 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { BrowserProvider, Contract, EventLog, parseEther, formatEther, JsonRpcProvider } from "ethers";
 import ICO_ABI from "@/abi/ICOContract.json";
-import REFERRAL_ABI from "@/abi/ReferralContract.json";
 
 // Live Contract Addresses
 const ICO_CONTRACT_ADDRESS = "0x7BB2458740c4F491277973212309d831385Ab9D7";
-const REFERRAL_CONTRACT_ADDRESS = "0x7BB2458740c4F491277973212309d831385Ab9D7";
 
 const FALLBACK_RPCS = [
   "https://rpc.ankr.com/polygon",
@@ -106,20 +104,21 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
   const fetchUserStats = useCallback(async (addr: string) => {
     try {
       const icoContract = getReadContract(ICO_CONTRACT_ADDRESS, ICO_ABI, provider);
-      const refContract = getReadContract(REFERRAL_CONTRACT_ADDRESS, REFERRAL_ABI, provider);
-      
-      if (!icoContract || !refContract) throw new Error("Contracts not initialized");
+      if (!icoContract) throw new Error("ICO contract not initialized");
 
-      const [contrib, refStatsRaw, events] = await Promise.all([
+      const [contrib, referralCountRaw, referralEarningsRaw, events] = await Promise.all([
         safeCall(() => icoContract.getUserContribution(addr), BigInt(0)),
-        safeCall(() => refContract.getUserStats(addr), [Array(5).fill(BigInt(0)), Array(5).fill(BigInt(0)), BigInt(0), ZERO_ADDRESS]),
+        safeCall(() => icoContract.referralCount(addr), BigInt(0)),
+        safeCall(() => icoContract.getReferralEarnings(addr), BigInt(0)),
         safeCall(() => icoContract.queryFilter(icoContract.filters.TokensPurchased(addr), -150_000), []),
       ]);
 
-      const counts = Array.isArray(refStatsRaw?.[0]) ? refStatsRaw[0] : Array(5).fill(BigInt(0));
-      const earnings = Array.isArray(refStatsRaw?.[1]) ? refStatsRaw[1] : Array(5).fill(BigInt(0));
-      const totalEarnings = refStatsRaw?.[2] || BigInt(0);
-      const referrer = refStatsRaw?.[3] || ZERO_ADDRESS;
+      // The deployed ICO exposes aggregate referral count/earnings only.
+      // Five-level breakdown and payout status are not exposed by this contract.
+      const counts = [referralCountRaw || BigInt(0), BigInt(0), BigInt(0), BigInt(0), BigInt(0)];
+      const earnings = [referralEarningsRaw || BigInt(0), BigInt(0), BigInt(0), BigInt(0), BigInt(0)];
+      const totalEarnings = referralEarningsRaw || BigInt(0);
+      const referrer = ZERO_ADDRESS;
 
       let earnedRaw = BigInt(0);
       if (Array.isArray(events)) {
@@ -175,8 +174,6 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
     try {
       const signer = await provider.getSigner();
       const icoContract = new Contract(ICO_CONTRACT_ADDRESS, ICO_ABI, signer);
-      const refContract = new Contract(REFERRAL_CONTRACT_ADDRESS, REFERRAL_ABI, signer);
-      
       const value = parseEther(polAmount);
       
       // Step 1: Purchase Tokens on ICO Contract
@@ -184,44 +181,7 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
       const tx = await icoContract.buyTokens(finalReferrer, { value });
       setTxStatus("confirming");
       setTxHash(tx.hash);
-      const receipt = await tx.wait(1);
-      
-      // Step 2: Trigger Referral Distribution on Referral Contract
-      // We MUST extract the token amount from the receipt to pass it to the referral contract
-      let tokenAmount = BigInt(0);
-      
-      // Attempt to parse the TokensPurchased event from the receipt logs
-      for (const log of receipt.logs) {
-        try {
-          const parsed = icoContract.interface.parseLog(log);
-          if (parsed?.name === "TokensPurchased") {
-            // In the ABI, 'tokens' is the 3rd input (index 2)
-            tokenAmount = parsed.args.tokens || parsed.args[2];
-            console.log("Found TokensPurchased event, tokens:", tokenAmount.toString());
-            break;
-          }
-        } catch (e) { /* skip logs from other contracts */ }
-      }
-
-      // If TokensPurchased event wasn't found in receipt logs, calculate manually as fallback
-      if (tokenAmount === BigInt(0)) {
-        const rate = stats?.tokensPerPOL ? BigInt(stats.tokensPerPOL) : BigInt(600000); // fallback to 0.6 if stats not loaded
-        tokenAmount = (value * rate) / BigInt(1000000); 
-        console.log("Manual token calculation:", tokenAmount.toString());
-      }
-
-      if (tokenAmount > BigInt(0)) {
-        try {
-          console.log("Triggering distributeRewards for:", address, "tokens:", tokenAmount.toString(), "referrer:", finalReferrer);
-          // IMPORTANT: This call links the buyer to the referrer and distributes rewards on-chain
-          const refTx = await refContract.distributeRewards(address, tokenAmount, finalReferrer);
-          console.log("Referral distribution TX sent:", refTx.hash);
-          await refTx.wait(1);
-          console.log("Referral rewards distributed successfully");
-        } catch (refErr) {
-          console.error("Referral distribution failed:", refErr);
-        }
-      }
+      await tx.wait(1);
       
       setTxStatus("success");
       await fetchStats();
