@@ -14,7 +14,7 @@ function buildBalanceOfCall(addr: string): string {
 
 // Parse uint256 hex → decimal string with 18-decimal formatting
 function parseOkbond(hexResult: string): string {
-  if (!hexResult || hexResult === "0x") return "0";
+  if (!hexResult || hexResult === "0x") throw new Error("Empty OKBOND balance response");
   try {
     const raw = BigInt(hexResult);
     if (raw === 0n) return "0";
@@ -26,8 +26,8 @@ function parseOkbond(hexResult: string): string {
     const fracStr  = frac.toString().padStart(18, "0").slice(0, 2);
     const formatted = Number(whole).toLocaleString("en-US");
     return fracStr === "00" ? formatted : `${formatted}.${fracStr}`;
-  } catch {
-    return "0";
+  } catch (err) {
+    throw err instanceof Error ? err : new Error("Unable to parse OKBOND balance");
   }
 }
 
@@ -43,9 +43,10 @@ async function fetchOkbondBalance(address: string): Promise<string> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
+  if (!r.ok) throw new Error(`Polygon RPC returned HTTP ${r.status}`);
   const data = await r.json();
-  if (data?.result) return parseOkbond(data.result);
-  return "0";
+  if (data?.error || typeof data?.result !== "string") throw new Error("Polygon RPC did not return an OKBOND balance");
+  return parseOkbond(data.result);
 }
 
 export function useWallet() {
@@ -216,6 +217,7 @@ export function useWallet() {
     address, provider, chainId, isPolygon,
     error, connecting, okbondBalance,
     connect, disconnect, switchToPolygon,
+    refreshBalance: () => { if (address) void refreshOkbondBalance(address); },
     clearError: () => setError(null),
   };
 }
