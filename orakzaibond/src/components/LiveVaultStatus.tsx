@@ -181,18 +181,18 @@ export default function LiveVaultStatus() {
               </dd>
             </div>
             <div className="sv-detail">
-              <dt>Verification status</dt>
+              <dt>Record status</dt>
               <dd>Stated allocation record</dd>
             </div>
             <div className="sv-detail">
-              <dt>Vault source verification</dt>
+              <dt>Vault source record</dt>
               <dd>
                 Source record on PolygonScan
                 <br />Contract source information is listed separately from allocation figures.
               </dd>
             </div>
             <div className="sv-detail">
-              <dt>Verification method</dt>
+              <dt>Source reference</dt>
               <dd>
                 Polygon PoS · Chain ID 137
                 <br />Repository deployment record and PolygonScan reference
