@@ -1,7 +1,7 @@
-/* Orakzai Bond Service Worker — v1.
+/* Orakzai Bond Service Worker — v2.
  * Cache-first for shell + static assets, network-first for /api,
  * navigation fallback to cached index.html for offline single-page navigation. */
-const CACHE = "okbond-v1";
+const CACHE = "okbond-v2";
 const SHELL = [
   "/",
   "/index.html",
