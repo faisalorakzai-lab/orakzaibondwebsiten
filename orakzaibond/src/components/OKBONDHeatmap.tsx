@@ -20,8 +20,8 @@ import { useHolderCount } from "@/hooks/useHolderCount";
 
 const GOLD = "#D4AF37";
 
-// Investor hubs — equirectangular coords on 1000×500 viewport
-// Format: [cx, cy, size, delay, city, region]
+// Decorative network nodes — these are not investor locations or holder data.
+// Format: [cx, cy, size, delay, label, region]
 const HUBS = [
   [220, 192, 1.2, 0.0,  "New York",   "Americas"],
   [208, 178, 0.9, 0.4,  "Toronto",    "Americas"],
@@ -50,11 +50,10 @@ export default function OKBONDHeatmap() {
   const { count: holderCount, loading: holderLoading } = useHolderCount();
 
   const STAT_ROWS = [
-    { label: "Active Regions",  value: "18",                                                    suffix: "" },
-    { label: "Token Holders",   value: holderLoading ? "Syncing…" : (holderCount ?? "On-Chain"), suffix: "" },
-    { label: "Network",         value: "Polygon PoS",                                           suffix: "" },
-    { label: "Reserve Backing", value: "100",                                                   suffix: "%" },
-    { label: "Founder",         value: "F. Orakzai",                                           suffix: "" },
+    { label: "Active Regions",  value: "DATA NOT YET VERIFIED",                                      suffix: "" },
+    { label: "Token Holders",   value: holderLoading ? "SYNCING…" : (holderCount ?? "DATA NOT YET VERIFIED"), suffix: "" },
+    { label: "Blockchain Network", value: "Polygon PoS",                                               suffix: "" },
+    { label: "Reserve Verification", value: "DATA NOT YET VERIFIED",                                  suffix: "" },
   ];
 
   return (
@@ -97,7 +96,7 @@ export default function OKBONDHeatmap() {
               className="text-[10px] font-bold uppercase tracking-[0.22em]"
               style={{ color: `${GOLD}cc` }}
             >
-              Live Global Distribution
+              Global Network
             </span>
           </div>
 
@@ -115,7 +114,7 @@ export default function OKBONDHeatmap() {
             className="text-xs mt-2 max-w-sm mx-auto"
             style={{ color: "#555", letterSpacing: "0.04em" }}
           >
-            {t("map.subtitle")}
+            A connected vision for global participation in the OKBOND ecosystem.
           </p>
         </motion.div>
       </div>
@@ -321,7 +320,7 @@ export default function OKBONDHeatmap() {
           className="absolute bottom-3 left-4 text-[8px] font-mono uppercase tracking-[0.15em] pointer-events-none"
           style={{ color: `${GOLD}35` }}
         >
-          OKBOND · POLYGON MAINNET · LIVE
+          OKBOND · POLYGON POS · VISUALIZATION
         </div>
         {/* Bottom right coordinate */}
         <div
@@ -369,6 +368,10 @@ export default function OKBONDHeatmap() {
           </div>
         ))}
       </motion.div>
+
+      <p className="relative z-10 mx-auto mt-3 max-w-4xl text-center text-[10px] leading-5 text-neutral-600">
+        The network nodes are decorative and do not represent verified investor locations. Metrics are shown only when an actual data source is available.
+      </p>
     </section>
   );
 }
