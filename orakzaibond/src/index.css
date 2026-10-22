@@ -1374,10 +1374,19 @@ body {
   pointer-events: auto !important;
 }
 .okbond-sidebar-mobile-drawer {
-  display: block   !important;
+  /* Keep the flex column contract from the drawer component. The previous
+     display:block override prevented the menu from receiving the remaining
+     viewport height, so its overflow area could not scroll on mobile. */
+  display: flex !important;
+  flex-direction: column !important;
   visibility: visible !important;
   z-index: 2147483647 !important;
   pointer-events: auto !important;
+  overflow: hidden !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
   /* NOTE: do NOT set `transform` or `opacity` here — framer-motion owns
      them so the drawer can slide in/out smoothly. A previous "fix" pinned
      transform to translate3d(0,0,0) which froze the animation and made
