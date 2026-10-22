@@ -182,6 +182,13 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
       setTxStatus("confirming");
       setTxHash(tx.hash);
       await tx.wait(1);
+      if (finalReferrer !== ZERO_ADDRESS) {
+        await fetch("/api/referrals", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ txHash: tx.hash }),
+        }).catch(() => undefined);
+      }
       
       setTxStatus("success");
       await fetchStats();
