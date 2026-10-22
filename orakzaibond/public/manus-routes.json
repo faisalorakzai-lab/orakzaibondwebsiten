@@ -24,6 +24,13 @@
     { "path": "/legal", "title": "Legal" },
     { "path": "/system", "title": "System Status" },
     { "path": "/registry", "title": "Registry" },
-    { "path": "/services/:slug", "title": "OKBOND Services" }
+    { "path": "/services/:slug", "title": "OKBOND Services" },
+    { "path": "/rules", "title": "Rules" },
+    { "path": "/profile/:username", "title": "Profile" },
+    { "path": "/dashboard", "title": "Dashboard" },
+    { "path": "/admin", "title": "Admin" },
+    { "path": "/secret-admin", "title": "Secret Admin" },
+    { "path": "/threat-console", "title": "Threat Console" },
+    { "path": "/marcus-defense", "title": "Marcus Defense" }
   ]
 }

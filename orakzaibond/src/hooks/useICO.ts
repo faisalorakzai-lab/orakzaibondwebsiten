@@ -29,8 +29,8 @@ export interface UserICOStats {
   earnedTokens: string;
   referralEarnings: string;
   referralCount: string;
-  levelCounts: string[];
-  levelEarnings: string[];
+  levelCounts: (string | null)[];
+  levelEarnings: (string | null)[];
   referrer: string;
 }
 
@@ -115,8 +115,10 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
 
       // The deployed ICO exposes aggregate referral count/earnings only.
       // Five-level breakdown and payout status are not exposed by this contract.
-      const counts = [referralCountRaw || BigInt(0), BigInt(0), BigInt(0), BigInt(0), BigInt(0)];
-      const earnings = [referralEarningsRaw || BigInt(0), BigInt(0), BigInt(0), BigInt(0), BigInt(0)];
+      // The deployed ICO exposes aggregate referral count/earnings only.
+      // Keep L2-L5 unavailable instead of presenting fabricated zero activity.
+      const counts: (bigint | null)[] = [referralCountRaw || BigInt(0), null, null, null, null];
+      const earnings: (bigint | null)[] = [referralEarningsRaw || BigInt(0), null, null, null, null];
       const totalEarnings = referralEarningsRaw || BigInt(0);
       const referrer = ZERO_ADDRESS;
 
@@ -133,9 +135,9 @@ export function useICO(provider: BrowserProvider | null, address: string | null)
         contribution: formatEther(contrib || BigInt(0)),
         earnedTokens: formatEther(earnedRaw),
         referralEarnings: formatEther(totalEarnings),
-        referralCount: counts.reduce((a: bigint, b: bigint) => a + (b || BigInt(0)), BigInt(0)).toString(),
-        levelCounts: counts.map((c: bigint) => (c || BigInt(0)).toString()),
-        levelEarnings: earnings.map((e: bigint) => formatEther(e || BigInt(0))),
+        referralCount: (counts[0] || BigInt(0)).toString(),
+        levelCounts: counts.map((c) => c == null ? null : c.toString()),
+        levelEarnings: earnings.map((e) => e == null ? null : formatEther(e)),
         referrer: String(referrer),
       });
     } catch (e) {

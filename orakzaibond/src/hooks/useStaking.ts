@@ -17,13 +17,10 @@ export interface StakingStats {
 }
 export type StakeTxStatus = "idle" | "approving" | "staking" | "unstaking" | "claiming" | "success" | "error";
 
-async function safeCall<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
-  try { return await fn(); } catch { return fallback; }
-}
-
 export function useStaking(provider: BrowserProvider | null, address: string | null) {
   const [stats, setStats] = useState<StakingStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [readError, setReadError] = useState<string | null>(null);
   const [txStatus, setTxStatus] = useState<StakeTxStatus>("idle");
   const [txHash, setTxHash] = useState<string | null>(null);
   const [txError, setTxError] = useState<string | null>(null);
@@ -31,30 +28,35 @@ export function useStaking(provider: BrowserProvider | null, address: string | n
 
   const fetchStats = useCallback(async () => {
     setLoading(true);
+    setReadError(null);
     try {
       const rpc = getReadProvider();
       const staking = new Contract(STAKING_ADDRESS, STAKING_ABI, rpc);
       const okbond = new Contract(OKBOND_ADDRESS, OKBOND_ABI, rpc);
       const [totalStaked, totalStakers, rewardsDistributed, apyValues] = await Promise.all([
-        safeCall(() => staking.totalStaked(), 0n), safeCall(() => staking.totalStakers(), 0n), safeCall(() => staking.totalRewardsDistributed(), 0n),
-        Promise.all(LOCK_PERIODS.map(async (days) => [days, Number(await safeCall(() => staking.getAPY(days * 86400), 0n))] as const)),
+        staking.totalStaked(), staking.totalStakers(), staking.totalRewardsDistributed(),
+        Promise.all(LOCK_PERIODS.map(async (days) => [days, Number(await staking.getAPY(days * 86400))] as const)),
       ]);
       let userStaked = "0", userRewards = "0", allowance = "0", userStakes: StakeInfo[] = [];
       if (address) {
         const [uStaked, uRewards, stakeCount, allow] = await Promise.all([
-          safeCall(() => staking.totalUserStaked(address), 0n), safeCall(() => staking.totalUserRewards(address), 0n),
-          safeCall(() => staking.getStakeCount(address), 0n), safeCall(() => okbond.allowance(address, STAKING_ADDRESS), 0n),
+          staking.totalUserStaked(address), staking.totalUserRewards(address),
+          staking.getStakeCount(address), okbond.allowance(address, STAKING_ADDRESS),
         ]);
         userStaked = formatEther(uStaked); userRewards = formatEther(uRewards); allowance = formatEther(allow);
         const count = Math.min(Number(stakeCount), 50);
         const rawStakes = await Promise.all(Array.from({ length: count }, (_, i) => Promise.all([
-          safeCall(() => staking.getStakeInfo(address, i), [0n, 0n, 0n, 0n, false]), safeCall(() => staking.pendingRewards(address, i), 0n),
+          staking.getStakeInfo(address, i), staking.pendingRewards(address, i),
         ])));
-        const stakeEvents = await safeCall(() => staking.queryFilter(staking.filters.Staked(address), -150_000), [] as any[]);
-        userStakes = rawStakes.map(([info, pending], i) => ({ id: i, amount: formatEther(info[0] || 0n), startTime: Number(info[1] || 0n), lockPeriod: Number(info[2] || 0n) / 86400, apy: Number(info[3] || 0n), active: Boolean(info[4]), pendingReward: formatEther(pending), txHash: stakeEvents[i]?.transactionHash ?? null })).filter((s) => s.active);
+        // Staked events do not contain a stake id. Never infer a hash from event ordering.
+        userStakes = rawStakes.map(([info, pending], i) => ({ id: i, amount: formatEther(info[0]), startTime: Number(info[1]), lockPeriod: Number(info[2]) / 86400, apy: Number(info[3]), active: Boolean(info[4]), pendingReward: formatEther(pending), txHash: null })).filter((s) => s.active);
       }
       setStats({ totalStaked: formatEther(totalStaked), totalStakers: totalStakers.toString(), rewardsDistributed: formatEther(rewardsDistributed), userStaked, userRewards, userStakes, allowance, apys: Object.fromEntries(apyValues) });
-    } catch (e) { console.error("useStaking fetchStats:", e); }
+    } catch (e) {
+      console.error("useStaking fetchStats:", e);
+      setStats(null);
+      setReadError("Live Polygon staking data is temporarily unavailable. Retry to connect again.");
+    }
     finally { setLoading(false); }
   }, [address, getReadProvider]);
 
@@ -65,11 +67,13 @@ export function useStaking(provider: BrowserProvider | null, address: string | n
     setTxStatus("approving"); setTxError(null); setTxHash(null);
     try {
       const signer = await provider.getSigner(); const token = new Contract(OKBOND_ADDRESS, OKBOND_ABI, signer); const staking = new Contract(STAKING_ADDRESS, STAKING_ABI, signer);
+      const network = await provider.getNetwork();
+      if (network.chainId !== 137n) throw new Error("Switch to Polygon Mainnet before staking.");
       if (!amount.trim() || !/^\d+(\.\d{1,18})?$/.test(amount.trim()) || Number(amount) <= 0) throw new Error("Enter a valid OKBOND amount.");
       const amountWei = parseEther(amount);
       const balanceWei = await token.balanceOf(address);
       if (amountWei > balanceWei) throw new Error("Insufficient OKBOND balance.");
-      if (await safeCall(() => token.allowance(address, STAKING_ADDRESS), 0n) < amountWei) { const approval = await token.approve(STAKING_ADDRESS, amountWei); await approval.wait(1); }
+      if (await token.allowance(address, STAKING_ADDRESS) < amountWei) { const approval = await token.approve(STAKING_ADDRESS, amountWei); await approval.wait(1); }
       setTxStatus("staking"); const tx = await staking.stake(amountWei, lockDays * 86400); setTxHash(tx.hash); await tx.wait(1); setTxStatus("success"); await fetchStats();
     } catch (err: any) { setTxStatus("error"); setTxError(err?.shortMessage || err?.message || "Staking failed"); }
   }, [provider, address, fetchStats]);
@@ -81,5 +85,5 @@ export function useStaking(provider: BrowserProvider | null, address: string | n
     catch (err: any) { setTxStatus("error"); setTxError(err?.shortMessage || err?.message || `${kind} failed`); }
   }, [provider, address, fetchStats]);
 
-  return { stats, loading, txStatus, txHash, txError, lockPeriods: LOCK_PERIODS, approveAndStake, unstake: (id: number) => runPositionTx("unstake", id), claimRewards: (id: number) => runPositionTx("claim", id), resetTx: () => { setTxStatus("idle"); setTxError(null); setTxHash(null); }, refresh: fetchStats };
+  return { stats, loading, readError, txStatus, txHash, txError, lockPeriods: LOCK_PERIODS, approveAndStake, unstake: (id: number) => runPositionTx("unstake", id), claimRewards: (id: number) => runPositionTx("claim", id), resetTx: () => { setTxStatus("idle"); setTxError(null); setTxHash(null); }, refresh: fetchStats };
 }
