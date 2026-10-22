@@ -1,3 +1,6 @@
+/// <reference lib="dom" />
+declare const process: { env: Record<string, string | undefined> };
+
 export const config = { runtime: "edge" };
 
 type Category = "hotel" | "transport" | "car-rental" | "property" | "utility";

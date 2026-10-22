@@ -1,3 +1,6 @@
+/// <reference lib="dom" />
+declare const process: { env: Record<string, string | undefined> };
+
 export const config = { runtime: "edge" };
 
 const DEFAULT_SUPABASE_URL = "https://aqjfleanijwtfdfjimwz.supabase.co";
