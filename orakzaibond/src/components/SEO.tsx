@@ -13,7 +13,7 @@ import { useEffect } from "react";
   const SITE_NAME = "Orakzai Bond";
   const DEFAULT_TITLE = "Orakzai Bond (OKBOND) | Blockchain Platform on Polygon";
   const DEFAULT_DESC =
-    "Explore Orakzai Bond (OKBOND), a blockchain project on Polygon. Learn about its ecosystem, token information, technology, team, roadmap, and official documents.";
+    "Explore Orakzai Bond (OKBOND), a blockchain project on Polygon with public token information, ecosystem pages, founder profile, documents, and smart-contract references.";
   const DEFAULT_OG_IMAGE = "https://orakzaibond.com/opengraph.jpg";
   const BASE_URL = "https://orakzaibond.com";
 
@@ -180,13 +180,13 @@ import { useEffect } from "react";
     about: {
       title: "About Orakzai Bond — OKBOND | Pakistan's DeFi Revolution",
       description:
-        "Learn about Orakzai Bond — the world's first capital-protected decentralized bond on Polygon. Mission, vision, and technology behind OKBOND.",
+        "Learn about Orakzai Bond (OKBOND), its mission, technology, ecosystem, and public information on Polygon.",
       canonical: BASE_URL + "/about",
     },
     token: {
       title: "OKBOND Token — Tokenomics & Capital Protection on Polygon",
       description:
-        "OKBOND is a capital-protected decentralized bond token on Polygon. Real-asset backed, sovereign yield, founder-guaranteed by Faisal Orakzai.",
+        "Explore OKBOND token information, Polygon contract references, token utility, and public project documentation.",
       canonical: BASE_URL + "/token",
     },
     tokenomics: {
@@ -198,13 +198,13 @@ import { useEffect } from "react";
     staking: {
       title: "OKBOND Staking — Earn Sovereign Yield | Capital-Protected",
       description:
-        "Stake OKBOND tokens and earn sovereign yield with capital protection on Polygon. Connect your Web3 wallet and start earning passive income.",
+        "Explore the OKBOND staking interface on Polygon, including wallet connection, staking information, and participation details.",
       canonical: BASE_URL + "/staking",
     },
     ico: {
       title: "OKBOND ICO — Buy Orakzai Bond | Capital-Protected DeFi",
       description:
-        "Join the OKBOND ICO. Buy Orakzai Bond tokens with capital protection on Polygon. Pakistan's first blockchain bond investment opportunity.",
+        "Explore the OKBOND token sale interface on Polygon, participation information, and the project's public disclosures.",
       canonical: BASE_URL + "/ico",
     },
     dashboard: {
@@ -258,7 +258,7 @@ import { useEffect } from "react";
     documents: {
       title: "Documents — Whitepaper, Audit & Legal | Orakzai Bond",
       description:
-        "Official Orakzai Bond documents: whitepaper, smart contract audit, tokenomics paper, and legal disclosures for OKBOND investors.",
+        "Official Orakzai Bond documents, including the whitepaper, project information, tokenomics material, and legal disclosures.",
       canonical: BASE_URL + "/documents",
     },
     contact: {
@@ -283,7 +283,7 @@ import { useEffect } from "react";
     vault: {
       title: "Vault — OKBOND Capital Reserve & Real Asset Backing",
       description:
-        "Orakzai Bond vault: real asset reserves backing the OKBOND capital protection model. Transparent blockchain-verified collateral on Polygon.",
+        "Explore the Orakzai Bond vault page, stated allocation information, Polygon contract references, and public transparency records.",
       canonical: BASE_URL + "/vault",
     },
     guide: {
@@ -301,7 +301,7 @@ import { useEffect } from "react";
     security: {
       title: "Security — Orakzai Bond OKBOND Smart Contract Safety",
       description:
-        "Orakzai Bond security architecture: smart contract audits, Polygon PoS safety, capital protection mechanisms, and OKBOND investor safeguards.",
+        "Read the Orakzai Bond security information, smart-contract references, Polygon network details, and public risk disclosures.",
       canonical: BASE_URL + "/security",
     },
     system: {
@@ -313,7 +313,7 @@ import { useEffect } from "react";
     registry: {
       title: "Registry — OKBOND Holder Registry & On-Chain Records",
       description:
-        "Verified Orakzai Bond OKBOND holder registry. Transparent on-chain record of OKBOND token holders and staking positions.",
+        "Explore the OKBOND registry interface and public on-chain record pages for the Orakzai Bond ecosystem.",
       canonical: BASE_URL + "/registry",
     },
   };
