@@ -5,7 +5,7 @@ const SITE_URL = "https://orakzaibond.com";
 const PERSON_URL = `${SITE_URL}/faisal-orakzai`;
 const PERSON_ID = `${PERSON_URL}#person`;
 const DESCRIPTION =
-  "Explore Orakzai Bond (OKBOND), its stated Sovereign Vault allocations and Polygon smart-contract references. Figures are illustrative, not independently verified.";
+  "Explore Orakzai Bond (OKBOND), a blockchain project on Polygon with public token information, ecosystem pages, founder profile, documents, and smart-contract references.";
 const JSON_LD_PATTERN =
   /<script\b(?=[^>]*\btype=["']application\/ld\+json["'])[^>]*>([\s\S]*?)<\/script>/gi;
 
@@ -90,6 +90,13 @@ const homeGraph = {
       url: `${SITE_URL}/`,
       description:
         "Official website for Orakzai Bond (OKBOND), a blockchain project on Polygon.",
+      sameAs: [
+        "https://x.com/orakzaibond",
+        "https://www.linkedin.com/company/orakzaibond",
+        "https://www.instagram.com/orakzaibond",
+        "https://www.youtube.com/@orakzaibond",
+        "https://github.com/faisalorakzai-lab",
+      ],
       logo: {
         "@type": "ImageObject",
         url: `${SITE_URL}/okbond-logo.png`,
@@ -105,6 +112,25 @@ const homeGraph = {
       alternateName: "OKBOND",
       publisher: { "@id": organizationId },
       inLanguage: "en",
+    },
+    {
+      "@type": "ItemList",
+      "@id": `${SITE_URL}/#primary-navigation`,
+      name: "Primary navigation",
+      itemListElement: [
+        ["about", "About Orakzai Bond"],
+        ["token", "OKBOND Token"],
+        ["tokenomics", "Tokenomics"],
+        ["vault", "Vault"],
+        ["documents", "Documents"],
+        ["faisal-orakzai", "Faisal Orakzai"],
+        ["contact", "Contact"],
+      ].map(([path, name], position) => ({
+        "@type": "ListItem",
+        position: position + 1,
+        name,
+        url: `${SITE_URL}/${path}`,
+      })),
     },
     {
       "@type": "WebPage",
