@@ -1,0 +1,29 @@
+{
+  "routes": [
+    { "path": "/", "title": "Orakzai Bond (OKBOND)" },
+    { "path": "/about", "title": "About Orakzai Bond" },
+    { "path": "/faisal-orakzai", "title": "Faisal Orakzai" },
+    { "path": "/founder", "title": "Founder" },
+    { "path": "/team", "title": "Team" },
+    { "path": "/press", "title": "Press and Media" },
+    { "path": "/token", "title": "OKBOND Token" },
+    { "path": "/tokenomics", "title": "Tokenomics" },
+    { "path": "/ico", "title": "OKBOND ICO" },
+    { "path": "/staking", "title": "Staking" },
+    { "path": "/vault", "title": "Vault" },
+    { "path": "/security", "title": "Security" },
+    { "path": "/documents", "title": "Documents" },
+    { "path": "/roadmap", "title": "Roadmap" },
+    { "path": "/guide", "title": "Guide" },
+    { "path": "/community", "title": "Community" },
+    { "path": "/community-hub", "title": "Community Hub" },
+    { "path": "/ambassador", "title": "Ambassador Program" },
+    { "path": "/lottery", "title": "Lottery" },
+    { "path": "/winners", "title": "Winners" },
+    { "path": "/contact", "title": "Contact" },
+    { "path": "/legal", "title": "Legal" },
+    { "path": "/system", "title": "System Status" },
+    { "path": "/registry", "title": "Registry" },
+    { "path": "/services/:slug", "title": "OKBOND Services" }
+  ]
+}
