@@ -5,14 +5,12 @@ import { BrowserProvider, Contract, JsonRpcProvider } from "ethers";
 import { useStaking, STAKING_ADDRESS } from "@/hooks/useStaking";
 import { useWallet } from "@/hooks/useWallet";
 import { useICO } from "@/hooks/useICO";
+import REFERRAL_ABI from "@/abi/ReferralContract.json";
 import { AlertCircle, ArrowRight, Calculator, Check, CheckCircle2, ChevronDown, ExternalLink, Info, Layers3, Loader2, LockKeyhole, Network, RefreshCw, ShieldCheck, Sparkles, TrendingUp, Unlock, WalletCards, Zap } from "lucide-react";
 
 const GOLD = "#D4AF37";
 const REFERRAL_ADDRESS = "0x7BB2458740c4F491277973212309d831385Ab9D7";
 const RPC = "https://polygon-bor-rpc.publicnode.com";
-const REFERRAL_ABI = [
-  "function levelRates(uint256) view returns (uint256)",
-];
 const POOL_META = [
   { days: 30, label: "Starter", accent: "#94A3B8", note: "Short-duration access" },
   { days: 90, label: "Growth", accent: "#60A5FA", note: "Balanced time horizon" },

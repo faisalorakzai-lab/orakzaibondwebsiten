@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { BrowserProvider, Contract, EventLog, parseEther, formatEther, JsonRpcProvider } from "ethers";
 import ICO_ABI from "@/abi/ICOContract.json";
+import REFERRAL_ABI from "@/abi/ReferralContract.json";
 
 // Live Contract Addresses
 const ICO_CONTRACT_ADDRESS = "0x7BB2458740c4F491277973212309d831385Ab9D7";
@@ -12,13 +13,6 @@ const FALLBACK_RPCS = [
   "https://polygon-bor-rpc.publicnode.com",
 ];
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
-
-const REFERRAL_ABI = [
-  "function getUserStats(address _user) external view returns (uint256[5] counts, uint256[5] earnings, uint256 totalEarnings, address referrer)",
-  "function distributeRewards(address _buyer, uint256 _tokenAmount, address _referrer) external",
-  "function levelRates(uint256) external view returns (uint256)",
-  "function paused() external view returns (bool)"
-];
 
 export interface ICOStats {
   icoActive: boolean;
