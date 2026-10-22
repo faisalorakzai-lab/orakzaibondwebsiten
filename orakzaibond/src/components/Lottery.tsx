@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BrowserProvider, Contract, formatUnits, isAddress } from "ethers";
+import { BrowserProvider, Contract, formatUnits, isAddress, JsonRpcProvider } from "ethers";
 import LiveParticipationFeed from "@/components/LiveParticipationFeed";
 import {
   Trophy, Ticket, Loader2, CheckCircle2, XCircle,
@@ -15,6 +15,7 @@ import LOTTERY_ABI from "@/lib/contractABI.json";
 const LOTTERY_ADDRESS = "0x5BC55d4b347e39B986864E28604Ddca5dE6357B7";
 const TOKEN_ADDRESS   = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
 const EXPLORER        = "https://polygonscan.com";
+const READ_RPCS        = ["https://polygon-bor-rpc.publicnode.com", "https://rpc.ankr.com/polygon"];
 
 const ERC20_ABI = [
   "function approve(address spender, uint256 amount) public returns (bool)",
@@ -118,6 +119,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
     rewardClaimed: false, deposit: 0n,
   });
   const [loading, setLoading]   = useState(true);
+  const [stateError, setStateError] = useState<string | null>(null);
   const [phase, setPhase]       = useState<TxPhase>("idle");
   const [action, setAction]     = useState<Action | null>(null);
   const [txHash, setTxHash]     = useState<string | null>(null);
@@ -135,10 +137,22 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
 
   // ── Read contract state ──────────────────────────────────────────────────
   const fetchState = useCallback(async () => {
-    if (!provider || !isPolygon) return;
     setLoading(true);
+    setStateError(null);
     try {
-      const c = new Contract(LOTTERY_ADDRESS, LOTTERY_ABI, provider);
+      let readProvider: BrowserProvider | JsonRpcProvider | null = provider && isPolygon ? provider : null;
+      if (!readProvider) {
+        for (const rpc of READ_RPCS) {
+          try {
+            const candidate = new JsonRpcProvider(rpc, { chainId: 137, name: "polygon" });
+            await candidate.getBlockNumber();
+            readProvider = candidate;
+            break;
+          } catch { /* try the next public Polygon RPC */ }
+        }
+      }
+      if (!readProvider) throw new Error("No Polygon RPC responded");
+      const c = new Contract(LOTTERY_ADDRESS, LOTTERY_ABI, readProvider);
       const [started, winSel, amount, reward, st, lock] = await Promise.all([
         c.lotteryStarted()   as Promise<boolean>,
         c.winnersSelected()  as Promise<boolean>,
@@ -157,8 +171,9 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
         lockDuration:    Number(lock),
         totalPlayers:    players,
       });
-    } catch { /* best-effort */ }
-    finally { setLoading(false); }
+    } catch {
+      setStateError("Unable to load live lottery data. Check your connection and retry.");
+    } finally { setLoading(false); }
   }, [provider, isPolygon]);
 
   // ── Read user state ──────────────────────────────────────────────────────
@@ -429,17 +444,17 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
 
             {/* Content Grid */}
             <div className="px-8 py-8 space-y-6">
-              {/* How Cashback Works */}
+              {/* How refunds work */}
               <div className="space-y-4">
                 <h4 className="font-extrabold text-foreground flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xs font-bold text-emerald-400">1</span>
-                  How Cashback Works
+                  How refunds work
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {[
                     {
                       title: "You Participate",
-                      desc: "Enter the lottery by depositing OKBOND tokens. Your funds are secured in the smart contract immediately.",
+                      desc: "Enter the lottery by depositing OKBOND tokens. Your OKBOND transfer is recorded by the contract after confirmation.",
                       icon: "🎫"
                     },
                     {
@@ -469,11 +484,11 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                 </div>
               </div>
 
-              {/* Key Guarantees */}
+              {/* Contract conditions */}
               <div className="space-y-4">
                 <h4 className="font-extrabold text-foreground flex items-center gap-2">
                   <span className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-xs font-bold text-emerald-400">2</span>
-                  Key Guarantees
+                  Contract conditions
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {[
@@ -589,6 +604,8 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
               </div>
               {loading ? (
                 <Loader2 className="w-10 h-10 text-primary animate-spin mx-auto my-3" />
+              ) : stateError ? (
+                <p className="my-3 text-lg font-semibold text-amber-200">Unable to load live data</p>
               ) : (
                 <motion.p
                   key={cs.totalPlayers}
@@ -600,11 +617,11 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                   }
                 </motion.p>
               )}
-              <p className="text-primary/60 font-mono text-sm font-bold uppercase tracking-widest mb-4">OKBOND · entry deposits</p>
+              <p className="text-primary/60 font-mono text-sm font-bold uppercase tracking-widest mb-4">OKBOND · nominal entry deposits</p>
               <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <Users className="w-3.5 h-3.5 text-primary/50" />
-                  {cs.totalPlayers} participants
+                  {stateError ? "—" : cs.totalPlayers} participants
                 </span>
                 <span className="text-primary/30">·</span>
                 <span className="flex items-center gap-1">
@@ -639,11 +656,12 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                     <h3 className="font-extrabold text-xl text-foreground">Orakzai Principal Security</h3>
                     {!loading && (
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                        cs.winnersSelected ? "bg-purple-500/15 text-purple-400 border border-purple-500/25"
+                        stateError ? "bg-amber-500/10 text-amber-300 border border-amber-500/25"
+                        : cs.winnersSelected ? "bg-purple-500/15 text-purple-400 border border-purple-500/25"
                         : cs.lotteryStarted ? "bg-green-500/15 text-green-400 border border-green-500/25"
                         : "bg-muted/40 text-muted-foreground border border-border"
                       }`}>
-                        {cs.winnersSelected ? "✓ Complete" : cs.lotteryStarted ? "● Active" : "○ Pending"}
+                        {stateError ? "Data unavailable" : cs.winnersSelected ? "✓ Complete" : cs.lotteryStarted ? "● Active" : "○ Pending"}
                       </span>
                     )}
                   </div>
@@ -662,9 +680,9 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
             <div className="border-b border-border">
               <div className="grid grid-cols-3 divide-x divide-border">
                 {[
-                  { label: "Entry Cost",    value: loading ? null : `${entryFmt} OKBOND`,  raw: entryFmt,  sub: "per ticket" },
-                  { label: "Participants",  value: loading ? null : `${cs.totalPlayers}`,               raw: null, sub: "entered" },
-                  { label: "Reward/Winner", value: loading ? null : cs.rewardPerWinner > 0n ? `${rewardFmt} POL` : "Not set", raw: rewardFmt, sub: "5 winners" },
+                  { label: "Entry Cost",    value: loading ? null : stateError ? "Unavailable" : `${entryFmt} OKBOND`,  raw: entryFmt,  sub: "per ticket" },
+                  { label: "Participants",  value: loading ? null : stateError ? "Unavailable" : `${cs.totalPlayers}`, raw: null, sub: "entered" },
+                  { label: "Reward/Winner", value: loading ? null : stateError ? "Unavailable" : cs.rewardPerWinner > 0n ? `${rewardFmt} POL` : "Not set", raw: rewardFmt, sub: "5 winners" },
                 ].map((s) => (
                   <div key={s.label} className="px-4 py-4 text-center">
                     <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1 font-medium">{s.label}</p>
@@ -808,7 +826,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                     Two MetaMask prompts: <strong className="text-blue-200 mx-1">Step 1</strong> approves OKBOND spend, then <strong className="text-blue-200 ml-1">Step 2</strong> enters the draw.
                   </motion.div>
                 )}
-                {!cs.lotteryStarted && !loading && phase === "idle" && (
+                {!cs.lotteryStarted && !loading && !stateError && phase === "idle" && (
                   <motion.div key="inactive" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
                     className="flex items-center gap-2 px-4 py-3 rounded-xl border border-yellow-500/20 bg-yellow-500/5 text-xs text-yellow-400">
                     <AlertTriangle className="w-4 h-4 flex-shrink-0" />
