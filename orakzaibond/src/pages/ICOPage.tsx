@@ -1,409 +1,85 @@
-import { useSEO, PAGE_SEO } from "@/components/SEO";
-import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, type CSSProperties, type PointerEvent } from "react";
+import { motion } from "framer-motion";
 import {
-  Rocket, TrendingUp, Clock,
-  ExternalLink, Loader2,
-  RefreshCw, Target, ArrowLeft, Users, Gift, ShieldCheck
+  ArrowDownRight, ArrowRight, ArrowUpRight, BadgeCheck, Building2,
+  CarFront, Check, ChevronRight, CircleHelp, Clock3, Droplets, Flame,
+  Globe2, Hotel, Landmark, Mail, MapPin, Plane, ReceiptText, ShieldCheck,
+  Sparkles, WalletCards, Wifi, Zap,
 } from "lucide-react";
-import { Link } from "wouter";
-import { useWallet } from "@/hooks/useWallet";
-import { useICO } from "@/hooks/useICO";
-import ReferralDashboard from "@/components/ReferralDashboard";
-import { Button } from "@/components/ui/button";
-import OKBONDCalculator from "@/components/OKBONDCalculator";
+import type { LucideIcon } from "lucide-react";
+import { useSEO } from "@/components/SEO";
+import "./ServicesMarketplace.css";
 
-// ── Constants ──────────────────────────────────────────────────────────────────
-const POLYGON_SCAN = "https://polygonscan.com/tx/";
-
-// Phase 1 ends 60 days from April 10, 2026
-const PHASE1_END = new Date("2026-06-09T00:00:00Z").getTime();
-const PHASE1_SUPPLY = 333_333;
-
-const PHASES = [
-  {
-    id: 1,
-    label: "Phase 1",
-    status: "live" as const,
-    price: "$0.50",
-    priceNum: 0.50,
-    supply: "333,333 OKBOND",
-    badge: "LIVE NOW",
-    badgeColor: "bg-emerald-500",
-    borderColor: "border-emerald-500/60",
-    glowColor: "shadow-emerald-500/20",
-    desc: "Lowest entry — open now",
-  },
-  {
-    id: 2,
-    label: "Phase 2",
-    status: "upcoming" as const,
-    price: "$0.70",
-    priceNum: 0.70,
-    supply: "333,333 OKBOND",
-    badge: "LOCKED",
-    badgeColor: "bg-amber-500",
-    borderColor: "border-amber-500/40",
-    glowColor: "shadow-amber-500/10",
-    desc: "40% premium over Phase 1",
-  },
-  {
-    id: 3,
-    label: "Phase 3",
-    status: "upcoming" as const,
-    price: "$1.00",
-    priceNum: 1.00,
-    supply: "333,334 OKBOND",
-    badge: "LOCKED",
-    badgeColor: "bg-primary/80",
-    borderColor: "border-primary/40",
-    glowColor: "shadow-primary/10",
-    desc: "Listing price — final entry",
-  },
+type Service = {
+  id: string; name: string; description: string; group: string;
+  icon: LucideIcon; availability: string;
+};
+const SERVICES: Service[] = [
+  { id: "hotels", name: "Hotel reservations", description: "Discover a more considered way to plan your next stay.", group: "Travel & mobility", icon: Hotel, availability: "Booking integration in development" },
+  { id: "flights", name: "Flights & travel", description: "Bring travel planning and essential trip details together.", group: "Travel & mobility", icon: Plane, availability: "Airline search in development" },
+  { id: "chauffeur", name: "Transport & chauffeur", description: "Explore private transfers and local mobility services.", group: "Travel & mobility", icon: CarFront, availability: "Operator network in development" },
+  { id: "car-rental", name: "Rent a car", description: "A simple starting point for future vehicle discovery.", group: "Travel & mobility", icon: ArrowUpRight, availability: "Rental inventory in development" },
+  { id: "buy-sell", name: "Property buy & sell", description: "Discover a future marketplace for property opportunities.", group: "Property", icon: Building2, availability: "Verified listings in development" },
+  { id: "rentals", name: "Property rentals", description: "Explore long-stay and rental discovery concepts.", group: "Property", icon: MapPin, availability: "Rental listings in development" },
+  { id: "installments", name: "Real estate installments", description: "Learn about future property payment-plan experiences.", group: "Property", icon: Landmark, availability: "Plans and transactions in development" },
+  { id: "electricity", name: "Electricity bills", description: "A clear route to future electricity bill services.", group: "Everyday utilities", icon: Zap, availability: "Utility provider connection in development" },
+  { id: "gas", name: "Gas bills", description: "Keep essential household utility payments in view.", group: "Everyday utilities", icon: Flame, availability: "Utility provider connection in development" },
+  { id: "water", name: "Water bills", description: "A future-ready utility experience for water services.", group: "Everyday utilities", icon: Droplets, availability: "Utility provider connection in development" },
+  { id: "internet-mobile", name: "Internet & mobile top-ups", description: "Explore future connectivity and mobile top-up options.", group: "Everyday utilities", icon: Wifi, availability: "Telecom connection in development" },
+  { id: "receipts", name: "Receipts & billing", description: "A planned home for service records and transaction receipts.", group: "Everyday utilities", icon: ReceiptText, availability: "Billing services in development" },
 ];
-
-// ── Countdown hook ─────────────────────────────────────────────────────────────
-function useCountdown(target: number) {
-  const calc = () => {
-    const diff = Math.max(0, target - Date.now());
-    return {
-      days:    Math.floor(diff / 86_400_000),
-      hours:   Math.floor((diff % 86_400_000) / 3_600_000),
-      minutes: Math.floor((diff % 3_600_000) / 60_000),
-      seconds: Math.floor((diff % 60_000) / 1_000),
-      done:    diff === 0,
-    };
+const FEATURED = [
+  { number: "01", label: "Travel, thoughtfully", title: "Your next journey, in one place.", description: "Hotel, flight and mobility experiences are being shaped into one connected travel journey.", icon: Globe2, tone: "travel" },
+  { number: "02", label: "A place to belong", title: "Explore property possibilities.", description: "A future discovery experience for buying, selling and renting—built around clear information.", icon: Building2, tone: "property" },
+  { number: "03", label: "Everyday, simplified", title: "The essentials, connected.", description: "Utility categories are planned in one useful hub. No bill details or payments are processed here.", icon: Zap, tone: "utility" },
+];
+function inquiryHref(service: string) {
+  return `mailto:support@orakzaibond.com?subject=${encodeURIComponent(`OKBOND service inquiry: ${service}`)}&body=${encodeURIComponent(`Hello OKBOND team,\n\nI would like to learn more about ${service}.\n\nPlease share availability and next steps.\n`)}`;
+}
+function ServiceCard({ service, index }: { service: Service; index: number }) {
+  const Icon = service.icon;
+  return <motion.article className="service-market-card" initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.12 }} transition={{ duration: 0.45, delay: (index % 4) * 0.055 }}>
+    <div className="service-market-card__top"><span className="service-market-card__icon"><Icon size={20} strokeWidth={1.7} aria-hidden="true" /></span><span className="service-market-card__index">{String(index + 1).padStart(2, "0")}</span></div>
+    <p className="service-market-card__group">{service.group}</p><h3>{service.name}</h3><p className="service-market-card__description">{service.description}</p>
+    <div className="service-market-card__status"><span aria-hidden="true" />{service.availability}</div>
+    <a className="service-market-card__action" href={inquiryHref(service.name)} aria-label={`Ask about ${service.name}`}>Ask about this service <ArrowRight size={15} aria-hidden="true" /></a>
+  </motion.article>;
+}
+function GlobeScene() {
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "touch" || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    setTilt({ x: ((event.clientY - rect.top) / rect.height - 0.5) * -5, y: ((event.clientX - rect.left) / rect.width - 0.5) * 7 });
   };
-  const [tick, setTick] = useState(calc);
-  useEffect(() => {
-    const id = setInterval(() => setTick(calc()), 1_000);
-    return () => clearInterval(id);
-  }, [target]);
-  return tick;
-}
-
-// ── Tiny countdown box ─────────────────────────────────────────────────────────
-function CountBox({ value, label }: { value: number; label: string }) {
-  return (
-    <div className="flex flex-col items-center">
-      <motion.div
-        key={value}
-        initial={{ rotateX: 90, opacity: 0 }}
-        animate={{ rotateX: 0, opacity: 1 }}
-        transition={{ duration: 0.3 }}
-        className="w-16 sm:w-20 h-14 sm:h-16 flex items-center justify-center rounded-xl bg-black/60 border border-primary/30 font-mono font-extrabold text-2xl sm:text-3xl text-primary shadow-inner"
-      >
-        {String(value).padStart(2, "0")}
-      </motion.div>
-      <span className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground font-semibold">{label}</span>
+  const reset = () => setTilt({ x: 0, y: 0 });
+  return <div className="service-globe-stage" onPointerMove={handlePointerMove} onPointerLeave={reset} aria-label="Illustration of a connected, illuminated globe">
+    <div className="service-globe-stage__halo" /><div className="service-globe-stage__orbit service-globe-stage__orbit--one" /><div className="service-globe-stage__orbit service-globe-stage__orbit--two" />
+    <div className="service-globe" style={{ "--tilt-x": `${tilt.x}deg`, "--tilt-y": `${tilt.y}deg` } as CSSProperties}>
+      <div className="service-globe__latitude service-globe__latitude--one" /><div className="service-globe__latitude service-globe__latitude--two" /><div className="service-globe__longitude service-globe__longitude--one" /><div className="service-globe__longitude service-globe__longitude--two" />
+      <svg className="service-globe__continents" viewBox="0 0 300 300" aria-hidden="true"><path d="M69 73 91 53l25 7 9 17-11 15 9 14-13 12-5 26-19 14-4 25-17-9-7-24-17-13 4-24-14-15 10-15-1-10 17-11Zm88 17 16-12 28 5 17 14 28 4 12 15-14 11-28-5-16 14-20-5-17-17-19-2-12-13 10-9Zm36 54 22 5 14 17-8 18-18 6-16-12-6-19 12-15Zm-67 24 18 8 4 18-13 14-8 31-18 14-10-18 7-25-9-15 8-18 21-9Z" fill="url(#globe-land)" opacity=".83" /><defs><linearGradient id="globe-land" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#f4dc9e" /><stop offset="1" stopColor="#8d682e" /></linearGradient></defs></svg>
+      <span className="service-globe__node service-globe__node--one" /><span className="service-globe__node service-globe__node--two" /><span className="service-globe__node service-globe__node--three" />
     </div>
-  );
+    <div className="service-float-card service-float-card--stay"><Hotel size={16} /><span>Stays</span><b>01</b></div><div className="service-float-card service-float-card--property"><Building2 size={16} /><span>Property</span><b>02</b></div><div className="service-float-card service-float-card--utility"><Zap size={16} /><span>Utilities</span><b>03</b></div>
+    <div className="service-globe-caption"><span /> A WORLD OF SERVICES <span>·</span> ONE ECOSYSTEM</div>
+  </div>;
 }
-
-// ── Progress bar ───────────────────────────────────────────────────────────────
-function ProgressBar({ sold, total }: { sold: number; total: number }) {
-  const pct = Math.min((sold / total) * 100, 100);
-  return (
-    <div className="space-y-2">
-      <div className="flex justify-between text-xs font-mono text-muted-foreground">
-        <span>{sold.toLocaleString()} OKBOND sold</span>
-        <span>{total.toLocaleString()} total</span>
-      </div>
-      <div className="h-3 w-full rounded-full bg-black/40 border border-primary/20 overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{ width: `${pct}%` }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          className="h-full rounded-full bg-gradient-to-r from-primary/80 via-primary to-amber-400 relative"
-        >
-          <div className="absolute inset-0 bg-white/10 animate-pulse rounded-full" />
-        </motion.div>
-      </div>
-      <div className="flex justify-between text-xs">
-        <span className="text-emerald-400 font-semibold">{pct.toFixed(1)}% Filled</span>
-        <span className="text-muted-foreground">{(total - sold).toLocaleString()} remaining</span>
-      </div>
-    </div>
-  );
-}
-
-// ── ROI comparison table ───────────────────────────────────────────────────────
-function ROITable() {
-  const rows = [
-    { phase: "Phase 1", entry: "$0.50", listing: "$1.00", roi: "100%", status: "live" },
-    { phase: "Phase 2", entry: "$0.70", listing: "$1.00", roi: "43%",  status: "upcoming" },
-    { phase: "Phase 3", entry: "$1.00", listing: "$1.00", roi: "—",    status: "upcoming" },
-  ];
-  return (
-    <div className="overflow-x-auto rounded-2xl border border-primary/20 bg-black/40">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b border-primary/20 bg-primary/10">
-            <th className="px-4 py-3 text-left text-xs uppercase tracking-widest text-primary font-bold">Phase</th>
-            <th className="px-4 py-3 text-center text-xs uppercase tracking-widest text-muted-foreground font-bold">Entry Price</th>
-            <th className="px-4 py-3 text-center text-xs uppercase tracking-widest text-muted-foreground font-bold">Target Listing</th>
-            <th className="px-4 py-3 text-center text-xs uppercase tracking-widest text-emerald-400 font-bold">ROI at Listing</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r, i) => (
-            <tr key={i} className={`border-b border-white/5 ${r.status === "live" ? "bg-emerald-500/5" : ""}`}>
-              <td className="px-4 py-3 font-semibold text-foreground flex items-center gap-2">
-                {r.phase}
-                {r.status === "live" && (
-                  <span className="px-1.5 py-0.5 rounded text-[9px] bg-emerald-500 text-black font-bold uppercase">Live</span>
-                )}
-              </td>
-              <td className="px-4 py-3 text-center font-mono text-foreground">{r.entry}</td>
-              <td className="px-4 py-3 text-center font-mono text-primary font-bold">{r.listing}</td>
-              <td className="px-4 py-3 text-center font-mono text-emerald-400 font-extrabold">{r.roi}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-// ── Buy Form ───────────────────────────────────────────────────────────────────
-function BuyForm({ address, provider, isPolygon, onConnect, switchToPolygon }: any) {
-  const [polAmount, setPolAmount] = useState("10");
-  const { stats, txStatus, txHash, txError, buyTokens, resetTx, loading } = useICO(provider, address);
-  const [referrer, setReferrer] = useState<string | null>(null);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const ref = params.get("ref");
-    if (ref && ref.startsWith("0x") && ref.length === 42) setReferrer(ref);
-  }, []);
-
-  const handleBuy = async () => {
-    if (!isPolygon) return switchToPolygon();
-    if (!address) return onConnect();
-    await buyTokens(polAmount, referrer);
-  };
-
-  // Tokens sold from on-chain data (with a visual floor for social proof)
-  const tokensSold = stats ? Math.max(parseFloat(stats.totalTokensSold), 42150) : 42150;
-
-  return (
-    <div className="space-y-6">
-      {/* Progress bar */}
-      <div className="glass-card rounded-2xl border border-primary/20 p-5 bg-gradient-to-br from-primary/10 to-transparent">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-bold text-primary uppercase tracking-widest">Phase 1 Progress</h3>
-          {loading && <Loader2 className="w-4 h-4 text-primary animate-spin" />}
-        </div>
-        <ProgressBar sold={tokensSold} total={PHASE1_SUPPLY} />
-      </div>
-
-      <div className="glass-card rounded-3xl border border-primary/30 p-8 bg-gradient-to-br from-primary/10 via-background to-background shadow-2xl relative overflow-hidden">
-        <div className="relative z-10 space-y-6">
-          <div className="flex items-center justify-between">
-            <h3 className="text-2xl font-bold text-foreground" style={{ fontFamily: "'Playfair Display', serif" }}>Acquire OKBOND</h3>
-            <span className="px-2 py-1 rounded-lg bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
-              Phase 1 — $0.50
-            </span>
-          </div>
-          
-          {referrer && (
-            <div className="p-3 rounded-xl bg-primary/10 border border-primary/20 flex items-center gap-2">
-              <Users className="w-4 h-4 text-primary" />
-              <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Referrer: {referrer.slice(0,6)}...{referrer.slice(-4)}</p>
-            </div>
-          )}
-          <div className="space-y-4">
-            <div className="p-4 rounded-2xl bg-black/40 border border-white/5 space-y-1">
-              <div className="flex justify-between text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
-                <span>You Pay</span>
-                <span>Balance: {stats?.totalRaisedPOL || "0"} POL</span>
-              </div>
-              <div className="relative">
-                <input 
-                  type="number" 
-                  value={polAmount} 
-                  onChange={(e) => setPolAmount(e.target.value)} 
-                  className="w-full bg-transparent border-none text-3xl font-mono font-bold text-foreground focus:outline-none" 
-                  placeholder="0.0" 
-                />
-                <span className="absolute right-0 top-1/2 -translate-y-1/2 text-primary font-bold">POL</span>
-              </div>
-            </div>
-            <Button onClick={handleBuy} disabled={loading || !polAmount || parseFloat(polAmount) <= 0} className="w-full h-16 rounded-2xl bg-primary text-primary-foreground text-lg font-black shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
-              {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : !address ? "Connect Wallet" : !isPolygon ? "Switch to Polygon" : "Buy OKBOND Now"}
-            </Button>
-          </div>
-          {txStatus !== "idle" && (
-            <div className={`p-4 rounded-2xl border ${txStatus === "success" ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" : txStatus === "error" ? "bg-red-500/10 border-red-500/20 text-red-400" : "bg-primary/10 border-primary/20 text-primary"}`}>
-              <div className="flex items-start gap-3">
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-bold">{txStatus === "pending" ? "Transaction Pending..." : txStatus === "confirming" ? "Confirming..." : txStatus === "success" ? "Purchase Successful!" : "Transaction Failed"}</p>
-                  {txError && <p className="text-xs opacity-80 mt-1">{txError}</p>}
-                  {txHash && <a href={`${POLYGON_SCAN}${txHash}`} target="_blank" className="text-[10px] font-bold uppercase mt-2 hover:underline flex items-center gap-1">View on Explorer <ExternalLink className="w-3 h-3" /></a>}
-                </div>
-                <button onClick={resetTx} className="p-1"><RefreshCw className="w-4 h-4" /></button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function ICOPage() {
-  const { address, connect, provider, isPolygon, switchToPolygon } = useWallet();
-  const cd = useCountdown(PHASE1_END);
-
-  useSEO(PAGE_SEO.ico);
-  return (
-    <div className="w-full bg-background text-foreground flex flex-col overflow-x-hidden">
-      <main className="flex-1">
-        {/* Hero Section */}
-        <div className="relative pt-32 pb-20 overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(234,179,8,0.15),transparent_70%)] pointer-events-none" />
-          <div className="container mx-auto px-4 relative z-10 text-center space-y-6">
-            <Link href="/">
-              <button className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8">
-                <ArrowLeft className="w-4 h-4" />Back to Home
-              </button>
-            </Link>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight" style={{ fontFamily: "'Playfair Display', serif" }}>
-              Secure Your Stake in the <span className="text-primary">Global Future</span>
-            </h1>
-            <p className="text-white/60 max-w-2xl mx-auto text-lg font-normal tracking-wide">
-              Join an elite financial ecosystem backed by real-world luxury assets. 
-              Experience the pinnacle of capital protection and sovereign growth.
-            </p>
-          </div>
-        </div>
-
-        <div className="container mx-auto px-4 pb-32">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-            {/* Left Column: Phases & Details */}
-            <div className="lg:col-span-7 space-y-12">
-              
-              {/* Countdown Strip */}
-              <div className="space-y-6">
-                <h3 className="text-sm font-bold text-primary uppercase tracking-widest flex items-center gap-2">
-                  <Clock className="w-4 h-4" />Phase 1 Countdown
-                </h3>
-                <div className="flex gap-3 sm:gap-6">
-                  <CountBox value={cd.days} label="Days" />
-                  <CountBox value={cd.hours} label="Hours" />
-                  <CountBox value={cd.minutes} label="Minutes" />
-                  <CountBox value={cd.seconds} label="Seconds" />
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Phase 1 closes when supply runs out. Price will increase to <span className="text-amber-400 font-bold">$0.70</span> in Phase 2.
-                </p>
-              </div>
-
-              {/* 3-Phase Layout Restoration */}
-              <div className="space-y-6">
-                <h3 className="text-sm font-bold text-primary uppercase tracking-widest flex items-center gap-2">
-                  <Rocket className="w-4 h-4" />ICO Phases
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {PHASES.map((p) => (
-                    <div 
-                      key={p.id} 
-                      className={`relative glass-card rounded-2xl border ${p.borderColor} p-5 shadow-lg ${p.glowColor} ${p.status === "live" ? "ring-1 ring-emerald-500/30" : ""}`}
-                    >
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{p.label}</span>
-                        <span className={`px-2 py-0.5 rounded text-[9px] font-extrabold uppercase ${p.badgeColor} ${p.status === "live" ? "text-black" : "text-foreground/80"}`}>
-                          {p.badge}
-                        </span>
-                      </div>
-                      <p className="text-3xl font-extrabold text-foreground font-mono">{p.price}</p>
-                      <p className="text-[10px] text-muted-foreground mb-2">per OKBOND</p>
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-2">
-                        <Target className="w-3 h-3 text-primary/50" />
-                        {p.supply}
-                      </div>
-                      <p className="text-[10px] text-muted-foreground/70 border-t border-white/5 pt-2 mt-2">{p.desc}</p>
-                      {p.status === "live" && (
-                        <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* ROI Table */}
-              <div className="space-y-6">
-                <h3 className="text-sm font-bold text-primary uppercase tracking-widest flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4" />ROI Step-Up Ladder
-                </h3>
-                <ROITable />
-              </div>
-
-              {/* Referral Dashboard (Conditional) */}
-              {address && (
-                <div className="space-y-6">
-                  <h3 className="text-sm font-bold text-primary uppercase tracking-widest flex items-center gap-2">
-                    <Users className="w-4 h-4" />5-Level Team Performance
-                  </h3>
-                  <ReferralDashboard address={address} provider={provider} />
-                </div>
-              )}
-            </div>
-
-            {/* Right Column: Buy Form & Why Participate */}
-            <div className="lg:col-span-5 space-y-8">
-              <BuyForm address={address} provider={provider} isPolygon={isPolygon} onConnect={connect} switchToPolygon={switchToPolygon} />
-              
-              <div className="space-y-4">
-                <h2 className="text-xl font-extrabold">Why Participate?</h2>
-                {[
-                  { icon: <ShieldCheck className="w-5 h-5" />, title: "Capital Protection", desc: "Your principal is protected via smart contract logic." },
-                  { icon: <TrendingUp className="w-5 h-5" />, title: "High ROI Potential", desc: "Phase 1 entry at $0.50 — target listing price $1.00 and beyond." },
-                  { icon: <Gift className="w-5 h-5" />, title: "MLM Rewards", desc: "Earn up to 5 levels of deep referral commissions." }
-                ].map((item, i) => (
-                  <div key={i} className="glass-card rounded-xl border border-primary/20 p-4 flex gap-4 items-start">
-                    <div className="w-9 h-9 rounded-lg bg-primary/15 flex items-center justify-center text-primary">
-                      {item.icon}
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold">{item.title}</p>
-                      <p className="text-xs text-muted-foreground">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* $OKBOND Smart Calculator */}
-              <div className="col-span-full">
-                <OKBONDCalculator apy={18} />
-              </div>
-
-                            {/* Token Specs */}
-              <div className="glass-card rounded-2xl border border-white/5 p-6 bg-white/5 space-y-4">
-                <h3 className="text-sm font-bold text-primary uppercase tracking-widest">Token Specifications</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-[10px] text-muted-foreground uppercase font-bold">Network</p>
-                    <p className="text-sm font-bold">Polygon PoS</p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] text-muted-foreground uppercase font-bold">Total Supply</p>
-                    <p className="text-sm font-bold">10,000,000</p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] text-muted-foreground uppercase font-bold">Decimals</p>
-                    <p className="text-sm font-bold">18</p>
-                  </div>
-                  <div>
-                    <p className="text-[10px] text-muted-foreground uppercase font-bold">Security</p>
-                    <p className="text-sm font-bold text-emerald-400">Audited</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
+  useSEO({ title: "Sovereign Services & Utility Marketplace | OKBOND", description: "Explore the OKBOND service network: hospitality, travel, property discovery and everyday utilities. Services are previews; live provider and payment integrations are not connected.", canonical: "https://orakzaibond.com/ico" });
+  return <div className="service-marketplace"><div className="service-marketplace__ambient" aria-hidden="true" /><div className="service-marketplace__wrap">
+    <section className="service-hero" aria-labelledby="service-hero-title"><div className="service-hero__copy">
+      <p className="service-eyebrow"><span /> THE OKBOND SERVICE NETWORK</p><h1 id="service-hero-title">Your World.<br /><em>Connected</em> Through OKBOND.</h1>
+      <p className="service-hero__lead">Explore hospitality, transportation, property opportunities and everyday utilities through one integrated service experience.</p><p className="service-hero__tagline">One Ecosystem. Everyday Essentials. Connected Value.</p>
+      <div className="service-hero__actions"><a className="service-button service-button--gold" href="#service-catalog">Explore services <ArrowDownRight size={16} /></a><a className="service-button service-button--quiet" href="#property-discovery">Explore properties <ArrowRight size={16} /></a></div>
+      <div className="service-hero__assurance"><span><ShieldCheck size={15} /> Built for clarity</span><i /><span><Globe2 size={15} /> One connected vision</span></div>
+    </div><GlobeScene /><div className="service-hero__index"><span>OKBOND</span><span>01 — 04 / SERVICE NETWORK</span></div></section>
+    <section className="service-intro" id="service-catalog"><div><p className="service-eyebrow"><span /> THE ECOSYSTEM, AT A GLANCE</p><h2>Useful by design.<br /><em>Connected</em> by nature.</h2></div><p>From a journey to a place to call home, explore a curated service network designed to bring everyday essentials into one refined experience.</p></section>
+    <section className="service-category-section" aria-labelledby="service-category-title"><div className="service-section-heading"><div><p className="service-eyebrow"><span /> FIND YOUR NEXT STEP</p><h2 id="service-category-title">Services for <em>real life.</em></h2></div><span className="service-count">12 SERVICE CATEGORIES</span></div><div className="service-category-grid">{SERVICES.map((service, index) => <ServiceCard key={service.id} service={service} index={index} />)}</div></section>
+    <section className="service-featured" aria-labelledby="service-featured-title"><div className="service-section-heading service-section-heading--light"><div><p className="service-eyebrow"><span /> A CLOSER LOOK</p><h2 id="service-featured-title">More than a service.<br /><em>A considered experience.</em></h2></div><p>Three connected pillars. One thoughtful way to explore what comes next.</p></div><div className="service-featured-grid">{FEATURED.map(({ number, label, title, description, icon: Icon, tone }, index) => <motion.article key={number} className={`service-feature-card service-feature-card--${tone}`} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }}><div className="service-feature-card__art"><span className="service-feature-card__orb" /><Icon size={31} strokeWidth={1.2} /><span className="service-feature-card__number">{number}</span></div><p className="service-feature-card__label">{label}</p><h3>{title}</h3><p className="service-feature-card__description">{description}</p></motion.article>)}</div></section>
+    <section className="service-utility-band" aria-labelledby="service-utility-title"><div className="service-utility-band__icon"><WalletCards size={25} /></div><div className="service-utility-band__copy"><p className="service-eyebrow"><span /> QUICK ACCESS</p><h2 id="service-utility-title">Everyday essentials,<br /><em>one clear starting point.</em></h2><p>Electricity, gas, water, internet, mobile top-ups and receipts are planned for this utility hub.</p></div><div className="service-utility-band__links">{SERVICES.slice(7).map(({ name, icon: Icon, id }) => <a key={id} href={inquiryHref(name)}><Icon size={17} /><span>{name}</span><ChevronRight size={15} /></a>)}</div><p className="service-notice service-notice--wide"><CircleHelp size={15} /> Utility providers and payment services are not connected. This page does not collect account numbers or process bills.</p></section>
+    <section className="service-property" id="property-discovery" aria-labelledby="service-property-title"><div className="service-property__art" aria-hidden="true"><div className="service-property__sun" /><div className="service-property__building service-property__building--back" /><div className="service-property__building service-property__building--front"><i /><i /><i /><i /><i /><i /></div><div className="service-property__horizon" /><span className="service-property__coordinates">31° 32' N&nbsp; · &nbsp;74° 21' E</span></div><div className="service-property__copy"><p className="service-eyebrow"><span /> PROPERTY DISCOVERY</p><h2 id="service-property-title">Find space for<br /><em>what’s next.</em></h2><p>Explore the planned property experience: buy or sell, find rentals, or learn about real estate installment concepts—all with clear status and inquiry paths.</p><div className="service-property__actions"><a href={inquiryHref("Property buy and sell")}>Buy or sell <ArrowUpRight size={15} /></a><a href={inquiryHref("Property rentals")}>Discover rentals <ArrowUpRight size={15} /></a><a href={inquiryHref("Real estate installments")}>Installment plans <ArrowUpRight size={15} /></a></div><p className="service-notice"><CircleHelp size={15} /> No live listings, property verification or transaction service is connected.</p></div></section>
+    <section className="service-journey" aria-labelledby="service-journey-title"><div className="service-journey__heading"><p className="service-eyebrow"><span /> SIMPLE BY DESIGN</p><h2 id="service-journey-title">A clearer service <em>journey.</em></h2><p>Explore now. Ask a question. Know exactly what is—and isn’t—available.</p></div><div className="service-journey__steps">{[{ icon: Sparkles, title: "Explore", copy: "Browse travel, property and utility categories." }, { icon: CircleHelp, title: "Make an inquiry", copy: "Contact the team to ask about a service." }, { icon: Clock3, title: "Get a clear update", copy: "We’ll clarify availability and next steps." }].map(({ icon: Icon, title, copy }, index) => <article key={title}><span className="service-journey__step-icon"><Icon size={19} /></span><span className="service-journey__step-index">0{index + 1}</span><h3>{title}</h3><p>{copy}</p>{index < 2 && <span className="service-journey__connector" />}</article>)}</div></section>
+    <section className="service-trust" aria-label="Service transparency"><div className="service-trust__mark"><BadgeCheck size={23} /></div><div><p className="service-eyebrow"><span /> TRANSPARENCY, ALWAYS</p><h2>Know where things stand.</h2><p>These pages are a service-network preview. Hotels, airlines, vehicles, property listings, utility providers and payment gateways are not connected yet. An inquiry is only a request for information—it is not a booking, listing, bill payment or financial transaction.</p></div><div className="service-trust__status"><span />PREVIEW NETWORK</div></section>
+    <section className="service-closing"><div className="service-closing__spark"><Sparkles size={20} /></div><p className="service-eyebrow"><span /> EVERYDAY ESSENTIALS, CONNECTED VALUE</p><h2>One ecosystem.<br /><em>A world of possibility.</em></h2><p>Tell us which service you’d like to see next. Our team can share current availability and development updates.</p><a className="service-button service-button--gold" href={inquiryHref("OKBOND service network")}>Start an inquiry <Mail size={16} /></a><span className="service-closing__footnote"><Check size={13} /> No service booking or payment is processed on this page.</span></section>
+  </div></div>;
 }
