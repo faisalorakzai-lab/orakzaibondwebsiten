@@ -1,336 +1,62 @@
 import { useSEO, PAGE_SEO } from "@/components/SEO";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useStaking } from "@/hooks/useStaking";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { BrowserProvider, Contract, JsonRpcProvider } from "ethers";
+import { useStaking, STAKING_ADDRESS } from "@/hooks/useStaking";
 import { useWallet } from "@/hooks/useWallet";
-import {
-  Lock, Unlock, TrendingUp, Zap, Users, RefreshCw, CheckCircle,
-  AlertCircle, Loader2, ExternalLink, Calculator, ArrowRight,
-} from "lucide-react";
+import { useICO } from "@/hooks/useICO";
+import { AlertCircle, ArrowRight, Calculator, Check, CheckCircle2, ChevronDown, ExternalLink, Info, Layers3, Loader2, LockKeyhole, Network, RefreshCw, ShieldCheck, Sparkles, TrendingUp, Unlock, WalletCards, Zap } from "lucide-react";
 
 const GOLD = "#D4AF37";
-
-function fmt(val: string, d = 2): string {
-  const n = parseFloat(val);
-  if (isNaN(n)) return "0";
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(2) + "M";
-  if (n >= 1_000)     return (n / 1_000).toFixed(2) + "K";
-  return n.toFixed(d);
-}
-
-const POOLS = [
-  { days: 30,  apy: 12, label: "Starter",   badge: "12% APY",  accent: "#64748B", popular: false },
-  { days: 90,  apy: 15, label: "Growth",    badge: "15% APY",  accent: "#3B82F6", popular: false },
-  { days: 180, apy: 18, label: "Premium",   badge: "18% APY",  accent: GOLD,      popular: true  },
-  { days: 365, apy: 24, label: "Sovereign", badge: "24% APY",  accent: "#F59E0B", popular: false },
+const REFERRAL_ADDRESS = "0x7BB2458740c4F491277973212309d831385Ab9D7";
+const RPC = "https://polygon-bor-rpc.publicnode.com";
+const REFERRAL_ABI = [
+  "function levelRates(uint256) view returns (uint256)",
+];
+const POOL_META = [
+  { days: 30, label: "Starter", accent: "#94A3B8", note: "Short-duration access" },
+  { days: 90, label: "Growth", accent: "#60A5FA", note: "Balanced time horizon" },
+  { days: 180, label: "Premium", accent: GOLD, note: "Extended yield window" },
+  { days: 365, label: "Sovereign", accent: "#F59E0B", note: "Maximum lock duration" },
 ];
 
+function fmt(value: string | number, digits = 2) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return "—";
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(2)}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(2)}K`;
+  return n.toLocaleString(undefined, { maximumFractionDigits: digits });
+}
+function shortHash(value: string) { return `${value.slice(0, 6)}…${value.slice(-4)}`; }
+function dateFromUnix(seconds: number) { return seconds ? new Date(seconds * 1000).toLocaleDateString() : "—"; }
+function Panel({ children, className = "" }: { children: ReactNode; className?: string }) { return <section className={`relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#0a111b]/80 shadow-[0_20px_80px_rgba(0,0,0,.22)] ${className}`}>{children}</section>; }
+function SectionHeading({ eyebrow, title, copy }: { eyebrow: string; title: string; copy?: string }) { return <div className="mb-6"><p className="mb-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[#d4af37]">{eyebrow}</p><h2 className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl">{title}</h2>{copy && <p className="mt-2 max-w-2xl text-sm leading-6 text-white/50">{copy}</p>}</div>; }
+function Status({ children, tone = "muted" }: { children: React.ReactNode; tone?: "muted" | "green" | "gold" }) { const colors = tone === "green" ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-300" : tone === "gold" ? "border-[#d4af37]/25 bg-[#d4af37]/10 text-[#e9ce72]" : "border-white/10 bg-white/[0.03] text-white/45"; return <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold ${colors}`}>{children}</span>; }
+
+function ReferralNetwork({ address, provider }: { address: string | null; provider: BrowserProvider | null }) {
+  const { userStats } = useICO(provider, address);
+  const [rates, setRates] = useState<(number | null)[]>([null, null, null, null, null]);
+  const [openLevel, setOpenLevel] = useState(0);
+  useEffect(() => { let cancelled = false; (async () => { try { const c = new Contract(REFERRAL_ADDRESS, REFERRAL_ABI, new JsonRpcProvider(RPC)); const values = await Promise.all([0, 1, 2, 3, 4].map((i) => c.levelRates(i).catch(() => null))); if (!cancelled) setRates(values.map((v) => v == null ? null : Number(v) / 100)); } catch { /* unavailable is rendered explicitly */ } })(); return () => { cancelled = true; }; }, []);
+  const levels = Array.from({ length: 5 }, (_, i) => ({ level: i + 1, count: userStats?.levelCounts?.[i] ?? "0", earned: userStats?.levelEarnings?.[i] ?? "0", rate: rates[i] }));
+  return <div className="space-y-5"><Panel className="p-5 sm:p-7"><div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"><SectionHeading eyebrow="Separate accounting" title="OKBOND Referral Network" copy="Track eligible referral activity and commissions across five levels. Referral rewards are not included in staking rewards." /><Status tone={userStats ? "green" : "muted"}><span className="h-1.5 w-1.5 rounded-full bg-current" />{userStats ? "On-chain profile" : "Connect wallet to load"}</Status></div><div className="relative grid gap-3 md:grid-cols-5 md:gap-0">{levels.map((item, index) => <div key={item.level} className="relative"><div className="absolute left-1/2 top-6 hidden h-px w-full bg-gradient-to-r from-[#d4af37]/45 to-transparent md:block" /><button onClick={() => setOpenLevel(openLevel === index ? -1 : index)} className={`relative w-full rounded-2xl border p-4 text-left transition hover:-translate-y-0.5 ${openLevel === index ? "border-[#d4af37]/45 bg-[#d4af37]/[0.08]" : "border-white/[0.07] bg-white/[0.025]"}`}><div className="mb-4 flex items-center justify-between"><span className="flex h-8 w-8 items-center justify-center rounded-xl border border-[#d4af37]/25 bg-[#d4af37]/10 text-xs font-bold text-[#e9ce72]">L{item.level}</span><ChevronDown className={`h-4 w-4 text-white/30 transition ${openLevel === index ? "rotate-180" : ""}`} /></div><p className="text-xs font-semibold text-white">Level {item.level}</p><p className="mt-1 font-mono text-lg font-bold text-[#e9ce72]">{fmt(item.count, 0)}</p><p className="text-[10px] text-white/35">eligible referrals</p><div className="mt-3 border-t border-white/[0.07] pt-3"><p className="text-[10px] text-white/35">Earned commission</p><p className="font-mono text-xs text-white/80">{fmt(item.earned)} OKBOND</p></div><p className="mt-3 text-[10px] text-white/45">{item.rate == null ? "Rate unavailable" : `${item.rate}% configured`}</p></button>{openLevel === index && <div className="mt-2 rounded-xl border border-[#d4af37]/15 bg-black/20 p-3 text-[11px] leading-5 text-white/55 md:absolute md:left-2 md:right-2 md:top-full md:z-10"><p>Verified activity: {userStats ? "On-chain count loaded" : "Connect wallet to load"}</p><p>Pending / paid commission history: <span className="text-[#e9ce72]">Not exposed by the current contract</span></p></div>}</div>)}</div></Panel><Panel className="grid gap-5 p-5 sm:grid-cols-[1fr_auto] sm:p-7"><div><p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[#d4af37]">Referral dashboard</p><h3 className="font-display text-lg font-bold text-white">Your referral link</h3><p className="mt-1 text-sm text-white/45">Uses the authenticated wallet address. No private key or sensitive account data is exposed.</p><div className="mt-4 flex items-center gap-2 rounded-xl border border-white/[0.08] bg-black/25 px-3 py-2.5 font-mono text-xs text-white/65"><span className="min-w-0 flex-1 truncate">{address ? `${window.location.origin}/ico?ref=${address}` : "Connect wallet to generate link"}</span><button disabled={!address} onClick={() => address && navigator.clipboard.writeText(`${window.location.origin}/ico?ref=${address}`)} className="shrink-0 rounded-lg border border-[#d4af37]/25 px-2 py-1 text-[10px] text-[#e9ce72] disabled:opacity-30">Copy</button></div></div><div className="grid grid-cols-2 gap-3 sm:min-w-[260px]"><div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-4"><p className="text-[10px] text-white/40">Total earned</p><p className="mt-2 font-mono text-lg font-bold text-[#e9ce72]">{fmt(userStats?.referralEarnings ?? "0")} <span className="text-[10px]">OKBOND</span></p></div><div className="rounded-2xl border border-white/[0.07] bg-white/[0.025] p-4"><p className="text-[10px] text-white/40">Referral count</p><p className="mt-2 font-mono text-lg font-bold text-white">{fmt(userStats?.referralCount ?? "0", 0)}</p></div></div></Panel></div>;
+}
+
 export default function StakingPage() {
-  const { provider, address, connect } = useWallet();
+  const { provider, address, connect, okbondBalance, isPolygon, switchToPolygon } = useWallet();
   const { stats, loading, txStatus, txHash, txError, approveAndStake, unstake, claimRewards, resetTx, refresh } = useStaking(provider, address);
-
-  const [selectedPool, setSelectedPool] = useState(POOLS[2]);
-  const [amount, setAmount]             = useState("");
-  const [compoundYears, setCompoundYears] = useState(1);
-
-  const parsedAmount    = parseFloat(amount) || 0;
-  const estimatedReward = parsedAmount * (selectedPool.apy / 100) * (selectedPool.days / 365);
-  const compoundFinal   = parsedAmount * Math.pow(1 + selectedPool.apy / 100, compoundYears);
-  const isPending       = ["approving", "staking", "unstaking", "claiming"].includes(txStatus);
-
+  const [selectedDays, setSelectedDays] = useState(180); const [amount, setAmount] = useState(""); const [years, setYears] = useState(1);
   useSEO(PAGE_SEO.staking);
-  return (
-    <div className="min-h-screen pb-24 lg:pb-10" style={{ background: "#050505" }}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
-
-        {/* ── Header ── */}
-        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: `${GOLD}20` }}>
-              <Lock className="w-4.5 h-4.5" style={{ color: GOLD }} />
-            </div>
-            <span className="text-xs font-mono uppercase tracking-widest" style={{ color: GOLD }}>Staking Terminal</span>
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-white mb-2"
-            style={{ fontFamily: "'Sora','Inter',sans-serif" }}>
-            Stake OKBOND
-          </h1>
-          <p className="text-white/40 text-sm">Institutional-grade yields · Polygon Mainnet · Up to 24% APY</p>
-        </motion.div>
-
-        {/* ── Protocol Stats ── */}
-        {!loading && stats && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            className="grid grid-cols-3 gap-3 mb-8">
-            {[
-              { label: "Total Staked",   value: `${fmt(stats.totalStaked)} OKBOND`, icon: <Lock    className="w-4 h-4" /> },
-              { label: "Total Stakers",  value: stats.totalStakers,                  icon: <Users   className="w-4 h-4" /> },
-              { label: "Rewards Given",  value: `${fmt(stats.rewardsDistributed)}`,  icon: <Zap     className="w-4 h-4" /> },
-            ].map(({ label, value, icon }) => (
-              <div key={label}
-                className="rounded-2xl border border-white/6 p-4 flex items-center gap-3"
-                style={{ background: "rgba(7,17,31,0.7)" }}>
-                <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${GOLD}18`, color: GOLD }}>
-                  {icon}
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[10px] text-white/35 uppercase font-mono tracking-widest truncate">{label}</p>
-                  <p className="text-sm font-black text-white" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{value}</p>
-                </div>
-              </div>
-            ))}
-          </motion.div>
-        )}
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-          {/* ── Pool Selection ── */}
-          <div className="lg:col-span-2 space-y-4">
-            <h2 className="text-white font-bold text-base mb-1" style={{ fontFamily: "'Sora','Inter',sans-serif" }}>
-              Choose Staking Pool
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {POOLS.map((pool) => {
-                const active = selectedPool.days === pool.days;
-                return (
-                  <motion.button
-                    key={pool.days}
-                    onClick={() => setSelectedPool(pool)}
-                    whileHover={{ y: -3 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="relative w-full rounded-2xl p-5 text-left transition-all duration-200"
-                    style={{
-                      border: `1px solid ${active ? pool.accent + "70" : pool.accent + "20"}`,
-                      background: active ? `${pool.accent}12` : "rgba(7,17,31,0.6)",
-                      boxShadow: active ? `0 0 24px ${pool.accent}20` : "none",
-                    }}
-                  >
-                    {pool.popular && (
-                      <span className="absolute -top-2.5 left-4 text-[10px] font-bold uppercase tracking-widest px-3 py-0.5 rounded-full"
-                        style={{ background: GOLD, color: "#050505" }}>
-                        Most Popular
-                      </span>
-                    )}
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-white font-bold text-sm" style={{ fontFamily: "'Sora','Inter',sans-serif" }}>{pool.label}</span>
-                      <span className="text-[11px] font-bold px-2.5 py-1 rounded-full border"
-                        style={{ color: pool.accent, borderColor: `${pool.accent}40`, background: `${pool.accent}15` }}>
-                        {pool.badge}
-                      </span>
-                    </div>
-                    <p className="text-3xl font-black mb-1" style={{ color: pool.accent, fontFamily: "'JetBrains Mono', monospace" }}>
-                      {pool.apy}%
-                    </p>
-                    <p className="text-white/40 text-xs">{pool.days} day lock · Annual Percentage Yield</p>
-                    {active && (
-                      <div className="absolute top-4 right-4 w-5 h-5 rounded-full flex items-center justify-center"
-                        style={{ background: pool.accent }}>
-                        <CheckCircle className="w-3 h-3 text-black" />
-                      </div>
-                    )}
-                  </motion.button>
-                );
-              })}
-            </div>
-
-            {/* ── Stake Form ── */}
-            <div className="rounded-2xl border border-white/6 p-6" style={{ background: "rgba(7,17,31,0.7)" }}>
-              <h3 className="text-white font-bold text-sm mb-4" style={{ fontFamily: "'Sora','Inter',sans-serif" }}>
-                Stake Amount
-              </h3>
-
-              {!address ? (
-                <div className="text-center py-6">
-                  <p className="text-white/40 text-sm mb-4">Connect wallet to stake OKBOND</p>
-                  <button onClick={connect}
-                    className="px-6 py-3 rounded-xl font-bold text-sm"
-                    style={{ background: `linear-gradient(135deg, ${GOLD}, #B8942A)`, color: "#050505" }}>
-                    Connect Wallet
-                  </button>
-                </div>
-              ) : (
-                <>
-                  <div className="relative mb-4">
-                    <input
-                      type="number"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      placeholder="0.00"
-                      className="w-full rounded-xl px-4 py-3.5 text-right text-lg font-mono font-bold pr-24 focus:outline-none transition-all"
-                      style={{
-                        background: "rgba(255,255,255,0.04)",
-                        border: `1px solid ${amount ? GOLD + "40" : "rgba(255,255,255,0.08)"}`,
-                        color: "#F5F5F5",
-                        fontFamily: "'JetBrains Mono', monospace",
-                      }}
-                    />
-                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-bold" style={{ color: GOLD }}>
-                      OKBOND
-                    </span>
-                  </div>
-
-                  {parsedAmount > 0 && (
-                    <div className="rounded-xl p-4 mb-4 border border-white/5" style={{ background: "rgba(255,255,255,0.02)" }}>
-                      <div className="flex justify-between text-sm mb-2">
-                        <span className="text-white/40">Estimated reward ({selectedPool.days}d)</span>
-                        <span className="font-bold" style={{ color: GOLD, fontFamily: "'JetBrains Mono', monospace" }}>
-                          +{estimatedReward.toFixed(2)} OKBOND
-                        </span>
-                      </div>
-                      <div className="flex justify-between text-sm">
-                        <span className="text-white/40">Lock expires</span>
-                        <span className="text-white/60 font-mono text-xs">
-                          {new Date(Date.now() + selectedPool.days * 86400000).toLocaleDateString()}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Tx Status */}
-                  <AnimatePresence>
-                    {txStatus !== "idle" && (
-                      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                        className="mb-4 p-4 rounded-xl flex items-start gap-3"
-                        style={{
-                          background: txStatus === "success" ? "rgba(16,185,129,0.1)" : txStatus === "error" ? "rgba(239,68,68,0.1)" : "rgba(212,175,55,0.08)",
-                          border: `1px solid ${txStatus === "success" ? "#10B98130" : txStatus === "error" ? "#EF444430" : GOLD + "30"}`,
-                        }}>
-                        {isPending && <Loader2 className="w-4 h-4 animate-spin shrink-0 mt-0.5" style={{ color: GOLD }} />}
-                        {txStatus === "success" && <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />}
-                        {txStatus === "error"   && <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5"    />}
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold text-white">
-                            {txStatus === "approving" ? "Approving OKBOND…"
-                              : txStatus === "staking"    ? "Staking in progress…"
-                              : txStatus === "unstaking"  ? "Unstaking…"
-                              : txStatus === "claiming"   ? "Claiming rewards…"
-                              : txStatus === "success"    ? "Transaction successful!"
-                              : "Transaction failed"}
-                          </p>
-                          {txHash && (
-                            <a href={`https://polygonscan.com/tx/${txHash}`} target="_blank" rel="noopener noreferrer"
-                              className="text-xs flex items-center gap-1 mt-1" style={{ color: GOLD }}>
-                              View on PolygonScan <ExternalLink className="w-3 h-3" />
-                            </a>
-                          )}
-                          {txError && <p className="text-xs text-red-400 mt-1 break-words">{txError}</p>}
-                        </div>
-                        {(txStatus === "success" || txStatus === "error") && (
-                          <button onClick={resetTx} className="text-xs text-white/30 hover:text-white/60 shrink-0">✕</button>
-                        )}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  <div className="grid grid-cols-3 gap-3">
-                    <button
-                      onClick={() => approveAndStake(amount, selectedPool.days)}
-                      disabled={isPending || !amount || parsedAmount <= 0}
-                      className="col-span-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-                      style={{ background: `linear-gradient(135deg, ${GOLD}, #B8942A)`, color: "#050505" }}>
-                      {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
-                      Stake
-                    </button>
-                    <button
-                      onClick={() => unstake(0)}
-                      disabled={isPending || !stats?.userStaked || parseFloat(stats.userStaked) <= 0}
-                      className="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm border transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                      style={{ borderColor: "rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.6)" }}>
-                      <Unlock className="w-4 h-4" />
-                      Unstake
-                    </button>
-                    <button
-                      onClick={() => claimRewards(0)}
-                      disabled={isPending || !stats?.userRewards || parseFloat(stats.userRewards) <= 0}
-                      className="flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm border transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                      style={{ borderColor: GOLD + "30", color: GOLD }}>
-                      <Zap className="w-4 h-4" />
-                      Claim
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* ── Sidebar: Compound Calculator + Your Position ── */}
-          <div className="space-y-4">
-
-            {/* Your Position */}
-            {address && stats && (
-              <div className="rounded-2xl border border-white/6 p-5" style={{ background: "rgba(7,17,31,0.7)" }}>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-white font-bold text-sm" style={{ fontFamily: "'Sora','Inter',sans-serif" }}>Your Position</span>
-                  <button onClick={refresh} className="text-white/30 hover:text-white/60 transition-colors">
-                    <RefreshCw className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-                {[
-                  { label: "Staked",          value: `${fmt(stats.userStaked || "0")} OKBOND` },
-                  { label: "Claimable Rewards", value: `${fmt(stats.userRewards || "0")} OKBOND` },
-                  { label: "Active Stakes",    value: stats.userStakes?.filter(s => s.active).length.toString() || "0" },
-                  { label: "Allowance",        value: `${fmt(stats.allowance || "0")} OKBOND` },
-                ].map(({ label, value }) => (
-                  <div key={label} className="flex justify-between py-2.5 border-b border-white/5 last:border-0 text-sm">
-                    <span className="text-white/40">{label}</span>
-                    <span className="text-white font-mono font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{value}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Compound Calculator */}
-            <div className="rounded-2xl border border-white/6 p-5" style={{ background: "rgba(7,17,31,0.7)" }}>
-              <div className="flex items-center gap-2 mb-4">
-                <Calculator className="w-4 h-4" style={{ color: GOLD }} />
-                <span className="text-white font-bold text-sm" style={{ fontFamily: "'Sora','Inter',sans-serif" }}>Compound Calculator</span>
-              </div>
-              <div className="space-y-3 mb-4">
-                <div>
-                  <label className="text-white/40 text-xs block mb-1.5">Years to compound</label>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 5].map((y) => (
-                      <button key={y}
-                        onClick={() => setCompoundYears(y)}
-                        className="flex-1 py-2 rounded-lg text-xs font-bold transition-all"
-                        style={{
-                          background: compoundYears === y ? `${GOLD}20` : "rgba(255,255,255,0.04)",
-                          color: compoundYears === y ? GOLD : "rgba(255,255,255,0.35)",
-                          border: `1px solid ${compoundYears === y ? GOLD + "40" : "transparent"}`,
-                        }}>
-                        {y}Y
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                <div className="rounded-xl p-4 border border-white/5" style={{ background: "rgba(255,255,255,0.02)" }}>
-                  <div className="flex justify-between mb-2 text-sm">
-                    <span className="text-white/40">Input</span>
-                    <span className="text-white font-mono">{parsedAmount > 0 ? parsedAmount.toLocaleString() : "1,000"} OKBOND</span>
-                  </div>
-                  <div className="flex justify-between mb-1 text-sm">
-                    <span className="text-white/40">APY</span>
-                    <span style={{ color: selectedPool.accent }} className="font-bold">{selectedPool.apy}%</span>
-                  </div>
-                  <div className="h-px bg-white/8 my-3" />
-                  <div className="flex justify-between text-base">
-                    <span className="text-white/60 font-semibold">After {compoundYears}Y</span>
-                    <span className="font-black" style={{ color: GOLD, fontFamily: "'JetBrains Mono', monospace" }}>
-                      {((parsedAmount > 0 ? parsedAmount : 1000) * Math.pow(1 + selectedPool.apy / 100, compoundYears)).toFixed(0)} OKBOND
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <a href="https://polygonscan.com/address/0x5067e9E4Ef827cE0Cc06a44B786668522732fB4e"
-                target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs text-white/30 hover:text-[#D4AF37] transition-colors">
-                <ExternalLink className="w-3 h-3" />
-                Verify contract on PolygonScan
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  const selectedApy = stats?.apys[selectedDays]; const parsed = Number(amount); const reward = selectedApy == null ? null : parsed > 0 ? parsed * selectedApy / 100 * selectedDays / 365 : 0; const compound = selectedApy == null ? null : (parsed > 0 ? parsed : 1000) * Math.pow(1 + selectedApy / 100, years);
+  const isPending = ["approving", "staking", "unstaking", "claiming"].includes(txStatus);
+  const dataState = loading ? "Loading live Polygon data…" : stats ? "Live data synced" : "On-chain sync pending";
+  const pools = useMemo(() => POOL_META.map((pool) => ({ ...pool, apy: stats?.apys[pool.days] })), [stats]);
+  return <div className="min-h-screen overflow-x-hidden bg-[#050708] pb-28 text-white lg:pb-12"><div className="pointer-events-none fixed inset-0 -z-0 bg-[radial-gradient(circle_at_75%_8%,rgba(212,175,55,.12),transparent_27%),radial-gradient(circle_at_10%_55%,rgba(26,74,66,.10),transparent_25%)]" /><main className="relative z-10 mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-10 lg:px-8">
+    <div className="grid items-center gap-8 pb-10 lg:grid-cols-[1.05fr_.95fr] lg:pb-16"><div><Status tone="gold"><LockKeyhole className="h-3 w-3" /> OKBOND sovereign staking</Status><h1 className="mt-5 max-w-2xl font-display text-4xl font-bold leading-[1.04] tracking-[-0.05em] text-white sm:text-6xl">Put your digital assets to work.</h1><p className="mt-5 max-w-xl text-base leading-7 text-white/50 sm:text-lg">Manage eligible staking positions, monitor rewards and explore the OKBOND referral network in one transparent interface.</p><div className="mt-7 flex flex-wrap gap-3"><button onClick={() => document.getElementById("stake-assets")?.scrollIntoView({ behavior: "smooth" })} className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#e8ca68] to-[#b8902f] px-5 py-3 text-sm font-bold text-black shadow-[0_10px_30px_rgba(212,175,55,.18)]">Stake OKBOND <ArrowRight className="h-4 w-4" /></button><button onClick={() => document.getElementById("positions")?.scrollIntoView({ behavior: "smooth" })} className="rounded-xl border border-white/15 px-5 py-3 text-sm font-semibold text-white/75">View my positions</button></div><div className="mt-6 flex flex-wrap gap-4 text-xs text-white/35"><span className="inline-flex items-center gap-1.5"><span className={`h-1.5 w-1.5 rounded-full ${isPolygon ? "bg-emerald-400" : "bg-amber-400"}`} /> Polygon Mainnet {isPolygon ? "connected" : "required"}</span><span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 text-[#d4af37]" /> Contract actions are real transactions</span></div></div><div className="relative mx-auto flex aspect-square w-full max-w-[420px] items-center justify-center"><div className="absolute inset-[12%] rounded-full border border-[#d4af37]/25 bg-[radial-gradient(circle_at_35%_28%,rgba(240,216,143,.3),rgba(42,35,18,.25)_34%,rgba(2,5,5,.9)_72%)] shadow-[inset_-35px_-25px_60px_rgba(0,0,0,.8),0_0_80px_rgba(212,175,55,.12)] motion-safe:animate-[spin_24s_linear_infinite]" /><div className="absolute h-[68%] w-[116%] rounded-[50%] border border-[#d4af37]/30 [transform:rotate(-25deg)]" /><div className="absolute h-[46%] w-[125%] rounded-[50%] border border-[#d4af37]/15 [transform:rotate(28deg)]" /><div className="relative text-center"><Sparkles className="mx-auto mb-3 h-7 w-7 text-[#e9ce72]" /><p className="font-display text-sm font-bold tracking-[.18em] text-[#e9ce72]">OKBOND</p><p className="mt-1 text-[10px] uppercase tracking-[.3em] text-white/35">Vault protocol</p></div></div></div>
+    <div className="mb-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">{[{ label: "Total staked", value: stats ? `${fmt(stats.totalStaked)} OKBOND` : "—", icon: LockKeyhole }, { label: "Accrued rewards", value: address && stats ? `${fmt(stats.userRewards)} OKBOND` : "—", icon: Zap }, { label: "Active positions", value: address && stats ? String(stats.userStakes.length) : "—", icon: Layers3 }, { label: "Available balance", value: address && okbondBalance != null ? `${okbondBalance} OKBOND` : "—", icon: WalletCards }].map(({ label, value, icon: Icon }) => <Panel key={label} className="p-4"><div className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#d4af37]/10 text-[#e9ce72]"><Icon className="h-4 w-4" /></span><div><p className="text-[10px] uppercase tracking-widest text-white/35">{label}</p><p className="mt-1 font-mono text-sm font-bold text-white">{value}</p></div></div></Panel>)}</div>
+    <div id="stake-assets" className="grid gap-6 lg:grid-cols-[1.1fr_.9fr]"><div><SectionHeading eyebrow="Stake assets" title="Choose your lock horizon" copy="Pool rates and reward estimates are read from the deployed staking contract. If a rate cannot be read, it is shown as unavailable rather than estimated." /><div className="grid gap-3 sm:grid-cols-2">{pools.map((pool, i) => { const active = pool.days === selectedDays; return <button key={pool.days} onClick={() => setSelectedDays(pool.days)} className={`relative rounded-2xl border p-5 text-left transition hover:-translate-y-0.5 ${active ? "border-[#d4af37]/50 bg-[#d4af37]/[0.08]" : "border-white/[0.08] bg-[#0a111b]/75"}`}><div className="flex items-center justify-between"><span className="font-display text-sm font-bold text-white">{pool.label}</span>{i === 2 && <span className="rounded-full bg-[#d4af37] px-2 py-1 text-[9px] font-black uppercase tracking-wider text-black">Selected class</span>}</div><p className="mt-5 font-mono text-3xl font-bold" style={{ color: pool.accent }}>{pool.apy == null ? "—" : `${pool.apy}%`}</p><p className="mt-1 text-xs text-white/45">{pool.days} day lock · {pool.note}</p>{active && <CheckCircle2 className="absolute right-4 top-4 h-4 w-4 text-[#e9ce72]" />}</button>})}</div><Panel className="mt-5 p-5 sm:p-7"><div className="mb-5 flex items-center justify-between"><div><p className="text-[10px] uppercase tracking-[.2em] text-[#d4af37]">Transaction terminal</p><h3 className="mt-1 font-display text-lg font-bold">Stake OKBOND</h3></div><Status>{dataState}</Status></div>{!address ? <div className="rounded-2xl border border-dashed border-white/15 p-8 text-center"><WalletCards className="mx-auto mb-3 h-7 w-7 text-[#e9ce72]" /><p className="text-sm text-white/55">Connect your wallet to read your balance and stake.</p><button onClick={connect} className="mt-5 rounded-xl bg-[#d4af37] px-5 py-3 text-sm font-bold text-black">Connect wallet</button></div> : !isPolygon ? <div className="rounded-2xl border border-amber-400/20 bg-amber-400/5 p-5"><p className="font-semibold text-amber-200">Switch to Polygon Mainnet</p><p className="mt-1 text-xs text-white/45">Staking transactions are only supported on chain 137.</p><button onClick={switchToPolygon} className="mt-4 rounded-xl border border-amber-300/25 px-4 py-2 text-xs font-bold text-amber-200">Switch network</button></div> : <><div className="relative"><input value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^0-9.]/g, ""))} inputMode="decimal" placeholder="0.00" className="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-5 pr-24 font-mono text-2xl font-bold text-white outline-none focus:border-[#d4af37]/50" /><span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-[#e9ce72]">OKBOND</span></div>{parsed > 0 && <div className="mt-3 grid gap-3 rounded-2xl border border-white/[0.07] bg-white/[0.025] p-4 text-xs sm:grid-cols-3"><div><p className="text-white/35">Estimated reward</p><p className="mt-1 font-mono font-bold text-[#e9ce72]">{reward == null ? "Unavailable" : `+${reward.toFixed(4)} OKBOND`}</p></div><div><p className="text-white/35">Contract APY</p><p className="mt-1 font-mono font-bold text-white">{selectedApy == null ? "Unavailable" : `${selectedApy}%`}</p></div><div><p className="text-white/35">Lock expires</p><p className="mt-1 font-mono font-bold text-white">{new Date(Date.now() + selectedDays * 86400000).toLocaleDateString()}</p></div></div>}<AnimatePresence>{txStatus !== "idle" && <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className={`mt-4 rounded-2xl border p-4 ${txStatus === "error" ? "border-red-400/20 bg-red-400/5" : txStatus === "success" ? "border-emerald-400/20 bg-emerald-400/5" : "border-[#d4af37]/20 bg-[#d4af37]/5"}`}><div className="flex gap-3">{isPending ? <Loader2 className="h-4 w-4 animate-spin text-[#e9ce72]" /> : txStatus === "success" ? <Check className="h-4 w-4 text-emerald-300" /> : <AlertCircle className="h-4 w-4 text-red-300" />}<div className="min-w-0 flex-1"><p className="text-sm font-semibold">{txStatus === "approving" ? "Approving OKBOND…" : txStatus === "staking" ? "Confirm staking transaction…" : txStatus === "success" ? "Transaction confirmed" : txStatus === "error" ? "Transaction failed" : txStatus}</p>{txError && <p className="mt-1 break-words text-xs text-red-200/80">{txError}</p>}{txHash && <a className="mt-2 inline-flex items-center gap-1 text-xs text-[#e9ce72]" href={`https://polygonscan.com/tx/${txHash}`} target="_blank" rel="noreferrer">View transaction <ExternalLink className="h-3 w-3" /></a>}</div>{!isPending && <button onClick={resetTx} className="text-xs text-white/35">Dismiss</button>}</div></motion.div>}</AnimatePresence><div className="mt-4 flex flex-wrap gap-3"><button disabled={isPending || !parsed || selectedApy == null} onClick={() => approveAndStake(amount, selectedDays)} className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#e8ca68] to-[#b8902f] px-4 py-3 text-sm font-bold text-black disabled:cursor-not-allowed disabled:opacity-40">{isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <LockKeyhole className="h-4 w-4" />} Stake now</button><button onClick={refresh} className="rounded-xl border border-white/10 px-4 text-white/55 hover:text-white"><RefreshCw className="h-4 w-4" /></button></div></>}</Panel></div>
+    <div className="space-y-6"><Panel className="p-5 sm:p-7"><div className="mb-5 flex items-center gap-2"><Calculator className="h-4 w-4 text-[#e9ce72]" /><h3 className="font-display font-bold">Compound calculator</h3></div><div className="flex gap-2">{[1, 2, 3, 5].map((value) => <button key={value} onClick={() => setYears(value)} className={`flex-1 rounded-xl border py-2 text-xs font-bold ${years === value ? "border-[#d4af37]/40 bg-[#d4af37]/10 text-[#e9ce72]" : "border-white/[0.07] text-white/35"}`}>{value}Y</button>)}</div><div className="mt-4 space-y-3 rounded-2xl border border-white/[0.07] bg-black/20 p-4 text-sm"><div className="flex justify-between"><span className="text-white/40">Input</span><span className="font-mono">{parsed > 0 ? fmt(parsed) : "1,000"} OKBOND</span></div><div className="flex justify-between"><span className="text-white/40">APY</span><span className="font-mono text-[#e9ce72]">{selectedApy == null ? "Unavailable" : `${selectedApy}%`}</span></div><div className="border-t border-white/[0.07] pt-3"><div className="flex justify-between"><span className="font-semibold text-white/65">After {years}Y</span><span className="font-mono font-bold text-[#e9ce72]">{compound == null ? "Unavailable" : `${fmt(compound, 0)} OKBOND`}</span></div></div></div><p className="mt-4 flex gap-2 text-[11px] leading-5 text-white/35"><Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />Projection only. It does not execute compounding and is based on the current contract APY.</p></Panel><Panel className="p-5"><div className="flex items-start gap-3"><Network className="mt-0.5 h-4 w-4 text-[#e9ce72]" /><div><p className="font-semibold">Verified contract</p><a href={`https://polygonscan.com/address/${STAKING_ADDRESS}`} target="_blank" rel="noreferrer" className="mt-1 inline-flex items-center gap-1 text-xs text-[#e9ce72]">{shortHash(STAKING_ADDRESS)} on PolygonScan <ExternalLink className="h-3 w-3" /></a><p className="mt-3 text-xs leading-5 text-white/40">Lock periods, APY, positions and transaction methods are read from the deployed contract. No contract or tokenomics changes are made by this page.</p></div></div></Panel></div></div>
+    <div id="positions" className="mt-16"><SectionHeading eyebrow="Position history" title="Your active positions" copy="Each position is read from the wallet's staking records. Withdrawals and reward claims remain separate on-chain actions." /><Panel className="p-5 sm:p-7">{!address ? <div className="py-8 text-center text-sm text-white/40">Connect wallet to load position history.</div> : loading ? <div className="flex items-center justify-center gap-2 py-8 text-sm text-white/45"><Loader2 className="h-4 w-4 animate-spin" /> Loading positions…</div> : stats?.userStakes.length ? <div className="space-y-3">{stats.userStakes.map((position) => <div key={position.id} className="grid gap-4 rounded-2xl border border-white/[0.07] bg-white/[0.025] p-4 md:grid-cols-[1.1fr_1fr_1fr_auto]"><div><p className="text-[10px] uppercase tracking-wider text-white/35">Position #{position.id}</p><p className="mt-1 font-mono text-lg font-bold text-white">{fmt(position.amount)} OKBOND</p></div><div><p className="text-[10px] text-white/35">Started</p><p className="mt-1 text-sm text-white/70">{dateFromUnix(position.startTime)}</p><p className="mt-1 text-xs text-white/35">{position.lockPeriod} day lock · {position.apy}% APY</p></div><div><p className="text-[10px] text-white/35">Accrued reward</p><p className="mt-1 font-mono text-sm font-bold text-[#e9ce72]">{fmt(position.pendingReward)} OKBOND</p><Status tone="green">Active</Status></div><div className="flex flex-wrap items-center gap-2 md:justify-end"><button disabled={isPending || Number(position.pendingReward) <= 0} onClick={() => claimRewards(position.id)} className="rounded-lg border border-[#d4af37]/25 px-3 py-2 text-xs font-semibold text-[#e9ce72] disabled:opacity-30">Claim</button><button disabled={isPending} onClick={() => unstake(position.id)} className="rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-white/60 disabled:opacity-30"><Unlock className="mr-1 inline h-3 w-3" />Unstake</button></div></div>)}</div> : <div className="py-8 text-center"><TrendingUp className="mx-auto mb-3 h-7 w-7 text-white/20" /><p className="text-sm text-white/45">No active staking positions yet.</p><p className="mt-1 text-xs text-white/25">Your confirmed positions will appear here.</p></div>}</Panel></div>
+    <div className="mt-16"><ReferralNetwork address={address} provider={provider} /></div><Panel className="mt-6 p-5 sm:p-7"><div className="flex gap-3"><ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#e9ce72]" /><div><h3 className="font-display font-bold">Transparency & risk</h3><p className="mt-2 text-sm leading-6 text-white/45">Staking depends on the deployed Polygon contract, its lock conditions, reward calculation and available liquidity. Rewards are not guaranteed by this interface. Review the contract and applicable terms before signing a transaction. Referral commissions are separate from staking rewards and remain disabled where the current contract does not expose payout history or qualifying-activity detail.</p></div></div></Panel>
+  </main></div>;
 }
