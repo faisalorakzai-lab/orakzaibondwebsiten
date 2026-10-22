@@ -1,43 +1,10 @@
 -- OKBOND service inquiries and bill-tracking requests.
--- Apply once to the existing Supabase project before enabling the Vercel API.
--- Property records are managed by an administrator in Supabase, never created as demo data.
+-- Apply after 20261022_property_listings.sql and before enabling the Vercel API.
 -- No client-facing table policies are created; all customer reads/writes stay in the server API.
 
 begin;
 
 create extension if not exists pgcrypto;
-
-create table if not exists public.property_listings (
-  id uuid primary key default gen_random_uuid(),
-  slug text not null unique check (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
-  title text not null check (length(btrim(title)) between 3 and 180),
-  city text not null check (length(btrim(city)) between 1 and 100),
-  location text not null default '' check (length(location) <= 160),
-  description text not null default '' check (length(description) <= 2000),
-  property_type text not null check (property_type in ('house', 'apartment', 'commercial', 'land')),
-  bedrooms smallint null check (bedrooms is null or bedrooms between 1 and 20),
-  price_amount numeric(18, 2) null check (price_amount is null or price_amount >= 0),
-  price_currency text null check (price_currency is null or price_currency ~ '^[A-Z]{3}$'),
-  installment_terms text null check (installment_terms is null or length(installment_terms) <= 500),
-  image_urls jsonb not null default '[]'::jsonb check (jsonb_typeof(image_urls) = 'array'),
-  verified boolean not null default false,
-  listing_status text not null default 'draft' check (listing_status in ('draft', 'published', 'archived')),
-  published_at timestamptz null,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now(),
-  constraint property_listings_publication_requires_verification
-    check (listing_status <> 'published' or (verified and published_at is not null)),
-  constraint property_listings_price_requires_currency
-    check (price_amount is null or price_currency is not null)
-);
-
-create index if not exists property_listings_public_catalog_idx
-  on public.property_listings (published_at desc)
-  where listing_status = 'published' and verified = true;
-
-alter table public.property_listings enable row level security;
-revoke all on table public.property_listings from anon, authenticated, service_role;
-grant select on table public.property_listings to service_role;
 
 create table if not exists public.service_requests (
   id uuid primary key default gen_random_uuid(),
