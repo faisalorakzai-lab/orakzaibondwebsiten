@@ -58,6 +58,13 @@
       ]
     },
     {
+      "source": "/ico",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600" },
+        { "key": "X-Robots-Tag", "value": "index, follow" }
+      ]
+    },
+    {
       "source": "/sw.js",
       "headers": [
         { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
@@ -72,6 +79,10 @@
     {
       "source": "/founder",
       "destination": "/founder.html"
+    },
+    {
+      "source": "/ico",
+      "destination": "/ico.html"
     },
     {
       "source": "/(.*)",
