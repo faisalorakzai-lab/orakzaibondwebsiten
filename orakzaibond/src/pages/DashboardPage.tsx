@@ -237,7 +237,7 @@ export default function DashboardPage() {
             <div className="max-w-2xl">
               <div className="mb-4 flex flex-wrap items-center gap-2.5">
                 <span className="inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/20 bg-black/25 px-3 py-1.5 text-[10px] font-mono uppercase tracking-[.18em] text-[#E6CC77]"><BarChart3 className="h-3.5 w-3.5" /> Sovereign portfolio</span>
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.09] bg-black/20 px-3 py-1.5 text-[10px] font-mono text-white/55"><span className={`h-1.5 w-1.5 rounded-full ${stakingError ? "bg-amber-300" : staking ? "bg-emerald-300" : "bg-white/30"}`} />{stakingError ? "RPC READ DEGRADED" : stakingLoading ? "CONNECTING TO POLYGON" : "POLYGON · CHAIN 137"}</span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-white/[0.09] bg-black/20 px-3 py-1.5 text-[10px] font-mono text-white/55"><span className={`h-1.5 w-1.5 rounded-full ${stakingError ? "bg-amber-300" : staking ? "bg-emerald-300" : "bg-white/30"}`} />{stakingError ? "STAKING READ UNAVAILABLE" : stakingLoading ? "READING STAKING CONTRACT" : "POLYGON · CHAIN 137"}</span>
               </div>
               <h1 className="max-w-xl text-3xl font-semibold leading-[1.08] tracking-[-.045em] text-white sm:text-4xl lg:text-[52px]">Your Financial<br /><span className="bg-gradient-to-r from-[#F1DE9A] via-[#D4AF37] to-[#A77F22] bg-clip-text text-transparent">Command Center</span></h1>
               <p className="mt-4 max-w-lg text-sm leading-relaxed text-white/55 sm:text-base">One ecosystem. Your assets. Full visibility.</p>
@@ -277,7 +277,7 @@ export default function DashboardPage() {
               {TABS.map(({ id, label, icon: Icon }) => <button key={id} role="tab" aria-selected={activeTab === id} aria-controls="dashboard-tab-panel" onClick={() => setActiveTab(id)} className={`inline-flex min-h-10 shrink-0 items-center gap-2 rounded-xl border px-3.5 text-xs font-medium transition sm:px-4 ${activeTab === id ? "border-[#D4AF37]/25 bg-[#D4AF37]/[0.09] text-[#E9D27E]" : "border-transparent text-white/45 hover:bg-white/[0.035] hover:text-white/80"}`}><Icon className="h-3.5 w-3.5" />{label}</button>)}
             </div>
           </div>
-          <div className="mb-6 mt-4 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[.16em] text-white/35"><Wifi className="h-3.5 w-3.5 text-[#D4AF37]/70" />{stakingError ? "Polygon contract read unavailable" : stakingLoading ? "Reading configured Polygon contracts" : "Polygon contract read completed"}<span className="ml-auto hidden sm:inline">No fabricated activity or market history</span></div>
+          <div className="mb-6 mt-4 flex items-center gap-2 text-[10px] font-mono uppercase tracking-[.16em] text-white/35"><Wifi className="h-3.5 w-3.5 text-[#D4AF37]/70" />{stakingError ? "Staking contract read unavailable" : stakingLoading ? "Reading staking contract" : "Staking contract read completed"}<span className="ml-auto hidden sm:inline">No fabricated activity or market history</span></div>
           <div id="dashboard-tab-panel" role="tabpanel" aria-label={`${activeTab} section`}>
             <TabContent tab={activeTab} address={address} okbondBalance={okbondBalance} staking={staking} stakingLoading={stakingLoading} stakingError={stakingError} />
           </div>
