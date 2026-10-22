@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Quote, BadgeCheck, ScrollText } from "lucide-react";
+import { Quote, ScrollText } from "lucide-react";
 
 const GOLD = "#D4AF37";
 const GOLD_BRIGHT = "#F4CE45";
@@ -48,10 +48,14 @@ export default function SovereignGuarantee() {
           >
             <ScrollText className="w-3.5 h-3.5" style={{ color: GOLD_BRIGHT }} />
             <span className="text-xs md:text-sm font-mono tracking-wider uppercase" style={{ color: GOLD_BRIGHT }}>
-              The Orakzai Bond Guarantee
+              The Orakzai Legacy
             </span>
           </div>
         </div>
+
+        <h2 className="mb-8 text-center text-3xl font-black uppercase tracking-tight text-white md:text-5xl">
+          The Vision Behind OKBOND
+        </h2>
 
         {/* Card */}
         <motion.div
@@ -140,19 +144,6 @@ export default function SovereignGuarantee() {
                   }}
                 />
               </div>
-              {/* Verified ribbon */}
-              <div
-                className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1 rounded-full"
-                style={{
-                  background: `linear-gradient(135deg, ${GOLD_BRIGHT}, ${GOLD}, ${GOLD_DEEP})`,
-                  boxShadow: `0 6px 18px ${GOLD}77, inset 0 1px 0 rgba(255,255,255,0.4)`,
-                }}
-              >
-                <BadgeCheck className="w-3.5 h-3.5" style={{ color: "#0a0a0a" }} />
-                <span className="text-[10px] font-extrabold tracking-wider" style={{ color: "#0a0a0a" }}>
-                  CHAIRMAN VERIFIED
-                </span>
-              </div>
             </motion.div>
           </div>
 
@@ -178,10 +169,8 @@ export default function SovereignGuarantee() {
                   textShadow: `0 0 24px ${GOLD}33`,
                 }}
               >
-                <span style={{ color: GOLD_BRIGHT, fontWeight: 700 }}>“My character is the ultimate collateral.</span>
-                {" "}
-                Every <span style={{ color: GOLD_BRIGHT, fontWeight: 700 }}>$OKBOND</span> is backed by the tangible legacy of the{" "}
-                <span style={{ color: GOLD_BRIGHT, fontWeight: 700 }}>Orakzai Group</span>.”
+                <span style={{ color: GOLD_BRIGHT, fontWeight: 700 }}>“Building an ecosystem</span>{" "}
+                where digital infrastructure meets real-world opportunity.”
               </p>
 
               {/* Signature divider */}
@@ -206,9 +195,9 @@ export default function SovereignGuarantee() {
               {/* Trust meta-row */}
               <div className="grid grid-cols-3 gap-4 mt-6 pt-5" style={{ borderTop: `1px dashed ${GOLD}33` }}>
                 {[
-                  { k: "EST.",        v: "Legacy" },
+                  { k: "LEGACY",       v: "Orakzai Group" },
                   { k: "JURISDICTION", v: "Pakistan" },
-                  { k: "PLEDGE",      v: "OKBOND" },
+                  { k: "ECOSYSTEM",    v: "OKBOND" },
                 ].map((m) => (
                   <div key={m.k}>
                     <p className="text-[9.5px] font-mono uppercase tracking-[0.18em]" style={{ color: GOLD + "88" }}>
