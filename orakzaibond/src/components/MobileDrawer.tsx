@@ -281,11 +281,13 @@ export default function MobileDrawer({ open, onClose }: MobileDrawerProps) {
               style={{
                 flex: "1 1 0",
                 minHeight: 0,
-                overflowY: "scroll",
+                overflowY: "auto",
                 WebkitOverflowScrolling: "touch",
                 overscrollBehavior: "contain",
+                overscrollBehaviorY: "contain",
+                touchAction: "pan-y",
               }}
-              className="py-3 px-2 space-y-0.5"
+              className="min-h-0 flex-1 py-3 px-2 space-y-0.5"
             >
               <SectionLabel>Sections</SectionLabel>
               {SECTION_ITEMS.map((item) => (
