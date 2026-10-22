@@ -102,6 +102,19 @@
       ]
     },
     {
+      "source": "/ico",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "index, follow"
+        }
+      ]
+    },
+    {
       "source": "/sw.js",
       "headers": [
         {
@@ -119,6 +132,10 @@
     {
       "source": "/founder",
       "destination": "/founder.html"
+    },
+    {
+      "source": "/ico",
+      "destination": "/ico.html"
     },
     {
       "source": "/(.*)",

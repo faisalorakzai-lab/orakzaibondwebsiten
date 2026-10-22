@@ -202,9 +202,9 @@ import { useEffect } from "react";
       canonical: BASE_URL + "/staking",
     },
     ico: {
-      title: "OKBOND ICO — Buy Orakzai Bond | Capital-Protected DeFi",
+      title: "OKBOND Services & Utilities | Hotel, Transport, Property & Bill Inquiries",
       description:
-        "Explore the OKBOND token sale interface on Polygon, participation information, and the project's public disclosures.",
+        "Inquiry-only OKBOND hotel, transport, car-rental and utility services. Property cards appear only for admin-verified listings; bookings and payments are not connected.",
       canonical: BASE_URL + "/ico",
     },
     dashboard: {

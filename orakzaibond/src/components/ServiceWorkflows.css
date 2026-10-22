@@ -1,0 +1,136 @@
+.okbond-workflow {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(3.75rem, 8vw, 7rem) 1.2rem;
+  color: #f4efe5;
+  background: radial-gradient(ellipse at 88% 18%, rgba(183, 143, 57, .12), transparent 32%), linear-gradient(180deg, #080a08, #0d0e0b 45%, #080a08);
+  scroll-margin-top: 5rem;
+}
+.okbond-workflow::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  background-image: linear-gradient(rgba(226, 190, 104, .022) 1px, transparent 1px), linear-gradient(90deg, rgba(226, 190, 104, .022) 1px, transparent 1px);
+  background-size: 52px 52px;
+  mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent);
+}
+.okbond-workflow__container { width: min(100%, 78rem); margin: 0 auto; }
+.okbond-workflow__header { display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; margin-bottom: 2rem; }
+.okbond-workflow__header h2 { margin: 0; color: #fbf7ee; font-family: var(--font-heading, Georgia, serif); font-size: clamp(2.3rem, 5vw, 4.25rem); font-weight: 500; letter-spacing: -.045em; line-height: 1.04; }
+.okbond-workflow__header h2 em { color: #e4c77e; font-weight: 400; }
+.okbond-workflow__header > div > p:last-child { max-width: 48rem; margin: .9rem 0 0; color: rgba(238, 233, 222, .68); line-height: 1.7; }
+.okbond-workflow__eyebrow { display: flex; align-items: center; gap: .6rem; margin: 0 0 .8rem; color: #d8bd7d; font-size: .64rem; font-weight: 750; letter-spacing: .18em; text-transform: uppercase; }
+.okbond-workflow__eyebrow > span { width: .4rem; height: .4rem; flex: 0 0 auto; border-radius: 50%; background: #d5b267; box-shadow: 0 0 14px rgba(214, 177, 95, .72); }
+.okbond-workflow__status { display: inline-flex; align-items: center; gap: .5rem; flex: 0 0 auto; padding: .72rem .9rem; border: 1px solid rgba(220, 188, 113, .25); border-radius: 999px; background: rgba(212, 175, 55, .055); color: #e5cc91; font-size: .67rem; font-weight: 700; letter-spacing: .08em; }
+.okbond-workflow__status svg { width: 1rem; height: 1rem; }
+.okbond-workflow__tabs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .55rem; margin-bottom: .8rem; }
+.okbond-workflow__tabs button { display: flex; min-width: 0; min-height: 3.9rem; align-items: center; justify-content: center; gap: .55rem; padding: .7rem .65rem; border: 1px solid rgba(232, 218, 181, .13); border-radius: .85rem; background: rgba(255,255,255,.025); color: rgba(244,239,229,.68); cursor: pointer; font: inherit; font-size: .77rem; font-weight: 650; transition: border-color .18s ease, background .18s ease, color .18s ease, transform .18s ease; }
+.okbond-workflow__tabs button:hover { border-color: rgba(219,187,111,.45); color: #fff1cd; transform: translateY(-1px); }
+.okbond-workflow__tabs button.is-active { border-color: rgba(229,196,119,.65); background: linear-gradient(115deg, rgba(210,176,99,.14), rgba(255,255,255,.025)); color: #fff1cd; box-shadow: inset 0 1px rgba(255,239,200,.06); }
+.okbond-workflow__tabs button svg { width: 1rem; height: 1rem; flex: 0 0 auto; color: #d3b269; }
+.okbond-workflow__tabs button:focus-visible, .okbond-workflow button:focus-visible, .okbond-workflow input:focus-visible, .okbond-workflow select:focus-visible, .okbond-workflow textarea:focus-visible { outline: 2px solid #f0cf7b; outline-offset: 3px; }
+.okbond-workflow__panel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(15rem, .32fr); overflow: hidden; border: 1px solid transparent; border-radius: 1.35rem; background: linear-gradient(145deg, rgba(13,16,14,.985), rgba(7,9,8,.985)) padding-box, linear-gradient(140deg, rgba(224,193,126,.45), rgba(104,82,42,.12) 48%, rgba(239,209,151,.22)) border-box; box-shadow: 0 25px 75px rgba(0,0,0,.24); }
+.okbond-workflow__content { min-width: 0; padding: clamp(1.2rem, 3.1vw, 2.5rem); }
+.okbond-workflow__content h3 { margin: .2rem 0 .5rem; color: #fbf7ee; font-family: var(--font-heading, Georgia, serif); font-size: clamp(1.7rem, 3.4vw, 2.55rem); font-weight: 500; letter-spacing: -.035em; line-height: 1.1; }
+.okbond-workflow__subtext, .okbond-workflow__review-intro { max-width: 48rem; margin: 0 0 1.35rem; color: rgba(238,233,222,.63); font-size: .88rem; line-height: 1.65; }
+.okbond-workflow__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; }
+.okbond-workflow__field { display: flex; min-width: 0; flex-direction: column; gap: .42rem; color: rgba(247,240,222,.82); font-size: .75rem; font-weight: 650; }
+.okbond-workflow__field > span:first-child b { color: #e8c978; }
+.okbond-workflow__field.is-wide { grid-column: 1 / -1; }
+.okbond-workflow__input-wrap { display: flex; min-width: 0; min-height: 2.85rem; align-items: center; gap: .62rem; padding: 0 .78rem; border: 1px solid rgba(231,220,190,.15); border-radius: .72rem; background: rgba(255,255,255,.035); color: #c9aa63; transition: border-color .18s ease, background .18s ease; }
+.okbond-workflow__input-wrap:focus-within { border-color: rgba(230,196,116,.68); background: rgba(255,255,255,.055); }
+.okbond-workflow__input-wrap > svg { width: 1rem; height: 1rem; flex: 0 0 auto; }
+.okbond-workflow__input-wrap input, .okbond-workflow__input-wrap select, .okbond-workflow__input-wrap textarea { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: #fbf7ee; font: inherit; font-size: .84rem; }
+.okbond-workflow__input-wrap input, .okbond-workflow__input-wrap select { min-height: 2.6rem; }
+.okbond-workflow__input-wrap textarea { min-height: 5rem; padding: .72rem 0; resize: vertical; }
+.okbond-workflow__input-wrap input::placeholder, .okbond-workflow__input-wrap textarea::placeholder { color: rgba(238,233,222,.36); }
+.okbond-workflow__input-wrap select option { background: #11130f; color: #fbf7ee; }
+.okbond-workflow__field input[type="date"], .okbond-workflow__field input[type="time"] { color-scheme: dark; }
+.okbond-workflow__check { display: flex; grid-column: 1 / -1; align-items: center; gap: .65rem; min-height: 2.5rem; color: rgba(244,239,229,.8); font-size: .8rem; }
+.okbond-workflow__check input { width: 1rem; height: 1rem; accent-color: #d5b267; }
+.okbond-workflow__form-footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid rgba(239,229,204,.1); }
+.okbond-workflow__form-footer > p { display: flex; align-items: center; gap: .45rem; margin: 0; color: rgba(235,228,210,.53); font-size: .69rem; line-height: 1.5; }
+.okbond-workflow__form-footer > p svg { width: .95rem; height: .95rem; flex: 0 0 auto; color: #c6a65b; }
+.okbond-workflow__primary, .okbond-workflow__secondary { display: inline-flex; min-height: 2.85rem; align-items: center; justify-content: center; gap: .55rem; padding: .7rem 1rem; border: 1px solid rgba(234,203,127,.48); border-radius: 999px; cursor: pointer; font: inherit; font-size: .77rem; font-weight: 750; transition: filter .18s ease, transform .18s ease, background .18s ease; }
+.okbond-workflow__primary { background: linear-gradient(120deg, #e4c77e, #b88d42); color: #17140c; box-shadow: 0 8px 22px rgba(183,143,57,.16); }
+.okbond-workflow__primary:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-1px); }
+.okbond-workflow__primary:disabled { cursor: wait; opacity: .72; }
+.okbond-workflow__primary svg { width: 1rem; height: 1rem; }
+.okbond-workflow__secondary { background: transparent; color: #e6d7b0; }
+.okbond-workflow__secondary:hover { background: rgba(255,255,255,.05); }
+.okbond-workflow__aside { display: flex; flex-direction: column; align-items: flex-start; padding: 1.65rem 1.35rem; border-left: 1px solid rgba(239,229,204,.1); background: linear-gradient(165deg, rgba(212,175,55,.055), rgba(255,255,255,.008)); }
+.okbond-workflow__aside-icon { display: grid; width: 2.75rem; height: 2.75rem; place-items: center; margin-bottom: 1.4rem; border: 1px solid rgba(221,190,116,.3); border-radius: .9rem; background: rgba(212,175,55,.07); color: #e6c979; }
+.okbond-workflow__aside-icon svg { width: 1.35rem; height: 1.35rem; }
+.okbond-workflow__aside h3 { margin: 0; color: #f8efda; font-family: var(--font-heading, Georgia, serif); font-size: 1.55rem; font-weight: 500; line-height: 1.14; }
+.okbond-workflow__aside > p:not(.okbond-workflow__eyebrow) { margin: .7rem 0 1.15rem; color: rgba(235,228,210,.6); font-size: .77rem; line-height: 1.7; }
+.okbond-workflow__aside strong { color: #e4c77e; }
+.okbond-workflow__aside-row { display: flex; align-items: flex-start; gap: .55rem; margin-top: .78rem; color: rgba(235,228,210,.68); font-size: .7rem; line-height: 1.5; }
+.okbond-workflow__aside-row svg { width: .95rem; height: .95rem; flex: 0 0 auto; color: #c6a65b; }
+.okbond-workflow__footnote { display: flex; align-items: flex-start; gap: .5rem; max-width: 75rem; margin: 1rem auto 0; color: rgba(235,228,210,.45); font-size: .68rem; line-height: 1.55; }
+.okbond-workflow__footnote svg { width: .95rem; height: .95rem; flex: 0 0 auto; color: #c6a65b; }
+.okbond-workflow__error { margin: .9rem 0 0; padding: .72rem .85rem; border: 1px solid rgba(244,116,116,.28); border-radius: .7rem; background: rgba(132,31,31,.15); color: #ffc6bd; font-size: .78rem; line-height: 1.55; }
+.okbond-workflow__privacy { display: flex; align-items: flex-start; gap: .5rem; margin: 1rem 0 0; color: rgba(235,228,210,.55); font-size: .69rem; line-height: 1.55; }
+.okbond-workflow__privacy svg { width: 1rem; height: 1rem; flex: 0 0 auto; color: #cfb16c; }
+.okbond-workflow__utility-types { display: flex; flex-wrap: wrap; gap: .48rem; margin-bottom: 1rem; }
+.okbond-workflow__utility-types button { display: inline-flex; min-height: 2.4rem; align-items: center; gap: .4rem; padding: .48rem .68rem; border: 1px solid rgba(231,220,190,.14); border-radius: 999px; background: rgba(255,255,255,.025); color: rgba(244,239,229,.68); cursor: pointer; font: inherit; font-size: .69rem; }
+.okbond-workflow__utility-types button.is-active { border-color: rgba(229,196,119,.6); background: rgba(212,175,55,.1); color: #fae9bc; }
+.okbond-workflow__utility-types svg { width: .9rem; height: .9rem; color: #d3b269; }
+.okbond-workflow__property .okbond-workflow__filters { margin-bottom: 1rem; }
+.okbond-workflow__empty-listings, .okbond-workflow__empty-history { display: flex; align-items: flex-start; gap: .8rem; padding: 1rem; border: 1px dashed rgba(225,195,122,.24); border-radius: .85rem; background: rgba(212,175,55,.035); color: rgba(238,233,222,.65); }
+.okbond-workflow__empty-listings > svg, .okbond-workflow__empty-history > svg { width: 1.2rem; height: 1.2rem; flex: 0 0 auto; color: #d1b56f; }
+.okbond-workflow__empty-listings strong, .okbond-workflow__empty-history strong { display: block; color: #f3e7c7; font-size: .82rem; }
+.okbond-workflow__empty-listings p, .okbond-workflow__empty-history p { margin: .35rem 0 0; font-size: .74rem; line-height: 1.6; }
+.okbond-workflow__property-inquiry { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid rgba(239,229,204,.1); }
+.okbond-workflow__property-inquiry h4 { margin: 0 0 .35rem; color: #f5e9ca; font-size: 1rem; }
+.okbond-workflow__property-inquiry > p { margin: 0 0 .9rem; color: rgba(235,228,210,.56); font-size: .75rem; line-height: 1.55; }
+.okbond-workflow__property-inquiry textarea { min-height: 5.3rem; }
+.okbond-workflow__review dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; margin: 1rem 0; }
+.okbond-workflow__review dl > div { min-width: 0; padding: .7rem .78rem; border: 1px solid rgba(231,220,190,.1); border-radius: .65rem; background: rgba(255,255,255,.025); }
+.okbond-workflow__review dt { margin-bottom: .25rem; color: rgba(235,228,210,.47); font-size: .65rem; text-transform: capitalize; }
+.okbond-workflow__review dd { overflow-wrap: anywhere; margin: 0; color: #f5e9ca; font-size: .8rem; font-weight: 600; }
+.okbond-workflow__review-actions { display: flex; justify-content: flex-end; gap: .65rem; margin-top: 1rem; }
+.okbond-workflow__success { max-width: 38rem; padding: 1.5rem 0; }
+.okbond-workflow__success-icon { display: grid; width: 3rem; height: 3rem; place-items: center; margin-bottom: 1rem; border: 1px solid rgba(134,199,146,.3); border-radius: 50%; background: rgba(73,132,86,.12); color: #9fe0a8; }
+.okbond-workflow__success h3 { margin-top: .3rem; }
+.okbond-workflow__success > p:not(.okbond-workflow__eyebrow) { color: rgba(238,233,222,.7); font-size: .84rem; line-height: 1.65; }
+.okbond-workflow__success > p > strong { color: #f0cf7b; }
+.okbond-workflow__disclosure { padding: .7rem .8rem; border-left: 2px solid #c6a65b; background: rgba(212,175,55,.045); }
+.okbond-workflow__history .okbond-workflow__inline-status { display: flex; align-items: center; gap: .6rem; color: #ddc88f; font-size: .8rem; }
+.okbond-workflow__empty-history { align-items: center; margin-top: 1rem; }
+.okbond-workflow__records { display: grid; gap: .7rem; margin-top: 1rem; }
+.okbond-workflow__record { padding: .95rem; border: 1px solid rgba(231,220,190,.12); border-radius: .8rem; background: rgba(255,255,255,.025); }
+.okbond-workflow__record-top { display: flex; align-items: center; justify-content: space-between; gap: .5rem; color: #e8cd85; font-size: .72rem; font-weight: 750; letter-spacing: .04em; }
+.okbond-workflow__record h4 { margin: .7rem 0 .4rem; color: #f5e9ca; font-size: .9rem; text-transform: capitalize; }
+.okbond-workflow__record p { margin: .28rem 0; color: rgba(235,228,210,.58); font-size: .72rem; line-height: 1.5; }
+.okbond-workflow__pill { padding: .28rem .48rem; border: 1px solid rgba(230,196,116,.22); border-radius: 999px; color: #e6c979; font-size: .62rem; text-transform: capitalize; }
+.okbond-workflow__pill--completed { border-color: rgba(134,199,146,.32); color: #9fe0a8; }
+.okbond-workflow__pill--failed, .okbond-workflow__pill--cancelled { border-color: rgba(244,116,116,.25); color: #ffb4a7; }
+.okbond-workflow__print { display: inline-flex; align-items: center; gap: .4rem; margin-top: .45rem; padding: .45rem .65rem; border: 1px solid rgba(230,196,116,.3); border-radius: .55rem; background: transparent; color: #f0cf7b; cursor: pointer; font: inherit; font-size: .68rem; }
+.okbond-workflow__print svg { width: .9rem; height: .9rem; }
+.okbond-workflow__spinner { width: 1rem; height: 1rem; border: 2px solid rgba(24,21,14,.25); border-top-color: currentColor; border-radius: 50%; animation: okbond-workflow-spin .7s linear infinite; }
+@keyframes okbond-workflow-spin { to { transform: rotate(360deg); } }
+@media (max-width: 900px) { .okbond-workflow__tabs { grid-template-columns: repeat(3, minmax(0,1fr)); } .okbond-workflow__panel { grid-template-columns: 1fr; } .okbond-workflow__aside { display: grid; grid-template-columns: auto 1fr; column-gap: .9rem; padding: 1.1rem 1.35rem; border-top: 1px solid rgba(239,229,204,.1); border-left: 0; } .okbond-workflow__aside-icon { grid-row: 1 / span 2; margin: 0; } .okbond-workflow__aside .okbond-workflow__eyebrow { margin: .1rem 0 .3rem; } .okbond-workflow__aside h3 { grid-column: 2; } .okbond-workflow__aside > p:not(.okbond-workflow__eyebrow) { grid-column: 2; margin: .5rem 0; } .okbond-workflow__aside-row { grid-column: 2; margin-top: .5rem; } }
+@media (max-width: 560px) { .okbond-workflow { padding-inline: 1rem; } .okbond-workflow__header { display: block; } .okbond-workflow__status { margin-top: 1rem; } .okbond-workflow__tabs { grid-template-columns: repeat(2, minmax(0,1fr)); gap: .45rem; } .okbond-workflow__tabs button { min-height: 3.35rem; justify-content: flex-start; padding: .65rem .72rem; font-size: .73rem; } .okbond-workflow__grid, .okbond-workflow__review dl { grid-template-columns: 1fr; } .okbond-workflow__field.is-wide { grid-column: auto; } .okbond-workflow__form-footer { align-items: stretch; flex-direction: column; } .okbond-workflow__form-footer .okbond-workflow__primary { width: 100%; } .okbond-workflow__review-actions { flex-direction: column-reverse; } .okbond-workflow__review-actions button { width: 100%; } .okbond-workflow__aside { grid-template-columns: 1fr; } .okbond-workflow__aside-icon { grid-row: auto; margin-bottom: .4rem; } .okbond-workflow__aside h3, .okbond-workflow__aside > p:not(.okbond-workflow__eyebrow), .okbond-workflow__aside-row { grid-column: 1; } }
+@media (prefers-reduced-motion: reduce) { .okbond-workflow *, .okbond-workflow *::before, .okbond-workflow *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+@media print { body * { visibility: hidden !important; } .okbond-workflow__record, .okbond-workflow__record * { visibility: visible !important; } .okbond-workflow { padding: 0; color: #111; background: #fff; } .okbond-workflow__record { position: absolute; inset: 0 auto auto 0; width: 100%; color: #111; background: #fff; border: 1px solid #aaa; } .okbond-workflow__record h4, .okbond-workflow__record p, .okbond-workflow__record-top { color: #111; } }
+
+.okbond-workflow__catalog-status { display: flex; align-items: center; gap: .65rem; margin: .8rem 0; color: rgba(235,228,210,.62); font-size: .76rem; }
+.okbond-workflow__spin-icon { width: 1rem; height: 1rem; color: #d4b86f; animation: okbond-workflow-spin 1s linear infinite; }
+.okbond-workflow__listing-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: .8rem; margin: .8rem 0 1rem; }
+.okbond-workflow__listing { min-width: 0; overflow: hidden; border: 1px solid rgba(231,220,190,.13); border-radius: .85rem; background: rgba(255,255,255,.025); }
+.okbond-workflow__listing-image, .okbond-workflow__listing-placeholder { display: grid; width: 100%; height: 10.5rem; place-items: center; object-fit: cover; background: radial-gradient(ellipse at 50% 30%,rgba(212,175,55,.14),transparent 64%),#14150f; color: #d3b269; }
+.okbond-workflow__listing-placeholder svg { width: 2rem; height: 2rem; }
+.okbond-workflow__listing-body { padding: .9rem; }
+.okbond-workflow__verified { display: inline-flex; align-items: center; gap: .35rem; color: #a6d8a4; font-size: .64rem; font-weight: 700; letter-spacing: .04em; }
+.okbond-workflow__verified svg { width: .9rem; height: .9rem; }
+.okbond-workflow__listing h4 { margin: .45rem 0; color: #f4e8c7; font-size: .92rem; }
+.okbond-workflow__listing-location, .okbond-workflow__listing-meta, .okbond-workflow__listing-price { display: flex; align-items: center; gap: .45rem; margin: .38rem 0; color: rgba(235,228,210,.68); font-size: .7rem; line-height: 1.5; }
+.okbond-workflow__listing-location svg, .okbond-workflow__listing-meta svg, .okbond-workflow__listing-price svg { width: .9rem; height: .9rem; flex: 0 0 auto; color: #c9ab64; }
+.okbond-workflow__listing-meta { flex-wrap: wrap; gap: .5rem .85rem; }
+.okbond-workflow__listing-meta span { display: inline-flex; align-items: center; gap: .35rem; }
+.okbond-workflow__listing-price { color: #f0cf7b; font-size: .83rem; font-weight: 750; }
+.okbond-workflow__listing-terms, .okbond-workflow__listing-description { margin: .45rem 0; color: rgba(235,228,210,.63); font-size: .71rem; line-height: 1.6; }
+.okbond-workflow__listing-body .okbond-workflow__secondary { width: 100%; margin-top: .45rem; font-size: .7rem; }
+@media (max-width: 560px) { .okbond-workflow__listing-grid { grid-template-columns: 1fr; } .okbond-workflow__listing-image, .okbond-workflow__listing-placeholder { height: 12rem; } }
