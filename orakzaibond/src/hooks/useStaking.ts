@@ -9,7 +9,7 @@ const POLYGON_RPC = "https://polygon-bor-rpc.publicnode.com";
 export const LOCK_PERIODS = [30, 90, 180, 365] as const;
 
 export interface StakeInfo {
-  id: number; amount: string; startTime: number; lockPeriod: number; apy: number; active: boolean; pendingReward: string;
+  id: number; amount: string; startTime: number; lockPeriod: number; apy: number; active: boolean; pendingReward: string; txHash: string | null;
 }
 export interface StakingStats {
   totalStaked: string; totalStakers: string; rewardsDistributed: string; userStaked: string; userRewards: string;
@@ -50,7 +50,8 @@ export function useStaking(provider: BrowserProvider | null, address: string | n
         const rawStakes = await Promise.all(Array.from({ length: count }, (_, i) => Promise.all([
           safeCall(() => staking.getStakeInfo(address, i), [0n, 0n, 0n, 0n, false]), safeCall(() => staking.pendingRewards(address, i), 0n),
         ])));
-        userStakes = rawStakes.map(([info, pending], i) => ({ id: i, amount: formatEther(info[0] || 0n), startTime: Number(info[1] || 0n), lockPeriod: Number(info[2] || 0n) / 86400, apy: Number(info[3] || 0n), active: Boolean(info[4]), pendingReward: formatEther(pending) })).filter((s) => s.active);
+        const stakeEvents = await safeCall(() => staking.queryFilter(staking.filters.Staked(address), -150_000), [] as any[]);
+        userStakes = rawStakes.map(([info, pending], i) => ({ id: i, amount: formatEther(info[0] || 0n), startTime: Number(info[1] || 0n), lockPeriod: Number(info[2] || 0n) / 86400, apy: Number(info[3] || 0n), active: Boolean(info[4]), pendingReward: formatEther(pending), txHash: stakeEvents[i]?.transactionHash ?? null })).filter((s) => s.active);
       }
       setStats({ totalStaked: formatEther(totalStaked), totalStakers: totalStakers.toString(), rewardsDistributed: formatEther(rewardsDistributed), userStaked, userRewards, userStakes, allowance, apys: Object.fromEntries(apyValues) });
     } catch (e) { console.error("useStaking fetchStats:", e); }
@@ -63,7 +64,11 @@ export function useStaking(provider: BrowserProvider | null, address: string | n
     if (!provider || !address) { setTxError("Wallet not connected"); return; }
     setTxStatus("approving"); setTxError(null); setTxHash(null);
     try {
-      const signer = await provider.getSigner(); const token = new Contract(OKBOND_ADDRESS, OKBOND_ABI, signer); const staking = new Contract(STAKING_ADDRESS, STAKING_ABI, signer); const amountWei = parseEther(amount);
+      const signer = await provider.getSigner(); const token = new Contract(OKBOND_ADDRESS, OKBOND_ABI, signer); const staking = new Contract(STAKING_ADDRESS, STAKING_ABI, signer);
+      if (!amount.trim() || !/^\d+(\.\d{1,18})?$/.test(amount.trim()) || Number(amount) <= 0) throw new Error("Enter a valid OKBOND amount.");
+      const amountWei = parseEther(amount);
+      const balanceWei = await token.balanceOf(address);
+      if (amountWei > balanceWei) throw new Error("Insufficient OKBOND balance.");
       if (await safeCall(() => token.allowance(address, STAKING_ADDRESS), 0n) < amountWei) { const approval = await token.approve(STAKING_ADDRESS, amountWei); await approval.wait(1); }
       setTxStatus("staking"); const tx = await staking.stake(amountWei, lockDays * 86400); setTxHash(tx.hash); await tx.wait(1); setTxStatus("success"); await fetchStats();
     } catch (err: any) { setTxStatus("error"); setTxError(err?.shortMessage || err?.message || "Staking failed"); }
