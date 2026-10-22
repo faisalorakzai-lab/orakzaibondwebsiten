@@ -1,219 +1,101 @@
 import { useSEO, PAGE_SEO } from "@/components/SEO";
-import { motion } from "framer-motion";
-import { ShieldCheck, Trophy, Sparkles, Zap, Clock, ExternalLink, Users, ArrowRight, CheckCircle } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  ArrowDown, ArrowRight, BadgeCheck, CircleHelp, Clock3, Coins, ExternalLink,
+  Fingerprint, LockKeyhole, ShieldAlert, Ticket, Trophy, Users, Wallet,
+} from "lucide-react";
 import Lottery from "@/components/Lottery";
 import { useWallet } from "@/hooks/useWallet";
+import "./LotteryPage.css";
 
-const GOLD = "#D4AF37";
+const LOTTERY_ADDRESS = "0x5BC55d4b347e39B986864E28604Ddca5dE6357B7";
+const EXPLORER_URL = `https://polygonscan.com/address/${LOTTERY_ADDRESS}#code`;
+
+const steps = [
+  { number: "01", icon: Ticket, title: "Enter the draw", copy: "The verified contract accepts one entry per wallet. The current entry amount is read directly from the contract terminal below." },
+  { number: "02", icon: LockKeyhole, title: "Wait for selection", copy: "The owner can select winners after the 60-day lock and when at least five wallets have entered. Selection is not automatic." },
+  { number: "03", icon: Trophy, title: "Check your outcome", copy: "The contract records five winners. Winners can claim POL; eligible non-winners can call the contract to claim their deposited OKBOND back." },
+];
+
+const faqs = [
+  { q: "What does it cost to enter?", a: "The OKBOND entry amount is read from the connected Polygon contract and shown in the terminal. Polygon network gas is separate and varies with network conditions." },
+  { q: "How are winners selected?", a: "The verified source uses block timestamp, block prevrandao, an index and the player count, and only the contract owner can call winner selection after the lock. This is not Chainlink VRF and should not be described as manipulation-proof." },
+  { q: "When can I claim a refund?", a: "After winners are selected, an address that is not a winner and has a recorded deposit can call claimRefund. A transaction and Polygon gas are required. The contract source does not guarantee a claim time or independent reserve backing." },
+  { q: "What do winners receive?", a: "The contract divides its native POL balance by five when winners are selected. The reward amount is not the OKBOND entry deposit, and actual payout depends on the balance available at that time." },
+  { q: "Is the contract audited?", a: "The repository's Polygon deployment manifest lists the source as verified and says an independent audit was not submitted. Source verification is not an independent security audit." },
+  { q: "Which network and address should I verify?", a: "The deployment manifest identifies Polygon PoS (chain ID 137) and the contract linked here. Always check the address and network in your wallet before approving or sending a transaction." },
+];
 
 export default function LotteryPage() {
   const { address, connect, provider, isPolygon, switchToPolygon } = useWallet();
-
+  const reduceMotion = useReducedMotion();
   useSEO(PAGE_SEO.lottery);
+
+  const goToTerminal = () => {
+    if (!address) {
+      void connect();
+      return;
+    }
+    document.getElementById("lottery-terminal")?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  };
+
   return (
-    <div className="min-h-screen pb-24 lg:pb-10" style={{ background: "#050505" }}>
-
-      {/* ── Cinematic Header ── */}
-      <div className="relative overflow-hidden border-b border-white/5"
-        style={{
-          background: "linear-gradient(135deg, #050505 0%, #07111F 50%, #050505 100%)",
-          paddingTop: "80px",
-          paddingBottom: "60px",
-        }}>
-        {/* Background glow */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0"
-            style={{
-              backgroundImage: `linear-gradient(rgba(212,175,55,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.03) 1px, transparent 1px)`,
-              backgroundSize: "60px 60px",
-            }}
-          />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full"
-            style={{
-              background: `radial-gradient(ellipse, ${GOLD}0a 0%, transparent 70%)`,
-              filter: "blur(60px)",
-            }}
-          />
-        </div>
-
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/8 mb-6"
-          >
-            <Trophy className="w-4 h-4" style={{ color: GOLD }} />
-            <span className="text-[11px] font-bold uppercase tracking-widest" style={{ color: GOLD }}>OKBOND Smart Lottery</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[11px] text-emerald-400 font-mono">LIVE</span>
+    <div className="lottery-page">
+      <section className="lottery-hero">
+        <div className="lottery-hero__grain" aria-hidden="true" />
+        <div className="lottery-hero__inner">
+          <motion.div className="lottery-hero__copy" initial={reduceMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+            <div className="lottery-kicker"><span className="lottery-kicker__dot" /> OKBOND · POLYGON LOTTERY</div>
+            <h1>THE OKBOND<br /><span>LOTTERY</span></h1>
+            <p className="lottery-hero__subtitle">A new standard for on-chain draws.</p>
+            <p className="lottery-hero__body">A live interface to the verified Polygon contract. Review the real entry, draw status and terms before you connect. Participation involves smart-contract, randomness and transaction risk.</p>
+            <div className="lottery-hero__actions">
+              <button className="lottery-button" onClick={goToTerminal}><Wallet size={17} /> {address ? "View lottery terminal" : "Connect wallet to enter"} <ArrowRight size={16} /></button>
+              <a className="lottery-link" href="#lottery-transparency">Explore transparency <ArrowDown size={15} /></a>
+            </div>
+            <div className="lottery-hero__meta"><span><BadgeCheck size={15} /> Polygon · chain 137</span><span><Users size={15} /> On-chain participants</span></div>
           </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-4"
-            style={{ fontFamily: "'Sora','Inter',sans-serif", letterSpacing: "-0.02em" }}
-          >
-            Win Big.<br />
-            <span style={{
-              background: `linear-gradient(135deg, ${GOLD} 0%, #F5E27D 40%, #B8942A 100%)`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}>
-              Risk Nothing.
-            </span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-white/50 text-base sm:text-lg max-w-2xl mx-auto mb-10"
-          >
-            The world's only capital-protected lottery. Winners claim the prize.
-            Non-winners receive 100% of their deposit back. Powered by Chainlink VRF.
-          </motion.p>
-
-          {/* ── Trust strip ── */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="flex flex-wrap justify-center gap-3"
-          >
-            {[
-              { icon: <ShieldCheck className="w-3.5 h-3.5" />, label: "100% Capital Return" },
-              { icon: <Zap         className="w-3.5 h-3.5" />, label: "Chainlink VRF" },
-              { icon: <CheckCircle className="w-3.5 h-3.5" />, label: "Audited Contract" },
-              { icon: <Users       className="w-3.5 h-3.5" />, label: "On-Chain Transparent" },
-            ].map((b) => (
-              <span key={b.label} className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/8 bg-white/3 text-white/45 text-xs font-medium">
-                <span style={{ color: GOLD + "99" }}>{b.icon}</span>
-                {b.label}
-              </span>
-            ))}
+          <motion.div className="lottery-vault" aria-label="Decorative animated gold lottery vault illustration" role="img" initial={reduceMotion ? false : { opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.15 }}>
+            <div className="lottery-vault__halo" />
+            <div className="lottery-vault__orbit lottery-vault__orbit--one"><i /><i /><i /></div>
+            <div className="lottery-vault__orbit lottery-vault__orbit--two"><i /><i /></div>
+            <div className="lottery-vault__ring lottery-vault__ring--outer" />
+            <div className="lottery-vault__ring lottery-vault__ring--inner" />
+            <div className="lottery-vault__coin"><div className="lottery-vault__coin-face"><span>OB</span><small>OKBOND</small></div></div>
+            <div className="lottery-vault__base"><span>LIVE CONTRACT</span><strong>POLYGON&nbsp; / &nbsp;137</strong></div>
           </motion.div>
         </div>
-      </div>
+        <div className="lottery-hero__bottom"><span>01 — 03</span><span>VERIFIED SOURCE · NOT AN AUDIT</span><span>SCROLL TO EXPLORE</span></div>
+      </section>
 
-      {/* ── How It Works ── */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-10"
-        >
-          <h2 className="text-2xl sm:text-3xl font-black text-white mb-2"
-            style={{ fontFamily: "'Sora','Inter',sans-serif" }}>
-            How It Works
-          </h2>
-          <p className="text-white/40 text-sm">Three steps to participate in the sovereign lottery</p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-16">
-          {[
-            {
-              step: "01",
-              icon: <Sparkles className="w-6 h-6" />,
-              title: "Enter the Draw",
-              desc: "Purchase lottery tickets with OKBOND tokens. Each ticket gives you an equal chance to win.",
-              color: "#3B82F6",
-            },
-            {
-              step: "02",
-              icon: <Clock className="w-6 h-6" />,
-              title: "Wait for Draw",
-              desc: "The smart contract draws a winner using Chainlink VRF — provably fair, tamper-proof randomness.",
-              color: GOLD,
-            },
-            {
-              step: "03",
-              icon: <Trophy className="w-6 h-6" />,
-              title: "Win or Get Refunded",
-              desc: "Winner takes the prize. Non-winners receive 100% of their ticket deposit back. No one loses capital.",
-              color: "#10B981",
-            },
-          ].map((step, i) => (
-            <motion.div
-              key={step.step}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="relative rounded-2xl p-6 border border-white/6"
-              style={{ background: "rgba(7,17,31,0.7)" }}
-            >
-              <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
-                  style={{ background: `${step.color}18`, color: step.color }}>
-                  {step.icon}
-                </div>
-                <div className="absolute top-5 right-5 text-5xl font-black leading-none select-none"
-                  style={{ color: step.color + "12", fontFamily: "'JetBrains Mono', monospace" }}>
-                  {step.step}
-                </div>
-              </div>
-              <h3 className="text-white font-bold text-base mt-4 mb-2"
-                style={{ fontFamily: "'Sora','Inter',sans-serif" }}>
-                {step.title}
-              </h3>
-              <p className="text-white/40 text-sm leading-relaxed">{step.desc}</p>
-            </motion.div>
+      <section className="lottery-section lottery-how" aria-labelledby="lottery-how-title">
+        <div className="lottery-section__heading"><span className="lottery-eyebrow">THE PROCESS</span><h2 id="lottery-how-title">Three steps. One on-chain record.</h2><p>Animation is purely visual; all real actions and statuses come from the contract.</p></div>
+        <div className="lottery-steps">
+          {steps.map(({ number, icon: Icon, title, copy }, index) => (
+            <motion.article key={number} className="lottery-step" initial={reduceMotion ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ delay: index * 0.08 }}>
+              <div className="lottery-step__top"><span>{number}</span><Icon size={20} /></div><h3>{title}</h3><p>{copy}</p>
+            </motion.article>
           ))}
         </div>
+      </section>
 
-        {/* ── Main Lottery Component ── */}
-        <div className="rounded-3xl border overflow-hidden" style={{ borderColor: `${GOLD}25` }}>
-          <div className="px-6 py-5 border-b flex items-center justify-between"
-            style={{ borderColor: `${GOLD}15`, background: `${GOLD}08` }}>
-            <div className="flex items-center gap-3">
-              <Trophy className="w-5 h-5" style={{ color: GOLD }} />
-              <span className="font-bold text-white" style={{ fontFamily: "'Sora','Inter',sans-serif" }}>
-                Live Lottery Terminal
-              </span>
-            </div>
-            <a
-              href={`https://polygonscan.com/address/0x7BB2458740c4F491277973212309d831385Ab9D7`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-xs text-white/35 hover:text-[#D4AF37] transition-colors"
-            >
-              <ExternalLink className="w-3.5 h-3.5" />
-              Verify Contract
-            </a>
-          </div>
-          <div style={{ background: "#050505" }}>
-            <Lottery
-              provider={provider}
-              address={address}
-              onConnect={connect}
-              isPolygon={isPolygon}
-              switchToPolygon={switchToPolygon}
-            />
-          </div>
+      <section className="lottery-terminal-wrap" id="lottery-terminal" aria-labelledby="lottery-terminal-title">
+        <div className="lottery-terminal__bar"><div><span className="lottery-live-dot" /><span id="lottery-terminal-title">LIVE LOTTERY TERMINAL</span></div><a href={EXPLORER_URL} target="_blank" rel="noreferrer">Verify contract <ExternalLink size={14} /></a></div>
+        <Lottery provider={provider} address={address} onConnect={connect} isPolygon={isPolygon} switchToPolygon={switchToPolygon} />
+      </section>
+
+      <section className="lottery-transparency" id="lottery-transparency" aria-labelledby="lottery-transparency-title">
+        <div className="lottery-transparency__intro"><span className="lottery-eyebrow">READ BEFORE PARTICIPATING</span><h2 id="lottery-transparency-title">Clear mechanics.<br /><em>No invented guarantees.</em></h2><p>These details reflect the repository's verified Solidity source and Polygon deployment manifest. Verification confirms published source matching the deployed bytecode; it is not an independent security review.</p><a href={EXPLORER_URL} target="_blank" rel="noreferrer" className="lottery-contract-link"><Fingerprint size={16} /> {LOTTERY_ADDRESS.slice(0, 10)}…{LOTTERY_ADDRESS.slice(-8)} <ExternalLink size={14} /></a></div>
+        <div className="lottery-transparency__facts">
+          <article><Clock3 /><div><h3>60-day lock</h3><p>The source requires 60 days from the owner starting a round before selection.</p></div></article>
+          <article><Users /><div><h3>Five winners · minimum five entrants</h3><p>Selection is owner-triggered and reverts unless at least five players have entered.</p></div></article>
+          <article><Coins /><div><h3>Separate assets</h3><p>Entry deposits are OKBOND. The per-winner reward is calculated from the contract's POL balance.</p></div></article>
+          <article><ShieldAlert /><div><h3>Understand the risks</h3><p>Randomness uses block data rather than Chainlink VRF; the source lists owner-only selection. No independent audit is recorded in the manifest.</p></div></article>
         </div>
+      </section>
 
-        {/* ── VRF Transparency Note ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-8 rounded-2xl p-5 border border-white/6 flex items-start gap-4"
-          style={{ background: "rgba(7,17,31,0.5)" }}
-        >
-          <Zap className="w-5 h-5 shrink-0 mt-0.5" style={{ color: GOLD }} />
-          <div>
-            <p className="text-white text-sm font-semibold mb-1">Chainlink VRF Verified Randomness</p>
-            <p className="text-white/40 text-xs leading-relaxed">
-              Winners are selected using Chainlink's Verifiable Random Function (VRF). This cryptographic proof
-              ensures the lottery outcome is truly random and cannot be manipulated by any party — including
-              the contract owner. Every draw is fully verifiable on-chain.
-            </p>
-          </div>
-        </motion.div>
-      </div>
+      <section className="lottery-faq" aria-labelledby="lottery-faq-title"><div className="lottery-section__heading"><span className="lottery-eyebrow">THE DETAILS</span><h2 id="lottery-faq-title">Questions worth asking.</h2></div><div className="lottery-faq__grid">{faqs.map((item) => <details key={item.q} className="lottery-faq__item"><summary><span><CircleHelp size={17} /> {item.q}</span><span className="lottery-faq__plus" aria-hidden="true">+</span></summary><p>{item.a}</p></details>)}</div></section>
+      <footer className="lottery-footer"><span>OKBOND LOTTERY · POLYGON POS</span><a href={EXPLORER_URL} target="_blank" rel="noreferrer">Source verified on PolygonScan <ExternalLink size={13} /></a></footer>
     </div>
   );
 }

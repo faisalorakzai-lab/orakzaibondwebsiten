@@ -246,7 +246,7 @@ import { useEffect } from "react";
     lottery: {
       title: "Lottery — OKBOND Community Prize Draws by Orakzai Bond",
       description:
-        "Participate in Orakzai Bond community lottery. OKBOND holders are eligible for regular prize draws and community rewards.",
+        "Review OKBOND lottery mechanics, live Polygon contract data, entry terms, and refund eligibility. On-chain participation involves smart-contract and transaction risk.",
       canonical: BASE_URL + "/lottery",
     },
     press: {

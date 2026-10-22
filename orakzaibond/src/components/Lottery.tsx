@@ -12,7 +12,7 @@ import {
 import LOTTERY_ABI from "@/lib/contractABI.json";
 
 // ── Addresses ────────────────────────────────────────────────────────────────
-const LOTTERY_ADDRESS = "0xCF82D9ED107bE2217Ead6ccd4ffc851f71aa38F8";
+const LOTTERY_ADDRESS = "0x5BC55d4b347e39B986864E28604Ddca5dE6357B7";
 const TOKEN_ADDRESS   = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
 const EXPLORER        = "https://polygonscan.com";
 
@@ -127,24 +127,9 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
   const [showAdmin, setShowAdmin]     = useState(false);
   const OWNER_WALLET = "0x9b02e2edd6f58d626aaa91889708dbf39dfa8cd7";
   const [switching, setSwitching]     = useState(false);
-  const [currency, setCurrency]       = useState<"OKBOND" | "USD" | "EUR" | "PKR">("OKBOND");
   // Referral reward state: null = not tried, true = sent, false = failed/no referrer
   const [refReward, setRefReward]     = useState<{ sent: boolean; txHash?: string } | null>(null);
 
-  // Approximate exchange rates (OKBOND → fiat) — display only
-  const RATES: Record<string, number> = { USD: 0.50, EUR: 0.46, PKR: 139 };
-  const FMT: Record<string, { prefix: string; decimals: number }> = {
-    USD: { prefix: "$",   decimals: 2 },
-    EUR: { prefix: "€",   decimals: 2 },
-    PKR: { prefix: "₨",  decimals: 0 },
-  };
-  function toFiat(okbondAmt: string): string {
-    if (currency === "OKBOND") return `${okbondAmt} OKBOND`;
-    const num = parseFloat(okbondAmt.replace(/,/g, "")) || 0;
-    const fiat = num * RATES[currency];
-    const { prefix, decimals } = FMT[currency];
-    return `~${prefix}${fiat.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}`;
-  }
 
   const isPending = ["approving", "approved", "sending"].includes(phase);
 
@@ -343,7 +328,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-200">Lottery</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto mb-8">
-            Enter the decentralized Lottery using OKBOND tokens. 5 winners share the prize pool — secured on Polygon, no middlemen.
+            Enter with OKBOND. The verified source records five winners after an owner-triggered draw; winners claim POL and eligible non-winners may claim their OKBOND deposit.
           </p>
 
           {/* ── Public Trust Badge Strip (always visible) ── */}
@@ -351,8 +336,8 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
             {[
               { icon: <ShieldCheck className="w-3.5 h-3.5" />, label: "Smart Contract Transparency", cls: "text-green-400 border-green-500/25 bg-green-500/8" },
               { icon: <CheckCircle2 className="w-3.5 h-3.5" />, label: "Blockchain Verified",        cls: "text-blue-400  border-blue-500/25  bg-blue-500/8"  },
-              { icon: <Lock className="w-3.5 h-3.5" />,         label: "No Manual Control",          cls: "text-purple-400 border-purple-500/25 bg-purple-500/8" },
-              { icon: <Star className="w-3.5 h-3.5" />,         label: "Fully On-chain System",      cls: "text-primary   border-primary/25   bg-primary/8"   },
+              { icon: <Lock className="w-3.5 h-3.5" />,         label: "Owner-triggered draw",          cls: "text-purple-400 border-purple-500/25 bg-purple-500/8" },
+              { icon: <Star className="w-3.5 h-3.5" />,         label: "Polygon contract",      cls: "text-primary   border-primary/25   bg-primary/8"   },
             ].map((b, i) => (
               <motion.span key={b.label}
                 initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
@@ -369,7 +354,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
           viewport={{ once: true }} transition={{ duration: 0.65 }}
           className="max-w-4xl mx-auto mb-10">
           <p className="text-center text-xs font-mono font-semibold uppercase tracking-widest text-primary/60 mb-6">
-            Safety First — How It Works
+            Lottery mechanics — how it works
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 relative">
             {/* Connector lines */}
@@ -377,17 +362,17 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
             {[
               {
                 step: "01", icon: Ticket, title: "Enter Draw",
-                desc: "Purchase your entry using OKBOND tokens. One entry per wallet, fully transparent.",
+                desc: "Purchase one entry per wallet using OKBOND tokens. The transaction is recorded on Polygon.",
                 color: "text-primary", ring: "border-primary/40 bg-primary/10 shadow-[0_0_18px_rgba(234,179,8,0.2)]",
               },
               {
                 step: "02", icon: Lock, title: "Secure Lock",
-                desc: "Your tokens are instantly locked inside the audited Smart Contract. Zero admin access.",
+                desc: "Your OKBOND entry is transferred to the verified contract. The owner controls round start and winner selection; review the source and risks before participating.",
                 color: "text-blue-400", ring: "border-blue-500/40 bg-blue-500/10 shadow-[0_0_18px_rgba(96,165,250,0.15)]",
               },
               {
                 step: "03", icon: Trophy, title: "Outcome",
-                desc: "5 winners get the Jackpot. All others get 100% Automatic Refund — no questions asked.",
+                desc: "The contract records five winners. Winners may claim POL; eligible non-winners can call claimRefund after selection.",
                 color: "text-emerald-400", ring: "border-emerald-500/40 bg-emerald-500/10 shadow-[0_0_18px_rgba(52,211,153,0.15)]",
               },
             ].map((s, i) => (
@@ -417,7 +402,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
             transition={{ delay: 0.5 }}
             className="mt-4 flex items-center justify-center gap-2 text-xs text-emerald-400/80">
             <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Liquidity-Backed Capital Retention Model — Zero-Loss Participation Mechanism</span>
+            <span>Refunds are a separate on-chain claim after winner selection</span>
           </motion.div>
         </motion.div>
 
@@ -433,12 +418,12 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                   <ShieldCheck className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-extrabold text-foreground">Non-Winner Cashback</h3>
-                  <p className="text-xs text-emerald-400/80 font-semibold uppercase tracking-widest mt-0.5">Liquidity-Backed Capital Retention Model Guarantee</p>
+                  <h3 className="text-2xl font-extrabold text-foreground">Non-winner refund process</h3>
+                  <p className="text-xs text-emerald-400/80 font-semibold uppercase tracking-widest mt-0.5">Claim conditions are defined by the deployed contract</p>
                 </div>
               </div>
               <p className="text-muted-foreground text-base leading-relaxed max-w-2xl">
-                Didn't win this round? No problem. Your entire entry deposit is automatically refundable through the smart contract. This is not a promise — it's hardcoded into the blockchain.
+                After winners are selected, a non-winner with a recorded deposit can call claimRefund. A successful claim depends on contract execution and available token balance; it requires a Polygon transaction and gas.
               </p>
             </div>
 
@@ -459,12 +444,12 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                     },
                     {
                       title: "Winners Are Selected",
-                      desc: "5 winners are randomly chosen via on-chain RNG. If you're not selected, you become eligible for cashback.",
+                      desc: "The owner selects five distinct players after the 60-day lock, using block timestamp and prevrandao in the source code. This is not Chainlink VRF.",
                       icon: "🎲"
                     },
                     {
                       title: "Claim Your Refund",
-                      desc: "Visit this page and click 'Claim Refund' to instantly recover 100% of your entry deposit to your wallet.",
+                      desc: "After winners are selected, an eligible non-winner can submit a claimRefund transaction for their recorded deposit.",
                       icon: "💰"
                     }
                   ].map((item, i) => (
@@ -492,10 +477,10 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {[
-                    { title: "100% Automatic", desc: "No manual approval needed. The smart contract enforces refunds automatically." },
-                    { title: "No Delays", desc: "Claim your refund instantly. Funds arrive in your wallet within seconds." },
-                    { title: "No Conditions", desc: "If you didn't win, you're eligible. No questions asked, no exceptions." },
-                    { title: "On-Chain Verified", desc: "Every refund is recorded on the Polygon blockchain — fully transparent and immutable." }
+                    { title: "Claim after selection", desc: "Refunds are not automatic. An eligible non-winner must submit claimRefund after winners are selected." },
+                    { title: "Network transaction", desc: "A refund requires an on-chain transaction and Polygon gas; confirmation time varies." },
+                    { title: "Contract conditions", desc: "The caller must not be a winner and must have a nonzero recorded deposit." },
+                    { title: "Source verification", desc: "The deployment manifest lists verified source; it does not list an independent audit." }
                   ].map((item, i) => (
                     <motion.div
                       key={i}
@@ -525,23 +510,23 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                   {[
                     {
                       q: "What if I win? Do I still get my deposit back?",
-                      a: "No. Winners receive rewards in POL. The reward is typically higher than the entry amount."
+                      a: "No. The contract calculates each winner's reward as one fifth of its native POL balance when selection occurs. The amount can vary."
                     },
                     {
                       q: "When can I claim my refund?",
-                      a: "After winners are selected and announced. You can claim immediately using the 'Claim Refund' button on this page."
+                      a: "After winners are selected, eligible non-winners with a recorded deposit can call claimRefund. A successful on-chain transaction and available contract token balance are required."
                     },
                     {
                       q: "Are there any fees or deductions?",
-                      a: "No. You receive 60% Lottery. Only standard Polygon network gas fees apply (typically $0.01–$0.10)."
+                      a: "The contract source defines no stated fee percentage. Polygon gas is paid separately and varies with network conditions."
                     },
                     {
                       q: "What if I forget to claim my refund?",
-                      a: "Your funds remain in the smart contract indefinitely. You can claim them at any time in the future — there's no deadline."
+                      a: "The source defines no explicit refund deadline. Do not assume a particular claim window or future contract solvency."
                     },
                     {
                       q: "Is this guaranteed by law or just the smart contract?",
-                      a: "It's guaranteed by the smart contract code itself. The refund mechanism is hardcoded and immutable — no admin can override it."
+                      a: "No legal guarantee is asserted. The verified source has owner-only start and winner selection functions and a pull-based refund; source verification is not an audit."
                     }
                   ].map((item, i) => (
                     <motion.div
@@ -572,7 +557,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                 <div>
                   <p className="font-bold text-emerald-300 text-sm">Why This Matters</p>
                   <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-                    Most lotteries keep your money if you lose. OKBOND is different. We believe in fair play and capital protection. Whether you win or not, your money is always yours.
+                    The contract provides a claimRefund function for eligible non-winners after selection. Refunds are not automatic, and no capital-protection or independent-audit guarantee is made here.
                   </p>
                 </div>
               </motion.div>
@@ -596,7 +581,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                   <Sparkles className="w-5 h-5 text-primary" />
                 </motion.div>
                 <span className="text-xs font-mono font-bold uppercase tracking-widest text-primary/80">
-                  Current Jackpot Pool
+                  OKBOND entry deposits (nominal)
                 </span>
                 <motion.div animate={{ rotate: [0, -10, 10, 0] }} transition={{ duration: 2, repeat: Infinity }}>
                   <Sparkles className="w-5 h-5 text-primary" />
@@ -615,7 +600,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                   }
                 </motion.p>
               )}
-              <p className="text-primary/60 font-mono text-sm font-bold uppercase tracking-widest mb-4">OKBOND Tokens</p>
+              <p className="text-primary/60 font-mono text-sm font-bold uppercase tracking-widest mb-4">OKBOND · entry deposits</p>
               <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <Users className="w-3.5 h-3.5 text-primary/50" />
@@ -624,12 +609,12 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                 <span className="text-primary/30">·</span>
                 <span className="flex items-center gap-1">
                   <Crown className="w-3.5 h-3.5 text-primary/50" />
-                  5 winners split pool
+                  5 winners
                 </span>
                 <span className="text-primary/30">·</span>
                 <span className="flex items-center gap-1">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-400/60" />
-                  Zero-Loss Participation Mechanism
+                  Refund claim may be available after selection
                 </span>
               </div>
             </div>
@@ -675,25 +660,11 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
 
             {/* Currency toggle + Stats row */}
             <div className="border-b border-border">
-              {/* Currency toggle bar */}
-              <div className="flex items-center justify-end gap-1 px-4 pt-3 pb-1">
-                <span className="text-[10px] text-muted-foreground font-mono mr-1 uppercase tracking-widest">View in:</span>
-                {(["OKBOND","USD","EUR","PKR"] as const).map((c) => (
-                  <button key={c} onClick={() => setCurrency(c)}
-                    className={`px-2.5 py-1 rounded-md text-[10px] font-mono font-bold transition-all ${
-                      currency === c
-                        ? "bg-primary text-primary-foreground shadow-[0_0_10px_rgba(234,179,8,0.4)]"
-                        : "text-muted-foreground hover:text-primary hover:bg-primary/10 border border-border"
-                    }`}>
-                    {c}
-                  </button>
-                ))}
-              </div>
               <div className="grid grid-cols-3 divide-x divide-border">
                 {[
-                  { label: "Entry Cost",    value: loading ? null : toFiat(entryFmt),  raw: entryFmt,  sub: "per ticket" },
+                  { label: "Entry Cost",    value: loading ? null : `${entryFmt} OKBOND`,  raw: entryFmt,  sub: "per ticket" },
                   { label: "Participants",  value: loading ? null : `${cs.totalPlayers}`,               raw: null, sub: "entered" },
-                  { label: "Reward/Winner", value: loading ? null : cs.rewardPerWinner > 0n ? toFiat(rewardFmt) : "TBD", raw: rewardFmt, sub: "5 winners" },
+                  { label: "Reward/Winner", value: loading ? null : cs.rewardPerWinner > 0n ? `${rewardFmt} POL` : "Not set", raw: rewardFmt, sub: "5 winners" },
                 ].map((s) => (
                   <div key={s.label} className="px-4 py-4 text-center">
                     <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1 font-medium">{s.label}</p>
@@ -767,7 +738,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                     <div className="flex-1">
                       <p className="text-sm font-bold text-yellow-300">🎉 You are a winner!</p>
                       <p className="text-xs text-muted-foreground mt-0.5">
-                        {us.rewardClaimed ? "Reward already claimed." : `Claim your reward of ${rewardFmt} OKBOND below.`}
+                        {us.rewardClaimed ? "Reward already claimed." : `Claim your reward of ${rewardFmt} POL below.`}
                       </p>
                     </div>
                   </motion.div>
@@ -976,13 +947,13 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                           <BadgeCheck className="w-3 h-3 text-emerald-400" />
                         </motion.div>
                         <span className="text-xs font-extrabold text-emerald-300 uppercase tracking-widest">
-                          100% Decentralized &amp; Fair
+                          ON-CHAIN SOURCE · OWNER-CONTROLLED DRAW
                         </span>
                       </div>
                       <a href={`${EXPLORER}/address/${LOTTERY_ADDRESS}`} target="_blank" rel="noopener noreferrer"
                         className="flex items-center gap-1 text-[10px] text-primary/60 hover:text-primary font-mono transition-colors">
                         <ExternalLink className="w-3 h-3" />
-                        Last Draw on Polygonscan
+                        Lottery contract on PolygonScan
                       </a>
                     </div>
                     <div className="px-4 py-4 space-y-3">
@@ -992,9 +963,9 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                           <Dices className="w-4 h-4 text-violet-400" />
                         </div>
                         <div>
-                          <p className="text-[11px] font-bold text-violet-300 mb-0.5">Verifiable Random Number Generator (RNG)</p>
+                          <p className="text-[11px] font-bold text-violet-300 mb-0.5">Randomness method in source</p>
                           <p className="text-[10px] text-muted-foreground leading-relaxed">
-                            Winners are picked by a tamper-proof on-chain RNG — no human, admin, or external party can influence the outcome. Every draw is publicly verifiable on the Polygon blockchain.
+                            The verified source derives an index from block.timestamp, block.prevrandao, an index, and player count. The owner calls selection; this is not Chainlink VRF and is not presented as manipulation-proof.
                           </p>
                         </div>
                       </div>
@@ -1003,16 +974,16 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
                           <ShieldCheck className="w-4 h-4 text-emerald-400" />
                         </div>
                         <div>
-                          <p className="text-[11px] font-bold text-emerald-300 mb-0.5">Smart Contract Enforced Refunds</p>
+                          <p className="text-[11px] font-bold text-emerald-300 mb-0.5">Refund claims after selection</p>
                           <p className="text-[10px] text-muted-foreground leading-relaxed">
-                            The refund mechanism is hardcoded in the smart contract. No manager or admin can block, delay, or withhold your funds — ever.
+                            The source exposes claimRefund for non-winners with a recorded deposit after winner selection. The contract must hold the required OKBOND and the transaction must succeed; no automatic payout is described.
                           </p>
                         </div>
                       </div>
                       <a href={`${EXPLORER}/address/${LOTTERY_ADDRESS}`} target="_blank" rel="noopener noreferrer"
                         className="flex items-center justify-center gap-2 w-full py-2.5 mt-1 rounded-xl border border-primary/25 bg-primary/8 text-primary text-xs font-semibold hover:bg-primary/18 hover:border-primary/45 transition-all">
                         <ExternalLink className="w-3.5 h-3.5" />
-                        View Last Draw on Polygonscan
+                        View Lottery contract on PolygonScan
                       </a>
                     </div>
                   </div>
@@ -1203,7 +1174,7 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
           <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }}
             className="grid grid-cols-3 gap-4">
             {[
-              { label: "Selection", value: "Random" },
+              { label: "Selection", value: "Owner-triggered" },
               { label: "Winners", value: "5 Players" },
               { label: "Network", value: "Polygon" },
             ].map((item) => (
@@ -1214,49 +1185,14 @@ export default function Lottery({ provider, address, onConnect, referrer, isPoly
             ))}
           </motion.div>
 
-          {/* ── Live Winners Ticker ── */}
-          <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.5 }}
-            className="rounded-2xl border border-primary/20 bg-[#06060a] overflow-hidden">
-            <div className="flex items-center gap-2 px-4 py-2.5 border-b border-primary/10 bg-primary/5">
-              <motion.div className="w-2 h-2 rounded-full bg-emerald-400"
-                animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
-              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-primary/70">
-                Recent Winners
-              </span>
-              <span className="ml-auto text-[9px] text-muted-foreground/50 font-mono">Live Feed</span>
-            </div>
-            <div className="overflow-hidden py-2.5">
-              <motion.div
-                className="flex gap-8 whitespace-nowrap"
-                animate={{ x: [0, -1400] }}
-                transition={{ duration: 28, repeat: Infinity, ease: "linear" }}>
-                {[
-                  { addr: "0x3aF2…8Cd7", amt: "5,000", prize: "Jackpot" },
-                  { addr: "0x9b21…1Ab3", amt: "5,000", prize: "Jackpot" },
-                  { addr: "0x7c44…F921", amt: "2,500", prize: "Jackpot" },
-                  { addr: "0x1eB5…4D30", amt: "5,000", prize: "Jackpot" },
-                  { addr: "0xaA92…7F10", amt: "2,500", prize: "Jackpot" },
-                  { addr: "0x55e0…C812", amt: "5,000", prize: "Jackpot" },
-                  { addr: "0x3aF2…8Cd7", amt: "5,000", prize: "Jackpot" },
-                  { addr: "0x9b21…1Ab3", amt: "2,500", prize: "Jackpot" },
-                  { addr: "0x7c44…F921", amt: "5,000", prize: "Jackpot" },
-                  { addr: "0x1eB5…4D30", amt: "2,500", prize: "Jackpot" },
-                ].map((w, i) => (
-                  <div key={i} className="flex items-center gap-2 text-xs">
-                    <Crown className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-                    <span className="font-mono text-primary/80">{w.addr}</span>
-                    <span className="text-muted-foreground">won</span>
-                    <span className="font-bold text-emerald-400">{w.amt} OKBOND</span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/10 text-primary/60 font-mono border border-primary/15">
-                      {w.prize}
-                    </span>
-                    <span className="text-primary/20">·</span>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-          </motion.div>
+          {/* Historical winners are not available in this component, so do not show sample identities. */}
+          <div className="rounded-2xl border border-primary/20 bg-[#06060a] px-5 py-5 text-center">
+            <p className="text-xs font-semibold text-foreground">Winner history</p>
+            <p className="mt-1 text-xs text-muted-foreground">This interface does not load verified winner records. Review the deployed contract and its transactions on PolygonScan.</p>
+            <a href={`${EXPLORER}/address/${LOTTERY_ADDRESS}`} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1 text-xs text-primary hover:underline">
+              View contract activity <ExternalLink className="h-3 w-3" />
+            </a>
+          </div>
 
           {/* ── Live Participation Feed ── */}
           <LiveParticipationFeed />
