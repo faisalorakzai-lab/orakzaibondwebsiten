@@ -45,7 +45,7 @@ const SECTION_ITEMS = [
   { labelKey: "nav.lottery",    label: "Lottery",    icon: Ticket,    href: "/lottery"    },
   { labelKey: "nav.tokenomics", label: "Tokenomics", icon: PieChart,  href: "/tokenomics" },
   { labelKey: "nav.roadmap",    label: "Roadmap",    icon: Map,       href: "/roadmap"    },
-  { labelKey: "nav.icoBuy",     label: "ICO / Buy",  icon: Rocket,    href: "/ico"        },
+  { labelKey: "nav.icoBuy",     label: "Services",   icon: Rocket,    href: "/ico"        },
   { labelKey: "nav.community",  label: "Community",  icon: Users,     href: "/community"  },
 ];
 

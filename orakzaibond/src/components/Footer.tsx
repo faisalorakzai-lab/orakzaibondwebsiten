@@ -45,7 +45,7 @@ const socials = [
 const links = [
   { labelKey: "nav.about",      label: "About",           href: "/about"     },
   { labelKey: "nav.token",      label: "Token",           href: "/token"     },
-  { labelKey: "nav.icoBuy",     label: "ICO / Buy",       href: "/ico"       },
+  { labelKey: "nav.icoBuy",     label: "Services",        href: "/ico"       },
   { labelKey: "nav.lottery",    label: "Lottery",         href: "/lottery"   },
   { labelKey: "nav.tokenomics", label: "Tokenomics",      href: "/tokenomics"},
   { labelKey: "nav.roadmap",    label: "Roadmap",         href: "/roadmap"   },

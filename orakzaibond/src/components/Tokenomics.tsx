@@ -459,7 +459,7 @@ export default function Tokenomics() {
             }}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-white/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <span className="relative z-10">Join the ICO</span>
+            <span className="relative z-10">Explore Services</span>
           </motion.a>
         </motion.div>
       </div>

@@ -497,7 +497,7 @@ export default function AboutPage() {
               className="flex flex-wrap gap-3 justify-center">
               <Link href="/ico">
                 <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:bg-primary/90 transition-colors cursor-pointer">
-                  Join ICO Now <ArrowRight className="w-4 h-4" />
+                  Explore Services <ArrowRight className="w-4 h-4" />
                 </span>
               </Link>
               <Link href="/founder">

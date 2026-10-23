@@ -20,7 +20,7 @@ const NAV_ITEMS = [
   { id: "Lottery",    label: "Lottery",     labelKey: "nav.lottery",    icon: <Ticket     className="w-4 h-4" />, href: "/lottery"    },
   { id: "tokenomics", label: "Tokenomics",  labelKey: "nav.tokenomics", icon: <PieChart   className="w-4 h-4" />, href: "/tokenomics" },
   { id: "roadmap",    label: "Roadmap",     labelKey: "nav.roadmap",    icon: <Map        className="w-4 h-4" />, href: "/roadmap"    },
-  { id: "ico",        label: "ICO / Buy",   labelKey: "nav.icoBuy",     icon: <Rocket     className="w-4 h-4" />, href: "/ico"        },
+  { id: "ico",        label: "Services",    labelKey: "nav.icoBuy",     icon: <Rocket     className="w-4 h-4" />, href: "/ico"        },
   { id: "community",  label: "Community",   labelKey: "nav.community",  icon: <Users      className="w-4 h-4" />, href: "/community"  },
 ];
 
