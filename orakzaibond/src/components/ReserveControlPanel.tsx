@@ -5,9 +5,7 @@
  * Liquidity / POL) in real time. On commit:
  *   1. Writes the snapshot to Supabase via reserveAllocations.updateAllocations
  *   2. RLS in migration 007 blocks any wallet other than the Chairman
- *   3. Pushes a Marcus escalation so the Live Log acknowledges:
- *      "Chairman, OKBOND Reserve allocations have been recalibrated on the Grid."
- *   4. Realtime subscribers (ReserveWidget) pick up the change with no redeploy
+ *   3. Realtime subscribers (ReserveWidget) pick up the change with no redeploy
  */
 
 import { useEffect, useMemo, useState } from "react";
@@ -21,15 +19,11 @@ import {
   updateAllocations,
   type ReserveAllocation,
 } from "@/lib/reserveAllocations";
-import { pushEscalation } from "@/lib/marcusBus";
 import { useWallet } from "@/hooks/useWallet";
 import { ADMIN_WALLET } from "@/lib/adminAuth";
 
 const GOLD        = "#d4af37";
 const GOLD_BRIGHT = "#f4ce45";
-
-const ACK_LINE =
-  "Chairman, OKBOND Reserve allocations have been recalibrated on the Grid.";
 
 export default function ReserveControlPanel() {
   const { address } = useWallet();
@@ -130,16 +124,6 @@ export default function ReserveControlPanel() {
         .map((r) => ({ asset_key: r.asset_key, pct: Number(draft[r.asset_key]) }));
 
       const merged = await updateAllocations(updates, address!, "Founder's Vault recalibration");
-
-      // Live acknowledgement → MarcusAILiveLog picks this up via window event.
-      pushEscalation({
-        level: "EXEC",
-        msg: ACK_LINE,
-        source: "vault",
-        meta: {
-          snapshot: Object.fromEntries(merged.map((m) => [m.asset_key, m.pct])),
-        },
-      });
 
       setBase(merged);
       setDraft(Object.fromEntries(merged.map((m) => [m.asset_key, m.pct])));
@@ -307,7 +291,7 @@ export default function ReserveControlPanel() {
                 <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                   className="mt-4 px-3 py-2 rounded-md text-[11px] flex items-center gap-2"
                   style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.30)", color: GOLD_BRIGHT }}>
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Marcus has acknowledged the recalibration.
+                  <CheckCircle2 className="w-3.5 h-3.5" /> Reserve allocations saved successfully.
                 </motion.div>
               )}
             </AnimatePresence>

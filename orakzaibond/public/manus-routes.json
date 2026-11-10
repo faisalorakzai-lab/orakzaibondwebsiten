@@ -29,8 +29,6 @@
     { "path": "/profile/:username", "title": "Profile" },
     { "path": "/dashboard", "title": "Dashboard" },
     { "path": "/admin", "title": "Admin" },
-    { "path": "/secret-admin", "title": "Secret Admin" },
-    { "path": "/threat-console", "title": "Threat Console" },
-    { "path": "/marcus-defense", "title": "Marcus Defense" }
+    { "path": "/secret-admin", "title": "Secret Admin" }
   ]
 }

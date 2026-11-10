@@ -63,8 +63,6 @@ User-agent: Googlebot
   Disallow: /admin/
   Disallow: /secret-admin
   Disallow: /secret-admin/
-  Disallow: /threat-console
-  Disallow: /marcus-defense
   Disallow: /profile/
   Disallow: /api/
 
@@ -103,4 +101,3 @@ User-agent: Googlebot
   Sitemap: https://orakzaibond.com/sitemap.xml
   Sitemap: https://orakzaibond.com/news-sitemap.xml
   Host: https://orakzaibond.com
-  

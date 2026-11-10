@@ -10,7 +10,6 @@ import {
   GraduationCap, HandCoins, CheckCircle2, Megaphone, Pin,
 } from "lucide-react";
 import { useWelfareMetrics } from "@/hooks/useWelfareMetrics";
-import { useSocialStats } from "@/hooks/useSocialStats";
 
 /* ── Animation Variants ────────────────────────────────────────────── */
 const fadeUp = {
@@ -388,9 +387,7 @@ export default function AboutPage() {
     try { return JSON.parse(localStorage.getItem("okbond_admin_events") || "[]"); } catch { return []; }
   });
 
-  // ── Real-data overrides (graceful fallback to baked-in defaults) ────────
   const { metrics: welfareMetrics } = useWelfareMetrics();
-  const { stats: socialStats }      = useSocialStats();
 
   // Map live welfare values onto the existing WELFARE array, preserving icons
   // / colours / glow that drive the visual layout.
@@ -398,17 +395,6 @@ export default function AboutPage() {
   const liveWelfare = WELFARE.map((w) => {
     const m = welfareByLabel.get(w.label);
     return m ? { ...w, value: Number(m.value), suffix: m.suffix ?? w.suffix } : w;
-  });
-
-  // Override social member counts with live API numbers when available.
-  const socialOverride: Record<string, number | null> = {
-    "Telegram":    socialStats.telegram,
-    "Twitter / X": socialStats.twitter,
-    "Facebook":    socialStats.facebook,
-  };
-  const liveSocials = SOCIALS.map((s) => {
-    const live = socialOverride[s.name];
-    return typeof live === "number" ? { ...s, members: live } : s;
   });
 
   const staticEvents = [
@@ -613,7 +599,7 @@ export default function AboutPage() {
         <section className="px-4 pb-10">
           <div className="max-w-5xl mx-auto">
             <div className="grid md:grid-cols-3 gap-5 mb-10">
-              {liveSocials.map((s, i) => <SocialCard key={s.name} s={s} i={i} />)}
+              {SOCIALS.map((s, i) => <SocialCard key={s.name} s={s} i={i} />)}
             </div>
           </div>
         </section>

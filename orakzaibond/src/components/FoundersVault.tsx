@@ -21,7 +21,6 @@ import {
 import { Contract, JsonRpcProvider, formatEther, formatUnits, EventLog, Log } from "ethers";
 import { useWallet } from "@/hooks/useWallet";
 import { broadcastDispatch, fetchRecentDispatches, unpinDispatch, type Dispatch } from "@/lib/dispatchBus";
-import { pushEscalation } from "@/lib/marcusBus";
 import ReserveControlPanel from "./ReserveControlPanel";
 
 const TOKEN_ADDRESS    = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
@@ -217,11 +216,6 @@ export default function FoundersVault() {
     setPosting(true);
     try {
       await broadcastDispatch(draft);
-      pushEscalation({
-        level: "BROADCAST",
-        source: "vault",
-        msg: `BROADCAST · Chairman pinned dispatch · "${draft.trim().slice(0, 80)}${draft.trim().length > 80 ? "…" : ""}"`,
-      });
       setDraft("");
       setToast("Dispatch pinned to community ticker");
       await loadDispatches();

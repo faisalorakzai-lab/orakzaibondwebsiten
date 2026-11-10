@@ -7,7 +7,7 @@ import {
   XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
 import {
-  ShieldCheck, Loader2, CheckCircle2, ExternalLink, Bot, Save, Star,
+  ShieldCheck, Loader2, CheckCircle2, ExternalLink, Save, Star,
   Play, Crown, Users, Coins, Clock, AlertTriangle,
   RefreshCw, Lock, Wallet, ArrowLeft, LayoutDashboard,
   TrendingUp, Database, CreditCard, Layers, Trophy, Check,
@@ -19,9 +19,7 @@ import { useWallet } from "@/hooks/useWallet";
 import LOTTERY_ABI from "@/lib/contractABI.json";
 import ParticleBackground from "@/components/ParticleBackground";
 import FoundersVault from "@/components/FoundersVault";
-import { Crosshair, Shield } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import MarcusAutoReply from "@/components/MarcusAutoReply";
 import { useFounderRank, setFounderRank, FOUNDER_RANK_DEFAULT } from "@/hooks/useFounderRank";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -40,7 +38,7 @@ const ERC20_ABI = [
 ];
 
 type TxPhase = "idle" | "pending" | "success" | "failed";
-type AdminTab = "dashboard" | "analytics" | "notifications" | "Lottery" | "players" | "treasury" | "vault" | "staking" | "lending" | "community" | "threat" | "defense" | "ai-settings" | "ambassador" | "legal-cms";
+type AdminTab = "dashboard" | "analytics" | "notifications" | "Lottery" | "players" | "treasury" | "vault" | "staking" | "lending" | "community" | "ai-settings" | "ambassador" | "legal-cms";
 
 interface PlayerRow {
   address: string;
@@ -117,10 +115,8 @@ const NAV: { id: AdminTab; label: string; icon: JSX.Element; soon?: boolean; ext
   { id: "players",       label: "Players",       icon: <Users className="w-4 h-4" /> },
   { id: "treasury",      label: "Treasury",      icon: <Database className="w-4 h-4" /> },
   { id: "vault",         label: "Founder's Vault", icon: <Crown className="w-4 h-4" /> },
-  { id: "threat",        label: "Threat Console",  icon: <Crosshair className="w-4 h-4" />, external: "/threat-console" },
-  { id: "defense",       label: "Marcus Defense",  icon: <Shield className="w-4 h-4" />,    external: "/marcus-defense" },
   { id: "community",     label: "Community Hub", icon: <ShieldCheck className="w-4 h-4" />, external: "/community-hub" },
-  { id: "ai-settings",  label: "AI Settings",   icon: <Bot className="w-4 h-4" /> },
+  { id: "ai-settings",  label: "Protocol Settings", icon: <Database className="w-4 h-4" /> },
   { id: "ambassador",   label: "Ambassadors",   icon: <Star className="w-4 h-4" /> },
   { id: "legal-cms",    label: "Legal CMS",     icon: <Lock className="w-4 h-4" /> },
   { id: "staking",       label: "Staking",       icon: <Layers className="w-4 h-4" />, soon: true },
@@ -130,7 +126,6 @@ const NAV: { id: AdminTab; label: string; icon: JSX.Element; soon?: boolean; ext
 export default function AdminPage() {
   const { address, provider, isPolygon, connect, switchToPolygon } = useWallet();
   const [switching, setSwitching] = useState(false);
-  const [marcusEnabled, setMarcusEnabled] = useState(false);
   const [stakingAPY, setStakingAPY] = useState<number>(18);
   const [icoStage, setIcoStage] = useState<number>(1);
   const [icoPrice, setIcoPrice] = useState<number>(0.60);
@@ -1147,7 +1142,7 @@ export default function AdminPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <h2 className="text-2xl font-extrabold text-foreground">AI <span className="text-primary">Settings</span></h2>
-                      <p className="text-muted-foreground text-sm mt-0.5">Control Marcus, staking APY, and ICO pricing. All changes update live for all visitors.</p>
+                      <p className="text-muted-foreground text-sm mt-0.5">Control staking APY and ICO pricing. All changes update live for all visitors.</p>
                     </div>
                     <button onClick={saveSettings} disabled={settingsLoading}
                       className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(234,179,8,0.3)] disabled:opacity-50">
@@ -1155,9 +1150,6 @@ export default function AdminPage() {
                       {settingsSaved ? "Saved!" : "Save All"}
                     </button>
                   </div>
-
-                  {/* Marcus Auto-Reply */}
-                  <MarcusAutoReply enabled={marcusEnabled} onToggle={setMarcusEnabled} />
 
                   {/* ICO Controls */}
                   <div className="glass-gold rounded-2xl border border-primary/20 p-6 space-y-5">

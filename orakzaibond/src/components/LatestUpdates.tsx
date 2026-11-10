@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Bell, Zap, FileText, Handshake, ExternalLink, ChevronRight, Send } from "lucide-react";
 
@@ -44,44 +43,10 @@ const STATIC_NEWS = [
   },
 ];
 
-// ── Telegram post from API ────────────────────────────────────────────────────
-interface TelegramPost {
-  id: number;
-  text: string;
-  date: number;
-  url: string;
-}
-
-function formatDate(unix: number): string {
-  return new Date(unix * 1000).toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
-
-function truncate(text: string, max = 120): string {
-  return text.length > max ? text.slice(0, max).trimEnd() + "…" : text;
-}
-
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function LatestUpdates() {
-  const [livePosts, setLivePosts] = useState<TelegramPost[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const baseUrl = import.meta.env.BASE_URL?.replace(/\/$/, "") ?? "";
-    fetch(`${baseUrl}/api/telegram/posts`)
-      .then((r) => r.json())
-      .then((d: { ok: boolean; posts: TelegramPost[] }) => {
-        if (d.ok && d.posts.length > 0) setLivePosts(d.posts);
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
-
-  // Decide which posts to show
-  const usingLive = livePosts.length > 0;
+  const loading = false;
+  const usingLive = false;
 
   return (
     <section className="py-16 px-4">
@@ -139,49 +104,6 @@ export default function LatestUpdates() {
                 <div className="w-full h-3 rounded bg-white/5" />
                 <div className="w-2/3 h-3 rounded bg-white/5 mt-2" />
               </div>
-            ))}
-          </div>
-        )}
-
-        {/* Cards — live Telegram posts */}
-        {!loading && usingLive && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {livePosts.map((post, idx) => (
-              <motion.div
-                key={post.id}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.45, delay: idx * 0.1 }}
-              >
-                <a
-                  href={post.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex flex-col h-full glass-card rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/5 via-transparent to-transparent p-5 hover:border-primary/35 hover:from-primary/10 transition-all duration-300 hover:-translate-y-1"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-black/30 border border-white/5 flex items-center justify-center flex-shrink-0">
-                        <Send className="w-4 h-4 text-primary" />
-                      </div>
-                      <span className="text-[10px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border bg-primary/15 text-primary border-primary/25">
-                        Telegram
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5 mt-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-                      <span className="text-[10px] text-muted-foreground font-mono">{formatDate(post.date)}</span>
-                    </div>
-                  </div>
-                  <p className="text-sm text-foreground leading-relaxed flex-1">
-                    {truncate(post.text)}
-                  </p>
-                  <div className="mt-4 flex items-center gap-1 text-[11px] font-semibold text-primary/70 group-hover:text-primary transition-colors">
-                    View on Telegram <ExternalLink className="w-3 h-3" />
-                  </div>
-                </a>
-              </motion.div>
             ))}
           </div>
         )}

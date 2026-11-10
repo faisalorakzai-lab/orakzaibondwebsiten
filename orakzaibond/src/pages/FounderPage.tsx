@@ -3,7 +3,6 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import {
   ArrowRight,
   Network,
-  BrainCircuit,
   Globe2,
   Quote,
   ChevronDown,
@@ -30,12 +29,6 @@ const PILLARS = [
     icon: Network,
     name: "OSG Infrastructure",
     description: "Proprietary Layer-1 grid for absolute digital autonomy."
-  },
-  {
-    icon: BrainCircuit,
-    name: "OrakzaiX (Marcus AI)",
-    description:
-      "Level-9 autonomous intelligence engine governing global liquidity and risk management."
   },
   {
     icon: Globe2,

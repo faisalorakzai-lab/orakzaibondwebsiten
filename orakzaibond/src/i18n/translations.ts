@@ -6,10 +6,8 @@
 //   ps — پښتو      (Pashto, RTL, KPK regional / Chairman's mother tongue)
 //
 // Translations are intentionally TERSE and EXECUTIVE. They mirror the
-// English persona of Marcus and the rest of the platform — measured,
 // formal, board-room cadence. NOT colloquial.
 //
-// Keep keys grouped by surface (nav, sidebar, cta, marcus, footer, …) so
 // it stays scannable as the table grows. New keys default to English at
 // runtime via the t() helper if a translation is missing — UI never
 // breaks if a string is added in EN before being translated.
@@ -37,7 +35,6 @@ export const LANG_BY_CODE: Record<LangCode, LangMeta> = LANGUAGES.reduce(
 );
 
 // ─── String table ─────────────────────────────────────────────────────────
-// Use dot.notation keys: "nav.home", "marcus.greeting", etc. Missing keys
 // gracefully fall back to the English value, then to the key itself.
 
 type Dict = Record<string, string>;
@@ -105,15 +102,6 @@ const en: Dict = {
   "cta.returnHome":    "Return home",
 
   // Marcus
-  "marcus.greeting":          "Acknowledged. How may I assist you?",
-  "marcus.greetingChairman":  "Chairman Orakzai. Standing by.",
-  "marcus.thinking":          "Thinking…",
-  "marcus.listening":         "Listening… speak when ready.",
-  "marcus.speaking":          "Speaking",
-  "marcus.muted":             "Muted",
-  "marcus.unmute":            "Unmute Marcus",
-  "marcus.mute":              "Mute Marcus",
-  "marcus.askPlaceholder":    "Ask Marcus…",
 
   // Page titles / hero
   "page.founder.title":       "Chairman Faisal Orakzai",
@@ -182,15 +170,6 @@ const ur: Dict = {
   "cta.tryAgain":      "دوبارہ کوشش کریں",
   "cta.returnHome":    "صفحۂ اوّل پر واپس",
 
-  "marcus.greeting":          "حاضر ہوں۔ میں آپ کی کیا خدمت کر سکتا ہوں؟",
-  "marcus.greetingChairman":  "چیئرمین اورکزئی صاحب۔ حکم کا منتظر ہوں۔",
-  "marcus.thinking":          "غور کر رہا ہوں…",
-  "marcus.listening":         "سن رہا ہوں… تشریف لائیے۔",
-  "marcus.speaking":          "گفتگو جاری ہے",
-  "marcus.muted":             "خاموش",
-  "marcus.unmute":            "آواز چالو کریں",
-  "marcus.mute":              "آواز بند کریں",
-  "marcus.askPlaceholder":    "مارکس سے پوچھیں…",
 
   "page.founder.title":       "چیئرمین فیصل اورکزئی",
   "page.founder.subtitle":    "بانی، اورکزئی گروپ",
@@ -256,15 +235,6 @@ const ps: Dict = {
   "cta.tryAgain":      "بیا هڅه وکړئ",
   "cta.returnHome":    "کور ته بیرته",
 
-  "marcus.greeting":          "حاضر یم. څنګه مرسته وکړم؟",
-  "marcus.greetingChairman":  "ښاغلی چیرمن اورکزی. ستاسو په خدمت کې یم.",
-  "marcus.thinking":          "فکر کوم…",
-  "marcus.listening":         "اورم… وفرمایئ.",
-  "marcus.speaking":          "خبرې کوم",
-  "marcus.muted":             "غلی",
-  "marcus.unmute":            "غږ راخلاص کړئ",
-  "marcus.mute":              "غږ بند کړئ",
-  "marcus.askPlaceholder":    "له مارکس څخه وپوښتئ…",
 
   "page.founder.title":       "ښاغلی چیرمن فیصل اورکزی",
   "page.founder.subtitle":    "بنسټګر، د اورکزي ګروپ",

@@ -3,8 +3,8 @@
  * --------------------------------------------------------------------------
  * A canvas-based background layer of slowly descending gold data tokens
  * (price ticks, hashes, FX pairs, ISO codes) — the visual signature of a
- * Swiss-bank terminal. Designed to sit BEHIND the OKBOND Command Center
- * (the Marcus AI Live Log) at ~1.5% opacity so it never competes with the
+ * Swiss-bank terminal. Designed to sit behind foreground content at ~1.5%
+ * opacity so it never competes with the
  * foreground content.
  *
  * Pure <canvas> — zero DOM nodes per drop, gracefully respects

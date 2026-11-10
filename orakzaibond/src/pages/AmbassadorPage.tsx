@@ -48,7 +48,7 @@ const TIERS = [
       "$1,000 USD performance award",
       "Priority ICO allocation",
       "Co-branded promotional materials",
-      "Monthly Chairman briefing access",
+      "Monthly founder update access",
       "Revenue-share referral program",
     ],
     requirements: [

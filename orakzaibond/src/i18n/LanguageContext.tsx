@@ -7,10 +7,8 @@
 //   - automatic <html lang=""> + dir="rtl|ltr" sync (RTL for ur/ps)
 //   - localStorage persistence under "orakzai.lang"
 //
-// Marcus AI ALREADY auto-detects the language of each prompt server-side
-// and replies in the same script — so the site language switcher is purely
-// a UI-strings concern. Marcus respects whatever language the user types
-// in regardless of the switcher state.
+// The site language switcher controls UI strings and keeps the document's
+// language and text direction synchronized.
 
 import {
   createContext,

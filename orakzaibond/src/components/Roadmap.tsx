@@ -90,11 +90,11 @@ const PHASE_DATA = [
   {
     phase: "2028",
     stage: "II",
-    title: "Infrastructure Deployment — OSG & AI",
-    body: "The Orakzai Group transitions from a financial asset to a global sovereign infrastructure provider — deploying its proprietary blockchain layer and autonomous intelligence.",
+    title: "Infrastructure Deployment — OSG",
+    body: "The Orakzai Group transitions from a financial asset to a global infrastructure provider — deploying its proprietary blockchain layer and ecosystem tools.",
     milestones: [
       "Orakzai Sovereign Grid (OSG): Master blockchain layer + OSG Explorer launched",
-      "OrakzaiX AI: 15 autonomous intelligence models deployed for ecosystem governance",
+      "OSG governance and explorer tools deployed for the ecosystem",
       "OreC (Real Estate Chain): Physical stock assets (Pakistan & Global) migrated to OSG",
     ],
   },
@@ -104,7 +104,7 @@ const PHASE_DATA = [
     title: "The Global Super-Ecosystem",
     body: "Full realization of the Orakzai vision — a self-sustaining, multi-sector sovereign super-app operating across transport, property, and commerce at global scale.",
     milestones: [
-      "OTC (Transport Chain): Super-App — Ride-hailing, Hotel Booking, Logistics on OrakzaiX",
+      "OTC (Transport Chain): Super-App — Ride-hailing, Hotel Booking, Logistics on OSG",
       "OPC (Properties Chain): Fractionalized real estate ownership from $1",
       "Orakzai Mart: Global e-commerce — 100k+ products, OSG payments, OTC logistics",
     ],

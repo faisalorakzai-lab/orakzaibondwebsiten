@@ -29,8 +29,6 @@ import WinnersPage from "./pages/WinnersPage";
 import LotteryPage from "./pages/LotteryPage";
 import AdminPage from "./pages/AdminPage";
 import SecretAdminPage from "./pages/SecretAdminPage";
-import ThreatConsolePage from "./pages/ThreatConsolePage";
-import MarcusDefensePage from "./pages/MarcusDefensePage";
 import CommunityHubPage from "./pages/CommunityHubPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/not-found";
@@ -46,13 +44,10 @@ import VaultPage from "./pages/VaultPage";
 import SecurityPage from "./pages/SecurityPage";
 import RegistryPage from "./pages/RegistryPage";
 import ServiceExplorerPage from "./pages/ServiceExplorerPage";
-import LiveVaultStatus from "./components/LiveVaultStatus";
 import BuiltForCarousel from "./components/BuiltForCarousel";
 import TraditionalBondCarousel from "./components/TraditionalBondCarousel";
-// import MarcusOrb from "./components/MarcusOrb";
 import PresenceGlow from "./components/PresenceGlow";
 import FilmGrain from "./components/FilmGrain";
-import AIBriefingTicker from "./components/AIBriefingTicker";
 import OKBONDHeatmap from "./components/OKBONDHeatmap";
 import OKBONDFAQSection from "./components/OKBONDFAQSection";
 import TrustStrip from "./components/TrustStrip";
@@ -190,7 +185,7 @@ function App() {
   //   from the admin dashboard) this effect would yank them back, making
   //   the rest of the site unreachable while connected.
   // • We also skip the redirect if they're already on any admin sub-route
-  //   (/admin, /secret-admin, /threat-console) so the effect is idempotent
+  //   (/admin and /secret-admin) so the effect is idempotent
   //   on the very first mount when the wallet was already connected from a
   //   previous session.
   const prevAddressRef = useRef<string | null>(null);
@@ -206,8 +201,7 @@ function App() {
     // Don't bounce if the chairman is already inside any admin surface.
     const isOnAdminSurface =
       location === "/admin" ||
-      location === "/secret-admin" ||
-      location === "/threat-console";
+      location === "/secret-admin";
     if (isOnAdminSurface) return;
 
     setLocation("/admin");
@@ -301,10 +295,6 @@ function App() {
         />
       </ErrorBoundary>
 
-      <ErrorBoundary scope="AIBriefingTicker" silent>
-        <AIBriefingTicker />
-      </ErrorBoundary>
-
       {/* Chairman directive 2026-04-30 (round 6): apply the Community
           page's Cyber-Grid + gold ambience to EVERY page except /founder
           (Founder keeps its own bespoke parchment treatment). The
@@ -337,17 +327,6 @@ function App() {
                   )}
                 >
                   <Hero onConnect={connect} address={address} />
-                </ErrorBoundary>
-                <ErrorBoundary
-                  scope="HomeLiveVaultStatus"
-                  fallback={(_error, retry) => (
-                    <HomeSectionFallback
-                      label="Allocation overview"
-                      onRetry={retry}
-                    />
-                  )}
-                >
-                  <LiveVaultStatus />
                 </ErrorBoundary>
                 <ErrorBoundary scope="BuiltForCarousel" silent>
                   <BuiltForCarousel />
@@ -395,16 +374,6 @@ function App() {
                 <SecretAdminPage />
               </AdminGate>
             </Route>
-            <Route path="/threat-console">
-              <AdminGate>
-                <ThreatConsolePage />
-              </AdminGate>
-            </Route>
-            <Route path="/marcus-defense">
-              <AdminGate>
-                <MarcusDefensePage />
-              </AdminGate>
-            </Route>
             <Route path="/dashboard" component={DashboardPage} />
             <Route path="/staking" component={StakingPage} />
             <Route path="/vault" component={VaultPage} />
@@ -429,14 +398,10 @@ function App() {
       </div>
 
       {/* Floating widgets are each isolated in their own SILENT boundary.
-          A crash in MarcusOrb / WhatsAppBot / PresenceGlow / FilmGrain
-          must NEVER take down the page — it just hides that one widget. */}
+          A crash in a floating widget must NEVER take down the page — it just hides that one widget. */}
       <ErrorBoundary scope="PresenceGlow" silent>
         <PresenceGlow />
       </ErrorBoundary>
-      {/* <ErrorBoundary scope="MarcusOrb" silent>
-        <MarcusOrb />
-      </ErrorBoundary> */}
       <ErrorBoundary scope="FilmGrain" silent>
         <FilmGrain />
       </ErrorBoundary>

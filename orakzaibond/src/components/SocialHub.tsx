@@ -806,35 +806,6 @@ export default function SocialHub() {
                           </button>
                         </div>
 
-                        {/* Discuss with Marcus — gold-bordered concierge handoff */}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            try {
-                              window.dispatchEvent(
-                                new CustomEvent("marcus:discuss", {
-                                  detail: {
-                                    text: post.content,
-                                    author: username,
-                                    handle,
-                                  },
-                                })
-                              );
-                            } catch { /* ignore */ }
-                          }}
-                          className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-[0.18em] transition-all hover:-translate-y-0.5"
-                          style={{
-                            color: "#fde68a",
-                            background: "linear-gradient(180deg, rgba(234,179,8,0.10), rgba(234,179,8,0.04))",
-                            border: "1px solid rgba(234,179,8,0.55)",
-                            boxShadow: "0 0 0 1px rgba(234,179,8,0.10), 0 0 14px rgba(234,179,8,0.18)",
-                          }}
-                          aria-label="Discuss this dispatch with Marcus AI"
-                        >
-                          <Sparkles size={12} />
-                          <span>Discuss with Marcus</span>
-                        </button>
-
                         {/* Comments panel */}
                         <AnimatePresence>
                           {activePostId === post.id && (

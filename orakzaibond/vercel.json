@@ -141,11 +141,5 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "crons": [
-    {
-      "path": "/api/marcus-watch",
-      "schedule": "0 0 * * *"
-    }
   ]
 }

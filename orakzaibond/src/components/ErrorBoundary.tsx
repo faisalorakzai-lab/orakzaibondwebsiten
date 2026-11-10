@@ -13,13 +13,12 @@ import { Component, type ErrorInfo, type ReactNode } from "react";
 //   3. Resets automatically when the parent passes a new `resetKey` prop
 //      (e.g. the wouter `location`), so simply navigating away from the
 //      broken page clears the error state.
-//   4. Logs the captured error to console so /api/marcus and /api/briefing
-//      diagnostics still capture the stack via the browser console feed.
+//   4. Logs the captured error to the browser console for diagnostics.
 // ─────────────────────────────────────────────────────────────────────────
 
 interface ErrorBoundaryProps {
   children: ReactNode;
-  /** Optional human label for diagnostic logs ("route", "MarcusOrb", etc.) */
+  /** Optional human label for diagnostic logs (for example, "route"). */
   scope?: string;
   /** When this prop changes, the boundary resets (e.g. pass `location`). */
   resetKey?: unknown;
