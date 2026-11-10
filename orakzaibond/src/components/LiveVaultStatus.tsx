@@ -1,5 +1,5 @@
 import { useState, type CSSProperties } from "react";
-import { Activity, ArrowUpRight, Building2, Landmark, Shield, Zap } from "lucide-react";
+import { ArrowUpRight, Building2, Landmark, Shield, Zap } from "lucide-react";
 import "./LiveVaultStatus.css";
 
 const allocations = [
@@ -198,26 +198,7 @@ export default function LiveVaultStatus() {
                 <br />Repository deployment record and PolygonScan reference
               </dd>
             </div>
-            <div className="sv-detail">
-              <dt>Independent audit</dt>
-              <dd>Not submitted, per repository record</dd>
-            </div>
-            <div className="sv-detail">
-              <dt>Last verified update</dt>
-              <dd>Not recorded in the source record</dd>
-            </div>
-            <div className="sv-detail">
-              <dt>Contract source record</dt>
-              <dd>Repository record linked to PolygonScan</dd>
-            </div>
           </dl>
-          <p className="sv-disclaimer">
-            <strong>Transparency note:</strong> Allocation figures and percentages are illustrative stated targets. They are not live TVL, proof of asset backing, or an audit.
-          </p>
-          <p className="sv-live-claim">
-            <Activity aria-hidden="true" />
-            No real-time reserve balance or verification timestamp is available here; none is presented as live data.
-          </p>
         </section>
       </div>
     </section>
