@@ -46,8 +46,6 @@ import VaultPage from "./pages/VaultPage";
 import SecurityPage from "./pages/SecurityPage";
 import RegistryPage from "./pages/RegistryPage";
 import ServiceExplorerPage from "./pages/ServiceExplorerPage";
-import LiveVaultStatus from "./components/LiveVaultStatus";
-import MarcusAILiveLog from "./components/MarcusAILiveLog";
 import SovereignGuarantee from "./components/SovereignGuarantee";
 // import MarcusOrb from "./components/MarcusOrb";
 import PresenceGlow from "./components/PresenceGlow";
@@ -337,28 +335,6 @@ function App() {
                   )}
                 >
                   <Hero onConnect={connect} address={address} />
-                </ErrorBoundary>
-                <ErrorBoundary
-                  scope="HomeLiveVaultStatus"
-                  fallback={(_error, retry) => (
-                    <HomeSectionFallback
-                      label="Live vault status"
-                      onRetry={retry}
-                    />
-                  )}
-                >
-                  <LiveVaultStatus />
-                </ErrorBoundary>
-                <ErrorBoundary
-                  scope="HomeMarcusAILog"
-                  fallback={(_error, retry) => (
-                    <HomeSectionFallback
-                      label="Live optimization log"
-                      onRetry={retry}
-                    />
-                  )}
-                >
-                  <MarcusAILiveLog />
                 </ErrorBoundary>
                 <ErrorBoundary
                   scope="HomeSovereignGuarantee"
