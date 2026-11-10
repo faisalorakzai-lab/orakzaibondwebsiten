@@ -90,8 +90,8 @@ const en: Dict = {
   "calc.investment":   "Your Investment",
   "calc.amount":       "OKBOND Amount",
   "calc.duration":     "Duration",
-  "map.title":         "Global Investor Distribution",
-  "map.subtitle":      "Active capital, eighteen regions, one ecosystem.",
+  "map.title":         "Global Network Coverage",
+  "map.subtitle":      "A world-connected vision, grounded in Orakzai Bond’s Pakistani roots.",
 
   // Common CTAs
   "cta.invest":        "Invest in OKBOND",
@@ -169,8 +169,8 @@ const ur: Dict = {
   "calc.investment":   "آپ کی سرمایہ کاری",
   "calc.amount":       "اوکے بانڈ مقدار",
   "calc.duration":     "مدت",
-  "map.title":         "عالمی سرمایہ کار تقسیم",
-  "map.subtitle":      "اٹھارہ خطوں میں فعال سرمایہ، ایک ایکو سسٹم۔",
+  "map.title":         "عالمی نیٹ ورک کی رسائی", 
+  "map.subtitle":      "اورکزئی بانڈ کی پاکستانی جڑوں سے جڑا عالمی وژن۔", 
 
   "cta.invest":        "اوکے بانڈ میں سرمایہ کاری",
   "cta.whitepaper":    "وائٹ پیپر پڑھیں",
@@ -243,8 +243,8 @@ const ps: Dict = {
   "calc.investment":   "ستاسو پانګونه",
   "calc.amount":       "د اوکې بانډ مقدار",
   "calc.duration":     "موده",
-  "map.title":         "د نړیوالو پانګوالو وېش",
-  "map.subtitle":      "په اتلسو سیمو کې فعاله پانګه، یو اکوسیستم.",
+  "map.title":         "د نړیوالې شبکې پوښښ", 
+  "map.subtitle":      "د اورکزي بانډ د پاکستاني ریښو سره تړلی نړیوال لید.", 
 
   "cta.invest":        "په اوکې بانډ کې پانګونه",
   "cta.whitepaper":    "سپینه پاڼه ولولئ",
