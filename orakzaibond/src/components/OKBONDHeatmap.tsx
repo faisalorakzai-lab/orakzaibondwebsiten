@@ -3,6 +3,15 @@ import { motion, useInView } from "framer-motion";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const GOLD = "#d4af37";
+const COUNTRY_FLAGS = [
+  { flag: "🇺🇸", country: "United States" },
+  { flag: "🇪🇺", country: "European Union" },
+  { flag: "🇬🇧", country: "United Kingdom" },
+  { flag: "🇦🇪", country: "United Arab Emirates" },
+  { flag: "🇨🇳", country: "China" },
+  { flag: "🇮🇳", country: "India" },
+  { flag: "🇿🇦", country: "South Africa" },
+];
 
 export default function OKBONDHeatmap() {
   const ref = useRef<HTMLElement>(null);
@@ -35,15 +44,8 @@ export default function OKBONDHeatmap() {
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.65 }}
-          className="mb-8 text-center md:mb-12"
+          className="mb-6 text-center md:mb-8"
         >
-          <span
-            className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em]"
-            style={{ color: "#f1d77a", border: `1px solid ${GOLD}55`, background: `${GOLD}12` }}
-          >
-            <span className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD, boxShadow: `0 0 10px ${GOLD}` }} />
-            Orakzai Bond · Worldwide Vision
-          </span>
           <h2
             id="global-network-heading"
             className="text-3xl font-bold tracking-tight md:text-5xl"
@@ -51,21 +53,13 @@ export default function OKBONDHeatmap() {
           >
             {t("map.title")}
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-6 md:text-base" style={{ color: "#b2aa96" }}>
-            A world-connected vision, grounded in Orakzai Bond&apos;s Pakistani roots.
-          </p>
         </motion.header>
 
-        <motion.figure
+        <motion.div
           initial={{ opacity: 0, scale: 0.985 }}
           animate={inView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.85, delay: 0.12 }}
-          className="relative mx-auto max-w-4xl overflow-hidden rounded-2xl"
-          style={{
-            border: `1px solid ${GOLD}70`,
-            background: "#030303",
-            boxShadow: `0 0 0 1px ${GOLD}15, 0 26px 90px #000, 0 0 64px ${GOLD}16`,
-          }}
+          className="mx-auto max-w-4xl"
         >
           <img
             src="/orakzai-global-network.webp"
@@ -76,10 +70,35 @@ export default function OKBONDHeatmap() {
             loading="lazy"
             decoding="async"
           />
-          <figcaption className="border-t px-4 py-3 text-center text-[10px] uppercase tracking-[0.2em] md:py-4 md:text-xs" style={{ color: "#d8c587", borderColor: `${GOLD}45`, background: "#080706" }}>
-            Orakzai Bond · Global Network
-          </figcaption>
-        </motion.figure>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.65, delay: 0.2 }}
+          className="mt-7 text-center md:mt-9"
+        >
+          <p className="text-2xl font-semibold tracking-tight md:text-3xl" style={{ color: "#f7f4ec" }}>
+            <span style={{ color: "#f1d77a" }}>100+</span> Countries
+          </p>
+          <p className="mt-1 text-xs md:text-sm" style={{ color: "#9b9689" }}>
+            Global network vision · Local availability may vary
+          </p>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5 md:gap-3" aria-label="Illustrative global country flags">
+            {COUNTRY_FLAGS.map(({ flag, country }) => (
+              <span
+                key={country}
+                role="img"
+                aria-label={country}
+                title={country}
+                className="flex h-11 w-11 items-center justify-center rounded-full text-2xl shadow-md md:h-12 md:w-12 md:text-[27px]"
+                style={{ background: "#f6f5f1", boxShadow: `0 3px 14px #0008, 0 0 0 1px ${GOLD}35` }}
+              >
+                {flag}
+              </span>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );
