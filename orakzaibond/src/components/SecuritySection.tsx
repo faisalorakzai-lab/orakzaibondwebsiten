@@ -262,13 +262,13 @@ export default function SecuritySection() {
                         <stop offset="100%" stopColor="#4ade80" />
                       </linearGradient>
                     </defs>
-                    <text x="36" y="41" textAnchor="middle" fill="#22c55e" fontSize="15" fontWeight="900" fontFamily="monospace">85%</text>
+                    <text x="36" y="41" textAnchor="middle" fill="#22c55e" fontSize="15" fontWeight="900" fontFamily="monospace">—</text>
                   </svg>
                 </div>
                 <div>
-                  <p className="text-2xl font-black text-foreground">85 / 100</p>
-                  <p className="text-sm font-bold text-emerald-400">High Reliability</p>
-                  <p className="text-[10px] text-foreground/40 mt-1 font-mono">CONTRACT: 0x6F53…472a · POLYGON</p>
+                  <p className="text-2xl font-black text-foreground">Scan pending</p>
+                  <p className="text-sm font-bold text-emerald-400">No audit report submitted</p>
+                  <p className="text-[10px] text-foreground/40 mt-1 font-mono">CONTRACT: 0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F · POLYGON</p>
                 </div>
               </div>
             </div>
