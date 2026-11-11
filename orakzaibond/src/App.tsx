@@ -48,6 +48,7 @@ import RegistryPage from "./pages/RegistryPage";
 import ServiceExplorerPage from "./pages/ServiceExplorerPage";
 import LiveVaultStatus from "./components/LiveVaultStatus";
 import SovereignGuarantee from "./components/SovereignGuarantee";
+import BuiltForCarousel from "./components/BuiltForCarousel";
 // import MarcusOrb from "./components/MarcusOrb";
 import PresenceGlow from "./components/PresenceGlow";
 import FilmGrain from "./components/FilmGrain";
@@ -347,6 +348,9 @@ function App() {
                   )}
                 >
                   <LiveVaultStatus />
+                </ErrorBoundary>
+                <ErrorBoundary scope="BuiltForCarousel" silent>
+                  <BuiltForCarousel />
                 </ErrorBoundary>
                 <ErrorBoundary
                   scope="HomeSovereignGuarantee"
