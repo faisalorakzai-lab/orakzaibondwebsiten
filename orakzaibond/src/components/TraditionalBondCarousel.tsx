@@ -77,36 +77,36 @@ export default function TraditionalBondCarousel() {
   return (
     <section
       aria-labelledby="traditional-bonds-title"
-      className="border-y border-[#d4af37]/20 bg-[#faf9f6] py-16 text-[#17191e] sm:py-20 lg:py-24"
+      className="border-y border-[#d4af37]/20 bg-[#050505] py-16 text-[#f2eee2] sm:py-20 lg:py-24"
     >
       <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
         <div className="mb-8 max-w-4xl sm:mb-10">
-          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-[#9a751b] sm:text-xs">
+          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-[#d4af37] sm:text-xs">
             A clearer view of the difference
           </p>
           <h2
             id="traditional-bonds-title"
-            className="text-balance text-3xl font-semibold leading-tight tracking-tight text-[#17191e] sm:text-4xl lg:text-[48px]"
+            className="text-balance text-3xl font-semibold leading-tight tracking-tight text-[#f5f1e7] sm:text-4xl lg:text-[48px]"
             style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
           >
             OKBOND vs. Traditional Bonds
           </h2>
-          <p className="mt-3 text-base font-medium leading-7 text-[#4d5159] sm:text-lg">
+          <p className="mt-3 text-base font-medium leading-7 text-[#c8c3b7] sm:text-lg">
             Redefining Global Fixed Income &amp; Capital Security
           </p>
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-[#686b71]">
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-[#9d998e]">
             A vision for digital access, transparency and utility—not a claim that OKBOND is fixed income, a bond, or capital-protected.
           </p>
         </div>
 
-        <div className="mb-3 flex items-center justify-between gap-4 text-xs text-[#686b71] sm:mb-4">
+        <div className="mb-3 flex items-center justify-between gap-4 text-xs text-[#9d998e] sm:mb-4">
           <p>Compare the instrument, holder rights and practical risks.</p>
           <p className="shrink-0 sm:hidden">Swipe to compare →</p>
         </div>
 
         <div
           aria-label="Scrollable comparison of government bonds, corporate bonds, bank bonds and OKBOND"
-          className="overflow-x-auto rounded-2xl border border-[#e2ded3] bg-white shadow-[0_18px_55px_rgba(31,28,20,0.07)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b38b25]"
+          className="overflow-x-auto rounded-2xl border border-[#3a3527] bg-[#090909] shadow-[0_20px_60px_rgba(0,0,0,0.42)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b38b25]"
           role="region"
           tabIndex={0}
         >
@@ -122,10 +122,10 @@ export default function TraditionalBondCarousel() {
               <col className="w-[240px]" />
             </colgroup>
             <thead>
-              <tr className="border-b border-[#e2ded3] bg-[#f4f2ec]">
+              <tr className="border-b border-[#39362d] bg-[#11110d]">
                 <th
                   scope="col"
-                  className="sticky left-0 z-20 border-r border-[#e2ded3] bg-[#f4f2ec] px-4 py-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#77766f] sm:px-5"
+                  className="sticky left-0 z-20 border-r border-[#343128] bg-[#11110d] px-4 py-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#a7a194] sm:px-5"
                 >
                   Dimension
                 </th>
@@ -133,18 +133,18 @@ export default function TraditionalBondCarousel() {
                   <th
                     key={column.title}
                     scope="col"
-                    className={`border-r border-[#e2ded3] px-4 py-5 align-top last:border-r-0 sm:px-5 ${
-                      column.featured ? "bg-[#f6f0df]" : ""
+                    className={`border-r border-[#343128] px-4 py-5 align-top last:border-r-0 sm:px-5 ${
+                      column.featured ? "bg-[rgba(212,175,55,0.08)]" : ""
                     }`}
                   >
                     <span
                       className={`block text-sm font-semibold leading-5 ${
-                        column.featured ? "text-[#806014]" : "text-[#25272b]"
+                        column.featured ? "text-[#e1c56d]" : "text-[#ede9de]"
                       }`}
                     >
                       {column.title}
                     </span>
-                    <span className="mt-1 block text-xs font-normal leading-5 text-[#77766f]">
+                    <span className="mt-1 block text-xs font-normal leading-5 text-[#a7a194]">
                       {column.note}
                     </span>
                   </th>
@@ -155,19 +155,19 @@ export default function TraditionalBondCarousel() {
               {comparisonRows.map((row, rowIndex) => (
                 <tr
                   key={row.label}
-                  className={rowIndex < comparisonRows.length - 1 ? "border-b border-[#ece9e2]" : ""}
+                  className={rowIndex < comparisonRows.length - 1 ? "border-b border-[#2b2922]" : ""}
                 >
                   <th
                     scope="row"
-                    className="sticky left-0 z-10 border-r border-[#e2ded3] bg-[#fbfaf7] px-4 py-5 align-top text-xs font-semibold leading-5 text-[#3e4147] sm:px-5 sm:text-sm"
+                    className="sticky left-0 z-10 border-r border-[#343128] bg-[#090909] px-4 py-5 align-top text-xs font-semibold leading-5 text-[#d9d4c8] sm:px-5 sm:text-sm"
                   >
                     {row.label}
                   </th>
                   {row.cells.map((cell, cellIndex) => (
                     <td
                       key={columns[cellIndex].title}
-                      className={`border-r border-[#ece9e2] px-4 py-5 align-top text-[13px] leading-[1.65] text-[#595d64] last:border-r-0 sm:px-5 ${
-                        cellIndex === 3 ? "bg-[#fffdf8]" : ""
+                      className={`border-r border-[#2b2922] px-4 py-5 align-top text-[13px] leading-[1.65] text-[#c0bcb3] last:border-r-0 sm:px-5 ${
+                        cellIndex === 3 ? "bg-[rgba(212,175,55,0.06)]" : ""
                       }`}
                     >
                       {cell}
@@ -179,19 +179,19 @@ export default function TraditionalBondCarousel() {
           </table>
         </div>
 
-        <div className="mt-8 grid gap-5 rounded-2xl border border-[#e5dcc1] bg-[#f5f0e3] p-5 sm:mt-10 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] sm:items-center sm:p-7">
+        <div className="mt-8 grid gap-5 rounded-2xl border border-[#d4af37]/25 bg-[#0d0c09] p-5 sm:mt-10 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] sm:items-center sm:p-7">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#92701b]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#d4af37]">
               The intended shift
             </p>
             <h3
-              className="mt-2 text-xl font-semibold leading-snug text-[#23231f] sm:text-2xl"
+              className="mt-2 text-xl font-semibold leading-snug text-[#f2eee3] sm:text-2xl"
               style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
               From debt instruments to digital participation
             </h3>
           </div>
-          <p className="text-sm leading-6 text-[#57564f] sm:text-[15px]">
+          <p className="text-sm leading-6 text-[#bbb5a8] sm:text-[15px]">
             Traditional bonds are debt with defined issuer obligations. OKBOND aims to explore a wallet-first token model with potential ecosystem utility and publicly viewable on-chain activity where available. It is a different category—not a one-to-one replacement for bonds—and its rights and use depend on confirmed terms, deployed code and availability.
           </p>
         </div>
@@ -199,11 +199,11 @@ export default function TraditionalBondCarousel() {
         <div className="mt-7 flex flex-col items-center gap-4 sm:mt-8">
           <a
             href="#okbond-ecosystem"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#17191e] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#34363a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b38b25] focus-visible:ring-offset-2"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#d4af37] px-6 py-3 text-sm font-semibold text-[#151208] transition hover:bg-[#f0d77e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f0d77e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
           >
             Explore OKBOND Ecosystem <ArrowUpRight size={16} aria-hidden="true" />
           </a>
-          <p className="max-w-4xl text-center text-xs leading-5 text-[#77766f]">
+          <p className="max-w-4xl text-center text-xs leading-5 text-[#a7a194]">
             Conceptual comparison only—not investment, legal or suitability advice. Bond features vary by issue and jurisdiction. OKBOND is not automatically a bond or repayment claim; no yield, repayment, protection, refund, liquidity, prize, reserve backing, audit or performance is guaranteed.
           </p>
         </div>

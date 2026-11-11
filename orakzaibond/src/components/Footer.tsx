@@ -1,169 +1,169 @@
 import { motion } from "framer-motion";
+import { ArrowUpRight, Mail, MessageCircle, Send } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
-const coinImage = "/okbond-logo.png";
 
 const socials = [
-  {
-    name: "Twitter",
-    href: "https://x.com/OrakzaiBond",
-    icon: (
-      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-      </svg>
-    ),
-  },
-  {
-    name: "Telegram",
-    href: "https://t.me/orakzaibond",
-    icon: (
-      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
-      </svg>
-    ),
-  },
-  {
-    name: "WhatsApp",
-    href: "https://whatsapp.com/channel/0029VbAyL102kNFkEZ7nyj1y",
-    icon: (
-      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
-      </svg>
-    ),
-  },
-  {
-    name: "Email",
-    href: "mailto:info@orakzaibond.com",
-    icon: (
-      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect width="20" height="16" x="2" y="4" rx="2" />
-        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-      </svg>
-    ),
-  },
+  { name: "X", href: "https://x.com/OrakzaiBond", icon: <span className="text-lg font-semibold" aria-hidden="true">𝕏</span> },
+  { name: "Telegram", href: "https://t.me/orakzaibond", icon: <Send className="h-4 w-4" aria-hidden="true" /> },
+  { name: "WhatsApp", href: "https://whatsapp.com/channel/0029VbAyL102kNFkEZ7nyj1y", icon: <MessageCircle className="h-4 w-4" aria-hidden="true" /> },
+  { name: "Email", href: "mailto:info@orakzaibond.com", icon: <Mail className="h-4 w-4" aria-hidden="true" /> },
 ];
 
 const links = [
-  { labelKey: "nav.about",      label: "About",           href: "/about"     },
-  { labelKey: "nav.token",      label: "Token",           href: "/token"     },
-  { labelKey: "nav.icoBuy",     label: "Services",        href: "/ico"       },
-  { labelKey: "nav.lottery",    label: "Lottery",         href: "/lottery"   },
-  { labelKey: "nav.tokenomics", label: "Tokenomics",      href: "/tokenomics"},
-  { labelKey: "nav.roadmap",    label: "Roadmap",         href: "/roadmap"   },
+  { labelKey: "nav.about", label: "About", href: "/about" },
+  { labelKey: "nav.token", label: "Token", href: "/token" },
+  { labelKey: "nav.icoBuy", label: "Services", href: "/ico" },
+  { labelKey: "nav.lottery", label: "Lottery", href: "/lottery" },
+  { labelKey: "nav.tokenomics", label: "Tokenomics", href: "/tokenomics" },
+  { labelKey: "nav.roadmap", label: "Roadmap", href: "/roadmap" },
 ];
 
 const legalLinks = [
-  { labelKey: "nav.rules",   label: "How to Buy",         href: "/guide"   },
-  { labelKey: "nav.rules",   label: "Rules & Disclaimer", href: "/rules"   },
-  { labelKey: "nav.system",  label: "How It Works",       href: "/system"  },
-  { labelKey: "nav.winners", label: "Winners Hall",       href: "/winners" },
-  { labelKey: "nav.founder", label: "The Group",          href: "/founder" },
+  { labelKey: "nav.rules", label: "How to Buy", href: "/guide" },
+  { labelKey: "nav.rules", label: "Rules & Disclaimer", href: "/rules" },
+  { labelKey: "nav.system", label: "How It Works", href: "/system" },
+  { labelKey: "nav.winners", label: "Winners Hall", href: "/winners" },
+  { labelKey: "nav.founder", label: "The Group", href: "/founder" },
 ];
+
+const socialLinkClass =
+  "inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.025] text-[#aaa69b] transition hover:border-[#d4af37]/50 hover:bg-[#d4af37]/[0.08] hover:text-[#f0d77e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]";
 
 export default function Footer() {
   const { t } = useLanguage();
+
   return (
-    <footer className="border-t border-border bg-card/50 pt-16 pb-8">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-          {/* Brand */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+    <footer className="relative isolate overflow-hidden border-t border-[#d4af37]/20 bg-[#050505] text-[#f1eee5]">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(ellipse_at_top,rgba(212,175,55,0.09),transparent_70%)]"
+      />
+      <div className="relative mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mx-auto flex max-w-4xl flex-col items-center border-b border-white/10 py-14 text-center sm:py-16 lg:py-20"
+        >
+          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d4af37] sm:text-xs">
+            Orakzai Bond · OKBOND
+          </p>
+          <h2
+            className="max-w-3xl text-balance text-3xl font-semibold leading-tight tracking-tight text-[#f5f1e7] sm:text-4xl lg:text-5xl"
+            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
           >
-            <div className="flex items-center gap-3 mb-4">
-              <img src={coinImage} alt="OKBOND" className="w-10 h-10 object-contain" />
-              <div>
-                <p className="font-extrabold text-lg text-foreground">Orakzai Bond</p>
-                <p className="text-xs text-primary font-mono tracking-widest">OKBOND</p>
-              </div>
-            </div>
-            <p className="text-muted-foreground text-sm leading-relaxed max-w-xs">
-              Next Generation Crypto Investment Ecosystem. Empowering global investors through the power of decentralized finance.
-            </p>
-          </motion.div>
+            Explore a more connected digital ecosystem.
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm leading-6 text-[#a9a59b] sm:text-base sm:leading-7">
+            Discover OKBOND’s project information, token model and ecosystem vision. Features, rights and services depend on confirmed terms, deployed code and availability.
+          </p>
+          <div className="mt-7 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row">
+            <a
+              href="/#okbond-ecosystem"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#d4af37] px-6 py-3 text-sm font-semibold text-[#151208] transition hover:bg-[#f0d77e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#f0d77e] focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505]"
+            >
+              Explore OKBOND <ArrowUpRight size={16} aria-hidden="true" />
+            </a>
+            <a
+              href="/rules"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/15 bg-white/[0.025] px-6 py-3 text-sm font-medium text-[#e1ddd2] transition hover:border-[#d4af37]/45 hover:text-[#f0d77e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]"
+            >
+              Read project rules <ArrowUpRight size={16} aria-hidden="true" />
+            </a>
+          </div>
+        </motion.section>
 
-          {/* Navigation */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <p className="text-foreground font-bold mb-5 text-sm uppercase tracking-wider">Navigation</p>
-            <ul className="space-y-3">
-              {links.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {t(link.labelKey)}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Legal */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-          >
-            <p className="text-foreground font-bold mb-5 text-sm uppercase tracking-wider">Legal & Pages</p>
-            <ul className="space-y-3">
-              {legalLinks.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {t(link.labelKey)}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Community */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <p className="text-foreground font-bold mb-5 text-sm uppercase tracking-wider">Community</p>
-            <div className="flex gap-3">
-              {socials.map((s) => (
-                <a
-                  key={s.name}
-                  href={s.href}
-                  aria-label={s.name}
-                  target={s.href.startsWith("mailto") ? undefined : "_blank"}
-                  rel={s.href.startsWith("mailto") ? undefined : "noopener noreferrer"}
-                  className="w-10 h-10 rounded-xl border border-border bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/10 transition-all"
-                  data-testid={`link-social-${s.name.toLowerCase()}`}
-                >
-                  {s.icon}
-                </a>
-              ))}
-            </div>
-            <p className="text-muted-foreground text-xs mt-5 leading-relaxed">
-              Join our growing community of global investors and early adopters building the future of Web3 finance.
-            </p>
-          </motion.div>
+        <div className="flex justify-center gap-3 py-7 sm:py-8" aria-label="OKBOND social links">
+          {socials.map((social) => (
+            <a
+              key={social.name}
+              href={social.href}
+              aria-label={social.name}
+              target={social.href.startsWith("mailto:") ? undefined : "_blank"}
+              rel={social.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+              className={socialLinkClass}
+              data-testid={`link-social-${social.name.toLowerCase()}`}
+            >
+              {social.icon}
+            </a>
+          ))}
         </div>
 
-        <div className="border-t border-border pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-muted-foreground text-sm">
-            &copy; 2026 Orakzai Bond. All rights reserved.
+        <nav
+          aria-label="Footer navigation"
+          className="grid grid-cols-2 gap-x-6 gap-y-10 border-y border-white/10 py-8 sm:gap-x-12 sm:py-10 lg:gap-x-20"
+        >
+          <div>
+            <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8e897e]">
+              Explore OKBOND
+            </p>
+            <ul className="space-y-4">
+              {links.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    className="text-sm uppercase tracking-[0.06em] text-[#aaa69b] transition hover:text-[#f0d77e] focus-visible:outline-none focus-visible:text-[#f0d77e] sm:text-[15px]"
+                  >
+                    {t(link.labelKey) || link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8e897e]">
+              Project &amp; information
+            </p>
+            <ul className="space-y-4">
+              {legalLinks.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    className="text-sm uppercase tracking-[0.06em] text-[#aaa69b] transition hover:text-[#f0d77e] focus-visible:outline-none focus-visible:text-[#f0d77e] sm:text-[15px]"
+                  >
+                    {t(link.labelKey) || link.label}
+                  </a>
+                </li>
+              ))}
+              <li>
+                <a
+                  href="/legal"
+                  className="text-sm uppercase tracking-[0.06em] text-[#aaa69b] transition hover:text-[#f0d77e] focus-visible:outline-none focus-visible:text-[#f0d77e] sm:text-[15px]"
+                >
+                  Legal information
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <div className="relative overflow-hidden pb-8 pt-10 text-center sm:pb-10 sm:pt-14">
+          <p
+            aria-label="OKBOND"
+            className="select-none whitespace-nowrap bg-gradient-to-b from-[#d4af37]/25 via-[#d4af37]/10 to-transparent bg-clip-text text-[clamp(4.5rem,23vw,19rem)] font-semibold leading-[0.78] tracking-[-0.085em] text-transparent"
+            style={{ fontFamily: "'Space Grotesk', Arial, sans-serif" }}
+          >
+            OKBOND
           </p>
-          <p className="text-muted-foreground text-xs font-mono">
-            Contract: <span className="text-primary/80">0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F</span>
+          <p className="mt-4 text-[9px] font-medium uppercase tracking-[0.34em] text-[#777267] sm:text-[10px]">
+            ORAKZAI BOND · DIGITAL-ASSET ECOSYSTEM
           </p>
+        </div>
+
+        <div className="border-t border-white/10 py-6">
+          <p className="mx-auto max-w-5xl text-center text-[10px] leading-5 text-[#807c73] sm:text-xs sm:leading-6">
+            OKBOND is a digital-asset project, not a government, corporate or bank bond. Digital assets involve risk. No yield, repayment, liquidity, prize, refund, reserve backing, audit or principal protection is guaranteed. Review applicable terms and laws before participating.
+          </p>
+          <div className="mt-5 flex flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left">
+            <p className="text-xs text-[#8e897e]">&copy; 2026 Orakzai Bond. All rights reserved.</p>
+            <a
+              href="/legal"
+              className="text-xs text-[#8e897e] transition hover:text-[#f0d77e] focus-visible:outline-none focus-visible:text-[#f0d77e]"
+            >
+              Legal information &amp; disclosures
+            </a>
+          </div>
         </div>
       </div>
     </footer>
