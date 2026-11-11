@@ -1,190 +1,210 @@
-import { useRef } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
-const comparisons = [
+const columns = [
+  { title: "Government bonds", note: "Sovereign debt" },
+  { title: "Corporate bonds", note: "Company debt" },
+  { title: "Bank bonds", note: "Financial-institution debt" },
+  { title: "OKBOND", note: "A different digital-asset model", featured: true },
+] as const;
+
+const comparisonRows = [
   {
-    badge: "vs. Government Bonds",
-    title: "Deflationary Supply?",
-    description:
-      "OKBOND uses contract-defined token-supply rules, not sovereign issuance. Any deflation depends on verified burn activity; scarcity alone does not guarantee value appreciation.",
-    image: "/audience-cards/savers.webp",
-    alt: "Financial chart with glowing market data",
+    label: "What it is",
+    cells: [
+      "Debt issued by a national or regional government, with terms set by the specific offering.",
+      "Debt issued by a company, with terms and seniority defined by the offering documents.",
+      "Debt issued by a bank or financial institution; structure and ranking vary by issue.",
+      "A blockchain-based token ecosystem—not a traditional bond or repayment claim by default.",
+    ],
   },
   {
-    badge: "vs. Corporate Bonds",
-    title: "Smart-Contract Security",
-    description:
-      "Deployed code can automate published rules. It does not remove code, administrator-key, custody or market risk, and it is not a repayment guarantee or proof of an audit.",
-    image: "/audience-cards/staking.webp",
-    alt: "Phone displaying a market chart in a person's hand",
+    label: "What the holder may receive",
+    cells: [
+      "Interest and repayment as specified in the bond terms, subject to the issuer meeting its obligations.",
+      "Interest and repayment as specified in the bond terms, subject to the company meeting its obligations.",
+      "Payments under the bond terms, subject to the bank meeting its obligations and the issue's ranking.",
+      "Rights depend on applicable product terms and deployed code. Token ownership alone does not promise interest or repayment.",
+    ],
   },
   {
-    badge: "vs. Bank Bonds",
-    title: "60-Day Cycle Concept",
-    description:
-      "The proposed Safety Vault describes a 60-day cadence. A cycle length is not a standard bond maturity, guaranteed redemption, principal protection or promised return.",
-    image: "/audience-cards/everyday-services.webp",
-    alt: "Person using a laptop for digital services",
+    label: "How it is governed",
+    cells: [
+      "Offering terms and applicable public-sector laws; details differ by issuer and jurisdiction.",
+      "Offering documents, issuer obligations and applicable securities laws; protections vary.",
+      "Issue documents and applicable banking and securities rules; protections vary by jurisdiction.",
+      "Aims to pair digital participation with ecosystem utility. Access and features depend on published terms and confirmed availability.",
+    ],
   },
   {
-    badge: "Global Shift",
-    title: "Borderless by Design",
-    description:
-      "Polygon transactions can be technically transferable across borders. Wallet access, eligibility, local laws and participating-service availability still apply.",
-    image: "/audience-cards/mobility.webp",
-    alt: "Commuter seated on a train with a bag",
+    label: "Transparency & verification",
+    cells: [
+      "Issuer disclosures and reporting are governed by the issue and applicable requirements.",
+      "Offering and ongoing disclosures depend on the issuer, issue and applicable rules.",
+      "Disclosures depend on the issue, institution and applicable rules.",
+      "Public-chain records may show transactions and contract activity; they do not alone verify reserves, backing, solvency or an audit.",
+    ],
   },
   {
-    badge: "Full Transparency",
-    title: "On-Chain Proof",
-    description:
-      "Public ledger records can help verify token transfers and contract activity. They do not, by themselves, prove reserves, asset backing, solvency or an independent audit.",
-    image: "/audience-cards/ambassadors.webp",
-    alt: "People collaborating around a table",
+    label: "Access & transfer",
+    cells: [
+      "Access and resale depend on the issue, local eligibility, intermediaries and market availability.",
+      "Access and resale depend on the offering, investor eligibility and market liquidity.",
+      "Access and resale depend on the offering, investor eligibility and market liquidity.",
+      "Wallet-based access is an intended digital model; eligibility, network, contract settings and service availability still apply.",
+    ],
   },
   {
-    badge: "Potential Upside",
-    title: "Prize-Draw Concept",
-    description:
-      "The proposed ‘zero-loss’ draw label is not a guarantee. Eligibility, entry and refund terms must be published before launch; no prize or refund is assured.",
-    image: "/audience-cards/prize-draw.webp",
-    alt: "A person holding a gold coin beside a smartphone",
+    label: "Timing & exit",
+    cells: [
+      "Maturity and payment dates are set out in the bond terms; a sale before maturity may be at a different price.",
+      "Maturity and payment dates are set out in the bond terms; early sale depends on market conditions.",
+      "Maturity and payment dates are set out in the bond terms; early sale depends on market conditions.",
+      "Do not assume a bond-style maturity or redemption schedule. Transferability and exit depend on terms and available liquidity.",
+    ],
   },
   {
-    badge: "Active Utility",
-    title: "Real-World Utility",
-    description:
-      "Planned payments and services could create additional use cases if launched and integrated. Acceptance, availability and any effect on token value are not assured.",
-    image: "/audience-cards/property.webp",
-    alt: "Contemporary residential home with a swimming pool",
+    label: "Key risks",
+    cells: [
+      "May include interest-rate, inflation, currency and sovereign-credit risk; value can change before maturity.",
+      "May include interest-rate, liquidity, currency and company-credit risk; recovery depends on the issue and circumstances.",
+      "May include interest-rate, liquidity and issuer-credit risk; ranking and recovery depend on the issue and applicable rules.",
+      "Token-price, market, liquidity, wallet/custody, network, contract and regulatory risks. No capital protection is assured.",
+    ],
   },
-  {
-    badge: "True Sovereignty",
-    title: "Autonomous Code",
-    description:
-      "Smart contracts can execute encoded rules automatically. Permissions, upgrade controls, dependencies and security assumptions still need to be checked; autonomy is not absolute.",
-    image: "/audience-cards/luxury-shopping.webp",
-    alt: "Shoppers browsing a luxury retail store",
-  },
-];
+] as const;
 
 export default function TraditionalBondCarousel() {
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  const move = (direction: -1 | 1) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const card = track.querySelector<HTMLElement>("[data-bond-card]");
-    const gap = Number.parseFloat(getComputedStyle(track).columnGap || "20") || 20;
-    track.scrollBy({
-      left: direction * ((card?.offsetWidth ?? 300) + gap),
-      behavior: "smooth",
-    });
-  };
-
   return (
     <section
       aria-labelledby="traditional-bonds-title"
-      className="relative overflow-hidden border-y border-[#d4af37]/15 bg-[#080807] py-16 sm:py-20 lg:py-24"
+      className="border-y border-[#d4af37]/20 bg-[#faf9f6] py-16 text-[#17191e] sm:py-20 lg:py-24"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.035]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, #d4af37 1px, transparent 1px), linear-gradient(to bottom, #d4af37 1px, transparent 1px)",
-          backgroundSize: "88px 88px",
-        }}
-      />
-      <div className="relative mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
-        <div className="mb-9 sm:mb-11">
-          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#d7bd72] sm:text-xs">
-            A different fixed-income model
+      <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
+        <div className="mb-8 max-w-4xl sm:mb-10">
+          <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-[#9a751b] sm:text-xs">
+            A clearer view of the difference
           </p>
           <h2
             id="traditional-bonds-title"
-            className="text-balance text-3xl font-semibold leading-tight tracking-tight text-white sm:text-4xl lg:text-[48px]"
+            className="text-balance text-3xl font-semibold leading-tight tracking-tight text-[#17191e] sm:text-4xl lg:text-[48px]"
             style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
           >
             OKBOND vs. Traditional Bonds
           </h2>
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-white/65 sm:text-base">
+          <p className="mt-3 text-base font-medium leading-7 text-[#4d5159] sm:text-lg">
             Redefining Global Fixed Income &amp; Capital Security
           </p>
-          <p className="mt-2 max-w-3xl text-xs leading-5 text-white/45 sm:text-sm">
-            A conceptual design comparison, not a claim of superior performance, lower risk or guaranteed capital protection.
+          <p className="mt-2 max-w-3xl text-sm leading-6 text-[#686b71]">
+            A vision for digital access, transparency and utility—not a claim that OKBOND is fixed income, a bond, or capital-protected.
           </p>
+        </div>
+
+        <div className="mb-3 flex items-center justify-between gap-4 text-xs text-[#686b71] sm:mb-4">
+          <p>Compare the instrument, holder rights and practical risks.</p>
+          <p className="shrink-0 sm:hidden">Swipe to compare →</p>
         </div>
 
         <div
-          ref={trackRef}
-          className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-3 [scrollbar-width:none] sm:-mx-8 sm:gap-5 sm:px-8 lg:-mx-12 lg:gap-6 lg:px-12 [&::-webkit-scrollbar]:hidden"
-          role="list"
-          aria-label="OKBOND and traditional bond comparison points"
+          aria-label="Scrollable comparison of government bonds, corporate bonds, bank bonds and OKBOND"
+          className="overflow-x-auto rounded-2xl border border-[#e2ded3] bg-white shadow-[0_18px_55px_rgba(31,28,20,0.07)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b38b25]"
+          role="region"
+          tabIndex={0}
         >
-          {comparisons.map((item, index) => (
-            <article
-              key={item.badge}
-              data-bond-card
-              role="listitem"
-              className="group relative isolate flex min-h-[430px] w-[min(78vw,300px)] shrink-0 snap-start flex-col justify-end overflow-hidden rounded-[16px] border border-white/10 bg-[#151412] sm:min-h-[460px] sm:w-[300px] lg:min-h-[480px] lg:w-[calc((100%-72px)/4)]"
-            >
-              <img
-                src={item.image}
-                alt={item.alt}
-                loading={index < 3 ? "eager" : "lazy"}
-                className="absolute inset-0 -z-20 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(4,4,4,0.08)_5%,rgba(4,4,4,0.28)_35%,rgba(4,4,4,0.94)_100%)]"
-              />
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 -z-10 rounded-[16px] ring-1 ring-inset ring-white/[0.08]"
-              />
-              <div className="p-5 sm:p-6">
-                <span className="mb-3 inline-flex max-w-full items-center rounded-full border border-[#d4af37]/35 bg-black/45 px-3 py-1.5 text-[9px] font-semibold uppercase leading-tight tracking-[0.14em] text-[#f0d98f] sm:text-[10px]">
-                  {item.badge}
-                </span>
-                <h3 className="text-xl font-semibold leading-snug text-white sm:text-[22px]">
-                  {item.title}
-                </h3>
-                <p className="mt-2.5 text-sm leading-[1.65] text-white/75">
-                  {item.description}
-                </p>
-              </div>
-            </article>
-          ))}
+          <table className="w-full min-w-[1050px] table-fixed border-collapse text-left">
+            <caption className="sr-only">
+              A conceptual comparison of government, corporate and bank bonds with OKBOND.
+            </caption>
+            <colgroup>
+              <col className="w-[170px]" />
+              <col className="w-[220px]" />
+              <col className="w-[220px]" />
+              <col className="w-[220px]" />
+              <col className="w-[240px]" />
+            </colgroup>
+            <thead>
+              <tr className="border-b border-[#e2ded3] bg-[#f4f2ec]">
+                <th
+                  scope="col"
+                  className="sticky left-0 z-20 border-r border-[#e2ded3] bg-[#f4f2ec] px-4 py-5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#77766f] sm:px-5"
+                >
+                  Dimension
+                </th>
+                {columns.map((column) => (
+                  <th
+                    key={column.title}
+                    scope="col"
+                    className={`border-r border-[#e2ded3] px-4 py-5 align-top last:border-r-0 sm:px-5 ${
+                      column.featured ? "bg-[#f6f0df]" : ""
+                    }`}
+                  >
+                    <span
+                      className={`block text-sm font-semibold leading-5 ${
+                        column.featured ? "text-[#806014]" : "text-[#25272b]"
+                      }`}
+                    >
+                      {column.title}
+                    </span>
+                    <span className="mt-1 block text-xs font-normal leading-5 text-[#77766f]">
+                      {column.note}
+                    </span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {comparisonRows.map((row, rowIndex) => (
+                <tr
+                  key={row.label}
+                  className={rowIndex < comparisonRows.length - 1 ? "border-b border-[#ece9e2]" : ""}
+                >
+                  <th
+                    scope="row"
+                    className="sticky left-0 z-10 border-r border-[#e2ded3] bg-[#fbfaf7] px-4 py-5 align-top text-xs font-semibold leading-5 text-[#3e4147] sm:px-5 sm:text-sm"
+                  >
+                    {row.label}
+                  </th>
+                  {row.cells.map((cell, cellIndex) => (
+                    <td
+                      key={columns[cellIndex].title}
+                      className={`border-r border-[#ece9e2] px-4 py-5 align-top text-[13px] leading-[1.65] text-[#595d64] last:border-r-0 sm:px-5 ${
+                        cellIndex === 3 ? "bg-[#fffdf8]" : ""
+                      }`}
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
-        <div className="mt-7 flex flex-col items-center gap-5 sm:mt-8">
-          <div className="flex items-center gap-3" aria-label="Carousel controls">
-            <button
-              type="button"
-              onClick={() => move(-1)}
-              aria-label="Show previous bond comparison cards"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/[0.04] text-white transition hover:border-[#d4af37]/70 hover:bg-[#d4af37]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]"
+        <div className="mt-8 grid gap-5 rounded-2xl border border-[#e5dcc1] bg-[#f5f0e3] p-5 sm:mt-10 sm:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] sm:items-center sm:p-7">
+          <div>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#92701b]">
+              The intended shift
+            </p>
+            <h3
+              className="mt-2 text-xl font-semibold leading-snug text-[#23231f] sm:text-2xl"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
-              <ArrowLeft size={18} aria-hidden="true" />
-            </button>
-            <button
-              type="button"
-              onClick={() => move(1)}
-              aria-label="Show next bond comparison cards"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/[0.04] text-white transition hover:border-[#d4af37]/70 hover:bg-[#d4af37]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]"
-            >
-              <ArrowRight size={18} aria-hidden="true" />
-            </button>
+              From debt instruments to digital participation
+            </h3>
           </div>
+          <p className="text-sm leading-6 text-[#57564f] sm:text-[15px]">
+            Traditional bonds are debt with defined issuer obligations. OKBOND aims to explore a wallet-first token model with potential ecosystem utility and publicly viewable on-chain activity where available. It is a different category—not a one-to-one replacement for bonds—and its rights and use depend on confirmed terms, deployed code and availability.
+          </p>
+        </div>
+
+        <div className="mt-7 flex flex-col items-center gap-4 sm:mt-8">
           <a
             href="#okbond-ecosystem"
-            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/10 bg-black px-6 py-3 text-sm font-semibold text-white shadow-[0_8px_30px_rgba(0,0,0,0.28)] transition hover:border-[#d4af37]/50 hover:text-[#f0d98f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37]"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#17191e] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#34363a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b38b25] focus-visible:ring-offset-2"
           >
             Explore OKBOND Ecosystem <ArrowUpRight size={16} aria-hidden="true" />
           </a>
-          <p className="max-w-3xl text-center text-xs leading-5 text-white/45">
-            OKBOND is not a government, corporate or bank bond. Features and terms depend on verified deployed code, applicable law and confirmed availability. No return, principal protection, liquidity, prize, refund or audit is guaranteed by this comparison.
+          <p className="max-w-4xl text-center text-xs leading-5 text-[#77766f]">
+            Conceptual comparison only—not investment, legal or suitability advice. Bond features vary by issue and jurisdiction. OKBOND is not automatically a bond or repayment claim; no yield, repayment, protection, refund, liquidity, prize, reserve backing, audit or performance is guaranteed.
           </p>
         </div>
       </div>
