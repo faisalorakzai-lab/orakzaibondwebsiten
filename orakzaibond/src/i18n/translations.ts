@@ -101,7 +101,6 @@ const en: Dict = {
   "cta.tryAgain":      "Try again",
   "cta.returnHome":    "Return home",
 
-  // Marcus
 
   // Page titles / hero
   "page.founder.title":       "Chairman Faisal Orakzai",

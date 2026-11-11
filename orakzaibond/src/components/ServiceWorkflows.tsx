@@ -152,8 +152,19 @@ function FieldError({ children }: { children: ReactNode }) {
   return <p className="okbond-workflow__error" role="alert">{children}</p>;
 }
 
+function initialServiceTab(): ServiceTab {
+  if (typeof window === "undefined") return "hotel";
+  const service = new URLSearchParams(window.location.search).get("service");
+  if (service === "chauffeur") return "transport";
+  if (service === "car-rental") return "car-rental";
+  if (["buy-sell", "rentals", "installments"].includes(service || "")) return "property";
+  if (["electricity", "gas", "water", "internet-mobile"].includes(service || "")) return "utility";
+  if (service === "receipts") return "history";
+  return "hotel";
+}
+
 export default function ServiceWorkflows() {
-  const [activeTab, setActiveTab] = useState<ServiceTab>("hotel");
+  const [activeTab, setActiveTab] = useState<ServiceTab>(initialServiceTab);
   const [review, setReview] = useState<RequestDraft | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [successRecord, setSuccessRecord] = useState<ServiceRecord | null>(null);

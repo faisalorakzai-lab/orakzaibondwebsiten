@@ -1,8 +1,8 @@
 import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
-  ArrowDownRight, ArrowRight, ArrowUpRight, Building2, CarFront, Globe2, Hotel, Landmark,
-  MapPin, Plane, ReceiptText, ShieldCheck, Wifi, Zap, Flame, Droplets,
+  ArrowDownRight, ArrowRight, ArrowUpRight, Building2, CarFront, ChevronLeft, ChevronRight,
+  Globe2, Hotel, Landmark, MapPin, Plane, ReceiptText, ShieldCheck, Wifi, Zap, Flame, Droplets,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useSEO } from "@/components/SEO";
@@ -24,35 +24,52 @@ const ServiceGlobe3D = lazy(() => import("./ServiceGlobe3D"));
 
 type Service = {
   id: string; name: string; description: string; group: string;
-  icon: LucideIcon; availability: string;
+  icon: LucideIcon; availability: string; image: string;
 };
 const SERVICES: Service[] = [
-  { id: "hotels", name: "Hotel Reservations", description: "Discover a more considered way to plan your next stay.", group: "Travel & mobility", icon: Hotel, availability: "Booking integration in development" },
-  { id: "flights", name: "Flights & Travel", description: "Bring travel planning and essential trip details together.", group: "Travel & mobility", icon: Plane, availability: "Airline search in development" },
-  { id: "chauffeur", name: "Transport & Chauffeur", description: "Explore private transfers and local mobility services.", group: "Travel & mobility", icon: CarFront, availability: "Operator network in development" },
-  { id: "car-rental", name: "Rent a Car", description: "A simple starting point for future vehicle discovery.", group: "Travel & mobility", icon: ArrowUpRight, availability: "Rental inventory in development" },
-  { id: "buy-sell", name: "Buy Property", description: "Discover a future marketplace for property opportunities.", group: "Property", icon: Building2, availability: "Verified listings in development" },
-  { id: "rentals", name: "Rent Property", description: "Explore long-stay and rental discovery concepts.", group: "Property", icon: MapPin, availability: "Rental listings in development" },
-  { id: "installments", name: "Real Estate Installments", description: "Learn about future property payment-plan experiences.", group: "Property", icon: Landmark, availability: "Plans and transactions in development" },
-  { id: "electricity", name: "Electricity Bills", description: "A clear route to future electricity bill services.", group: "Everyday utilities", icon: Zap, availability: "Utility provider connection in development" },
-  { id: "gas", name: "Gas Bills", description: "Keep essential household utility payments in view.", group: "Everyday utilities", icon: Flame, availability: "Utility provider connection in development" },
-  { id: "water", name: "Water Bills", description: "A future-ready utility experience for water services.", group: "Everyday utilities", icon: Droplets, availability: "Utility provider connection in development" },
-  { id: "internet-mobile", name: "Internet & Mobile Top-ups", description: "Explore future connectivity and mobile top-up options.", group: "Everyday utilities", icon: Wifi, availability: "Telecom connection in development" },
-  { id: "receipts", name: "Transaction Receipts & Billing", description: "A planned home for service records and transaction receipts.", group: "Everyday utilities", icon: ReceiptText, availability: "Billing services in development" },
+  { id: "hotels", name: "Hotel Reservations", description: "Plan a more considered stay with a clear request path for your next destination.", group: "Travel & mobility", icon: Hotel, availability: "Request-led service", image: "/services/hotel-reservations.jpg" },
+  { id: "flights", name: "Flights & Travel", description: "Bring travel planning and essential trip details together in one place.", group: "Travel & mobility", icon: Plane, availability: "Request-led service", image: "/services/flights-travel.jpg" },
+  { id: "chauffeur", name: "Transport & Chauffeur", description: "Explore private transfers and local mobility through a direct inquiry.", group: "Travel & mobility", icon: CarFront, availability: "Request-led service", image: "/services/transport-chauffeur.jpg" },
+  { id: "car-rental", name: "Rent a Car", description: "Start a vehicle request for future discovery, rental and driver support.", group: "Travel & mobility", icon: ArrowUpRight, availability: "Request-led service", image: "/services/rent-a-car.jpg" },
+  { id: "buy-sell", name: "Buy Property", description: "Begin a property discovery request for opportunities that fit your brief.", group: "Property", icon: Building2, availability: "Request-led service", image: "/services/buy-property.jpg" },
+  { id: "rentals", name: "Rent Property", description: "Share your location, budget and timeline for a focused rental request.", group: "Property", icon: MapPin, availability: "Request-led service", image: "/services/rent-property.jpg" },
+  { id: "installments", name: "Real Estate Installments", description: "Ask about future payment-plan experiences for real-estate opportunities.", group: "Property", icon: Landmark, availability: "Request-led service", image: "/services/real-estate-installments.jpg" },
+  { id: "electricity", name: "Electricity Bills", description: "Send an electricity service request with your provider and reference details.", group: "Everyday utilities", icon: Zap, availability: "Request-led service", image: "/services/electricity-bills.jpg" },
+  { id: "gas", name: "Gas Bills", description: "Keep essential gas utility support moving through a simple request.", group: "Everyday utilities", icon: Flame, availability: "Request-led service", image: "/services/gas-bills.jpg" },
+  { id: "water", name: "Water Bills", description: "Share your water utility details for a clear next step from the team.", group: "Everyday utilities", icon: Droplets, availability: "Request-led service", image: "/services/water-bills.jpg" },
+  { id: "internet-mobile", name: "Internet & Mobile Top-ups", description: "Explore a clear request path for connectivity and mobile support.", group: "Everyday utilities", icon: Wifi, availability: "Request-led service", image: "/services/internet-mobile-topups.jpg" },
+  { id: "receipts", name: "Transaction Receipts & Billing", description: "Keep service records and transaction receipt requests in one place.", group: "Everyday utilities", icon: ReceiptText, availability: "Request-led service", image: "/services/transaction-receipts-billing.jpg" },
 ];
 function inquiryHref(service: string) {
-  void service;
-  return "#service-workflows";
+  return `?service=${encodeURIComponent(service)}#service-workflows`;
 }
-function ServiceCard({ service, index }: { service: Service; index: number }) {
-  const Icon = service.icon;
+function ServiceCarousel() {
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const reduceMotion = useReducedMotion();
-  return <motion.article className="service-market-card" initial={reduceMotion ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.12 }} transition={{ duration: reduceMotion ? 0 : 0.45, delay: reduceMotion ? 0 : (index % 4) * 0.055 }}>
-    <div className="service-market-card__top"><span className="service-market-card__icon"><Icon size={21} strokeWidth={1.55} aria-hidden="true" /></span><span className="service-market-card__group">{service.group}</span></div>
-    <h3>{service.name}</h3><p className="service-market-card__description">{service.description}</p>
-    <div className="service-market-card__status"><span aria-hidden="true" />{service.availability}</div>
-    <a className="service-market-card__action" href={inquiryHref(service.name)} aria-label={`View ${service.name} service`}>View Service <ArrowRight size={15} aria-hidden="true" /></a>
-  </motion.article>;
+  const moveTo = (next: number) => {
+    const index = (next + SERVICES.length) % SERVICES.length;
+    setActiveIndex(index);
+    carouselRef.current?.children[index]?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest", inline: "center" });
+  };
+  const onScroll = () => {
+    const element = carouselRef.current;
+    if (!element) return;
+    const center = element.scrollLeft + element.clientWidth / 2;
+    const index = Array.from(element.children).reduce((best, child, i) => {
+      const box = (child as HTMLElement).offsetLeft + (child as HTMLElement).offsetWidth / 2;
+      return Math.abs(box - center) < Math.abs((element.children[best] as HTMLElement).offsetLeft + (element.children[best] as HTMLElement).offsetWidth / 2 - center) ? i : best;
+    }, 0);
+    setActiveIndex(index);
+  };
+  return <section className="service-carousel" aria-labelledby="service-carousel-title">
+    <div className="service-carousel__heading"><div><p className="service-eyebrow"><span /> THE OKBOND SERVICE NETWORK</p><h2 id="service-carousel-title">Services that move<br /><em>with your world.</em></h2></div><div className="service-carousel__controls"><span>{String(activeIndex + 1).padStart(2, "0")} / {String(SERVICES.length).padStart(2, "0")}</span><button type="button" aria-label="Previous service" onClick={() => moveTo(activeIndex - 1)}><ChevronLeft size={18} /></button><button type="button" aria-label="Next service" onClick={() => moveTo(activeIndex + 1)}><ChevronRight size={18} /></button></div></div>
+    <div ref={carouselRef} className="service-carousel__track" onScroll={onScroll} role="region" aria-label="OKBOND services" tabIndex={0}>
+      {SERVICES.map((service, index) => { const Icon = service.icon; return <motion.article className="service-slide" key={service.id} style={{ backgroundImage: `url(${service.image})` }} initial={reduceMotion ? false : { opacity: 0.7, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: false, amount: 0.55 }} transition={{ duration: reduceMotion ? 0 : 0.45 }} aria-label={service.name}>
+        <div className="service-slide__scrim" /><div className="service-slide__content"><div className="service-slide__meta"><span><Icon size={16} /> {service.group}</span><span>{String(index + 1).padStart(2, "0")}</span></div><div><p className="service-slide__availability">{service.availability}</p><h3>{service.name}</h3><p className="service-slide__description">{service.description}</p><a className="service-slide__action" href={inquiryHref(service.id)}>Get Started <ArrowRight size={16} /></a></div></div>
+      </motion.article>; })}
+    </div><div className="service-carousel__dots" aria-label="Choose a service slide">{SERVICES.map((service, index) => <button key={service.id} type="button" aria-label={`Show ${service.name}`} aria-current={index === activeIndex ? "true" : undefined} onClick={() => moveTo(index)}><span /></button>)}</div>
+  </section>;
 }
 function GlobeScene() {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
@@ -105,7 +122,7 @@ export default function ICOPage() {
       <div className="service-hero__actions"><a className="service-button service-button--gold" href="#service-catalog">Explore Services <ArrowDownRight size={16} /></a><a className="service-button service-button--quiet" href="#service-catalog">Explore Properties <ArrowRight size={16} /></a></div>
       <div className="service-hero__assurance"><span><ShieldCheck size={15} /> Built for clarity</span><i /><span><Globe2 size={15} /> One connected vision</span></div>
     </div><GlobeScene /><div className="service-hero__index"><span>OKBOND</span><span>01 — 04 / SERVICE NETWORK</span></div></section>
-    <section className="service-catalog" id="service-catalog" aria-labelledby="service-catalog-title"><div className="service-catalog__heading"><div><p className="service-eyebrow"><span /> THE OKBOND SERVICE NETWORK</p><h2 id="service-catalog-title">Everyday services.<br /><em>Elegantly connected.</em></h2></div><p>Explore the full service network and choose a clear next step. Each request opens the existing OKBOND workflow center.</p></div><div className="service-category-grid">{SERVICES.map((service, index) => <ServiceCard key={service.id} service={service} index={index} />)}</div></section>
+    <ServiceCarousel />
     <ServiceWorkflows />
   </div></div>;
 }
