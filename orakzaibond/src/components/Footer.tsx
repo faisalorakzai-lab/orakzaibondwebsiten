@@ -162,7 +162,7 @@ export default function Footer() {
             &copy; 2026 Orakzai Bond. All rights reserved.
           </p>
           <p className="text-muted-foreground text-xs font-mono">
-            Contract: <span className="text-primary/80">0x6F53...472a</span>
+            Contract: <span className="text-primary/80">0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F</span>
           </p>
         </div>
       </div>
