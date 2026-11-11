@@ -26,3 +26,23 @@
 .service-globe-stage__scene canvas{display:block;width:100%;height:100%}
 .service-globe-stage__fallback{display:grid;width:100%;height:100%;place-items:center}
 .service-globe-stage__fallback{position:absolute;inset:0}
+
+/* Compact luxury service catalog — intentionally scoped below the unchanged globe hero. */
+.service-catalog{padding:78px 0 76px;border-top:1px solid rgba(222,193,124,.14)}
+.service-catalog__heading{display:grid;grid-template-columns:1fr .72fr;align-items:end;gap:48px;margin-bottom:34px}
+.service-catalog__heading h2{margin:16px 0 0;font-family:'Playfair Display',Georgia,serif;font-size:clamp(38px,4.4vw,55px);font-weight:500;line-height:1.05;letter-spacing:-.03em}
+.service-catalog__heading>p{max-width:390px;margin:0 0 4px;color:#a2a29a;font-size:12px;line-height:1.8}
+.service-catalog .service-category-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.service-catalog .service-market-card{min-height:236px;padding:21px 20px 18px;border-radius:2px;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.012) 58%),#10110e}
+.service-catalog .service-market-card__top{align-items:flex-start}
+.service-catalog .service-market-card__icon{width:42px;height:42px;border-radius:2px;background:linear-gradient(145deg,rgba(219,181,91,.13),rgba(255,255,255,.02));color:#e6c875}
+.service-catalog .service-market-card__group{margin:5px 0 0;color:#998d70;font-size:8px;letter-spacing:.14em;text-align:right}
+.service-catalog .service-market-card h3{margin:22px 0 0;font-family:'Playfair Display',Georgia,serif;font-size:20px;font-weight:500;letter-spacing:-.01em}
+.service-catalog .service-market-card__description{min-height:38px;margin:8px 0 14px;color:#a3a39a;font-size:10px;line-height:1.65}
+.service-catalog .service-market-card__status{color:#8d9c8d;font-size:8px;letter-spacing:.02em}
+.service-catalog .service-market-card__status span{background:#8eb596;box-shadow:0 0 9px rgba(142,181,150,.5)}
+.service-catalog .service-market-card__action{margin-top:auto;padding-top:15px;border-top:1px solid rgba(224,193,119,.12);color:#e2c77c;font-size:10px;letter-spacing:.04em}
+.service-catalog .service-market-card__action svg{transition:transform .2s ease}
+.service-catalog .service-market-card:hover .service-market-card__action svg{transform:translateX(3px)}
+@media(max-width:1000px){.service-catalog__heading{grid-template-columns:1fr .9fr;gap:28px}.service-catalog .service-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.service-catalog{padding:57px 0 54px}.service-catalog__heading{grid-template-columns:1fr;gap:13px;margin-bottom:23px}.service-catalog__heading h2{font-size:38px}.service-catalog__heading>p{font-size:11px;line-height:1.7}.service-catalog .service-category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.service-catalog .service-market-card{min-height:238px;padding:13px 12px 12px}.service-catalog .service-market-card__icon{width:34px;height:34px}.service-catalog .service-market-card__icon svg{width:17px}.service-catalog .service-market-card__group{margin-top:3px;font-size:6px;line-height:1.4}.service-catalog .service-market-card h3{margin-top:15px;font-size:15px;line-height:1.18}.service-catalog .service-market-card__description{min-height:54px;margin-top:7px;font-size:8px;line-height:1.55}.service-catalog .service-market-card__status{font-size:7px;line-height:1.35}.service-catalog .service-market-card__action{padding-top:11px;font-size:8px}}
