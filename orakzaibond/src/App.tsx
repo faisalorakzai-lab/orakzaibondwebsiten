@@ -47,8 +47,8 @@ import SecurityPage from "./pages/SecurityPage";
 import RegistryPage from "./pages/RegistryPage";
 import ServiceExplorerPage from "./pages/ServiceExplorerPage";
 import LiveVaultStatus from "./components/LiveVaultStatus";
-import SovereignGuarantee from "./components/SovereignGuarantee";
 import BuiltForCarousel from "./components/BuiltForCarousel";
+import TraditionalBondCarousel from "./components/TraditionalBondCarousel";
 // import MarcusOrb from "./components/MarcusOrb";
 import PresenceGlow from "./components/PresenceGlow";
 import FilmGrain from "./components/FilmGrain";
@@ -352,16 +352,8 @@ function App() {
                 <ErrorBoundary scope="BuiltForCarousel" silent>
                   <BuiltForCarousel />
                 </ErrorBoundary>
-                <ErrorBoundary
-                  scope="HomeSovereignGuarantee"
-                  fallback={(_error, retry) => (
-                    <HomeSectionFallback
-                      label="Orakzai Bond overview"
-                      onRetry={retry}
-                    />
-                  )}
-                >
-                  <SovereignGuarantee />
+                <ErrorBoundary scope="TraditionalBondCarousel" silent>
+                  <TraditionalBondCarousel />
                 </ErrorBoundary>
                 <ErrorBoundary scope="OKBONDHeatmap" silent>
                   <OKBONDHeatmap />
