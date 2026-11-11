@@ -1,12 +1,44 @@
 import { motion } from "framer-motion";
-import { ArrowUpRight, Mail, MessageCircle, Send } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const socials = [
-  { name: "X", href: "https://x.com/OrakzaiBond", icon: <span className="text-lg font-semibold" aria-hidden="true">𝕏</span> },
-  { name: "Telegram", href: "https://t.me/orakzaibond", icon: <Send className="h-4 w-4" aria-hidden="true" /> },
-  { name: "WhatsApp", href: "https://whatsapp.com/channel/0029VbAyL102kNFkEZ7nyj1y", icon: <MessageCircle className="h-4 w-4" aria-hidden="true" /> },
-  { name: "Email", href: "mailto:info@orakzaibond.com", icon: <Mail className="h-4 w-4" aria-hidden="true" /> },
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/company/orakzai-bond/",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.35V9h3.413v1.561h.049c.476-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286ZM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124ZM3.555 20.452h3.564V9H3.555v11.452ZM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003Z" />
+      </svg>
+    ),
+  },
+  {
+    name: "Facebook",
+    href: "https://www.facebook.com/share/1DYd2B9rCL/",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+        <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.019 4.388 11.006 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.491 0-1.957.93-1.957 1.885v2.239h3.328l-.532 3.469h-2.796v8.385C19.612 23.079 24 18.092 24 12.073Z" />
+      </svg>
+    ),
+  },
+  {
+    name: "X",
+    href: "https://x.com/OrakzaiBond",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+        <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.847h-7.406l-5.8-7.584-6.637 7.584H.475l8.6-9.83L0 1.153h7.594l5.243 6.932zm-1.291 19.49h2.039L6.486 3.24H4.298z" />
+      </svg>
+    ),
+  },
+  {
+    name: "Telegram",
+    href: "https://t.me/orakzaibond",
+    icon: (
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+        <path d="M23.505 3.498a.5.5 0 0 0-.67-.47L.33 11.78a.5.5 0 0 0 .06.954l5.62 1.73 2.14 6.72a.5.5 0 0 0 .84.19l3.12-3.2 5.63 4.1a.5.5 0 0 0 .78-.3l4.98-18.24a.5.5 0 0 0 .005-.236ZM9.35 14.97l9.75-8.83-7.28 9.91a.5.5 0 0 0-.08.17l-.94 3.36-1.45-4.55Z" />
+      </svg>
+    ),
+  },
 ];
 
 const links = [
@@ -80,8 +112,8 @@ export default function Footer() {
               key={social.name}
               href={social.href}
               aria-label={social.name}
-              target={social.href.startsWith("mailto:") ? undefined : "_blank"}
-              rel={social.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+              target="_blank"
+              rel="noopener noreferrer"
               className={socialLinkClass}
               data-testid={`link-social-${social.name.toLowerCase()}`}
             >
