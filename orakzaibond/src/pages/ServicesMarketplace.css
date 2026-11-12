@@ -130,3 +130,7 @@
 .service-slide__image{margin-top:118px;border-color:#9b864c;background-color:#14150f;box-shadow:0 12px 28px rgba(0,0,0,.3)}.service-slide:nth-child(3n+2) .service-slide__image{border-color:#b39b5c}.service-slide:nth-child(3n) .service-slide__image{border-color:#8d865b}.service-slide:nth-child(4n) .service-slide__image{border-color:#9b7657}
 .service-slide__top-meta{color:#e1c475}.service-slide__top-meta svg{color:#e7c977}.service-slide__top-meta span:last-child{color:rgba(240,222,174,.7)}.service-slide__footer{background:#10110e}.service-slide__action{background:#e9c979;color:#16140d;box-shadow:0 10px 25px rgba(205,164,63,.18)}.service-slide__action:hover{background:#f4dda0;color:#16140d}.service-carousel__dots button span{background:rgba(226,200,125,.26)}.service-carousel__dots button[aria-current="true"] span{background:#e6c879}
 @media(max-width:680px){.service-slide{min-height:655px}.service-slide__backdrop-title{top:42px;font-size:clamp(52px,14vw,82px)}.service-slide__image{margin-top:99px}}
+
+/* Redline cleanup: the card begins directly after the site header; short name overlaps the frame. */
+.service-carousel{padding-top:28px}.service-carousel__track{padding-top:0}.service-slide__backdrop-title{top:78px}.service-slide__image{margin-top:137px}.service-carousel__dots{margin-top:20px}
+@media(max-width:680px){.service-carousel{padding-top:22px}.service-slide__backdrop-title{top:58px}.service-slide__image{margin-top:112px}}

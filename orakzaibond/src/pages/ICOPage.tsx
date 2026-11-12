@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
-  ArrowDownRight, ArrowRight, ArrowUpRight, Building2, CarFront, ChevronLeft, ChevronRight,
+  ArrowDownRight, ArrowRight, ArrowUpRight, Building2, CarFront,
   Globe2, Hotel, Landmark, MapPin, Plane, ReceiptText, ShieldCheck, Wifi, Zap, Flame, Droplets,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -62,11 +62,10 @@ function ServiceCarousel() {
     }, 0);
     setActiveIndex(index);
   };
-  return <section className="service-carousel" aria-labelledby="service-carousel-title">
-    <div className="service-carousel__heading"><div><p className="service-eyebrow"><span /> THE OKBOND SERVICE NETWORK</p><h2 id="service-carousel-title">Services that move<br /><em>with your world.</em></h2></div><div className="service-carousel__controls"><span>{String(activeIndex + 1).padStart(2, "0")} / {String(SERVICES.length).padStart(2, "0")}</span><button type="button" aria-label="Previous service" onClick={() => moveTo(activeIndex - 1)}><ChevronLeft size={18} /></button><button type="button" aria-label="Next service" onClick={() => moveTo(activeIndex + 1)}><ChevronRight size={18} /></button></div></div>
+  return <section className="service-carousel" aria-label="OKBOND services">
     <div ref={carouselRef} className="service-carousel__track" onScroll={onScroll} role="region" aria-label="OKBOND services" tabIndex={0}>
-      {SERVICES.map((service, index) => { const Icon = service.icon; return <motion.article className="service-slide" key={service.id} initial={reduceMotion ? false : { opacity: 0.72, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: false, amount: 0.55 }} transition={{ duration: reduceMotion ? 0 : 0.45 }} aria-label={service.name}>
-        <span className="service-slide__backdrop-title" aria-hidden="true">{service.shortName}</span><div className="service-slide__image" style={{ backgroundImage: `url(${service.image})` }}><div className="service-slide__scrim" /><div className="service-slide__top-meta"><span><Icon size={16} /> {service.group}</span><span>{String(index + 1).padStart(2, "0")}</span></div><div className="service-slide__image-copy"><p className="service-slide__availability">{service.availability}</p><h3>{service.name}</h3><p className="service-slide__description">{service.description}</p></div></div><div className="service-slide__footer"><a className="service-slide__action" href={inquiryHref(service.id)}>Get Started <ArrowRight size={16} /></a></div>
+      {SERVICES.map((service) => { return <motion.article className="service-slide" key={service.id} initial={reduceMotion ? false : { opacity: 0.72, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: false, amount: 0.55 }} transition={{ duration: reduceMotion ? 0 : 0.45 }} aria-label={service.name}>
+        <span className="service-slide__backdrop-title" aria-hidden="true">{service.shortName}</span><div className="service-slide__image" style={{ backgroundImage: `url(${service.image})` }}><div className="service-slide__scrim" /><div className="service-slide__image-copy"><p className="service-slide__availability">{service.availability}</p><h3>{service.name}</h3><p className="service-slide__description">{service.description}</p></div></div><div className="service-slide__footer"><a className="service-slide__action" href={inquiryHref(service.id)}>Get Started <ArrowRight size={16} /></a></div>
       </motion.article>; })}
     </div><div className="service-carousel__dots" aria-label="Choose a service slide">{SERVICES.map((service, index) => <button key={service.id} type="button" aria-label={`Show ${service.name}`} aria-current={index === activeIndex ? "true" : undefined} onClick={() => moveTo(index)}><span /></button>)}</div>
   </section>;
