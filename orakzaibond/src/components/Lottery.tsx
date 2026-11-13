@@ -13,7 +13,7 @@ import LOTTERY_ABI from "@/lib/contractABI.json";
 
 // ── Addresses ────────────────────────────────────────────────────────────────
 const LOTTERY_ADDRESS = "0x5BC55d4b347e39B986864E28604Ddca5dE6357B7";
-const TOKEN_ADDRESS   = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
+const TOKEN_ADDRESS   = "0xA61aA3460561A91A7402A3F32413e7253fE75bDa";
 const EXPLORER        = "https://polygonscan.com";
 const READ_RPCS        = ["https://polygon-bor-rpc.publicnode.com", "https://rpc.ankr.com/polygon"];
 

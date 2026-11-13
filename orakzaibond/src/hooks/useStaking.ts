@@ -4,7 +4,7 @@ import STAKING_ABI from "@/abi/StakingContract.json";
 import OKBOND_ABI from "@/abi/OKBONDToken.json";
 
 export const STAKING_ADDRESS = "0x5067e9E4Ef827cE0Cc06a44B786668522732fB4e";
-export const OKBOND_ADDRESS  = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
+export const OKBOND_ADDRESS  = "0xA61aA3460561A91A7402A3F32413e7253fE75bDa";
 const POLYGON_RPC = "https://polygon-bor-rpc.publicnode.com";
 export const LOCK_PERIODS = [30, 90, 180, 365] as const;
 

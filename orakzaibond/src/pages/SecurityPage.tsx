@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 
 const CONTRACTS = [
-  { label: "OKBOND Token",      addr: "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F", type: "ERC-20 Token",       verified: true },
+  { label: "OKBOND Token",      addr: "0xA61aA3460561A91A7402A3F32413e7253fE75bDa", type: "ERC-20 Token",       verified: true },
   { label: "ICO Contract",      addr: "0x7BB2458740c4F491277973212309d831385Ab9D7", type: "Token Sale",          verified: true },
   { label: "Vault",             addr: "0x3Cb45d2022e2E15AFa8C4822647B89935a2ceD08", type: "Reserve Vault",       verified: true },
   { label: "Staking",           addr: "0x5067e9E4Ef827cE0Cc06a44B786668522732fB4e", type: "Staking Protocol",    verified: true },

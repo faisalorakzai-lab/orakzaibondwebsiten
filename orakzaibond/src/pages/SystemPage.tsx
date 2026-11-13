@@ -17,7 +17,7 @@ import LOTTERY_ABI from "@/lib/contractABI.json";
 import { fetchRecentDispatches, type Dispatch } from "@/lib/dispatchBus";
 
 /* ── Live Contract Addresses (Polygon Mainnet) ───────────────────────── */
-const TOKEN_ADDRESS    = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
+const TOKEN_ADDRESS    = "0xA61aA3460561A91A7402A3F32413e7253fE75bDa";
 const ICO_ADDRESS      = "0x7BB2458740c4F491277973212309d831385Ab9D7";
 const REFERRAL_ADDRESS = "0x7BB2458740c4F491277973212309d831385Ab9D7";
 const LOTTERY_ADDRESS  = "0x5bc55d4b347e39b986864e28604ddca5de6357b7";

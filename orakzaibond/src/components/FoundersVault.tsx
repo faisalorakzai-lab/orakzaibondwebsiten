@@ -23,7 +23,7 @@ import { useWallet } from "@/hooks/useWallet";
 import { broadcastDispatch, fetchRecentDispatches, unpinDispatch, type Dispatch } from "@/lib/dispatchBus";
 import ReserveControlPanel from "./ReserveControlPanel";
 
-const TOKEN_ADDRESS    = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
+const TOKEN_ADDRESS    = "0xA61aA3460561A91A7402A3F32413e7253fE75bDa";
 const ICO_ADDRESS      = "0x7BB2458740c4F491277973212309d831385Ab9D7";
 const REFERRAL_ADDRESS = "0x7BB2458740c4F491277973212309d831385Ab9D7";
 const LOTTERY_ADDRESS  = "0xCF82D9ED107bE2217Ead6ccd4ffc851f71aa38F8";

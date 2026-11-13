@@ -128,7 +128,7 @@ export default function SecuritySection() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  const AUDIT_LINK = "https://solidityscan.com/quickscan/0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F/polygonscan/mainnet?ref=etherscan";
+  const AUDIT_LINK = "https://solidityscan.com/quickscan/0xA61aA3460561A91A7402A3F32413e7253fE75bDa/polygonscan/mainnet?ref=etherscan";
 
   return (
     <section id="security" className="py-28 relative overflow-hidden"
@@ -268,7 +268,7 @@ export default function SecuritySection() {
                 <div>
                   <p className="text-2xl font-black text-foreground">Scan pending</p>
                   <p className="text-sm font-bold text-emerald-400">No audit report submitted</p>
-                  <p className="text-[10px] text-foreground/40 mt-1 font-mono">CONTRACT: 0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F · POLYGON</p>
+                  <p className="text-[10px] text-foreground/40 mt-1 font-mono">CONTRACT: 0xA61aA3460561A91A7402A3F32413e7253fE75bDa · POLYGON</p>
                 </div>
               </div>
             </div>
@@ -293,7 +293,7 @@ export default function SecuritySection() {
             {/* Contract address */}
             <div className="px-4 py-3 rounded-xl font-mono text-[10px] text-foreground/40 truncate"
               style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-              Contract: 0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F
+              Contract: 0xA61aA3460561A91A7402A3F32413e7253fE75bDa
             </div>
 
             {/* CTA button */}

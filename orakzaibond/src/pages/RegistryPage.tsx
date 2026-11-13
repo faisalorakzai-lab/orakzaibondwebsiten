@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 
 const KNOWN_CONTRACTS: Record<string, { name: string; type: string; color: string }> = {
-  "0xc89729da02a8c2e282ec3070a9a680e01be2e22f": { name: "OKBOND Token",      type: "ERC-20 Token",      color: "text-yellow-400" },
+  "0xA61aA3460561A91A7402A3F32413e7253fE75bDa": { name: "OKBOND Token",      type: "ERC-20 Token",      color: "text-yellow-400" },
   "0x7bb2458740c4f491277973212309d831385ab9d7": { name: "ICO Contract",      type: "Token Sale",        color: "text-blue-400" },
   "0x3cb45d2022e2e15afa8c4822647b89935a2ced08": { name: "Vault",             type: "Reserve Vault",     color: "text-emerald-400" },
   "0x5067e9e4ef827ce0cc06a44b786668522732fb4e": { name: "Staking",           type: "Staking Protocol",  color: "text-purple-400" },
@@ -27,7 +27,7 @@ function formatDate(ts: number): string {
 }
 
 const FALLBACK_ENTRIES = [
-  { address: "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F", name: "OKBOND Token",      version: "v1.0", deployedAt: 1700000000, verified: true,  codeHash: "0x" },
+  { address: "0xA61aA3460561A91A7402A3F32413e7253fE75bDa", name: "OKBOND Token",      version: "v1.0", deployedAt: 1700000000, verified: true,  codeHash: "0x" },
   { address: "0x7BB2458740c4F491277973212309d831385Ab9D7", name: "ICO Contract",      version: "v1.0", deployedAt: 1700100000, verified: true,  codeHash: "0x" },
   { address: "0x3Cb45d2022e2E15AFa8C4822647B89935a2ceD08", name: "Vault",             version: "v1.0", deployedAt: 1700200000, verified: true,  codeHash: "0x" },
   { address: "0x5067e9E4Ef827cE0Cc06a44B786668522732fB4e", name: "Staking",           version: "v1.0", deployedAt: 1700300000, verified: true,  codeHash: "0x" },

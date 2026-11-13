@@ -27,7 +27,7 @@ const TABS: { id: TabId; label: string; icon: typeof Wallet }[] = [
 // Addresses are copied from the configured frontend contracts and deployment manifest.
 // “Exact-match” is only used where the repository manifest records a PolygonScan source match.
 const CONTRACTS = [
-  { name: "OKBOND Token", address: "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F", source: "Exact-match · deployment manifest" },
+  { name: "OKBOND Token", address: "0xA61aA3460561A91A7402A3F32413e7253fE75bDa", source: "Exact-match · deployment manifest" },
   { name: "ICO", address: "0x7BB2458740c4F491277973212309d831385Ab9D7", source: "Exact-match · deployment manifest" },
   { name: "Staking", address: "0x5067e9E4Ef827cE0Cc06a44B786668522732fB4e", source: "Verification not confirmed in deployment manifest" },
   { name: "Lottery", address: "0x5BC55d4b347e39B986864E28604Ddca5dE6357B7", source: "Exact-match · deployment manifest" },

@@ -25,7 +25,7 @@ import { useFounderRank, setFounderRank, FOUNDER_RANK_DEFAULT } from "@/hooks/us
 // ── Constants ─────────────────────────────────────────────────────────────────
 const ADMIN_WALLET    = "0x9b02e2Edd6F58D626aAa91889708dbF39dfa8Cd7";
 const LOTTERY_ADDRESS = "0x5bc55d4b347e39b986864e28604ddca5de6357b7";
-const TOKEN_ADDRESS   = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
+const TOKEN_ADDRESS   = "0xA61aA3460561A91A7402A3F32413e7253fE75bDa";
 const REFERRAL_CONTRACT = "0x7BB2458740c4F491277973212309d831385Ab9D7";
 const EXPLORER        = "https://polygonscan.com";
 
@@ -1496,7 +1496,7 @@ function LegalCMSPanel() {
         <h3 className="font-bold text-foreground flex items-center gap-2"><Info className="w-4 h-4 text-primary" /> Live Page Data Sources</h3>
         <div className="space-y-2 text-sm text-muted-foreground">
           <div className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-green-400 shrink-0" /> <span>Polygon Mainnet RPC — live totalSupply &amp; holder count (fetched client-side)</span></div>
-          <div className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-green-400 shrink-0" /> <span>OKBOND contract: 0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F</span></div>
+          <div className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-green-400 shrink-0" /> <span>OKBOND contract: 0xA61aA3460561A91A7402A3F32413e7253fE75bDa</span></div>
           <div className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-green-400 shrink-0" /> <span>Document vault: /public/docs/whitepaper.pdf &amp; marketing.pdf</span></div>
           <div className="flex items-center gap-2"><AlertTriangle className="w-3.5 h-3.5 text-yellow-400 shrink-0" /> <span>SECP status: update the LegalPage.tsx corporate entity section when registration is confirmed</span></div>
         </div>

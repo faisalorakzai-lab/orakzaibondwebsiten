@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useLiveBlockchainData } from "@/hooks/useLiveBlockchainData";
 
-const OKBOND_CONTRACT = "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F";
+const OKBOND_CONTRACT = "0xA61aA3460561A91A7402A3F32413e7253fE75bDa";
 const POLYGONSCAN_URL = `https://polygonscan.com/token/${OKBOND_CONTRACT}`;
 const POLYGONSCAN_ADDRESS = `https://polygonscan.com/address/${OKBOND_CONTRACT}`;
 
@@ -94,7 +94,7 @@ const ASSETS = [
 ];
 
 const CONTRACTS_ON_CHAIN = [
-  { label: "OKBOND Token",      addr: "0xc89729DA02a8c2E282EC3070A9a680E01bE2E22F", type: "ERC-20" },
+  { label: "OKBOND Token",      addr: "0xA61aA3460561A91A7402A3F32413e7253fE75bDa", type: "ERC-20" },
   { label: "ICO Contract",      addr: "0x7BB2458740c4F491277973212309d831385Ab9D7", type: "Token Sale" },
   { label: "Staking",           addr: "0x5067e9E4Ef827cE0Cc06a44B786668522732fB4e", type: "Staking" },
   { label: "Vault",             addr: "0x3Cb45d2022e2E15AFa8C4822647B89935a2ceD08", type: "Reserve Vault" },
