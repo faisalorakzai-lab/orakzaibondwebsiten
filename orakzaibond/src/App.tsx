@@ -45,6 +45,7 @@ import SecurityPage from "./pages/SecurityPage";
 import RegistryPage from "./pages/RegistryPage";
 import ServiceExplorerPage from "./pages/ServiceExplorerPage";
 import BuiltForCarousel from "./components/BuiltForCarousel";
+import EcosystemDiscovery from "./components/EcosystemDiscovery";
 import TraditionalBondCarousel from "./components/TraditionalBondCarousel";
 import PresenceGlow from "./components/PresenceGlow";
 import FilmGrain from "./components/FilmGrain";
@@ -327,6 +328,9 @@ function App() {
                   )}
                 >
                   <Hero onConnect={connect} address={address} />
+                </ErrorBoundary>
+                <ErrorBoundary scope="EcosystemDiscovery" silent>
+                  <EcosystemDiscovery />
                 </ErrorBoundary>
                 <ErrorBoundary scope="BuiltForCarousel" silent>
                   <BuiltForCarousel />
