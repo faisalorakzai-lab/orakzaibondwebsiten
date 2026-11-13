@@ -155,9 +155,8 @@
 @media(max-width:680px){.global-services-hub{margin-inline:-18px;padding:59px 18px 68px}.global-services-hub__heading{grid-template-columns:1fr;gap:18px;margin-bottom:31px}.global-services-hub__heading h2{font-size:47px}.global-services-hub__heading>p{font-size:11px}.global-country-panel{grid-template-columns:1fr;gap:18px;margin-bottom:47px;padding:18px 15px}.global-country-panel__copy h3{font-size:25px}.global-country-select{padding:10px}.global-country-directory{right:15px;bottom:-280px;width:calc(100% - 30px)}.global-services-hub__subhead{align-items:start;flex-direction:column;gap:13px}.global-services-hub__subhead h3{font-size:31px}.global-category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.global-category-card{min-height:132px;padding:12px}.global-category-card strong{font-size:10px}.global-category-card small{font-size:7px}.global-country-status{font-size:8px}.global-services-hub__notice{font-size:8px}}
 @media(prefers-reduced-motion:reduce){.global-category-card{transition:none}.global-category-card:hover{transform:none}}
 
-/* Final card correction: expose the service name behind the upper half of the image. */
+/* Minimal correction only: keep swipe, hide pagination marks, reveal the existing name layer. */
 .service-carousel__dots{display:none!important}
-.service-slide__title{display:block!important;position:absolute;z-index:0;top:-3px;right:auto;left:-8px;width:calc(100% + 16px);margin:0;padding:0;color:#e7c977;font-family:'Playfair Display',Georgia,serif;font-size:clamp(42px,5vw,70px);font-weight:600;line-height:.82;letter-spacing:-.06em;text-align:left;text-shadow:0 2px 0 rgba(255,235,164,.18),0 15px 28px rgba(0,0,0,.3);white-space:nowrap;pointer-events:none}
-.service-slide__image{z-index:1;margin-top:48px}
-.service-slide__image-copy{z-index:2}
-@media(max-width:680px){.service-slide__title{top:-2px;left:-5px;width:calc(100% + 10px);font-size:48px}.service-slide__image{margin-top:42px}}
+.service-carousel{padding-top:42px}
+.service-slide__image{margin-top:58px}
+@media(max-width:680px){.service-carousel{padding-top:34px}.service-slide__image{margin-top:48px}}
