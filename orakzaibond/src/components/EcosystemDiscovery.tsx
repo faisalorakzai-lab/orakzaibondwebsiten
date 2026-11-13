@@ -6,6 +6,7 @@ import {
   Layers3,
   LockKeyhole,
   ShieldCheck,
+  Ticket,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import "./EcosystemDiscovery.css";
@@ -57,6 +58,17 @@ const PILLARS: EcosystemPillar[] = [
   },
   {
     number: "04",
+    eyebrow: "Lottery & draws",
+    title: "Review before entering",
+    description:
+      "A live Polygon lottery interface with an on-chain terminal, published mechanics and contract transparency to review before connecting a wallet.",
+    availability: "Lottery terminal · Live contract interface",
+    icon: Ticket,
+    href: "/lottery",
+    linkLabel: "Review lottery",
+  },
+  {
+    number: "05",
     eyebrow: "Transparency & security",
     title: "Verify the foundations",
     description:
@@ -100,6 +112,16 @@ export default function EcosystemDiscovery() {
       aria-labelledby="okbond-discovery-title"
     >
       <div className="okbond-discovery__ambient" aria-hidden="true" />
+      <div className="okbond-discovery__orbital-scene" aria-hidden="true">
+        <div className="okbond-discovery__orbital-core"><span>OK</span></div>
+        <i className="okbond-discovery__orbital-ring orbital-ring--one" />
+        <i className="okbond-discovery__orbital-ring orbital-ring--two" />
+        <i className="okbond-discovery__orbital-ring orbital-ring--three" />
+        <b className="orbital-node orbital-node--one" />
+        <b className="orbital-node orbital-node--two" />
+        <b className="orbital-node orbital-node--three" />
+        <b className="orbital-node orbital-node--four" />
+      </div>
       <div className="okbond-discovery__container">
         <header className="okbond-discovery__header">
           <p className="okbond-discovery__eyebrow">
@@ -153,7 +175,7 @@ export default function EcosystemDiscovery() {
         </div>
 
         <div className="okbond-discovery__bottomline">
-          <p>Four layers. One connected direction.</p>
+          <p>Five layers. One connected direction.</p>
           <a href="/about" className="okbond-discovery__cta">
             Explore the Ecosystem <ArrowUpRight aria-hidden="true" />
           </a>

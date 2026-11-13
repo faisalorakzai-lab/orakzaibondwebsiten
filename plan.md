@@ -5,10 +5,10 @@ Insert one premium ecosystem-explanation section immediately after the existing 
 
 ## Implementation
 - Reuse the existing `EcosystemDiscovery` component and stylesheet, which are currently not mounted on the homepage.
-- Replace its service-discovery content with four non-fake ecosystem pillars: Digital Asset, Ecosystem Utilities, Staking & Participation, and Transparency & Security.
+- Replace its service-discovery content with five non-fake ecosystem pillars: Digital Asset, Ecosystem Utilities, Staking & Participation, Lottery & Draws, and Transparency & Security.
 - Mount it in `App.tsx` directly after the hero boundary.
 - Use real destinations only: `/staking`, `/documents`, `/about`, and the existing `#okbond-ecosystem` anchor.
-- Add IntersectionObserver-based entrance state and CSS motion with reduced-motion support.
+- Add IntersectionObserver-based entrance state, a lightweight CSS orbital 3D background graphic, and reduced-motion support.
 - Keep mobile cards in a vertical progression with no horizontal overflow; use a four-column connected composition at desktop widths.
 
 ## Design
