@@ -158,3 +158,10 @@
 /* Safe-only fixes: preserve the approved image design; reveal the existing title and remove dots. */
 .service-carousel__dots{display:none!important}
 .service-slide__title{display:block!important}
+
+/* Image-only finish: compact side-cut perspective, no layout or typography changes. */
+.service-slide__image{transform:perspective(1200px) rotateY(-2.5deg) translateX(5px);transform-origin:center right;box-shadow:-6px 6px 0 rgba(110,88,40,.22),0 12px 26px rgba(0,0,0,.3),inset -12px 0 18px rgba(0,0,0,.2);transition:transform .3s ease,box-shadow .3s ease}
+.service-slide__image:after{position:absolute;z-index:3;top:10px;right:-1px;bottom:12px;width:11px;border-radius:0 32px 32px 0;background:linear-gradient(90deg,transparent,rgba(0,0,0,.27));content:"";pointer-events:none}
+.service-slide:hover .service-slide__image{transform:perspective(1200px) rotateY(-1deg) translateX(3px) translateY(-2px);box-shadow:-4px 4px 0 rgba(110,88,40,.18),0 16px 30px rgba(0,0,0,.36),inset -12px 0 18px rgba(0,0,0,.17)}
+@media(max-width:680px){.service-slide__image{transform:perspective(900px) rotateY(-2deg) translateX(3px);box-shadow:-4px 4px 0 rgba(110,88,40,.2),0 10px 20px rgba(0,0,0,.28),inset -9px 0 14px rgba(0,0,0,.18)}.service-slide:hover .service-slide__image{transform:perspective(900px) rotateY(-1deg) translateX(2px) translateY(-1px)}}
+@media(prefers-reduced-motion:reduce){.service-slide__image{transform:none!important;transition:none!important}}
