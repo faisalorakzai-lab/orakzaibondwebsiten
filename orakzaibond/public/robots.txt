@@ -48,7 +48,7 @@ User-agent: Googlebot
   Allow: /ambassador
   Allow: /documents
   Allow: /contact
-  Allow: /ico
+  Allow: /services
   Allow: /lottery
   Allow: /guide
   Allow: /rules

@@ -200,7 +200,7 @@ function TabContent({ tab, address, okbondBalance, staking, stakingLoading, stak
 }) {
   switch (tab) {
     case "portfolio": return <PortfolioOverview address={address} okbondBalance={okbondBalance} staking={staking} stakingLoading={stakingLoading} stakingError={stakingError} />;
-    case "ico": return <FeatureUnavailable icon={Rocket} title="ICO contract data" description="ICO participation, terms, and current contract reads are handled by the dedicated ICO page; the portfolio does not substitute sale price for a market valuation." href="/ico" linkLabel="Open Services" />;
+    case "ico": return <FeatureUnavailable icon={Rocket} title="ICO contract data" description="ICO participation, terms, and current contract reads are handled by the dedicated ICO page; the portfolio does not substitute sale price for a market valuation." href="/services" linkLabel="Open Services" />;
     case "staking": return <StakingPanel address={address} staking={staking} loading={stakingLoading} error={stakingError} />;
     case "lottery": return <FeatureUnavailable icon={Ticket} title="Lottery activity" description="This dashboard has no wallet-specific lottery history integration. View the lottery page for the current contract status and wallet actions." href="/lottery" linkLabel="Open lottery page" />;
     case "vault": return <FeatureUnavailable icon={Landmark} title="Personal vault allocation" description="The current dashboard integration does not expose a user-specific vault position or allocation. No reserve shares are inferred." href="/vault" linkLabel="Open vault page" />;

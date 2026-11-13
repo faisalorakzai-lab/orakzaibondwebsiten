@@ -241,7 +241,7 @@ export default function Token() {
             Ready to secure your position in the Orakzai Bond ecosystem?
           </p>
           <motion.a
-            href="/ico"
+            href="/services"
             whileHover={{ scale: 1.05, boxShadow: "0 0 60px rgba(234,179,8,0.8), 0 0 100px rgba(234,179,8,0.4)" }}
             whileTap={{ scale: 0.98 }}
             className="inline-flex items-center justify-center gap-3 text-lg h-16 px-12 rounded-full font-black bg-gradient-to-r from-primary via-yellow-400 to-primary text-primary-foreground transition-all duration-300 relative overflow-hidden group"

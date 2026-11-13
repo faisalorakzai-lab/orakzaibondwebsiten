@@ -86,7 +86,7 @@
       "name": "Buy OKBOND",
       "short_name": "Buy",
       "description": "Purchase OKBOND tokens in the ICO",
-      "url": "/ico",
+      "url": "/services",
       "icons": [
         {
           "src": "/okbond-logo.png",

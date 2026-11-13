@@ -220,7 +220,7 @@ export default function GuidePage() {
             Phase 1 is LIVE at <strong className="text-primary">$0.50 / OKBOND</strong>. Listing target is <strong className="text-emerald-400">$1.00</strong> — that's a potential <strong className="text-emerald-400">+100% ROI</strong> for early investors.
           </p>
           <button
-            onClick={() => navigate("/ico")}
+            onClick={() => navigate("/services")}
             className="inline-flex items-center gap-2.5 px-10 py-4 rounded-2xl bg-primary text-primary-foreground font-extrabold text-base hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.03] active:scale-100"
           >
             Go to ICO <ArrowRight className="w-5 h-5" />

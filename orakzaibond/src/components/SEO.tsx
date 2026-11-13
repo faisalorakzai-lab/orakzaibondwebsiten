@@ -205,7 +205,7 @@ import { useEffect } from "react";
       title: "OKBOND Services & Utilities | Hotel, Transport, Property & Bill Inquiries",
       description:
         "Inquiry-only OKBOND hotel, transport, car-rental and utility services. Property cards appear only for admin-verified listings; bookings and payments are not connected.",
-      canonical: BASE_URL + "/ico",
+      canonical: BASE_URL + "/services",
     },
     dashboard: {
       title: "Dashboard — OKBOND Portfolio & Real-Time Analytics",

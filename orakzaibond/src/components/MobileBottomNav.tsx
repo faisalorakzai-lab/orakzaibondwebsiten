@@ -5,7 +5,7 @@ import { Home, Rocket, Lock, Ticket, BarChart3 } from "lucide-react";
 
 const NAV_ITEMS = [
   { href: "/",          icon: Home,     label: "Home"      },
-  { href: "/ico",       icon: Rocket,   label: "Services"  },
+  { href: "/services",       icon: Rocket,   label: "Services"  },
   { href: "/staking",   icon: Lock,     label: "Staking"   },
   { href: "/lottery",   icon: Ticket,   label: "Lottery"   },
   { href: "/dashboard", icon: BarChart3, label: "Dashboard" },

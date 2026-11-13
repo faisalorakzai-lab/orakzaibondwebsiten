@@ -271,7 +271,7 @@ export default function ReferralDashboard({ address, provider }: Props) {
   const [expandedTier, setExpandedTier] = useState<number | null>(1);
   const [modalOpen, setModalOpen] = useState(false);
 
-  const sgiLink = typeof window !== 'undefined' ? `${window.location.origin}/ico?ref=${address}` : "";
+  const sgiLink = typeof window !== 'undefined' ? `${window.location.origin}/services?ref=${address}` : "";
 
   const copyLink = () => {
     if (typeof navigator !== 'undefined' && sgiLink) {

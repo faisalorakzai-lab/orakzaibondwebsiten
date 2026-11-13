@@ -349,6 +349,9 @@ function App() {
             <Route path="/services/:slug">
               {(params) => <ServiceExplorerPage slug={params.slug} />}
             </Route>
+            <Route path="/services">
+              {() => <ICOPage />}
+            </Route>
             <Route path="/about" component={AboutPage} />
             <Route path="/founder" component={FounderPage} />
             <Route path="/ico">

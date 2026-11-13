@@ -29,7 +29,7 @@ const FAQS = [
   },
   {
     q: "How can I buy OKBOND tokens?",
-    a: "OKBOND tokens can be purchased through the Orakzai Bond ICO at orakzaibond.com/ico. Investors can also participate in staking and liquidity pools at orakzaibond.com/dashboard.",
+    a: "OKBOND tokens can be purchased through the Orakzai Bond ICO at orakzaibond.com/services. Investors can also participate in staking and liquidity pools at orakzaibond.com/dashboard.",
   },
   {
     q: "Where is Orakzai Bond headquartered?",

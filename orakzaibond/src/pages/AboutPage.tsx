@@ -481,7 +481,7 @@ export default function AboutPage() {
             </motion.p>
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-wrap gap-3 justify-center">
-              <Link href="/ico">
+              <Link href="/services">
                 <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:bg-primary/90 transition-colors cursor-pointer">
                   Explore Services <ArrowRight className="w-4 h-4" />
                 </span>

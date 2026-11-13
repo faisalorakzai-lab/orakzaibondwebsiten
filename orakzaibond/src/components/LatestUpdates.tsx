@@ -14,7 +14,7 @@ const STATIC_NEWS = [
     title: "ICO Phase 1 is officially LIVE!",
     body: "OKBOND Phase 1 is now open at $0.50/token. 333,333 OKBOND available — early investors get the best price before the listing.",
     date: "Apr 10, 2026",
-    link: "/ico",
+    link: "/services",
     external: false,
   },
   {

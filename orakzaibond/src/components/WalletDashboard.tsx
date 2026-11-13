@@ -140,7 +140,7 @@ export default function WalletDashboard({ compact = false }: WalletDashboardProp
           <Lock className="w-3.5 h-3.5" />
           Stake OKBOND
         </a>
-        <a href="/ico" className="flex items-center justify-center gap-2 py-2.5 rounded-xl bg-muted/40 border border-border/40 text-foreground text-xs font-semibold hover:border-primary/30 transition-all">
+        <a href="/services" className="flex items-center justify-center gap-2 py-2.5 rounded-xl bg-muted/40 border border-border/40 text-foreground text-xs font-semibold hover:border-primary/30 transition-all">
           <ChevronRight className="w-3.5 h-3.5" />
           Buy OKBOND
         </a>
