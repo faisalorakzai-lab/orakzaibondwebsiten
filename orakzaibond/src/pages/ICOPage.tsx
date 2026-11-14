@@ -126,18 +126,45 @@ const HUB_COUNTRIES: HubCountry[] = [
   { name: "Australia", code: "AU", dial: "+61", flag: "🇦🇺", region: "Oceania" },
   { name: "South Africa", code: "ZA", dial: "+27", flag: "🇿🇦", region: "Africa" },
 ];
-const HUB_CATEGORIES = [
-  { label: "Featured", detail: "Verified service pathways", icon: Globe2, href: "#service-workflows" },
-  { label: "Loans & Financing", detail: "Availability varies by market", icon: Landmark, href: "#service-workflows" },
-  { label: "Rent & Leasing", detail: "Property inquiry path", icon: Building2, href: "?service=rentals#service-workflows" },
-  { label: "Bill Payments", detail: "Inquiry-only utility support", icon: ReceiptText, href: "?service=electricity#service-workflows" },
-  { label: "Easyload & Mobile", detail: "Regional availability varies", icon: Wifi, href: "?service=internet-mobile#service-workflows" },
-  { label: "Government Payments", detail: "Not currently connected", icon: ShieldCheck, href: "#global-services-hub" },
-  { label: "Savings & Investment", detail: "Information only", icon: ArrowUpRight, href: "/token" },
-  { label: "Insurance", detail: "Coming soon", icon: ShieldCheck, href: "#global-services-hub" },
-  { label: "Travel & Mobility", detail: "Hotel and transport inquiries", icon: CarFront, href: "?service=transport#service-workflows" },
-  { label: "Digital Products", detail: "Explore supported paths", icon: Zap, href: "#service-workflows" },
+type HubCategory = {
+  id: string;
+  label: string;
+  detail: string;
+  icon: LucideIcon;
+  href: string;
+  services: string[];
+};
+
+const GLOBAL_CATEGORIES: HubCategory[] = [
+  { id: "featured", label: "Featured", detail: "Verified service pathways", icon: Globe2, href: "#service-workflows", services: ["Hotel inquiries", "Transport requests", "Property discovery"] },
+  { id: "financing", label: "Loans & Financing", detail: "Availability varies by market", icon: Landmark, href: "#service-workflows", services: ["Financing inquiries", "Installment pathways", "Business finance information"] },
+  { id: "rentals", label: "Rent & Leasing", detail: "Property inquiry path", icon: Building2, href: "?service=rentals#service-workflows", services: ["Residential rentals", "Commercial leasing", "Property installments"] },
+  { id: "bills", label: "Bill Payments", detail: "Inquiry-only utility support", icon: ReceiptText, href: "?service=electricity#service-workflows", services: ["Electricity bills", "Gas bills", "Water bills", "Internet bills"] },
+  { id: "easyload", label: "Easyload & Mobile", detail: "Regional availability varies", icon: Wifi, href: "?service=internet-mobile#service-workflows", services: ["Mobile top-ups", "Internet packages", "Account support"] },
+  { id: "government", label: "Government Payments", detail: "Country-specific public services", icon: ShieldCheck, href: "#global-services-hub", services: ["Vehicle Token Tax", "Traffic Challan", "NADRA Fees", "Passport Fees", "Punjab Vehicle Token Tax", "Punjab e-Challan", "CRMS Fees", "Sindh Vehicle Token Tax", "CDA Service Fees", "SECP", "FBR Income Tax", "FBR Sales Tax", "FBR Federal Excise", "CDA Property Tax", "KPK Sales Tax on Sales", "KPK Infrastructure Development Cess", "Private Education Providers Registration", "Islamabad Traffic Violation Challan", "Karachi Traffic Challan", "KPK Driving License", "KPK Traffic Violation Challan", "KPK Food Authority"] },
+  { id: "savings", label: "Savings & Investment", detail: "Information only", icon: ArrowUpRight, href: "/token", services: ["Crypto Staking", "Digital Savings", "Fixed-Term Savings", "Investment Opportunities"] },
+  { id: "insurance", label: "Insurance", detail: "Market availability varies", icon: ShieldCheck, href: "#global-services-hub", services: ["Health Insurance", "Income Protection", "Mobile Insurance", "Life Insurance", "Travel Insurance"] },
+  { id: "travel", label: "Travel & Mobility", detail: "Travel and transport pathways", icon: CarFront, href: "?service=transport#service-workflows", services: ["M-Tag Recharge", "ZU BRT", "Flight Booking", "City-to-City Travel", "Bus Tickets", "Train Tickets", "Airport Transfers", "Hotel Reservations"] },
+  { id: "digital", label: "Digital Products", detail: "Explore supported paths", icon: Zap, href: "#service-workflows", services: ["Gift Cards", "eSIM", "Mobile Top-ups", "Gaming Credits", "Digital Vouchers", "Subscription Payments"] },
 ];
+
+const MARKET_CATEGORY_IDS: Record<string, string[]> = {
+  PK: GLOBAL_CATEGORIES.map((category) => category.id),
+  AE: ["featured", "financing", "rentals", "bills", "easyload", "savings", "insurance", "travel", "digital"],
+  SA: ["featured", "financing", "rentals", "bills", "savings", "insurance", "travel", "digital"],
+  GB: ["featured", "financing", "rentals", "bills", "easyload", "savings", "insurance", "travel", "digital"],
+  US: ["featured", "financing", "rentals", "bills", "savings", "insurance", "travel", "digital"],
+  CA: ["featured", "financing", "rentals", "bills", "savings", "insurance", "travel", "digital"],
+  QA: ["featured", "financing", "rentals", "bills", "insurance", "travel", "digital"],
+  TR: ["featured", "rentals", "bills", "easyload", "savings", "insurance", "travel", "digital"],
+  AU: ["featured", "financing", "rentals", "bills", "savings", "insurance", "travel", "digital"],
+  ZA: ["featured", "rentals", "bills", "easyload", "insurance", "travel", "digital"],
+};
+
+function categoriesForMarket(code: string) {
+  const ids = MARKET_CATEGORY_IDS[code] ?? MARKET_CATEGORY_IDS.PK;
+  return GLOBAL_CATEGORIES.filter((category) => ids.includes(category.id));
+}
 
 function GlobalServicesHub() {
   const [country, setCountry] = useState<HubCountry>(() => {
@@ -145,19 +172,27 @@ function GlobalServicesHub() {
   });
   const [query, setQuery] = useState("");
   const [directoryOpen, setDirectoryOpen] = useState(false);
+  const [serviceDirectoryOpen, setServiceDirectoryOpen] = useState(false);
   const visibleCountries = HUB_COUNTRIES.filter((item) => `${item.name} ${item.code} ${item.dial}`.toLowerCase().includes(query.toLowerCase()));
-  const chooseCountry = (item: HubCountry) => { setCountry(item); setDirectoryOpen(false); try { localStorage.setItem("okbond-service-country", item.code); } catch { /* storage may be unavailable */ } };
+  const marketCategories = categoriesForMarket(country.code);
+  const availableServiceCount = marketCategories.reduce((total, category) => total + category.services.length, 0);
+  const chooseCountry = (item: HubCountry) => {
+    setCountry(item);
+    setDirectoryOpen(false);
+    setServiceDirectoryOpen(false);
+    try { localStorage.setItem("okbond-service-country", item.code); } catch { /* storage may be unavailable */ }
+  };
   return <section className="global-services-hub" id="global-services-hub" aria-labelledby="global-services-title">
     <div className="global-services-hub__inner">
-      <div className="global-services-hub__heading"><div><p className="service-eyebrow"><span /> GLOBAL SERVICES HUB</p><h2 id="global-services-title">One Ecosystem.<br /><em>Global Access.</em></h2></div><p>Explore financial, lifestyle, payment and digital service pathways across supported markets—clearly marked when inquiry-only or coming soon.</p></div>
+      <div className="global-services-hub__heading"><div><p className="service-eyebrow"><span /> GLOBAL SERVICES HUB</p><h2 id="global-services-title">One Ecosystem.<br /><em>Global Access.</em></h2></div><p>Explore financial, lifestyle, payment and digital service pathways across supported markets. Select a country to see the categories and services configured for that market.</p></div>
       <div className="global-country-panel"><div className="global-country-panel__copy"><span className="global-label">SELECT YOUR COUNTRY</span><h3>Discover what is available in your market.</h3><p>Country selection saves locally and does not change request history.</p></div><button type="button" className="global-country-select" onClick={() => setDirectoryOpen((open) => !open)} aria-expanded={directoryOpen}><span className="global-country-select__flag">{country.flag}</span><span><strong>{country.name}</strong><small>{country.code} · {country.dial}</small></span><ChevronDown size={17} /></button>{directoryOpen && <div className="global-country-directory"><label><Search size={15} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search country or code" aria-label="Search countries" /></label><div className="global-country-directory__list">{visibleCountries.map((item) => <button type="button" key={item.code} onClick={() => chooseCountry(item)}><span>{item.flag}</span><span><b>{item.name}</b><small>{item.region} · {item.dial}</small></span></button>)}{visibleCountries.length === 0 && <p>No country matched this search.</p>}</div></div>}</div>
-      <div className="global-services-hub__subhead"><div><span className="global-label">SERVICE CATEGORIES</span><h3>Built around real next steps.</h3></div><span className="global-country-status">{country.flag} {country.name} · inquiry catalog</span></div>
-      <div className="global-category-grid">{HUB_CATEGORIES.map(({ label, detail, icon: Icon, href }) => <a key={label} className="global-category-card" href={href}><span className="global-category-card__icon"><Icon size={17} /></span><span><strong>{label}</strong><small>{detail}</small></span><ArrowRight size={15} /></a>)}</div>
+      <div className="global-services-hub__subhead"><div><span className="global-label">SERVICE CATEGORIES · {marketCategories.length} AVAILABLE</span><h3>Built around real next steps.</h3></div><div className="global-services-hub__subhead-actions"><span className="global-country-status">{country.flag} {country.name} · {availableServiceCount} services</span><button type="button" className="global-see-all" onClick={() => setServiceDirectoryOpen((open) => !open)} aria-expanded={serviceDirectoryOpen}>{serviceDirectoryOpen ? "Close directory" : "See all services"}<ArrowRight size={15} /></button></div></div>
+      <div className="global-category-grid">{marketCategories.map(({ id, label, detail, icon: Icon, href, services }) => <a key={id} className="global-category-card" href={href} title={detail}><span className="global-category-card__icon"><Icon size={17} /></span><span><strong>{label}</strong><small>{services.length} services · {services.slice(0, 2).join(", ")}{services.length > 2 ? "…" : ""}</small></span><ArrowRight size={15} /></a>)}</div>
+      {serviceDirectoryOpen && <div className="global-services-directory" aria-label={`${country.name} complete services directory`}><div className="global-services-directory__heading"><div><span className="global-label">COMPLETE SERVICE DIRECTORY</span><h4>{country.name} services</h4></div><span>{availableServiceCount} service pathways</span></div><div className="global-services-directory__grid">{marketCategories.map(({ id, label, icon: Icon, href, services }) => <article key={id} className="global-services-directory__group"><div><span className="global-services-directory__group-icon"><Icon size={16} /></span><h5>{label}</h5></div><ul>{services.map((service) => <li key={service}><a href={href}>{service}<ArrowRight size={12} /></a></li>)}</ul></article>)}</div></div>}
       <div className="global-services-hub__notice"><ShieldCheck size={16} /><span>Availability, pricing and integrations depend on verified country configuration. No unsupported service is represented as live.</span></div>
     </div>
   </section>;
 }
-
 export default function ICOPage() {
   useSEO({ title: "OKBOND Services & Utilities | Hotel, Transport, Property & Bill Inquiries", description: "Inquiry-only OKBOND hotel, transport, car-rental and utility services. Property cards appear only for admin-verified listings; bookings and payments are not connected.", canonical: "https://orakzaibond.com/services", structuredData: SERVICE_PAGE_SCHEMA });
   return <div className="service-marketplace"><div className="service-marketplace__ambient" aria-hidden="true" /><div className="service-marketplace__wrap">

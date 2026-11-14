@@ -9,6 +9,8 @@ Redesign only the sections below the existing `/services` hero and image-card ca
 - Keep `ICOPage.tsx` hero and `ServiceCarousel` markup/behavior unchanged.
 - Refine the existing `GlobalServicesHub` and `ServiceWorkflows` presentation through scoped CSS, without inventing live availability, pricing, integrations, bookings, payments, or financial claims.
 - Use the current real destinations and inquiry-only wording; preserve local country selection and existing query/hash links.
+- Add a global category registry with market-specific category visibility, including Pakistan government payments, savings, insurance, travel/mobility, and digital product service inventories.
+- Add a country-aware “See all services” directory that expands complete services for the selected market and updates when the country filter changes.
 - Maintain no horizontal overflow on Android/mobile and preserve reduced-motion behavior.
 - Run the existing Vite build after edits and update the repository on `origin/main`.
 
