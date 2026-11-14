@@ -1,10 +1,11 @@
 # Delivery Outcomes
 
-- [x] Add one premium “How the OKBOND Ecosystem Works” section immediately after the existing hero and before “Built For Everyday Users, Savers & Businesses”.
-  - Use five pillars: Digital Asset; Ecosystem Utilities; Staking & Participation; Lottery & Draws; Transparency & Security.
-  - Use a deep black, metallic-gold, cinematic fintech visual system with restrained motion, fine connector lines, and a lightweight orbital 3D background graphic.
-  - Preserve the existing hero and everyday-users section unchanged.
-  - Do not invent statistics, partnerships, audits, guarantees, rewards, financial claims, or fake links.
-  - Support Android mobile browsers and desktop without horizontal overflow.
-- [x] Run the existing build and verify the homepage route plus the new real internal destinations.
-- [ ] Push the completed change to `origin/main`.
+- [x] Redesign only the services sections below the existing hero and image-card carousel.
+  - Preserve the hero and image-card carousel markup, imagery, copy, behavior, and responsive treatment.
+  - Elevate the global services hub to an institutional private-bank / sovereign service-desk standard.
+  - Keep the country selector, category links, inquiry-only language, and real destinations functional.
+  - Improve desktop and Android/mobile spacing, hierarchy, focus states, and no-overflow behavior.
+  - Preserve reduced-motion support and avoid inventing live availability, pricing, integrations, bookings, payments, or financial claims.
+- [x] Run the existing build and inspect the changed source for route and TypeScript regressions.
+  - Production Vite build and SEO build pass. Focused TypeScript check still reports pre-existing repository errors outside this change.
+- [ ] Push the completed change to `origin/main` and confirm the resulting commit.
