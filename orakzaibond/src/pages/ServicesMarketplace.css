@@ -957,3 +957,52 @@
   .catalog-detail-page__catalog { width: min(100% - 36px, 1120px); padding-bottom: 40px; }
   .catalog-detail-page__service-grid { grid-template-columns: 1fr; }
 }
+
+.all-services-page {
+  min-height: 100vh;
+  padding: 20px max(20px, calc((100vw - 980px) / 2)) 76px;
+  background: #080907;
+  color: #f5f1e8;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+.all-services-page__header {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+}
+.all-services-page__header h1 { margin: 0; color: #f5f1e8; font-size: 22px; font-weight: 700; letter-spacing: -.03em; }
+.all-services-page__back { display: inline-flex; align-items: center; gap: 8px; color: #bcbdb6; font-size: 13px; text-decoration: none; }
+.all-services-page__back:hover { color: #efd993; }
+.all-services-page__mark { color: #e5c46f; font-size: 10px; font-weight: 800; letter-spacing: .18em; }
+.all-services-page__toolbar { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin: 38px 0 18px; }
+.all-services-page__toolbar p { margin: 0; color: #a8aaa1; font-size: 13px; }
+.all-services-page__filters { display: flex; align-items: center; gap: 9px; }
+.all-services-page__search { display: flex; width: min(280px, 45vw); height: 40px; align-items: center; gap: 8px; padding: 0 12px; border-radius: 20px; background: #151714; color: #858b82; }
+.all-services-page__search input { width: 100%; border: 0; outline: 0; background: transparent; color: #f5f1e8; font: 400 12px Inter, sans-serif; }
+.all-services-page__filters select { height: 40px; max-width: 180px; padding: 0 10px; border: 1px solid #30332d; border-radius: 20px; background: #151714; color: #ded9ca; font: 400 11px Inter, sans-serif; }
+.all-services-page__market { margin: 0 0 26px; color: #bca96f; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+.all-services-page__categories { display: grid; gap: 28px; }
+.all-services-category { padding: 21px; border: 1px solid #2b2d28; border-radius: 4px; background: #0e100d; }
+.all-services-category__heading { display: flex; align-items: center; gap: 12px; padding-bottom: 17px; border-bottom: 1px solid #292c27; }
+.all-services-category__heading > div { flex: 1; }
+.all-services-category__heading h2 { margin: 0; color: #f2ede1; font-size: 18px; font-weight: 650; letter-spacing: -.02em; }
+.all-services-category__heading > div > span { display: block; margin-top: 4px; color: #898e85; font-size: 10px; }
+.all-services-category__heading > a { color: #c9a95d; }
+.all-services-category__icon { display: grid; width: 44px; height: 44px; place-items: center; border-radius: 10px; background: #f1eee5; color: #171916; }
+.all-services-category__grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px 9px; padding-top: 18px; }
+.all-services-item { display: flex; min-height: 72px; flex-direction: column; align-items: center; justify-content: center; gap: 7px; padding: 8px; border: 1px solid #242721; border-radius: 4px; color: #bbbcb4; font-size: 10px; line-height: 1.2; text-align: center; text-decoration: none; transition: border-color .2s ease, background .2s ease, color .2s ease; }
+.all-services-item:hover { border-color: #978148; background: #171812; color: #efda98; }
+.all-services-item__icon { display: grid; width: 27px; height: 27px; place-items: center; border-radius: 7px; background: #f1eee5; color: #171916; }
+.all-services-item > svg { display: none; }
+.all-services-page__empty { padding: 60px 0; color: #9b9d95; text-align: center; }
+@media (max-width: 680px) {
+  .all-services-page { padding: 17px 18px 58px; }
+  .all-services-page__toolbar { align-items: stretch; flex-direction: column; gap: 15px; margin-top: 31px; }
+  .all-services-page__filters { width: 100%; }
+  .all-services-page__search { width: 100%; }
+  .all-services-page__filters select { max-width: 130px; }
+  .all-services-category { padding: 15px 12px; }
+  .all-services-category__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .all-services-item { min-height: 68px; font-size: 9px; }
+}
