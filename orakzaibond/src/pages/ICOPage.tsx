@@ -6,7 +6,6 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useSEO } from "@/components/SEO";
-import ServiceWorkflows from "@/components/ServiceWorkflows";
 import "./ServicesMarketplace.css";
 
 const SERVICE_PAGE_SCHEMA = {
@@ -136,16 +135,16 @@ type HubCategory = {
 };
 
 const GLOBAL_CATEGORIES: HubCategory[] = [
-  { id: "featured", label: "Featured", detail: "Verified service pathways", icon: Globe2, href: "#service-workflows", services: ["Hotel inquiries", "Transport requests", "Property discovery"] },
-  { id: "financing", label: "Loans & Financing", detail: "Availability varies by market", icon: Landmark, href: "#service-workflows", services: ["Financing inquiries", "Installment pathways", "Business finance information"] },
-  { id: "rentals", label: "Rent & Leasing", detail: "Property inquiry path", icon: Building2, href: "?service=rentals#service-workflows", services: ["Residential rentals", "Commercial leasing", "Property installments"] },
-  { id: "bills", label: "Bill Payments", detail: "Inquiry-only utility support", icon: ReceiptText, href: "?service=electricity#service-workflows", services: ["Electricity bills", "Gas bills", "Water bills", "Internet bills"] },
-  { id: "easyload", label: "Easyload & Mobile", detail: "Regional availability varies", icon: Wifi, href: "?service=internet-mobile#service-workflows", services: ["Mobile top-ups", "Internet packages", "Account support"] },
-  { id: "government", label: "Government Payments", detail: "Country-specific public services", icon: ShieldCheck, href: "#global-services-hub", services: ["Vehicle Token Tax", "Traffic Challan", "NADRA Fees", "Passport Fees", "Punjab Vehicle Token Tax", "Punjab e-Challan", "CRMS Fees", "Sindh Vehicle Token Tax", "CDA Service Fees", "SECP", "FBR Income Tax", "FBR Sales Tax", "FBR Federal Excise", "CDA Property Tax", "KPK Sales Tax on Sales", "KPK Infrastructure Development Cess", "Private Education Providers Registration", "Islamabad Traffic Violation Challan", "Karachi Traffic Challan", "KPK Driving License", "KPK Traffic Violation Challan", "KPK Food Authority"] },
-  { id: "savings", label: "Savings & Investment", detail: "Information only", icon: ArrowUpRight, href: "/token", services: ["Crypto Staking", "Digital Savings", "Fixed-Term Savings", "Investment Opportunities"] },
-  { id: "insurance", label: "Insurance", detail: "Market availability varies", icon: ShieldCheck, href: "#global-services-hub", services: ["Health Insurance", "Income Protection", "Mobile Insurance", "Life Insurance", "Travel Insurance"] },
-  { id: "travel", label: "Travel & Mobility", detail: "Travel and transport pathways", icon: CarFront, href: "?service=transport#service-workflows", services: ["M-Tag Recharge", "ZU BRT", "Flight Booking", "City-to-City Travel", "Bus Tickets", "Train Tickets", "Airport Transfers", "Hotel Reservations"] },
-  { id: "digital", label: "Digital Products", detail: "Explore supported paths", icon: Zap, href: "#service-workflows", services: ["Gift Cards", "eSIM", "Mobile Top-ups", "Gaming Credits", "Digital Vouchers", "Subscription Payments"] },
+  { id: "featured", label: "Featured", detail: "Verified service pathways", icon: Globe2, href: "/services/catalog/featured", services: ["Hotel inquiries", "Transport requests", "Property discovery"] },
+  { id: "financing", label: "Loans & Financing", detail: "Availability varies by market", icon: Landmark, href: "/services/catalog/featured", services: ["Financing inquiries", "Installment pathways", "Business finance information"] },
+  { id: "rentals", label: "Rent & Leasing", detail: "Property inquiry path", icon: Building2, href: "/services/catalog/rentals", services: ["Residential rentals", "Commercial leasing", "Property installments"] },
+  { id: "bills", label: "Bill Payments", detail: "Inquiry-only utility support", icon: ReceiptText, href: "/services/catalog/bill-payments", services: ["Electricity bills", "Gas bills", "Water bills", "Internet bills"] },
+  { id: "easyload", label: "Easyload & Mobile", detail: "Regional availability varies", icon: Wifi, href: "/services/catalog/easyload-and-mobile", services: ["Mobile top-ups", "Internet packages", "Account support"] },
+  { id: "government", label: "Government Payments", detail: "Country-specific public services", icon: ShieldCheck, href: "/services/catalog/government-payments", services: ["Vehicle Token Tax", "Traffic Challan", "NADRA Fees", "Passport Fees", "Punjab Vehicle Token Tax", "Punjab e-Challan", "CRMS Fees", "Sindh Vehicle Token Tax", "CDA Service Fees", "SECP", "FBR Income Tax", "FBR Sales Tax", "FBR Federal Excise", "CDA Property Tax", "KPK Sales Tax on Sales", "KPK Infrastructure Development Cess", "Private Education Providers Registration", "Islamabad Traffic Violation Challan", "Karachi Traffic Challan", "KPK Driving License", "KPK Traffic Violation Challan", "KPK Food Authority"] },
+  { id: "savings", label: "Savings & Investment", detail: "Information only", icon: ArrowUpRight, href: "/services/catalog/savings-and-investment", services: ["Crypto Staking", "Digital Savings", "Fixed-Term Savings", "Investment Opportunities"] },
+  { id: "insurance", label: "Insurance", detail: "Market availability varies", icon: ShieldCheck, href: "/services/catalog/government-payments", services: ["Health Insurance", "Income Protection", "Mobile Insurance", "Life Insurance", "Travel Insurance"] },
+  { id: "travel", label: "Travel & Mobility", detail: "Travel and transport pathways", icon: CarFront, href: "/services/catalog/travel-and-mobility", services: ["M-Tag Recharge", "ZU BRT", "Flight Booking", "City-to-City Travel", "Bus Tickets", "Train Tickets", "Airport Transfers", "Hotel Reservations"] },
+  { id: "digital", label: "Digital Products", detail: "Explore supported paths", icon: Zap, href: "/services/catalog/featured", services: ["Gift Cards", "eSIM", "Mobile Top-ups", "Gaming Credits", "Digital Vouchers", "Subscription Payments"] },
 ];
 
 const MARKET_CATEGORY_IDS: Record<string, string[]> = {
@@ -161,6 +160,9 @@ const MARKET_CATEGORY_IDS: Record<string, string[]> = {
   ZA: ["featured", "rentals", "bills", "easyload", "insurance", "travel", "digital"],
 };
 
+function catalogSlug(value: string) {
+  return value.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
 function categoriesForMarket(code: string) {
   const ids = MARKET_CATEGORY_IDS[code] ?? MARKET_CATEGORY_IDS.PK;
   return GLOBAL_CATEGORIES.filter((category) => ids.includes(category.id));
@@ -189,8 +191,8 @@ function GlobalServicesHub() {
       <div className="global-services-hub__heading"><div className="global-appbar"><button type="button" className="global-appbar__back" onClick={() => window.history.back()} aria-label="Go back">‹</button><h2 id="global-services-title">Services</h2></div></div><label className="global-services-search"><Search size={17} /><input value={serviceQuery} onChange={(event) => setServiceQuery(event.target.value)} placeholder="Search services" aria-label="Search services" /></label>
       <div className="global-country-panel"><div className="global-country-panel__copy"><span className="global-label">SELECT YOUR COUNTRY</span><h3>Discover what is available in your market.</h3><p>Country selection saves locally and does not change request history.</p></div><button type="button" className="global-country-select" onClick={() => setDirectoryOpen((open) => !open)} aria-expanded={directoryOpen}><span className="global-country-select__flag">{country.flag}</span><span><strong>{country.name}</strong><small>{country.code} · {country.dial}</small></span><ChevronDown size={17} /></button>{directoryOpen && <div className="global-country-directory"><label><Search size={15} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search country or code" aria-label="Search countries" /></label><div className="global-country-directory__list">{visibleCountries.map((item) => <button type="button" key={item.code} onClick={() => chooseCountry(item)}><span>{item.flag}</span><span><b>{item.name}</b><small>{item.region} · {item.dial}</small></span></button>)}{visibleCountries.length === 0 && <p>No country matched this search.</p>}</div></div>}</div>
       <div className="global-services-hub__subhead"><div><span className="global-label">SERVICE CATEGORIES · {marketCategories.length} AVAILABLE</span><h3>Built around real next steps.</h3></div><div className="global-services-hub__subhead-actions"><span className="global-country-status">{country.flag} {country.name} · {availableServiceCount} services</span><button type="button" className="global-see-all" onClick={() => setServiceDirectoryOpen((open) => !open)} aria-expanded={serviceDirectoryOpen}>{serviceDirectoryOpen ? "Close directory" : "See all services"}<ArrowRight size={15} /></button></div></div>
-      <div className="global-category-grid">{visibleCategories.map(({ id, label, detail, icon: Icon, href, services }) => <a key={id} className="global-category-card" href={href} title={detail}><span className="global-category-card__icon"><Icon size={17} /></span><span><strong>{label}</strong><small>{services.length} services · {services.slice(0, 2).join(", ")}{services.length > 2 ? "…" : ""}</small></span><ArrowRight size={15} /></a>)}</div>
-      {serviceDirectoryOpen && <div className="global-services-directory" aria-label={`${country.name} complete services directory`}><div className="global-services-directory__heading"><div><span className="global-label">COMPLETE SERVICE DIRECTORY</span><h4>{country.name} services</h4></div><span>{availableServiceCount} service pathways</span></div><div className="global-services-directory__grid">{marketCategories.map(({ id, label, icon: Icon, href, services }) => <article key={id} className="global-services-directory__group"><div><span className="global-services-directory__group-icon"><Icon size={16} /></span><h5>{label}</h5></div><ul>{services.map((service) => <li key={service}><a href={href}>{service}<ArrowRight size={12} /></a></li>)}</ul></article>)}</div></div>}
+      <div className="global-category-grid">{visibleCategories.map(({ id, label, detail, icon: Icon, services }) => <a key={id} className="global-category-card" href={`/services/catalog/${id}`} title={detail}><span className="global-category-card__icon"><Icon size={17} /></span><span><strong>{label}</strong><small>{services.length} services · {services.slice(0, 2).join(", ")}{services.length > 2 ? "…" : ""}</small></span><ArrowRight size={15} /></a>)}</div>
+      {serviceDirectoryOpen && <div className="global-services-directory" aria-label={`${country.name} complete services directory`}><div className="global-services-directory__heading"><div><span className="global-label">COMPLETE SERVICE DIRECTORY</span><h4>{country.name} services</h4></div><span>{availableServiceCount} service pathways</span></div><div className="global-services-directory__grid">{marketCategories.map(({ id, label, icon: Icon, services }) => <article key={id} className="global-services-directory__group"><div><span className="global-services-directory__group-icon"><Icon size={16} /></span><h5>{label}</h5></div><ul>{services.map((service) => <li key={service}><a href={`/services/catalog/${catalogSlug(service)}`}>{service}<ArrowRight size={12} /></a></li>)}</ul></article>)}</div></div>}
       <div className="global-services-empty" aria-live="polite">{visibleCategories.length === 0 ? "No services found in this market." : ""}</div><div className="global-services-hub__notice"><ShieldCheck size={16} /><span>Availability, pricing and integrations depend on verified country configuration. No unsupported service is represented as live.</span></div>
     </div>
   </section>;
@@ -206,6 +208,5 @@ export default function ICOPage() {
     </div><GlobeScene /><div className="service-hero__index"><span>OKBOND</span><span>01 — 04 / SERVICE NETWORK</span></div></section>
     <ServiceCarousel />
     <GlobalServicesHub />
-    <ServiceWorkflows />
   </div></div>;
 }

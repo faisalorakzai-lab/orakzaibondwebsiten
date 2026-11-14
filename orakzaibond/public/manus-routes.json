@@ -24,6 +24,7 @@
     { "path": "/legal", "title": "Legal" },
     { "path": "/system", "title": "System Status" },
     { "path": "/registry", "title": "Registry" },
+    { "path": "/services/catalog/:slug", "title": "OKBOND Service Catalog" },
     { "path": "/services/:slug", "title": "OKBOND Services" },
     { "path": "/rules", "title": "Rules" },
     { "path": "/profile/:username", "title": "Profile" },

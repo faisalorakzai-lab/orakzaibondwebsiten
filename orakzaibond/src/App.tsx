@@ -44,6 +44,7 @@ import VaultPage from "./pages/VaultPage";
 import SecurityPage from "./pages/SecurityPage";
 import RegistryPage from "./pages/RegistryPage";
 import ServiceExplorerPage from "./pages/ServiceExplorerPage";
+import CatalogServicePage from "./pages/CatalogServicePage";
 import BuiltForCarousel from "./components/BuiltForCarousel";
 import EcosystemDiscovery from "./components/EcosystemDiscovery";
 import TraditionalBondCarousel from "./components/TraditionalBondCarousel";
@@ -345,6 +346,9 @@ function App() {
                   <OKBONDFAQSection />
                 </ErrorBoundary>
               </>
+            </Route>
+            <Route path="/services/catalog/:slug">
+              {(params) => <CatalogServicePage slug={params.slug} />}
             </Route>
             <Route path="/services/:slug">
               {(params) => <ServiceExplorerPage slug={params.slug} />}
