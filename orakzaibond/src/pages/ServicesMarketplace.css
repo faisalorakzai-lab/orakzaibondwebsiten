@@ -915,3 +915,45 @@
   .catalog-detail-page__description { font-size: 13px; }
   .catalog-detail-page__info { grid-template-columns: 1fr; gap: 29px; padding-bottom: 60px; }
 }
+
+.catalog-detail-page__catalog {
+  width: min(100% - 40px, 1120px);
+  margin: 0 auto;
+  padding: 26px 0 56px;
+  border-top: 1px solid #2b2d28;
+}
+.catalog-detail-page__catalog-heading h2 {
+  margin: 12px 0 0;
+  color: #f1ede2;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2rem, 4vw, 3.7rem);
+  font-weight: 500;
+  line-height: 1;
+}
+.catalog-detail-page__service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 24px;
+}
+.catalog-detail-page__service-card {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 14px;
+  border: 1px solid #2b2d28;
+  border-radius: 2px;
+  color: #cbc7b9;
+  font-size: 12px;
+  line-height: 1.25;
+  text-decoration: none;
+  transition: border-color .2s ease, color .2s ease, background .2s ease;
+}
+.catalog-detail-page__service-card:hover { border-color: #b69b59; background: #11130f; color: #f0d991; }
+.catalog-detail-page__service-card svg { flex: 0 0 auto; color: #b99850; }
+@media (max-width: 680px) {
+  .catalog-detail-page__catalog { width: min(100% - 36px, 1120px); padding-bottom: 40px; }
+  .catalog-detail-page__service-grid { grid-template-columns: 1fr; }
+}

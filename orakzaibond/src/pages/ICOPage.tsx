@@ -5,6 +5,7 @@ import {
   ChevronDown, Globe2, Hotel, Landmark, MapPin, Plane, ReceiptText, Search, ShieldCheck, Wifi, Zap, Flame, Droplets,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { HUB_COUNTRIES, catalogSlug, categoriesForMarket, type HubCountry } from "@/data/serviceCatalog";
 import { useSEO } from "@/components/SEO";
 import "./ServicesMarketplace.css";
 
@@ -110,62 +111,6 @@ function StaticGlobe({ tilt }: { tilt: { x: number; y: number } }) {
     <svg className="service-globe__continents" viewBox="0 0 300 300" aria-hidden="true"><path d="M69 73 91 53l25 7 9 17-11 15 9 14-13 12-5 26-19 14-4 25-17-9-7-24-17-13 4-24-14-15 10-15-1-10 17-11Zm88 17 16-12 28 5 17 14 28 4 12 15-14 11-28-5-16 14-20-5-17-17-19-2-12-13 10-9Zm36 54 22 5 14 17-8 18-18 6-16-12-6-19 12-15Zm-67 24 18 8 4 18-13 14-8 31-18 14-10-18 7-25-9-15 8-18 21-9Z" fill="url(#globe-land)" opacity=".83" /><defs><linearGradient id="globe-land" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#f4dc9e" /><stop offset="1" stopColor="#8d682e" /></linearGradient></defs></svg>
     <span className="service-globe__node service-globe__node--one" /><span className="service-globe__node service-globe__node--two" /><span className="service-globe__node service-globe__node--three" />
   </div>;
-}
-
-type HubCountry = { name: string; code: string; dial: string; flag: string; region: string };
-const HUB_COUNTRIES: HubCountry[] = [
-  { name: "Pakistan", code: "PK", dial: "+92", flag: "🇵🇰", region: "Asia" },
-  { name: "United Arab Emirates", code: "AE", dial: "+971", flag: "🇦🇪", region: "Middle East" },
-  { name: "Saudi Arabia", code: "SA", dial: "+966", flag: "🇸🇦", region: "Middle East" },
-  { name: "United Kingdom", code: "GB", dial: "+44", flag: "🇬🇧", region: "Europe" },
-  { name: "United States", code: "US", dial: "+1", flag: "🇺🇸", region: "North America" },
-  { name: "Canada", code: "CA", dial: "+1", flag: "🇨🇦", region: "North America" },
-  { name: "Qatar", code: "QA", dial: "+974", flag: "🇶🇦", region: "Middle East" },
-  { name: "Türkiye", code: "TR", dial: "+90", flag: "🇹🇷", region: "Europe" },
-  { name: "Australia", code: "AU", dial: "+61", flag: "🇦🇺", region: "Oceania" },
-  { name: "South Africa", code: "ZA", dial: "+27", flag: "🇿🇦", region: "Africa" },
-];
-type HubCategory = {
-  id: string;
-  label: string;
-  detail: string;
-  icon: LucideIcon;
-  href: string;
-  services: string[];
-};
-
-const GLOBAL_CATEGORIES: HubCategory[] = [
-  { id: "featured", label: "Featured", detail: "Verified service pathways", icon: Globe2, href: "/services/catalog/featured", services: ["Hotel inquiries", "Transport requests", "Property discovery"] },
-  { id: "financing", label: "Loans & Financing", detail: "Availability varies by market", icon: Landmark, href: "/services/catalog/featured", services: ["Financing inquiries", "Installment pathways", "Business finance information"] },
-  { id: "rentals", label: "Rent & Leasing", detail: "Property inquiry path", icon: Building2, href: "/services/catalog/rentals", services: ["Residential rentals", "Commercial leasing", "Property installments"] },
-  { id: "bills", label: "Bill Payments", detail: "Inquiry-only utility support", icon: ReceiptText, href: "/services/catalog/bill-payments", services: ["Electricity bills", "Gas bills", "Water bills", "Internet bills"] },
-  { id: "easyload", label: "Easyload & Mobile", detail: "Regional availability varies", icon: Wifi, href: "/services/catalog/easyload-and-mobile", services: ["Mobile top-ups", "Internet packages", "Account support"] },
-  { id: "government", label: "Government Payments", detail: "Country-specific public services", icon: ShieldCheck, href: "/services/catalog/government-payments", services: ["Vehicle Token Tax", "Traffic Challan", "NADRA Fees", "Passport Fees", "Punjab Vehicle Token Tax", "Punjab e-Challan", "CRMS Fees", "Sindh Vehicle Token Tax", "CDA Service Fees", "SECP", "FBR Income Tax", "FBR Sales Tax", "FBR Federal Excise", "CDA Property Tax", "KPK Sales Tax on Sales", "KPK Infrastructure Development Cess", "Private Education Providers Registration", "Islamabad Traffic Violation Challan", "Karachi Traffic Challan", "KPK Driving License", "KPK Traffic Violation Challan", "KPK Food Authority"] },
-  { id: "savings", label: "Savings & Investment", detail: "Information only", icon: ArrowUpRight, href: "/services/catalog/savings-and-investment", services: ["Crypto Staking", "Digital Savings", "Fixed-Term Savings", "Investment Opportunities"] },
-  { id: "insurance", label: "Insurance", detail: "Market availability varies", icon: ShieldCheck, href: "/services/catalog/government-payments", services: ["Health Insurance", "Income Protection", "Mobile Insurance", "Life Insurance", "Travel Insurance"] },
-  { id: "travel", label: "Travel & Mobility", detail: "Travel and transport pathways", icon: CarFront, href: "/services/catalog/travel-and-mobility", services: ["M-Tag Recharge", "ZU BRT", "Flight Booking", "City-to-City Travel", "Bus Tickets", "Train Tickets", "Airport Transfers", "Hotel Reservations"] },
-  { id: "digital", label: "Digital Products", detail: "Explore supported paths", icon: Zap, href: "/services/catalog/featured", services: ["Gift Cards", "eSIM", "Mobile Top-ups", "Gaming Credits", "Digital Vouchers", "Subscription Payments"] },
-];
-
-const MARKET_CATEGORY_IDS: Record<string, string[]> = {
-  PK: GLOBAL_CATEGORIES.map((category) => category.id),
-  AE: ["featured", "financing", "rentals", "bills", "easyload", "savings", "insurance", "travel", "digital"],
-  SA: ["featured", "financing", "rentals", "bills", "savings", "insurance", "travel", "digital"],
-  GB: ["featured", "financing", "rentals", "bills", "easyload", "savings", "insurance", "travel", "digital"],
-  US: ["featured", "financing", "rentals", "bills", "savings", "insurance", "travel", "digital"],
-  CA: ["featured", "financing", "rentals", "bills", "savings", "insurance", "travel", "digital"],
-  QA: ["featured", "financing", "rentals", "bills", "insurance", "travel", "digital"],
-  TR: ["featured", "rentals", "bills", "easyload", "savings", "insurance", "travel", "digital"],
-  AU: ["featured", "financing", "rentals", "bills", "savings", "insurance", "travel", "digital"],
-  ZA: ["featured", "rentals", "bills", "easyload", "insurance", "travel", "digital"],
-};
-
-function catalogSlug(value: string) {
-  return value.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-}
-function categoriesForMarket(code: string) {
-  const ids = MARKET_CATEGORY_IDS[code] ?? MARKET_CATEGORY_IDS.PK;
-  return GLOBAL_CATEGORIES.filter((category) => ids.includes(category.id));
 }
 
 function GlobalServicesHub() {
